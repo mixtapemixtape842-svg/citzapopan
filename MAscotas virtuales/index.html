@@ -2840,15 +2840,21 @@ function crearTarjetaActividad(
     }
 
 
-    const target =
-        /^https?:\/\//i.test(
-            enlace
-        )
-            ? 'target="_blank" rel="noopener noreferrer"'
-            : "";
+  const target =
+    /^https?:\/\//i.test(
+        enlace
+    )
+        ? 'target="_blank" rel="noopener noreferrer"'
+        : "";
+
+// Si es el diagnóstico, enviar el ID de la actividad
+const enlaceFinal =
+    actividad.id === 1
+        ? `diagnostico.html?actividad=${actividad.id}`
+        : enlace;
 
 
-    return `
+return `
 
         <article
             class="activity-card ${claseEstado}"
@@ -2906,19 +2912,19 @@ function crearTarjetaActividad(
             </div>
 
 
-            <a
-                href="${escaparHTML(enlace)}"
-                ${target}
-                class="activity-button"
-            >
+              <a
+        href="${escaparHTML(enlaceFinal)}"
+        ${target}
+        class="activity-button"
+    >
 
-                ${
-                    completada
-                        ? "VER ACTIVIDAD →"
-                        : "COMENZAR →"
-                }
+        ${
+            completada
+                ? "VER ACTIVIDAD →"
+                : "COMENZAR →"
+        }
 
-            </a>
+    </a>
 
         </article>
 
