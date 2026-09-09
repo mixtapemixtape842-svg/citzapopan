@@ -1,593 +1,519 @@
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Panel del Profesor | Robot Lab</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<style>
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: Arial, Helvetica, sans-serif;
-    background:
-        radial-gradient(circle at 20% 20%, rgba(0,255,255,.08), transparent 30%),
-        radial-gradient(circle at 80% 80%, rgba(170,0,255,.08), transparent 30%),
-        #080b14;
-    color: #fff;
-    min-height: 100vh;
-}
-
-/* =========================
-   LAYOUT
-========================= */
-
-.app {
-    display: flex;
-    min-height: 100vh;
-}
-
-/* =========================
-   SIDEBAR
-========================= */
-
-.sidebar {
-    width: 250px;
-    background: rgba(10,14,28,.96);
-    border-right: 1px solid rgba(0,255,255,.15);
-    padding: 25px 15px;
-    position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    z-index: 10;
-}
-
-.logo {
-    text-align: center;
-    margin-bottom: 35px;
-}
-
-.logo .robot {
-    font-size: 45px;
-}
-
-.logo h1 {
-    font-size: 18px;
-    letter-spacing: 3px;
-    color: #00f6ff;
-}
-
-.logo span {
-    font-size: 11px;
-    color: #8993a8;
-}
-
-.menu {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.menu button {
-    width: 100%;
-    padding: 14px 15px;
-    border: 0;
-    border-radius: 10px;
-    background: transparent;
-    color: #aeb7c8;
-    text-align: left;
-    font-size: 14px;
-    cursor: pointer;
-    transition: .2s;
-}
-
-.menu button:hover,
-.menu button.active {
-    background: linear-gradient(
-        90deg,
-        rgba(0,246,255,.15),
-        rgba(145,0,255,.12)
-    );
-    color: #fff;
-    border-left: 3px solid #00f6ff;
-}
-
-.logout {
-    position: absolute;
-    bottom: 25px;
-    left: 15px;
-    right: 15px;
-}
-
-.logout button {
-    width: 100%;
-    padding: 12px;
-    border-radius: 10px;
-    border: 1px solid rgba(255,80,100,.25);
-    background: rgba(255,50,80,.08);
-    color: #ff7184;
-    cursor: pointer;
-}
-
-/* =========================
-   MAIN
-========================= */
-
-.main {
-    margin-left: 250px;
-    width: calc(100% - 250px);
-    padding: 25px 35px;
-}
-
-/* =========================
-   TOPBAR
-========================= */
-
-.topbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-}
-
-.topbar h2 {
-    font-size: 25px;
-}
-
-.topbar p {
-    color: #8892a8;
-    margin-top: 5px;
-}
-
-.profesor {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.profesor-avatar {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    background: linear-gradient(135deg,#00eaff,#8d3cff);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 22px;
-}
-
-/* =========================
-   SECCIONES
-========================= */
-
-.section {
-    display: none;
-}
-
-.section.active {
-    display: block;
-}
-
-/* =========================
-   STATS
-========================= */
-
-.stats {
-    display: grid;
-    grid-template-columns: repeat(4,1fr);
-    gap: 18px;
-    margin-bottom: 25px;
-}
-
-.stat {
-    background: rgba(16,21,39,.85);
-    border: 1px solid rgba(255,255,255,.07);
-    border-radius: 16px;
-    padding: 22px;
-    position: relative;
-    overflow: hidden;
-}
-
-.stat::after {
-    content: "";
-    position: absolute;
-    width: 90px;
-    height: 90px;
-    right: -30px;
-    top: -30px;
-    border-radius: 50%;
-    background: rgba(0,240,255,.05);
-}
-
-.stat-icon {
-    font-size: 27px;
-    margin-bottom: 12px;
-}
-
-.stat-number {
-    font-size: 30px;
-    font-weight: bold;
-}
-
-.stat-label {
-    color: #8892a8;
-    font-size: 13px;
-    margin-top: 5px;
-}
-
-/* =========================
-   CARDS
-========================= */
-
-.card {
-    background: rgba(16,21,39,.85);
-    border: 1px solid rgba(255,255,255,.07);
-    border-radius: 16px;
-    padding: 22px;
-    margin-bottom: 20px;
-}
-
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.card-header h3 {
-    font-size: 17px;
-}
-
-.card-header span {
-    color: #778197;
-    font-size: 12px;
-}
-
-/* =========================
-   PROGRESO
-========================= */
-
-.progress-container {
-    margin-top: 10px;
-}
-
-.progress-info {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 8px;
-    font-size: 13px;
-}
-
-.progress {
-    height: 12px;
-    background: #202638;
-    border-radius: 20px;
-    overflow: hidden;
-}
-
-.progress-bar {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg,#00f6ff,#9c4dff);
-    border-radius: 20px;
-    transition: width .5s;
-}
-
-/* =========================
-   ALUMNOS
-========================= */
-
-.toolbar {
-    display: flex;
-    justify-content: space-between;
-    gap: 15px;
-    margin-bottom: 20px;
-}
-
-.search {
-    flex: 1;
-    padding: 13px 15px;
-    border-radius: 10px;
-    border: 1px solid #293149;
-    background: #111627;
-    color: white;
-    outline: none;
-}
-
-.btn {
-    padding: 12px 18px;
-    border-radius: 10px;
-    border: 0;
-    background: linear-gradient(135deg,#00d9ff,#7540ff);
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.btn:hover {
-    opacity: .85;
-}
-
-.students-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill,minmax(270px,1fr));
-    gap: 18px;
-}
-
-.student {
-    background: rgba(16,21,39,.9);
-    border: 1px solid rgba(255,255,255,.07);
-    border-radius: 16px;
-    padding: 20px;
-    transition: .2s;
-}
-
-.student:hover {
-    transform: translateY(-3px);
-    border-color: rgba(0,246,255,.3);
-}
-
-.student-top {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.pet {
-    width: 65px;
-    height: 65px;
-    border-radius: 15px;
-    background: #0c1120;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 35px;
-}
-
-.student-name {
-    font-weight: bold;
-}
-
-.student-user {
-    font-size: 12px;
-    color: #778197;
-    margin-top: 4px;
-}
-
-.student-stats {
-    display: grid;
-    grid-template-columns: repeat(3,1fr);
-    margin-top: 18px;
-    gap: 8px;
-}
-
-.student-stat {
-    background: #111627;
-    padding: 10px 5px;
-    text-align: center;
-    border-radius: 8px;
-}
-
-.student-stat strong {
-    display: block;
-    font-size: 16px;
-}
-
-.student-stat span {
-    color: #69738a;
-    font-size: 10px;
-}
-
-.edit-btn {
-    width: 100%;
-    margin-top: 15px;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #293149;
-    background: transparent;
-    color: #b7c1d4;
-    cursor: pointer;
-}
-
-.edit-btn:hover {
-    background: #182035;
-}
-
-/* =========================
-   TABLAS
-========================= */
-
-.table-container {
-    overflow-x: auto;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-th,
-td {
-    padding: 14px;
-    border-bottom: 1px solid #202638;
-    text-align: left;
-}
-
-th {
-    color: #778197;
-    font-size: 12px;
-    text-transform: uppercase;
-}
-
-td {
-    font-size: 14px;
-}
-
-/* =========================
-   MODAL
-========================= */
-
-.modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,.75);
-    backdrop-filter: blur(5px);
-    justify-content: center;
-    align-items: center;
-    z-index: 100;
-}
-
-.modal.show {
-    display: flex;
-}
-
-.modal-box {
-    width: 90%;
-    max-width: 500px;
-    background: #111627;
-    border: 1px solid rgba(0,246,255,.2);
-    border-radius: 18px;
-    padding: 25px;
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 25px;
-}
-
-.close {
-    cursor: pointer;
-    font-size: 24px;
-    color: #8993a8;
-}
-
-.form-group {
-    margin-bottom: 16px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 7px;
-    color: #aeb7c8;
-    font-size: 13px;
-}
-
-.form-group input,
-.form-group select {
-    width: 100%;
-    padding: 12px;
-    border-radius: 9px;
-    border: 1px solid #293149;
-    background: #080d19;
-    color: white;
-    outline: none;
-}
-
-.modal-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.cancel {
-    flex: 1;
-    padding: 12px;
-    border: 1px solid #293149;
-    background: transparent;
-    color: #aaa;
-    border-radius: 9px;
-    cursor: pointer;
-}
-
-.save {
-    flex: 1;
-    padding: 12px;
-    border: 0;
-    background: linear-gradient(135deg,#00d9ff,#7540ff);
-    color: white;
-    border-radius: 9px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-/* =========================
-   RESPONSIVE
-========================= */
-
-@media(max-width:900px) {
-
-    .sidebar {
-        width: 75px;
-    }
-
-    .logo h1,
-    .logo span,
-    .menu button span,
-    .logout button span {
-        display: none;
-    }
-
-    .logo .robot {
-        font-size: 35px;
-    }
-
-    .menu button {
-        text-align: center;
-        font-size: 22px;
-        padding: 13px 5px;
-    }
-
-    .logout button {
-        font-size: 20px;
-    }
-
-    .main {
-        margin-left: 75px;
-        width: calc(100% - 75px);
-        padding: 20px;
-    }
-
-    .stats {
-        grid-template-columns: repeat(2,1fr);
-    }
-}
-
-@media(max-width:550px) {
-
-    .stats {
-        grid-template-columns: 1fr;
-    }
-
-    .toolbar {
-        flex-direction: column;
-    }
-
-    .topbar {
-        align-items: flex-start;
-    }
-
-    .profesor {
-        display: none;
-    }
-}
-
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Campus CITZ | Profesor</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background:
+                radial-gradient(circle at top left, #172554 0%, transparent 35%),
+                radial-gradient(circle at bottom right, #312e81 0%, transparent 35%),
+                #080b16;
+            color: white;
+            min-height: 100vh;
+        }
+
+        /* ==============================
+           SIDEBAR
+        ============================== */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background: rgba(10, 15, 30, .96);
+            border-right: 1px solid rgba(255,255,255,.08);
+            padding: 25px 15px;
+            z-index: 100;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .logo-icon {
+            font-size: 42px;
+        }
+
+        .logo h2 {
+            margin-top: 5px;
+            font-size: 20px;
+        }
+
+        .logo p {
+            color: #8d99ae;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .menu button {
+            border: none;
+            background: transparent;
+            color: #aab4c8;
+            padding: 14px;
+            border-radius: 12px;
+            text-align: left;
+            font-size: 15px;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .menu button:hover {
+            background: rgba(255,255,255,.06);
+            color: white;
+        }
+
+        .menu button.active {
+            background: linear-gradient(135deg,#2563eb,#7c3aed);
+            color: white;
+        }
+
+        .logout {
+            position: absolute;
+            bottom: 25px;
+            left: 15px;
+            right: 15px;
+        }
+
+        .logout button {
+            width: 100%;
+            border: 1px solid rgba(255,255,255,.1);
+            background: rgba(255,255,255,.04);
+            color: #ff8a8a;
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        /* ==============================
+           MAIN
+        ============================== */
+
+        .main {
+            margin-left: 250px;
+            padding: 35px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 30px;
+        }
+
+        .header p {
+            color: #8993a7;
+            margin-top: 5px;
+        }
+
+        .teacher {
+            background: rgba(255,255,255,.05);
+            border: 1px solid rgba(255,255,255,.08);
+            padding: 10px 15px;
+            border-radius: 12px;
+        }
+
+        /* ==============================
+           SECTIONS
+        ============================== */
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* ==============================
+           STATS
+        ============================== */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .stat {
+            background: rgba(255,255,255,.055);
+            border: 1px solid rgba(255,255,255,.08);
+            padding: 22px;
+            border-radius: 18px;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-icon {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .stat h3 {
+            font-size: 28px;
+        }
+
+        .stat p {
+            color: #8993a7;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        /* ==============================
+           PROGRESS
+        ============================== */
+
+        .panel {
+            background: rgba(255,255,255,.05);
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 18px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .panel-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .panel-title h2 {
+            font-size: 20px;
+        }
+
+        .progress {
+            height: 14px;
+            background: #1b2235;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg,#2563eb,#8b5cf6);
+            border-radius: 20px;
+            transition: .5s;
+        }
+
+        /* ==============================
+           STUDENTS
+        ============================== */
+
+        .students-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .search {
+            flex: 1;
+            max-width: 350px;
+            padding: 13px 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,.1);
+            background: rgba(255,255,255,.05);
+            color: white;
+            outline: none;
+        }
+
+        .btn {
+            border: none;
+            padding: 12px 18px;
+            border-radius: 10px;
+            background: linear-gradient(135deg,#2563eb,#7c3aed);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            opacity: .9;
+        }
+
+        .students {
+            display: grid;
+            grid-template-columns: repeat(auto-fill,minmax(260px,1fr));
+            gap: 18px;
+        }
+
+        .student {
+            background: rgba(255,255,255,.05);
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 18px;
+            padding: 20px;
+            position: relative;
+            transition: .2s;
+        }
+
+        .student:hover {
+            transform: translateY(-3px);
+            border-color: rgba(99,102,241,.5);
+        }
+
+        .student-top {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 18px;
+        }
+
+        .avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            background: rgba(255,255,255,.06);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 34px;
+        }
+
+        .student-name {
+            font-weight: bold;
+            font-size: 17px;
+        }
+
+        .student-user {
+            color: #7f8ba3;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .student-info {
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .info {
+            background: rgba(0,0,0,.18);
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .info strong {
+            display: block;
+            font-size: 17px;
+        }
+
+        .info span {
+            font-size: 10px;
+            color: #7f8ba3;
+        }
+
+        .edit-btn {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 9px;
+            background: rgba(37,99,235,.18);
+            color: #8db4ff;
+            cursor: pointer;
+        }
+
+        /* ==============================
+           MODAL
+        ============================== */
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.75);
+            backdrop-filter: blur(6px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-box {
+            width: 100%;
+            max-width: 500px;
+            background: #111827;
+            border: 1px solid rgba(255,255,255,.1);
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 30px 80px rgba(0,0,0,.5);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .close {
+            border: none;
+            background: transparent;
+            color: #8993a7;
+            font-size: 25px;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            color: #aab4c8;
+            margin-bottom: 7px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 9px;
+            border: 1px solid rgba(255,255,255,.1);
+            background: #0b1020;
+            color: white;
+            outline: none;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .cancel-btn {
+            flex: 1;
+            border: none;
+            border-radius: 9px;
+            background: rgba(255,255,255,.08);
+            color: white;
+            padding: 12px;
+            cursor: pointer;
+        }
+
+        .save-btn {
+            flex: 1;
+            border: none;
+            border-radius: 9px;
+            background: linear-gradient(135deg,#2563eb,#7c3aed);
+            color: white;
+            padding: 12px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* ==============================
+           PLACEHOLDER SECTIONS
+        ============================== */
+
+        .empty {
+            text-align: center;
+            padding: 70px 20px;
+            color: #8993a7;
+        }
+
+        .empty-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+
+        /* ==============================
+           RESPONSIVE
+        ============================== */
+
+        @media(max-width:900px) {
+
+            .sidebar {
+                width: 75px;
+                padding: 15px 8px;
+            }
+
+            .logo h2,
+            .logo p,
+            .menu button span,
+            .logout span {
+                display: none;
+            }
+
+            .logo-icon {
+                font-size: 30px;
+            }
+
+            .menu button {
+                text-align: center;
+                font-size: 20px;
+            }
+
+            .main {
+                margin-left: 75px;
+                padding: 20px;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2,1fr);
+            }
+        }
+
+        @media(max-width:600px) {
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .students-header {
+                flex-direction: column;
+            }
+
+            .search {
+                max-width: none;
+            }
+        }
+    </style>
 </head>
 
 <body>
-
-<div class="app">
 
 <!-- ==========================================
      SIDEBAR
@@ -596,15 +522,15 @@ td {
 <aside class="sidebar">
 
     <div class="logo">
-        <div class="robot">🤖</div>
-        <h1>ROBOT LAB</h1>
-        <span>PANEL DEL PROFESOR</span>
+        <div class="logo-icon">🤖</div>
+        <h2>CITZ</h2>
+        <p>Campus Virtual</p>
     </div>
 
-    <nav class="menu">
+    <div class="menu">
 
         <button class="active" onclick="mostrarSeccion('resumen', this)">
-            🏠 <span>Resumen</span>
+            📊 <span>Resumen</span>
         </button>
 
         <button onclick="mostrarSeccion('alumnos', this)">
@@ -612,7 +538,7 @@ td {
         </button>
 
         <button onclick="mostrarSeccion('actividades', this)">
-            📚 <span>Actividades</span>
+            🧩 <span>Actividades</span>
         </button>
 
         <button onclick="mostrarSeccion('tareas', this)">
@@ -623,14 +549,12 @@ td {
             🏆 <span>Logros</span>
         </button>
 
-    </nav>
+    </div>
 
     <div class="logout">
-
         <button onclick="cerrarSesion()">
             🚪 <span>Cerrar sesión</span>
         </button>
-
     </div>
 
 </aside>
@@ -642,39 +566,23 @@ td {
 
 <main class="main">
 
-    <!-- TOPBAR -->
-
-    <header class="topbar">
+    <header class="header">
 
         <div>
-            <h2 id="tituloPagina">Resumen del Campus</h2>
-            <p>Administra el progreso de tus alumnos 🚀</p>
+            <h1>Panel del profesor</h1>
+            <p>Administra el progreso de tus alumnos</p>
         </div>
 
-        <div class="profesor">
-
-            <div class="profesor-avatar">
-                👨‍🏫
-            </div>
-
-            <div>
-                <strong id="nombreProfesor">
-                    Profesor
-                </strong>
-
-                <small style="display:block;color:#778197;">
-                    Administrador
-                </small>
-            </div>
-
+        <div class="teacher">
+            👨‍🏫 <span id="nombreProfesor">Profesor</span>
         </div>
 
     </header>
 
 
-    <!-- ==========================================
+    <!-- ======================================
          RESUMEN
-    ========================================== -->
+    ======================================= -->
 
     <section id="resumen" class="section active">
 
@@ -682,77 +590,65 @@ td {
 
             <div class="stat">
                 <div class="stat-icon">👨‍🎓</div>
-                <div class="stat-number" id="totalAlumnos">0</div>
-                <div class="stat-label">Alumnos registrados</div>
+                <h3 id="totalAlumnos">Calculando...</h3>
+                <p>Alumnos registrados</p>
             </div>
 
             <div class="stat">
                 <div class="stat-icon">⭐</div>
-                <div class="stat-number" id="totalPuntos">0</div>
-                <div class="stat-label">Puntos acumulados</div>
+                <h3 id="totalPuntos">Calculando...</h3>
+                <p>Puntos acumulados</p>
             </div>
 
             <div class="stat">
-                <div class="stat-icon">🐾</div>
-                <div class="stat-number" id="totalMascotas">0</div>
-                <div class="stat-label">Mascotas elegidas</div>
+                <div class="stat-icon">🤖</div>
+                <h3 id="mascotasElegidas">Calculando...</h3>
+                <p>Mascotas elegidas</p>
             </div>
 
             <div class="stat">
-                <div class="stat-icon">🏆</div>
-                <div class="stat-number" id="nivelPromedio">0</div>
-                <div class="stat-label">Nivel promedio</div>
+                <div class="stat-icon">🆙</div>
+                <h3 id="nivelPromedio">Calculando...</h3>
+                <p>Nivel promedio</p>
             </div>
 
         </div>
 
 
-        <div class="card">
+        <div class="panel">
 
-            <div class="card-header">
-
-                <h3>📈 Progreso general</h3>
-
-                <span id="textoProgreso">
-                    Calculando...
-                </span>
-
+            <div class="panel-title">
+                <h2>🚀 Progreso del grupo</h2>
+                <strong id="porcentajeProgreso">0%</strong>
             </div>
 
-            <div class="progress-container">
-
-                <div class="progress-info">
-                    <span>Progreso del grupo</span>
-                    <strong id="porcentajeProgreso">0%</strong>
+            <div class="progress">
+                <div
+                    class="progress-bar"
+                    id="barraProgreso">
                 </div>
-
-                <div class="progress">
-
-                    <div
-                        class="progress-bar"
-                        id="barraProgreso">
-                    </div>
-
-                </div>
-
             </div>
 
         </div>
 
 
-        <div class="card">
+        <div class="panel">
 
-            <div class="card-header">
+            <div class="panel-title">
 
-                <h3>👨‍🎓 Alumnos</h3>
+                <h2>👨‍🎓 Alumnos</h2>
 
-                <span>Vista rápida</span>
+                <button class="btn" onclick="abrirAgregarAlumno()">
+                    ➕ Agregar alumno
+                </button>
 
             </div>
 
-            <div
-                class="students-grid"
-                id="alumnosResumen">
+            <div id="alumnosResumen" class="students">
+                <div class="empty">
+                    <div class="empty-icon">⏳</div>
+                    Cargando alumnos...
+                </div>
             </div>
 
         </div>
@@ -760,113 +656,225 @@ td {
     </section>
 
 
-    <!-- ==========================================
+    <!-- ======================================
          ALUMNOS
-    ========================================== -->
+    ======================================= -->
 
     <section id="alumnos" class="section">
 
-        <div class="toolbar">
+        <div class="panel">
 
-            <input
-                id="buscarAlumno"
-                class="search"
-                placeholder="🔎 Buscar alumno..."
-                oninput="filtrarAlumnos()"
-            >
+            <div class="panel-title">
 
-            <button class="btn" onclick="abrirAgregarAlumno()">
-                ➕ Agregar alumno
-            </button>
+                <h2>👨‍🎓 Gestión de alumnos</h2>
 
-        </div>
+                <button class="btn" onclick="abrirAgregarAlumno()">
+                    ➕ Agregar alumno
+                </button>
 
-        <div
-            class="students-grid"
-            id="listaAlumnos">
+            </div>
+
+            <div class="students-header">
+
+                <input
+                    id="buscador"
+                    class="search"
+                    type="text"
+                    placeholder="🔎 Buscar alumno..."
+                    oninput="buscarAlumno()"
+                >
+
+            </div>
+
+            <div id="listaAlumnos" class="students">
+
+                <div class="empty">
+                    <div class="empty-icon">⏳</div>
+                    Cargando alumnos...
+                </div>
+
+            </div>
+
         </div>
 
     </section>
 
 
-    <!-- ==========================================
+    <!-- ======================================
          ACTIVIDADES
-    ========================================== -->
+    ======================================= -->
 
     <section id="actividades" class="section">
 
-        <div class="card">
+        <div class="panel">
 
-            <div class="card-header">
+            <div class="panel-title">
 
-                <h3>📚 Actividades</h3>
+                <h2>🧩 Actividades</h2>
 
-                <button class="btn">
+                <button class="btn" onclick="alert('Módulo de actividades próximamente')">
                     ➕ Nueva actividad
                 </button>
 
             </div>
 
-            <p style="color:#778197;">
-                Aquí administraremos las actividades de los alumnos.
-            </p>
+            <div class="empty">
+
+                <div class="empty-icon">🧩</div>
+
+                <h2>Gestión de actividades</h2>
+
+                <p style="margin-top:10px;">
+                    Aquí podrás crear, editar y calificar actividades.
+                </p>
+
+            </div>
 
         </div>
 
     </section>
 
 
-    <!-- ==========================================
+    <!-- ======================================
          TAREAS
-    ========================================== -->
+    ======================================= -->
 
     <section id="tareas" class="section">
 
-        <div class="card">
+        <div class="panel">
 
-            <div class="card-header">
+            <div class="panel-title">
 
-                <h3>📝 Tareas</h3>
+                <h2>📝 Tareas</h2>
 
-                <button class="btn">
+                <button class="btn" onclick="alert('Módulo de tareas próximamente')">
                     ➕ Nueva tarea
                 </button>
 
             </div>
 
-            <p style="color:#778197;">
-                Aquí administraremos las tareas y calificaciones.
-            </p>
+            <div class="empty">
+
+                <div class="empty-icon">📝</div>
+
+                <h2>Gestión de tareas</h2>
+
+                <p style="margin-top:10px;">
+                    Aquí podrás crear, editar y calificar tareas.
+                </p>
+
+            </div>
 
         </div>
 
     </section>
 
 
-    <!-- ==========================================
+    <!-- ======================================
          LOGROS
-    ========================================== -->
+    ======================================= -->
 
     <section id="logros" class="section">
 
-        <div class="card">
+        <div class="panel">
 
-            <div class="card-header">
-
-                <h3>🏆 Sistema de logros</h3>
-
+            <div class="panel-title">
+                <h2>🏆 Logros</h2>
             </div>
 
-            <p style="color:#778197;">
-                Próximamente podrás crear y administrar logros
-                para tus alumnos.
-            </p>
+            <div class="empty">
+
+                <div class="empty-icon">🏆</div>
+
+                <h2>Sistema de logros</h2>
+
+                <p style="margin-top:10px;">
+                    Próximamente podrás administrar los logros de tus alumnos.
+                </p>
+
+            </div>
 
         </div>
 
     </section>
 
 </main>
+
+
+<!-- ==========================================
+     MODAL AGREGAR ALUMNO
+========================================== -->
+
+<div class="modal" id="modalAgregar">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h2>➕ Agregar alumno</h2>
+
+            <button
+                class="close"
+                onclick="cerrarAgregarAlumno()">
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Nombre completo</label>
+
+            <input
+                id="nuevoNombre"
+                type="text"
+                placeholder="Ej. Juan Pérez">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Usuario</label>
+
+            <input
+                id="nuevoUsuario"
+                type="text"
+                placeholder="Ej. jperez">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Contraseña</label>
+
+            <input
+                id="nuevaPassword"
+                type="text"
+                placeholder="Ej. Juan2026">
+
+        </div>
+
+
+        <div class="modal-actions">
+
+            <button
+                class="cancel-btn"
+                onclick="cerrarAgregarAlumno()">
+                Cancelar
+            </button>
+
+            <button
+                class="save-btn"
+                onclick="crearAlumno()">
+                Crear alumno
+            </button>
+
+        </div>
+
+    </div>
 
 </div>
 
@@ -881,20 +889,19 @@ td {
 
         <div class="modal-header">
 
-            <h3>✏️ Editar alumno</h3>
+            <h2>✏️ Editar alumno</h2>
 
-            <div
+            <button
                 class="close"
-                onclick="cerrarModal()">
+                onclick="cerrarEditarAlumno()">
                 ×
-            </div>
+            </button>
 
         </div>
 
-        <input
-            type="hidden"
-            id="editarId"
-        >
+
+        <input type="hidden" id="editarId">
+
 
         <div class="form-group">
 
@@ -902,94 +909,79 @@ td {
 
             <input
                 id="editarNombre"
-                type="text"
-            >
+                type="text">
 
         </div>
 
+
         <div class="form-group">
 
-            <label>Puntos ⭐</label>
+            <label>Puntos</label>
 
             <input
                 id="editarPuntos"
                 type="number"
-                min="0"
-            >
+                min="0">
 
         </div>
 
+
         <div class="form-group">
 
-            <label>Nivel 🏆</label>
+            <label>Nivel</label>
 
             <input
                 id="editarNivel"
                 type="number"
                 min="1"
-            >
+                max="5">
 
         </div>
 
+
         <div class="form-group">
 
-            <label>Energía ⚡</label>
+            <label>Energía</label>
 
             <input
                 id="editarEnergia"
                 type="number"
                 min="0"
-                max="100"
-            >
+                max="100">
 
         </div>
 
+
         <div class="form-group">
 
-            <label>Mascota 🐾</label>
+            <label>Mascota</label>
 
             <select id="editarMascota">
 
-                <option value="">
-                    Sin mascota
-                </option>
-
-                <option value="robot">
-                    🤖 Robot
-                </option>
-
-                <option value="dinosaurio">
-                    🦖 Dinosaurio
-                </option>
-
-                <option value="gato">
-                    🐱 Gato
-                </option>
-
-                <option value="alien">
-                    👽 Alien
-                </option>
-
-                <option value="zorro">
-                    🦊 Zorro
-                </option>
+                <option value="">Sin mascota</option>
+                <option value="robot">🤖 Robot</option>
+                <option value="dinosaurio">🦖 Dinosaurio</option>
+                <option value="gato">🐱 Gato</option>
+                <option value="alien">👽 Alien</option>
+                <option value="zorro">🦊 Zorro</option>
 
             </select>
 
         </div>
 
+
         <div class="modal-actions">
 
             <button
-                class="cancel"
-                onclick="cerrarModal()">
+                class="cancel-btn"
+                onclick="cerrarEditarAlumno()">
                 Cancelar
             </button>
 
             <button
-                class="save"
+                class="save-btn"
                 onclick="guardarAlumno()">
-                💾 Guardar cambios
+                Guardar cambios
             </button>
 
         </div>
@@ -998,1250 +990,1113 @@ td {
 
 </div>
 
+
+<!-- ==========================================
+     JAVASCRIPT
+========================================== -->
 
 <script>
 
+    /* ==========================================
+       SUPABASE
+    ========================================== */
 
-    <!-- ==========================================
-     MODAL AGREGAR ALUMNO
-========================================== -->
+    const SUPABASE_URL =
+        "https://bcfknbpkduiwgqymxkns.supabase.co";
 
-<div class="modal" id="modalAgregar">
+    const SUPABASE_KEY =
+        "sb_publishable_END5KZ8gA4e9YDpicG-aLw_aRaIzo7E";
 
-    <div class="modal-box">
-
-        <div class="modal-header">
-
-            <h3>➕ Agregar alumno</h3>
-
-            <div
-                class="close"
-                onclick="cerrarAgregarAlumno()">
-                ×
-            </div>
-
-        </div>
+    const supabaseClient =
+        supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
 
 
-        <div class="form-group">
+    /* ==========================================
+       VARIABLES
+    ========================================== */
 
-            <label>
-                Nombre completo
-            </label>
-
-            <input
-                id="nuevoNombre"
-                type="text"
-                placeholder="Ej. Juan Pérez"
-                autocomplete="off"
-            >
-
-        </div>
+    let alumnos = [];
 
 
-        <div class="form-group">
+    /* ==========================================
+       MASCOTAS
+    ========================================== */
 
-            <label>
-                Usuario
-            </label>
-
-            <input
-                id="nuevoUsuario"
-                type="text"
-                placeholder="Ej. jperez"
-                autocomplete="off"
-            >
-
-            <small style="
-                display:block;
-                margin-top:6px;
-                color:#69738a;
-            ">
-                Se utilizará para iniciar sesión.
-            </small>
-
-        </div>
+    const mascotasEmoji = {
+        robot: "🤖",
+        dinosaurio: "🦖",
+        gato: "🐱",
+        alien: "👽",
+        zorro: "🦊"
+    };
 
 
-        <div class="form-group">
+    /* ==========================================
+       INICIO
+    ========================================== */
 
-            <label>
-                Contraseña
-            </label>
-
-            <input
-                id="nuevoPassword"
-                type="password"
-                placeholder="Contraseña inicial"
-                autocomplete="new-password"
-            >
-
-        </div>
-
-
-        <div
-            id="mensajeAgregar"
-            style="
-                display:none;
-                padding:11px;
-                border-radius:8px;
-                margin-top:10px;
-                font-size:13px;
-            ">
-        </div>
-
-
-        <div class="modal-actions">
-
-            <button
-                class="cancel"
-                onclick="cerrarAgregarAlumno()">
-
-                Cancelar
-
-            </button>
-
-
-            <button
-                class="save"
-                id="btnGuardarAlumno"
-                onclick="crearAlumno()">
-
-                ➕ Crear alumno
-
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-/* ==========================================
-   SUPABASE
-========================================== */
-
-const SUPABASE_URL =
-    "https://bcfknbpkduiwgqymxkns.supabase.co";
-
-const SUPABASE_KEY =
-    "sb_publishable_END5KZ8gA4e9YDpicG-aLw_aRaIzo7E";
-
-const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
+    document.addEventListener(
+        "DOMContentLoaded",
+        iniciarPanel
     );
 
 
-/* ==========================================
-   VARIABLES
-========================================== */
+    async function iniciarPanel() {
 
-let alumnos = [];
+        try {
 
-
-/* ==========================================
-   INICIO
-========================================== */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    iniciarPanel
-);
+            const {
+                data: sessionData,
+                error: sessionError
+            } = await supabaseClient.auth.getSession();
 
 
-async function iniciarPanel() {
-
-    try {
-
-        const {
-            data: {
-                session
+            if (sessionError) {
+                console.error(sessionError);
+                window.location.href = "login.html";
+                return;
             }
-        } =
-        await supabaseClient.auth.getSession();
 
 
-        if (!session) {
+            const session =
+                sessionData.session;
 
-            window.location.href =
-                "login.html";
 
-            return;
+            if (!session) {
 
-        }
+                window.location.href =
+                    "login.html";
 
+                return;
+            }
 
-        /* ==========================
-           VERIFICAR PROFESOR
-        ========================== */
 
-        const {
-            data: profesor,
-            error
-        } =
-        await supabaseClient
-            .from("alumnos")
-            .select("*")
-            .eq(
-                "auth_id",
-                session.user.id
-            )
-            .single();
+            /* ==============================
+               OBTENER PROFESOR
+            ============================== */
 
+            const {
+                data: profesor,
+                error: profesorError
+            } = await supabaseClient
+                .from("alumnos")
+                .select(
+                    "id, usuario, nombre, rol"
+                )
+                .eq(
+                    "auth_id",
+                    session.user.id
+                )
+                .maybeSingle();
 
-        if (
-            error ||
-            !profesor ||
-            profesor.rol !== "profesor"
-        ) {
 
-            alert(
-                "No tienes permisos para acceder al panel del profesor."
-            );
+            if (profesorError) {
 
-            await supabaseClient.auth.signOut();
-
-            window.location.href =
-                "login.html";
-
-            return;
-
-        }
-
-
-        document.getElementById(
-            "nombreProfesor"
-        ).textContent =
-            profesor.nombre;
-
-
-        /* ==========================
-           CARGAR ALUMNOS
-        ========================== */
-
-        await cargarAlumnos();
-
-    }
-    catch(error) {
-
-        console.error(error);
-
-        alert(
-            "Ocurrió un error al iniciar el panel."
-        );
-
-    }
-
-}
-
-
-/* ==========================================
-   CARGAR ALUMNOS
-========================================== */
-
-async function cargarAlumnos() {
-
-    const {
-        data,
-        error
-    } =
-    await supabaseClient
-        .from("alumnos")
-        .select("*")
-        .eq("rol", "alumno")
-        .order("nombre");
-
-
-    if (error) {
-
-        console.error(
-            "Error cargando alumnos:",
-            error
-        );
-
-        return;
-
-    }
-
-
-    alumnos = data || [];
-
-
-    actualizarResumen();
-
-    mostrarAlumnos();
-    mostrarAlumnosResumen();
-
-}
-
-
-/* ==========================================
-   RESUMEN
-========================================== */
-
-function actualizarResumen() {
-
-    const total =
-        alumnos.length;
-
-
-    const puntos =
-        alumnos.reduce(
-            (suma, alumno) =>
-                suma + (
-                    Number(alumno.puntos) || 0
-                ),
-            0
-        );
-
-
-    const mascotas =
-        alumnos.filter(
-            alumno =>
-                alumno.mascota
-        ).length;
-
-
-    const niveles =
-        alumnos.reduce(
-            (suma, alumno) =>
-                suma + (
-                    Number(alumno.nivel) || 0
-                ),
-            0
-        );
-
-
-    const promedio =
-        total
-            ? niveles / total
-            : 0;
-
-
-    document.getElementById(
-        "totalAlumnos"
-    ).textContent =
-        total;
-
-
-    document.getElementById(
-        "totalPuntos"
-    ).textContent =
-        puntos;
-
-
-    document.getElementById(
-        "totalMascotas"
-    ).textContent =
-        mascotas;
-
-
-    document.getElementById(
-        "nivelPromedio"
-    ).textContent =
-        promedio.toFixed(1);
-
-
-    /*
-       Consideramos nivel 5 como
-       progreso máximo por ahora.
-    */
-
-    const porcentaje =
-        total
-            ? Math.min(
-                100,
-                (promedio / 5) * 100
-            )
-            : 0;
-
-
-    document.getElementById(
-        "porcentajeProgreso"
-    ).textContent =
-        Math.round(porcentaje) + "%";
-
-
-    document.getElementById(
-        "barraProgreso"
-    ).style.width =
-        porcentaje + "%";
-
-
-    document.getElementById(
-        "textoProgreso"
-    ).textContent =
-        `${Math.round(porcentaje)}% del progreso`;
-}
-
-
-/* ==========================================
-   MOSTRAR ALUMNOS
-========================================== */
-
-function mostrarAlumnos(
-    lista = alumnos
-) {
-
-    const contenedor =
-        document.getElementById(
-            "listaAlumnos"
-        );
-
-
-    contenedor.innerHTML = "";
-
-
-    if (!lista.length) {
-
-        contenedor.innerHTML = `
-            <div class="card">
-                <p style="color:#778197;">
-                    No se encontraron alumnos.
-                </p>
-            </div>
-        `;
-
-        return;
-
-    }
-
-
-    lista.forEach(
-        alumno => {
-
-            contenedor.innerHTML +=
-                crearTarjetaAlumno(
-                    alumno
+                console.error(
+                    profesorError
                 );
 
-        }
-    );
+                alert(
+                    "No fue posible verificar el usuario."
+                );
 
-}
-
-
-/* ==========================================
-   TARJETA ALUMNO
-========================================== */
-
-function crearTarjetaAlumno(
-    alumno
-) {
-
-    const emoji =
-        obtenerEmojiMascota(
-            alumno.mascota
-        );
-
-
-    return `
-
-        <div class="student">
-
-            <div class="student-top">
-
-                <div class="pet">
-                    ${emoji}
-                </div>
-
-                <div>
-
-                    <div class="student-name">
-                        ${escaparHTML(
-                            alumno.nombre
-                        )}
-                    </div>
-
-                    <div class="student-user">
-                        @${escaparHTML(
-                            alumno.usuario
-                        )}
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="student-stats">
-
-                <div class="student-stat">
-
-                    <strong>
-                        ${alumno.puntos ?? 0}
-                    </strong>
-
-                    <span>
-                        ⭐ Puntos
-                    </span>
-
-                </div>
-
-
-                <div class="student-stat">
-
-                    <strong>
-                        ${alumno.nivel ?? 1}
-                    </strong>
-
-                    <span>
-                        🏆 Nivel
-                    </span>
-
-                </div>
-
-
-                <div class="student-stat">
-
-                    <strong>
-                        ${alumno.energia ?? 100}
-                    </strong>
-
-                    <span>
-                        ⚡ Energía
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <button
-                class="edit-btn"
-                onclick="abrirEditarAlumno(${alumno.id})"
-            >
-                ✏️ Editar alumno
-            </button>
-
-        </div>
-
-    `;
-
-}
-
-
-/* ==========================================
-   ALUMNOS DEL RESUMEN
-========================================== */
-
-function mostrarAlumnosResumen() {
-
-    const contenedor =
-        document.getElementById(
-            "alumnosResumen"
-        );
-
-
-    contenedor.innerHTML = "";
-
-
-    alumnos
-        .slice(0, 6)
-        .forEach(
-            alumno => {
-
-                contenedor.innerHTML +=
-                    crearTarjetaAlumno(
-                        alumno
-                    );
-
+                return;
             }
-        );
 
-}
 
+            if (
+                !profesor ||
+                profesor.rol !== "profesor"
+            ) {
 
-/* ==========================================
-   BUSCAR
-========================================== */
+                alert(
+                    "No tienes permisos para acceder a este panel."
+                );
 
-function filtrarAlumnos() {
+                await supabaseClient.auth.signOut();
 
-    const texto =
-        document
-            .getElementById(
-                "buscarAlumno"
-            )
-            .value
-            .toLowerCase();
+                window.location.href =
+                    "login.html";
 
-
-    const filtrados =
-        alumnos.filter(
-            alumno =>
-                alumno.nombre
-                    .toLowerCase()
-                    .includes(texto)
-                ||
-                alumno.usuario
-                    .toLowerCase()
-                    .includes(texto)
-        );
-
-
-    mostrarAlumnos(
-        filtrados
-    );
-
-}
-
-
-/* ==========================================
-   EDITAR ALUMNO
-========================================== */
-
-function abrirEditarAlumno(
-    id
-) {
-
-    const alumno =
-        alumnos.find(
-            a => a.id === id
-        );
-
-
-    if (!alumno) return;
-
-
-    document.getElementById(
-        "editarId"
-    ).value =
-        alumno.id;
-
-
-    document.getElementById(
-        "editarNombre"
-    ).value =
-        alumno.nombre || "";
-
-
-    document.getElementById(
-        "editarPuntos"
-    ).value =
-        alumno.puntos ?? 0;
-
-
-    document.getElementById(
-        "editarNivel"
-    ).value =
-        alumno.nivel ?? 1;
-
-
-    document.getElementById(
-        "editarEnergia"
-    ).value =
-        alumno.energia ?? 100;
-
-
-    document.getElementById(
-        "editarMascota"
-    ).value =
-        alumno.mascota || "";
-
-
-    document.getElementById(
-        "modalEditar"
-    ).classList.add("show");
-
-}
-
-
-/* ==========================================
-   GUARDAR ALUMNO
-========================================== */
-
-async function guardarAlumno() {
-
-    const id =
-        document.getElementById(
-            "editarId"
-        ).value;
-
-
-    const nombre =
-        document.getElementById(
-            "editarNombre"
-        ).value.trim();
-
-
-    const puntos =
-        Number(
-            document.getElementById(
-                "editarPuntos"
-            ).value
-        );
-
-
-    const nivel =
-        Number(
-            document.getElementById(
-                "editarNivel"
-            ).value
-        );
-
-
-    const energia =
-        Number(
-            document.getElementById(
-                "editarEnergia"
-            ).value
-        );
-
-
-    const mascota =
-        document.getElementById(
-            "editarMascota"
-        ).value || null;
-
-
-    if (!nombre) {
-
-        alert(
-            "Escribe el nombre del alumno."
-        );
-
-        return;
-
-    }
-
-
-    const {
-        error
-    } =
-    await supabaseClient
-        .from("alumnos")
-        .update({
-
-            nombre,
-            puntos,
-            nivel,
-            energia,
-            mascota
-
-        })
-        .eq("id", id);
-
-
-    if (error) {
-
-        console.error(error);
-
-        alert(
-            "No se pudieron guardar los cambios."
-        );
-
-        return;
-
-    }
-
-
-    cerrarModal();
-
-    await cargarAlumnos();
-
-    alert(
-        "Alumno actualizado correctamente. ✅"
-    );
-
-}
-
-
-/* ==========================================
-   MODAL
-========================================== */
-
-function cerrarModal() {
-
-    document.getElementById(
-        "modalEditar"
-    ).classList.remove(
-        "show"
-    );
-
-}
-
-
-/* ==========================================
-   AGREGAR ALUMNO
-========================================== */
-
-function abrirAgregarAlumno() {
-
-    document.getElementById(
-        "nuevoNombre"
-    ).value = "";
-
-    document.getElementById(
-        "nuevoUsuario"
-    ).value = "";
-
-    document.getElementById(
-        "nuevoPassword"
-    ).value = "";
-
-    ocultarMensajeAgregar();
-
-    document.getElementById(
-        "modalAgregar"
-    ).classList.add("show");
-
-    setTimeout(() => {
-
-        document.getElementById(
-            "nuevoNombre"
-        ).focus();
-
-    }, 100);
-
-}
-
-
-/* ==========================================
-   CERRAR MODAL AGREGAR
-========================================== */
-
-function cerrarAgregarAlumno() {
-
-    document.getElementById(
-        "modalAgregar"
-    ).classList.remove(
-        "show"
-    );
-
-}
-
-
-/* ==========================================
-   MENSAJE MODAL
-========================================== */
-
-function mostrarMensajeAgregar(
-    mensaje,
-    tipo = "error"
-) {
-
-    const elemento =
-        document.getElementById(
-            "mensajeAgregar"
-        );
-
-
-    elemento.style.display =
-        "block";
-
-
-    elemento.textContent =
-        mensaje;
-
-
-    if (tipo === "success") {
-
-        elemento.style.background =
-            "rgba(0,255,150,.10)";
-
-        elemento.style.border =
-            "1px solid rgba(0,255,150,.25)";
-
-        elemento.style.color =
-            "#5dffb0";
-
-    }
-    else {
-
-        elemento.style.background =
-            "rgba(255,60,80,.10)";
-
-        elemento.style.border =
-            "1px solid rgba(255,60,80,.25)";
-
-        elemento.style.color =
-            "#ff7184";
-
-    }
-
-}
-
-
-function ocultarMensajeAgregar() {
-
-    const elemento =
-        document.getElementById(
-            "mensajeAgregar"
-        );
-
-    elemento.style.display =
-        "none";
-
-}
-
-
-/* ==========================================
-   CREAR ALUMNO
-========================================== */
-
-async function crearAlumno() {
-
-    const nombre =
-        document.getElementById(
-            "nuevoNombre"
-        )
-        .value
-        .trim();
-
-
-    const usuario =
-        document.getElementById(
-            "nuevoUsuario"
-        )
-        .value
-        .trim()
-        .toLowerCase();
-
-
-    const password =
-        document.getElementById(
-            "nuevoPassword"
-        )
-        .value;
-
-
-    if (!nombre) {
-
-        mostrarMensajeAgregar(
-            "Escribe el nombre completo del alumno."
-        );
-
-        return;
-
-    }
-
-
-    if (!usuario) {
-
-        mostrarMensajeAgregar(
-            "Escribe un nombre de usuario."
-        );
-
-        return;
-
-    }
-
-
-    if (!/^[a-zA-Z0-9._-]+$/.test(usuario)) {
-
-        mostrarMensajeAgregar(
-            "El usuario solo puede contener letras, números, punto, guion y guion bajo."
-        );
-
-        return;
-
-    }
-
-
-    if (password.length < 4) {
-
-        mostrarMensajeAgregar(
-            "La contraseña debe tener al menos 4 caracteres."
-        );
-
-        return;
-
-    }
-
-
-    const boton =
-        document.getElementById(
-            "btnGuardarAlumno"
-        );
-
-
-    boton.disabled =
-        true;
-
-    boton.textContent =
-        "⏳ Creando alumno...";
-
-
-    ocultarMensajeAgregar();
-
-
-    try {
-
-        // ==========================
-        // OBTENER SESIÓN ACTUAL
-        // ==========================
-
-        const {
-            data: {
-                session
+                return;
             }
-        } =
-        await supabaseClient
-            .auth
-            .getSession();
 
 
-        if (!session) {
+            document.getElementById(
+                "nombreProfesor"
+            ).textContent =
+                profesor.nombre;
 
-            throw new Error(
-                "Tu sesión ha expirado. Vuelve a iniciar sesión."
+
+            await cargarAlumnos();
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "Ocurrió un error al iniciar el panel."
             );
-
         }
+    }
 
 
-        // ==========================
-        // LLAMAR EDGE FUNCTION
-        // ==========================
+    /* ==========================================
+       CARGAR ALUMNOS
+    ========================================== */
+
+    async function cargarAlumnos() {
 
         const {
             data,
             error
-        } =
-        await supabaseClient.functions.invoke(
-            "crear-alumno",
-            {
-                body: {
-
-                    nombre,
-
-                    usuario,
-
-                    password
-
-                }
-            }
-        );
+        } = await supabaseClient
+            .from("alumnos")
+            .select(
+                "id, usuario, nombre, mascota, puntos, nivel, energia, rol"
+            )
+            .eq("rol", "alumno")
+            .order("nombre");
 
 
         if (error) {
 
-            console.error(
-                "Error Edge Function:",
-                error
+            console.error(error);
+
+            alert(
+                "No se pudieron cargar los alumnos."
             );
 
-            throw new Error(
-                error.message ||
-                "No se pudo crear el alumno."
-            );
-
+            return;
         }
 
 
-        if (!data || !data.success) {
+        alumnos = data || [];
 
-            throw new Error(
-                data?.error ||
-                "No se pudo crear el alumno."
+
+        actualizarEstadisticas();
+
+        mostrarAlumnos();
+
+        mostrarAlumnosResumen();
+    }
+
+
+    /* ==========================================
+       ESTADÍSTICAS
+    ========================================== */
+
+    function actualizarEstadisticas() {
+
+        const total =
+            alumnos.length;
+
+
+        const puntos =
+            alumnos.reduce(
+                (sum, alumno) =>
+                    sum + (Number(alumno.puntos) || 0),
+                0
             );
 
-        }
+
+        const mascotas =
+            alumnos.filter(
+                alumno =>
+                    alumno.mascota
+            ).length;
 
 
-        // ==========================
-        // ÉXITO
-        // ==========================
-
-        mostrarMensajeAgregar(
-            "Alumno creado correctamente. ✅",
-            "success"
-        );
-
-
-        // ==========================
-        // RECARGAR LISTA
-        // ==========================
-
-        await cargarAlumnos();
+        const promedio =
+            total > 0
+                ? alumnos.reduce(
+                    (sum, alumno) =>
+                        sum +
+                        (Number(alumno.nivel) || 1),
+                    0
+                ) / total
+                : 0;
 
 
-        // ==========================
-        // CERRAR DESPUÉS DE UN MOMENTO
-        // ==========================
-
-        setTimeout(() => {
-
-            cerrarAgregarAlumno();
-
-        }, 1000);
+        document.getElementById(
+            "totalAlumnos"
+        ).textContent =
+            total;
 
 
-    }
-    catch (error) {
-
-        console.error(
-            "Error creando alumno:",
-            error
-        );
+        document.getElementById(
+            "totalPuntos"
+        ).textContent =
+            puntos;
 
 
-        mostrarMensajeAgregar(
-            error.message ||
-            "Ocurrió un error al crear el alumno."
-        );
+        document.getElementById(
+            "mascotasElegidas"
+        ).textContent =
+            mascotas;
 
-    }
-    finally {
 
-        boton.disabled =
-            false;
+        document.getElementById(
+            "nivelPromedio"
+        ).textContent =
+            total
+                ? promedio.toFixed(1)
+                : "0.0";
 
-        boton.textContent =
-            "➕ Crear alumno";
 
-    }
+        /*
+            Nivel máximo considerado: 5
 
-}
+            Ejemplo:
+            nivel promedio 1 = 20%
+            nivel promedio 2.5 = 50%
+            nivel promedio 5 = 100%
+        */
 
-/* ==========================================
-   NAVEGACIÓN
-========================================== */
-
-function mostrarSeccion(
-    id,
-    boton
-) {
-
-    document
-        .querySelectorAll(
-            ".section"
-        )
-        .forEach(
-            seccion =>
-                seccion.classList.remove(
-                    "active"
+        const porcentaje =
+            total
+                ? Math.min(
+                    100,
+                    (promedio / 5) * 100
                 )
+                : 0;
+
+
+        document.getElementById(
+            "barraProgreso"
+        ).style.width =
+            porcentaje + "%";
+
+
+        document.getElementById(
+            "porcentajeProgreso"
+        ).textContent =
+            Math.round(porcentaje) + "%";
+    }
+
+
+    /* ==========================================
+       MOSTRAR ALUMNOS
+    ========================================== */
+
+    function mostrarAlumnos(
+        lista = alumnos
+    ) {
+
+        const contenedor =
+            document.getElementById(
+                "listaAlumnos"
+            );
+
+
+        if (!lista.length) {
+
+            contenedor.innerHTML = `
+                <div class="empty">
+                    <div class="empty-icon">👨‍🎓</div>
+                    No hay alumnos registrados.
+                </div>
+            `;
+
+            return;
+        }
+
+
+        contenedor.innerHTML =
+            lista.map(
+                alumno =>
+                    crearTarjetaAlumno(alumno)
+            ).join("");
+    }
+
+
+    /* ==========================================
+       RESUMEN DE ALUMNOS
+    ========================================== */
+
+    function mostrarAlumnosResumen() {
+
+        const contenedor =
+            document.getElementById(
+                "alumnosResumen"
+            );
+
+
+        if (!alumnos.length) {
+
+            contenedor.innerHTML = `
+                <div class="empty">
+                    <div class="empty-icon">👨‍🎓</div>
+                    No hay alumnos registrados.
+                </div>
+            `;
+
+            return;
+        }
+
+
+        contenedor.innerHTML =
+            alumnos
+                .map(
+                    alumno =>
+                        crearTarjetaAlumno(alumno)
+                )
+                .join("");
+    }
+
+
+    /* ==========================================
+       CREAR TARJETA
+    ========================================== */
+
+    function crearTarjetaAlumno(
+        alumno
+    ) {
+
+        const emoji =
+            mascotasEmoji[
+                alumno.mascota
+            ] || "👤";
+
+
+        return `
+
+            <div class="student">
+
+                <div class="student-top">
+
+                    <div class="avatar">
+                        ${emoji}
+                    </div>
+
+                    <div>
+
+                        <div class="student-name">
+                            ${escapeHTML(
+                                alumno.nombre
+                            )}
+                        </div>
+
+                        <div class="student-user">
+                            @${escapeHTML(
+                                alumno.usuario
+                            )}
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="student-info">
+
+                    <div class="info">
+
+                        <strong>
+                            ${alumno.puntos || 0}
+                        </strong>
+
+                        <span>
+                            PUNTOS
+                        </span>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <strong>
+                            ${alumno.nivel || 1}
+                        </strong>
+
+                        <span>
+                            NIVEL
+                        </span>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <strong>
+                            ${alumno.energia ?? 100}
+                        </strong>
+
+                        <span>
+                            ENERGÍA
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="edit-btn"
+                    onclick="abrirEditarAlumno(${alumno.id})">
+
+                    ✏️ Editar alumno
+
+                </button>
+
+            </div>
+        `;
+    }
+
+
+    /* ==========================================
+       BUSCAR ALUMNO
+    ========================================== */
+
+    function buscarAlumno() {
+
+        const texto =
+            document.getElementById(
+                "buscador"
+            ).value
+            .toLowerCase()
+            .trim();
+
+
+        if (!texto) {
+
+            mostrarAlumnos();
+
+            return;
+        }
+
+
+        const filtrados =
+            alumnos.filter(
+                alumno =>
+                    alumno.nombre
+                        .toLowerCase()
+                        .includes(texto)
+                    ||
+                    alumno.usuario
+                        .toLowerCase()
+                        .includes(texto)
+            );
+
+
+        mostrarAlumnos(
+            filtrados
         );
+    }
 
 
-    document
-        .getElementById(id)
-        .classList.add(
+    /* ==========================================
+       NAVEGACIÓN
+    ========================================== */
+
+    function mostrarSeccion(
+        id,
+        boton
+    ) {
+
+        document
+            .querySelectorAll(".section")
+            .forEach(
+                section =>
+                    section.classList.remove(
+                        "active"
+                    )
+            );
+
+
+        document
+            .getElementById(id)
+            .classList.add(
+                "active"
+            );
+
+
+        document
+            .querySelectorAll(".menu button")
+            .forEach(
+                button =>
+                    button.classList.remove(
+                        "active"
+                    )
+            );
+
+
+        boton.classList.add(
             "active"
         );
 
 
-    document
-        .querySelectorAll(
-            ".menu button"
-        )
-        .forEach(
-            btn =>
-                btn.classList.remove(
-                    "active"
-                )
-        );
+        if (id === "alumnos") {
 
+            mostrarAlumnos();
 
-    boton.classList.add(
-        "active"
-    );
-
-
-    const titulos = {
-
-        resumen:
-            "Resumen del Campus",
-
-        alumnos:
-            "Alumnos",
-
-        actividades:
-            "Actividades",
-
-        tareas:
-            "Tareas",
-
-        logros:
-            "Sistema de Logros"
-
-    };
-
-
-    document.getElementById(
-        "tituloPagina"
-    ).textContent =
-        titulos[id] || "Panel";
-
-
-    if (id === "resumen") {
-
-        mostrarAlumnosResumen();
+        }
 
     }
 
-}
+
+    /* ==========================================
+       MODAL AGREGAR
+    ========================================== */
+
+    function abrirAgregarAlumno() {
+
+        document
+            .getElementById(
+                "modalAgregar"
+            )
+            .classList.add(
+                "show"
+            );
 
 
-/* ==========================================
-   CERRAR SESIÓN
-========================================== */
-
-async function cerrarSesion() {
-
-    await supabaseClient
-        .auth
-        .signOut();
+        document.getElementById(
+            "nuevoNombre"
+        ).focus();
+    }
 
 
-    sessionStorage.clear();
+    function cerrarAgregarAlumno() {
 
-    window.location.href =
-        "login.html";
-
-}
-
-
-/* ==========================================
-   MASCOTAS
-========================================== */
-
-function obtenerEmojiMascota(
-    mascota
-) {
-
-    const emojis = {
-
-        robot: "🤖",
-
-        dinosaurio: "🦖",
-
-        gato: "🐱",
-
-        alien: "👽",
-
-        zorro: "🦊"
-
-    };
+        document
+            .getElementById(
+                "modalAgregar"
+            )
+            .classList.remove(
+                "show"
+            );
 
 
-    return emojis[mascota] || "❓";
+        document.getElementById(
+            "nuevoNombre"
+        ).value = "";
 
-}
+
+        document.getElementById(
+            "nuevoUsuario"
+        ).value = "";
 
 
-/* ==========================================
-   SEGURIDAD HTML
-========================================== */
+        document.getElementById(
+            "nuevaPassword"
+        ).value = "";
+    }
 
-function escaparHTML(
-    texto
-) {
 
-    return String(texto)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+    /* ==========================================
+       CREAR ALUMNO
+    ========================================== */
 
-}
+    async function crearAlumno() {
+
+        const nombre =
+            document.getElementById(
+                "nuevoNombre"
+            ).value.trim();
+
+
+        const usuario =
+            document.getElementById(
+                "nuevoUsuario"
+            ).value
+            .trim()
+            .toLowerCase();
+
+
+        const password =
+            document.getElementById(
+                "nuevaPassword"
+            ).value;
+
+
+        if (!nombre) {
+
+            alert(
+                "Escribe el nombre del alumno."
+            );
+
+            return;
+        }
+
+
+        if (!usuario) {
+
+            alert(
+                "Escribe el usuario."
+            );
+
+            return;
+        }
+
+
+        if (!password) {
+
+            alert(
+                "Escribe una contraseña."
+            );
+
+            return;
+        }
+
+
+        if (password.length < 4) {
+
+            alert(
+                "La contraseña debe tener al menos 4 caracteres."
+            );
+
+            return;
+        }
+
+
+        try {
+
+            const {
+                data: sessionData
+            } =
+                await supabaseClient
+                    .auth
+                    .getSession();
+
+
+            const session =
+                sessionData.session;
+
+
+            if (!session) {
+
+                alert(
+                    "Tu sesión ha expirado."
+                );
+
+                window.location.href =
+                    "login.html";
+
+                return;
+            }
+
+
+            const response =
+                await fetch(
+                    SUPABASE_URL +
+                    "/functions/v1/crear-alumno",
+                    {
+                        method: "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json",
+
+                            "Authorization":
+                                "Bearer " +
+                                session.access_token
+
+                        },
+
+                        body: JSON.stringify({
+
+                            nombre:
+                                nombre,
+
+                            usuario:
+                                usuario,
+
+                            password:
+                                password
+
+                        })
+                    }
+                );
+
+
+            const resultado =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                console.error(
+                    resultado
+                );
+
+                alert(
+                    resultado.error ||
+                    "No fue posible crear el alumno."
+                );
+
+                return;
+            }
+
+
+            alert(
+                "✅ Alumno creado correctamente."
+            );
+
+
+            cerrarAgregarAlumno();
+
+
+            await cargarAlumnos();
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "Error de conexión con el servidor."
+            );
+        }
+    }
+
+
+    /* ==========================================
+       EDITAR ALUMNO
+    ========================================== */
+
+    function abrirEditarAlumno(
+        id
+    ) {
+
+        const alumno =
+            alumnos.find(
+                a =>
+                    Number(a.id) ===
+                    Number(id)
+            );
+
+
+        if (!alumno) {
+
+            alert(
+                "No se encontró el alumno."
+            );
+
+            return;
+        }
+
+
+        document.getElementById(
+            "editarId"
+        ).value =
+            alumno.id;
+
+
+        document.getElementById(
+            "editarNombre"
+        ).value =
+            alumno.nombre || "";
+
+
+        document.getElementById(
+            "editarPuntos"
+        ).value =
+            alumno.puntos ?? 0;
+
+
+        document.getElementById(
+            "editarNivel"
+        ).value =
+            alumno.nivel ?? 1;
+
+
+        document.getElementById(
+            "editarEnergia"
+        ).value =
+            alumno.energia ?? 100;
+
+
+        document.getElementById(
+            "editarMascota"
+        ).value =
+            alumno.mascota || "";
+
+
+        document
+            .getElementById(
+                "modalEditar"
+            )
+            .classList.add(
+                "show"
+            );
+    }
+
+
+    function cerrarEditarAlumno() {
+
+        document
+            .getElementById(
+                "modalEditar"
+            )
+            .classList.remove(
+                "show"
+            );
+    }
+
+
+    /* ==========================================
+       GUARDAR ALUMNO
+    ========================================== */
+
+    async function guardarAlumno() {
+
+        const id =
+            document.getElementById(
+                "editarId"
+            ).value;
+
+
+        const nombre =
+            document.getElementById(
+                "editarNombre"
+            ).value.trim();
+
+
+        const puntos =
+            Number(
+                document.getElementById(
+                    "editarPuntos"
+                ).value
+            );
+
+
+        const nivel =
+            Number(
+                document.getElementById(
+                    "editarNivel"
+                ).value
+            );
+
+
+        const energia =
+            Number(
+                document.getElementById(
+                    "editarEnergia"
+                ).value
+            );
+
+
+        const mascota =
+            document.getElementById(
+                "editarMascota"
+            ).value || null;
+
+
+        if (!nombre) {
+
+            alert(
+                "El nombre no puede estar vacío."
+            );
+
+            return;
+        }
+
+
+        if (
+            Number.isNaN(puntos) ||
+            puntos < 0
+        ) {
+
+            alert(
+                "Los puntos no son válidos."
+            );
+
+            return;
+        }
+
+
+        if (
+            Number.isNaN(nivel) ||
+            nivel < 1 ||
+            nivel > 5
+        ) {
+
+            alert(
+                "El nivel debe estar entre 1 y 5."
+            );
+
+            return;
+        }
+
+
+        if (
+            Number.isNaN(energia) ||
+            energia < 0 ||
+            energia > 100
+        ) {
+
+            alert(
+                "La energía debe estar entre 0 y 100."
+            );
+
+            return;
+        }
+
+
+        const {
+            error
+        } = await supabaseClient
+            .from("alumnos")
+            .update({
+
+                nombre:
+                    nombre,
+
+                puntos:
+                    puntos,
+
+                nivel:
+                    nivel,
+
+                energia:
+                    energia,
+
+                mascota:
+                    mascota
+
+            })
+            .eq(
+                "id",
+                id
+            );
+
+
+        if (error) {
+
+            console.error(error);
+
+            alert(
+                "No se pudieron guardar los cambios."
+            );
+
+            return;
+        }
+
+
+        alert(
+            "✅ Cambios guardados."
+        );
+
+
+        cerrarEditarAlumno();
+
+
+        await cargarAlumnos();
+    }
+
+
+    /* ==========================================
+       CERRAR SESIÓN
+    ========================================== */
+
+    async function cerrarSesion() {
+
+        const confirmar =
+            confirm(
+                "¿Seguro que quieres cerrar sesión?"
+            );
+
+
+        if (!confirmar) {
+            return;
+        }
+
+
+        await supabaseClient
+            .auth
+            .signOut();
+
+
+        sessionStorage.clear();
+
+
+        window.location.href =
+            "login.html";
+    }
+
+
+    /* ==========================================
+       SEGURIDAD HTML
+    ========================================== */
+
+    function escapeHTML(
+        texto
+    ) {
+
+        return String(
+            texto ?? ""
+        )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+    }
+
+
+    /* ==========================================
+       CERRAR MODALES AL HACER CLICK FUERA
+    ========================================== */
+
+    document
+        .getElementById(
+            "modalAgregar"
+        )
+        .addEventListener(
+            "click",
+            function(event) {
+
+                if (
+                    event.target === this
+                ) {
+
+                    cerrarAgregarAlumno();
+
+                }
+
+            }
+        );
+
+
+    document
+        .getElementById(
+            "modalEditar"
+        )
+        .addEventListener(
+            "click",
+            function(event) {
+
+                if (
+                    event.target === this
+                ) {
+
+                    cerrarEditarAlumno();
+
+                }
+
+            }
+        );
 
 </script>
 
 </body>
 </html>
+```
