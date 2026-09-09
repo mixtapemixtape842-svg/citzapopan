@@ -2572,8 +2572,8 @@ Selecciona los tres componentes.
 
 <button class="gray" onclick="prevCard()">← Atrás</button>
 
-<button onclick="finishExam()">
-🏁 Terminar examen
+<button class="green" onclick="finishExam()">
+🏁 Terminar y enviar resultado
 </button>
 
 </div>
@@ -2643,10 +2643,17 @@ No representa una calificación definitiva.
 
 
 <button
+    id="sendResultButton"
     class="green"
-    onclick="window.print()">
-🖨️ Imprimir resultado
+    onclick="enviarResultado()"
+    style="display:none;">
+📤 Enviar resultado al profesor
 </button>
+
+<p
+    id="sendResultMessage"
+    class="feedback hidden">
+</p>
 
 <button
     onclick="location.reload()">
@@ -2662,46 +2669,92 @@ No representa una calificación definitiva.
 <script>
 
 /* =========================================================
+   SUPABASE
+========================================================= */
+
+const SUPABASE_URL =
+    "https://bcfknbpkduiwgqymxkns.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_END5KZ8gA4e9YDpicG-aLw_aRaIzo7E";
+
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =========================================================
+   ACTIVIDAD Y ALUMNO
+========================================================= */
+
+const parametros =
+    new URLSearchParams(
+        window.location.search
+    );
+
+const actividadId =
+    parametros.get("actividad");
+
+let alumnoActual = null;
+
+let actividadActual = null;
+
+let resultadoEnviado = false;
+
+
+/* =========================================================
    VARIABLES GENERALES
 ========================================================= */
 
-let currentCard=0;
+let currentCard = 0;
 
-const cards=
-document.querySelectorAll(".card");
+const cards =
+    document.querySelectorAll(".card");
 
-let gamePoints=0;
+let gamePoints = 0;
 
 
 /* =========================================================
    INICIO
 ========================================================= */
 
-function startExam(){
+async function startExam(){
 
-    const name=
-        document.getElementById("studentName")
-        .value.trim();
+    const name =
+        document
+        .getElementById("studentName")
+        .value
+        .trim();
 
-    const grade=
-        document.getElementById("grade")
+    const grade =
+        document
+        .getElementById("grade")
         .value;
+
 
     if(!name){
 
-        alert("Primero escribe tu nombre.");
+        alert(
+            "Primero escribe tu nombre."
+        );
 
         return;
 
     }
+
 
     if(!grade){
 
-        alert("Primero selecciona tu grado.");
+        alert(
+            "Primero selecciona tu grado."
+        );
 
         return;
 
     }
+
 
     setupTyping();
 
@@ -2718,38 +2771,52 @@ function startExam(){
 
 function updateProgress(){
 
-    const percentage=
-        currentCard/
-        (cards.length-1)*
+    const percentage =
+        currentCard /
+        (cards.length - 1) *
         100;
 
-    document.getElementById("progressBar")
-        .style.width=
-        percentage+"%";
+    document
+        .getElementById("progressBar")
+        .style.width =
+        percentage + "%";
 
 }
 
+
 function showCard(){
 
-    cards.forEach(card=>{
+    cards.forEach(card => {
+
         card.classList.remove("active");
+
     });
+
 
     cards[currentCard]
         .classList.add("active");
 
+
     updateProgress();
 
+
     window.scrollTo({
+
         top:0,
+
         behavior:"smooth"
+
     });
 
 }
 
+
 function nextCard(){
 
-    if(currentCard<cards.length-1){
+    if(
+        currentCard <
+        cards.length - 1
+    ){
 
         currentCard++;
 
@@ -2759,9 +2826,10 @@ function nextCard(){
 
 }
 
+
 function prevCard(){
 
-    if(currentCard>0){
+    if(currentCard > 0){
 
         currentCard--;
 
@@ -2778,15 +2846,27 @@ function prevCard(){
 
 function shuffleArray(array){
 
-    for(let i=array.length-1;i>0;i--){
+    for(
+        let i = array.length - 1;
+        i > 0;
+        i--
+    ){
 
-        const j=
+        const j =
             Math.floor(
-                Math.random()*(i+1)
+                Math.random() *
+                (i + 1)
             );
 
-        [array[i],array[j]]=
-        [array[j],array[i]];
+
+        [
+            array[i],
+            array[j]
+        ] =
+        [
+            array[j],
+            array[i]
+        ];
 
     }
 
@@ -2799,17 +2879,23 @@ function shuffleAllAnswers(){
 
     document
         .querySelectorAll(".options")
-        .forEach(container=>{
+        .forEach(container => {
 
-            const options=
+            const options =
                 Array.from(
                     container.children
                 );
 
+
             shuffleArray(options);
 
-            options.forEach(option=>{
-                container.appendChild(option);
+
+            options.forEach(option => {
+
+                container.appendChild(
+                    option
+                );
+
             });
 
         });
@@ -2821,13 +2907,19 @@ function shuffleAllAnswers(){
    ROBOT
 ========================================================= */
 
-let robotGridX=0;
-let robotGridY=0;
-let robotMoves=0;
+let robotGridX = 0;
 
-const robotStep=60;
+let robotGridY = 0;
 
-const robotWalls=[
+let robotMoves = 0;
+
+let robotCompleted = false;
+
+const robotStep = 60;
+
+
+const robotWalls = [
+
     {x:2,y:0},
     {x:2,y:1},
     {x:2,y:2},
@@ -2838,94 +2930,144 @@ const robotWalls=[
     {x:5,y:3},
 
     {x:8,y:2}
+
 ];
+
 
 function isRobotWall(x,y){
 
     return robotWalls.some(
-        wall=>
-            wall.x===x &&
-            wall.y===y
+
+        wall =>
+            wall.x === x &&
+            wall.y === y
+
     );
 
 }
 
+
 function moveRobot(direction){
 
-    let newX=robotGridX;
-    let newY=robotGridY;
+    let newX =
+        robotGridX;
 
-    if(direction==="right")
+    let newY =
+        robotGridY;
+
+
+    if(direction === "right")
         newX++;
 
-    if(direction==="left")
+
+    if(direction === "left")
         newX--;
 
-    if(direction==="up")
+
+    if(direction === "up")
         newY--;
 
-    if(direction==="down")
+
+    if(direction === "down")
         newY++;
 
-    /*
-      Límites del tablero
-    */
 
-    if(newX<0 || newX>10 ||
-       newY<0 || newY>5){
+    if(
+        newX < 0 ||
+        newX > 10 ||
+        newY < 0 ||
+        newY > 5
+    ){
 
-        document.getElementById("robotFeedback")
-            .textContent=
+        document
+            .getElementById("robotFeedback")
+            .textContent =
             "🧱 No puedes salir del tablero.";
 
         return;
 
     }
 
-    if(isRobotWall(newX,newY)){
 
-        document.getElementById("robotFeedback")
-            .textContent=
+    if(
+        isRobotWall(
+            newX,
+            newY
+        )
+    ){
+
+        document
+            .getElementById("robotFeedback")
+            .textContent =
             "🧱 ¡Hay un obstáculo! Busca otro camino.";
 
         return;
 
     }
 
-    robotGridX=newX;
-    robotGridY=newY;
+
+    robotGridX = newX;
+
+    robotGridY = newY;
 
     robotMoves++;
 
-    const robot=
-        document.getElementById("robotPlayer");
 
-    robot.style.left=
-        (newX*60+10)+"px";
+    const robot =
+        document
+        .getElementById(
+            "robotPlayer"
+        );
 
-    robot.style.top=
-        (newY*60+10)+"px";
 
-    document.getElementById("robotMoves")
-        .textContent=robotMoves;
+    robot.style.left =
+        (
+            newX * 60 + 10
+        ) + "px";
 
-    /*
-      Meta:
-      columna 10, fila 5
-    */
 
-    if(newX===10 && newY===5){
+    robot.style.top =
+        (
+            newY * 60 + 10
+        ) + "px";
 
-        document.getElementById("robotFeedback")
-            .textContent=
+
+    document
+        .getElementById(
+            "robotMoves"
+        )
+        .textContent =
+        robotMoves;
+
+
+    if(
+        newX === 10 &&
+        newY === 5
+    ){
+
+        document
+            .getElementById(
+                "robotFeedback"
+            )
+            .textContent =
             "🎉 ¡Excelente! El robot llegó a la estrella.";
 
-        gamePoints++;
+
+        if(!robotCompleted){
+
+            robotCompleted = true;
+
+            gamePoints++;
+
+        }
 
     }else{
 
-        document.getElementById("robotFeedback")
-            .textContent=
+        document
+            .getElementById(
+                "robotFeedback"
+            )
+            .textContent =
             "🤖 ¡Sigue buscando el camino!";
 
     }
@@ -2934,15 +3076,21 @@ function moveRobot(direction){
 
 
 /* =========================================================
-   PROGRAMA
+   PROGRAMACION
 ========================================================= */
 
-let programBlocks=[];
+let programBlocks = [];
+
+let programCompleted = false;
+
 
 function addProgramBlock(block){
 
-    if(programBlocks.length>=6)
+    if(
+        programBlocks.length >= 6
+    )
         return;
+
 
     programBlocks.push(block);
 
@@ -2950,91 +3098,150 @@ function addProgramBlock(block){
 
 }
 
+
 function renderProgram(){
 
-    const container=
-        document.getElementById("programSelected");
+    const container =
+        document
+        .getElementById(
+            "programSelected"
+        );
 
-    container.innerHTML="";
 
-    programBlocks.forEach((block,index)=>{
+    container.innerHTML = "";
 
-        const div=
-            document.createElement("div");
 
-        div.className="selected-item";
+    programBlocks.forEach(
+        (block,index) => {
 
-        const names={
-            avanzar:"⬆️ Avanzar",
-            derecha:"➡️ Girar derecha",
-            izquierda:"⬅️ Girar izquierda",
-            detener:"⏹️ Detener"
-        };
+            const div =
+                document.createElement(
+                    "div"
+                );
 
-        div.textContent=
-            (index+1)+". "+names[block];
 
-        container.appendChild(div);
+            div.className =
+                "selected-item";
 
-    });
+
+            const names = {
+
+                avanzar:
+                    "⬆️ Avanzar",
+
+                derecha:
+                    "➡️ Girar derecha",
+
+                izquierda:
+                    "⬅️ Girar izquierda",
+
+                detener:
+                    "⏹️ Detener"
+
+            };
+
+
+            div.textContent =
+                (
+                    index + 1
+                ) +
+                ". " +
+                names[block];
+
+
+            container.appendChild(
+                div
+            );
+
+        }
+    );
 
 }
+
 
 function clearProgram(){
 
-    programBlocks=[];
+    programBlocks = [];
+
+    programCompleted = false;
 
     renderProgram();
 
-    document.getElementById("programFeedback")
-        .textContent="";
+
+    document
+        .getElementById(
+            "programFeedback"
+        )
+        .textContent = "";
 
 }
 
+
 function runProgram(){
 
-    /*
-      Para este reto se espera:
-      avanzar x2
-      girar derecha
-      avanzar
-    */
+    const expected = [
 
-    const expected=[
         "avanzar",
         "avanzar",
         "derecha",
         "avanzar"
+
     ];
 
-    const correct=
-        JSON.stringify(programBlocks)===
-        JSON.stringify(expected);
 
-    const feedback=
-        document.getElementById("programFeedback");
+    const correct =
+        JSON.stringify(
+            programBlocks
+        ) ===
+        JSON.stringify(
+            expected
+        );
+
+
+    const feedback =
+        document
+        .getElementById(
+            "programFeedback"
+        );
+
 
     if(correct){
 
-        feedback.className=
+        feedback.className =
             "feedback correct";
 
-        feedback.textContent=
+
+        feedback.textContent =
             "🎉 ¡Programa correcto! El robot llegó a la estrella.";
 
-        const character=
-            document.getElementById("programCharacter");
 
-        character.style.left="80%";
+        const character =
+            document
+            .getElementById(
+                "programCharacter"
+            );
 
-        gamePoints++;
+
+        character.style.left =
+            "80%";
+
+
+        if(!programCompleted){
+
+            programCompleted = true;
+
+            gamePoints++;
+
+        }
+
 
     }else{
 
-        feedback.className=
+        feedback.className =
             "feedback incorrect";
 
-        feedback.textContent=
+
+        feedback.textContent =
             "💡 Pista: primero avanza dos veces, gira a la derecha y después avanza.";
 
     }
@@ -3046,11 +3253,16 @@ function runProgram(){
    MECANOGRAFIA
 ========================================================= */
 
-let typingStartedFlag=false;
-let typingStartTime=0;
-let typingInterval=null;
+let typingStartedFlag = false;
 
-const typingTexts={
+let typingStartTime = 0;
+
+let typingInterval = null;
+
+let typingFinished = false;
+
+
+const typingTexts = {
 
     1:
     "el robot camina por el salon y busca una estrella mientras sigue las instrucciones",
@@ -3075,63 +3287,92 @@ const typingTexts={
 
 function setupTyping(){
 
-    const grade=
+    const grade =
         Number(
-            document.getElementById("grade").value
+            document
+            .getElementById(
+                "grade"
+            )
+            .value
         );
 
-    const text=
+
+    const text =
         typingTexts[grade] ||
         typingTexts[1];
 
-    document.getElementById("typingSource")
-        .textContent=text;
 
-    let instruction="";
+    document
+        .getElementById(
+            "typingSource"
+        )
+        .textContent =
+        text;
 
-    if(grade<=3){
 
-        instruction=
-        "1° a 3°: escribe respetando las letras, los espacios y el orden del texto.";
+    let instruction = "";
 
-    }else if(grade<=5){
 
-        instruction=
-        "4° y 5°: debes respetar MAYÚSCULAS, minúsculas, espacios y signos.";
+    if(grade <= 3){
 
-    }else{
-
-        instruction=
-        "6°: debes respetar MAYÚSCULAS, minúsculas, acentos, espacios y signos.";
+        instruction =
+            "1° a 3°: escribe respetando las letras, los espacios y el orden del texto.";
 
     }
 
-    document.getElementById("typingInstruction")
-        .textContent=instruction;
+    else if(grade <= 5){
+
+        instruction =
+            "4° y 5°: debes respetar MAYÚSCULAS, minúsculas, espacios y signos.";
+
+    }
+
+    else{
+
+        instruction =
+            "6°: debes respetar MAYÚSCULAS, minúsculas, acentos, espacios y signos.";
+
+    }
+
+
+    document
+        .getElementById(
+            "typingInstruction"
+        )
+        .textContent =
+        instruction;
 
 }
 
 
 function typingStarted(){
 
-    const input=
-        document.getElementById("typingInput");
+    const input =
+        document
+        .getElementById(
+            "typingInput"
+        );
 
-    if(!typingStartedFlag &&
-       input.value.length>0){
 
-        typingStartedFlag=true;
+    if(
+        !typingStartedFlag &&
+        input.value.length > 0
+    ){
 
-        typingStartTime=
+        typingStartedFlag = true;
+
+        typingStartTime =
             Date.now();
 
-        typingInterval=
+
+        typingInterval =
             setInterval(
                 updateTypingTimer,
                 100
             );
 
     }
+
 
     updateTypingStats();
 
@@ -3143,11 +3384,19 @@ function updateTypingTimer(){
     if(!typingStartedFlag)
         return;
 
-    const seconds=
-        (Date.now()-typingStartTime)/1000;
 
-    document.getElementById("typingTimer")
-        .textContent=
+    const seconds =
+        (
+            Date.now() -
+            typingStartTime
+        ) / 1000;
+
+
+    document
+        .getElementById(
+            "typingTimer"
+        )
+        .textContent =
         seconds.toFixed(1);
 
 }
@@ -3155,61 +3404,102 @@ function updateTypingTimer(){
 
 function updateTypingStats(){
 
-    const input=
-        document.getElementById("typingInput")
+    const input =
+        document
+        .getElementById(
+            "typingInput"
+        )
         .value;
 
-    const source=
-        document.getElementById("typingSource")
+
+    const source =
+        document
+        .getElementById(
+            "typingSource"
+        )
         .textContent;
 
-    let correct=0;
 
-    const max=
+    let correct = 0;
+
+
+    const max =
         Math.min(
             input.length,
             source.length
         );
 
-    for(let i=0;i<max;i++){
 
-        if(input[i]===source[i])
+    for(
+        let i = 0;
+        i < max;
+        i++
+    ){
+
+        if(
+            input[i] ===
+            source[i]
+        ){
+
             correct++;
+
+        }
 
     }
 
-    let accuracy=100;
 
-    if(input.length>0){
+    let accuracy = 100;
 
-        accuracy=
+
+    if(input.length > 0){
+
+        accuracy =
             Math.round(
-                correct/
+
+                correct /
                 Math.max(
                     input.length,
                     source.length
-                )*
+                ) *
                 100
+
             );
 
     }
 
-    document.getElementById("charCount")
-        .textContent=input.length;
 
-    document.getElementById("accuracy")
-        .textContent=accuracy;
+    document
+        .getElementById(
+            "charCount"
+        )
+        .textContent =
+        input.length;
 
-    const words=
-        input.trim()
+
+    document
+        .getElementById(
+            "accuracy"
+        )
+        .textContent =
+        accuracy;
+
+
+    const words =
+        input
+        .trim()
         .split(/\s+/)
         .filter(Boolean);
 
-    document.getElementById("wordCount")
-        .textContent=
-        input.trim()===""
-        ?0
-        :words.length;
+
+    document
+        .getElementById(
+            "wordCount"
+        )
+        .textContent =
+
+        input.trim() === ""
+        ? 0
+        : words.length;
 
 }
 
@@ -3218,50 +3508,96 @@ function finishTyping(){
 
     if(!typingStartedFlag){
 
-        alert("Primero comienza a escribir.");
+        alert(
+            "Primero comienza a escribir."
+        );
 
         return;
 
     }
 
-    clearInterval(typingInterval);
+
+    clearInterval(
+        typingInterval
+    );
+
 
     updateTypingStats();
 
-    const source=
-        document.getElementById("typingSource")
+
+    const source =
+        document
+        .getElementById(
+            "typingSource"
+        )
         .textContent;
 
-    const input=
-        document.getElementById("typingInput")
+
+    const input =
+        document
+        .getElementById(
+            "typingInput"
+        )
         .value;
 
-    const time=
-        document.getElementById("typingTimer")
+
+    const time =
+        document
+        .getElementById(
+            "typingTimer"
+        )
         .textContent;
 
-    const accuracy=
-        document.getElementById("accuracy")
+
+    const accuracy =
+        document
+        .getElementById(
+            "accuracy"
+        )
         .textContent;
 
-    if(input===source){
 
-        document.getElementById("typingResult")
-            .className="feedback correct";
+    if(input === source){
 
-        document.getElementById("typingResult")
-            .textContent=
+        document
+            .getElementById(
+                "typingResult"
+            )
+            .className =
+            "feedback correct";
+
+
+        document
+            .getElementById(
+                "typingResult"
+            )
+            .textContent =
             "🎉 ¡Perfecto! Escribiste exactamente el texto.";
 
-        gamePoints++;
+
+        if(!typingFinished){
+
+            typingFinished = true;
+
+            gamePoints++;
+
+        }
 
     }else{
 
-        document.getElementById("typingResult")
-            .className="feedback incorrect";
+        document
+            .getElementById(
+                "typingResult"
+            )
+            .className =
+            "feedback incorrect";
 
-        document.getElementById("typingResult")
-            .textContent=
+
+        document
+            .getElementById(
+                "typingResult"
+            )
+            .textContent =
             "👍 Buen intento. Revisa mayúsculas, acentos, espacios y signos.";
 
     }
@@ -3273,12 +3609,18 @@ function finishTyping(){
    SCRATCH
 ========================================================= */
 
-let scratchBlocks=[];
+let scratchBlocks = [];
+
+let scratchCompleted = false;
+
 
 function addScratchBlock(block){
 
-    if(scratchBlocks.length>=5)
+    if(
+        scratchBlocks.length >= 5
+    )
         return;
+
 
     scratchBlocks.push(block);
 
@@ -3289,95 +3631,162 @@ function addScratchBlock(block){
 
 function renderScratch(){
 
-    const container=
-        document.getElementById("scratchSelected");
+    const container =
+        document
+        .getElementById(
+            "scratchSelected"
+        );
 
-    container.innerHTML="";
 
-    const names={
+    container.innerHTML = "";
 
-        bandera:"🟢 Al presionar bandera",
 
-        mover:"🟦 Mover 10 pasos",
+    const names = {
 
-        decir:'🟪 Decir "hola"',
+        bandera:
+            "🟢 Al presionar bandera",
 
-        detener:"🟥 Detener"
+        mover:
+            "🟦 Mover 10 pasos",
+
+        decir:
+            '🟪 Decir "hola"',
+
+        detener:
+            "🟥 Detener"
 
     };
 
-    scratchBlocks.forEach((block,index)=>{
 
-        const div=
-            document.createElement("div");
+    scratchBlocks.forEach(
+        (block,index) => {
 
-        div.className=
-            "selected-item";
+            const div =
+                document.createElement(
+                    "div"
+                );
 
-        div.textContent=
-            (index+1)+". "+names[block];
 
-        container.appendChild(div);
+            div.className =
+                "selected-item";
 
-    });
+
+            div.textContent =
+                (
+                    index + 1
+                ) +
+                ". " +
+                names[block];
+
+
+            container.appendChild(
+                div
+            );
+
+        }
+    );
 
 }
 
 
 function clearScratch(){
 
-    scratchBlocks=[];
+    scratchBlocks = [];
+
+    scratchCompleted = false;
 
     renderScratch();
 
-    document.getElementById("scratchFeedback")
-        .textContent="";
 
-    document.getElementById("scratchBubble")
-        .style.display="none";
+    document
+        .getElementById(
+            "scratchFeedback"
+        )
+        .textContent = "";
+
+
+    document
+        .getElementById(
+            "scratchBubble"
+        )
+        .style.display =
+        "none";
 
 }
 
 
 function runScratch(){
 
-    const expected=[
+    const expected = [
+
         "bandera",
         "mover",
         "decir"
+
     ];
 
-    const correct=
-        JSON.stringify(scratchBlocks)===
-        JSON.stringify(expected);
 
-    const feedback=
-        document.getElementById("scratchFeedback");
+    const correct =
+        JSON.stringify(
+            scratchBlocks
+        ) ===
+        JSON.stringify(
+            expected
+        );
+
+
+    const feedback =
+        document
+        .getElementById(
+            "scratchFeedback"
+        );
+
 
     if(correct){
 
-        feedback.className=
+        feedback.className =
             "feedback correct";
 
-        feedback.textContent=
+
+        feedback.textContent =
             "🎉 ¡Correcto! El gato se mueve y dice hola.";
 
-        const cat=
-            document.getElementById("scratchCat");
 
-        cat.style.left="65%";
+        const cat =
+            document
+            .getElementById(
+                "scratchCat"
+            );
 
-        document.getElementById("scratchBubble")
-            .style.display="block";
 
-        gamePoints++;
+        cat.style.left =
+            "65%";
+
+
+        document
+            .getElementById(
+                "scratchBubble"
+            )
+            .style.display =
+            "block";
+
+
+        if(!scratchCompleted){
+
+            scratchCompleted = true;
+
+            gamePoints++;
+
+        }
+
 
     }else{
 
-        feedback.className=
+        feedback.className =
             "feedback incorrect";
 
-        feedback.textContent=
+
+        feedback.textContent =
             '💡 El orden correcto es: bandera → mover 10 pasos → decir "hola".';
 
     }
@@ -3389,26 +3798,35 @@ function runScratch(){
    DRON
 ========================================================= */
 
-let droneX=20;
-let droneY=20;
+let droneX = 20;
+
+let droneY = 20;
+
+let droneCompleted = false;
+
 
 function moveDrone(direction){
 
-    const step=35;
+    const step = 35;
 
-    if(direction==="right")
-        droneX+=step;
 
-    if(direction==="left")
-        droneX-=step;
+    if(direction === "right")
+        droneX += step;
 
-    if(direction==="up")
-        droneY-=step;
 
-    if(direction==="down")
-        droneY+=step;
+    if(direction === "left")
+        droneX -= step;
 
-    droneX=
+
+    if(direction === "up")
+        droneY -= step;
+
+
+    if(direction === "down")
+        droneY += step;
+
+
+    droneX =
         Math.max(
             0,
             Math.min(
@@ -3417,7 +3835,8 @@ function moveDrone(direction){
             )
         );
 
-    droneY=
+
+    droneY =
         Math.max(
             0,
             Math.min(
@@ -3426,41 +3845,67 @@ function moveDrone(direction){
             )
         );
 
-    const drone=
-        document.getElementById("drone");
 
-    drone.style.left=
-        droneX+"px";
-
-    drone.style.top=
-        droneY+"px";
+    const drone =
+        document
+        .getElementById(
+            "drone"
+        );
 
 
-    /*
-      Zona de aterrizaje
-      aproximadamente:
-      x > 500
-      y > 220
-    */
+    drone.style.left =
+        droneX + "px";
 
-    if(droneX>500 && droneY>220){
 
-        document.getElementById("droneFeedback")
-            .className="feedback correct";
+    drone.style.top =
+        droneY + "px";
 
-        document.getElementById("droneFeedback")
-            .textContent=
+
+    if(
+        droneX > 500 &&
+        droneY > 220
+    ){
+
+        document
+            .getElementById(
+                "droneFeedback"
+            )
+            .className =
+            "feedback correct";
+
+
+        document
+            .getElementById(
+                "droneFeedback"
+            )
+            .textContent =
             "🎉 ¡Aterrizaje perfecto!";
 
-        gamePoints++;
+
+        if(!droneCompleted){
+
+            droneCompleted = true;
+
+            gamePoints++;
+
+        }
+
 
     }else{
 
-        document.getElementById("droneFeedback")
-            .className="game-message";
+        document
+            .getElementById(
+                "droneFeedback"
+            )
+            .className =
+            "game-message";
 
-        document.getElementById("droneFeedback")
-            .textContent=
+
+        document
+            .getElementById(
+                "droneFeedback"
+            )
+            .textContent =
             "🚁 Sigue controlando el dron hasta la zona verde.";
 
     }
@@ -3472,24 +3917,41 @@ function moveDrone(direction){
    PLUMA 3D
 ========================================================= */
 
+let penCompleted = false;
+
+
 function draw3D(object){
 
-    const drawing=
-        document.getElementById("penDrawing");
+    const drawing =
+        document
+        .getElementById(
+            "penDrawing"
+        );
 
-    drawing.textContent=object;
 
-    drawing.style.transform=
+    drawing.textContent =
+        object;
+
+
+    drawing.style.transform =
         "translate(-50%,-50%) rotate(8deg) scale(1.1)";
 
-    setTimeout(()=>{
 
-        drawing.style.transform=
+    setTimeout(() => {
+
+        drawing.style.transform =
             "translate(-50%,-50%) rotate(0deg) scale(1)";
 
     },400);
 
-    gamePoints++;
+
+    if(!penCompleted){
+
+        penCompleted = true;
+
+        gamePoints++;
+
+    }
 
 }
 
@@ -3498,20 +3960,56 @@ function draw3D(object){
    LEGO
 ========================================================= */
 
+let legoCompleted = false;
+
+
 function legoAnswer(type){
 
-    const feedback=
-        document.getElementById("legoFeedback");
+    const feedback =
+        document
+        .getElementById(
+            "legoFeedback"
+        );
 
-    document.querySelectorAll(".lego-item")
-        .forEach(item=>{
-            item.classList.remove("selected");
+
+    document
+        .querySelectorAll(
+            ".lego-item"
+        )
+        .forEach(item => {
+
+            item.classList.remove(
+                "selected"
+            );
+
         });
 
-    event.currentTarget
-        .classList.add("selected");
 
-    const messages={
+    const clicked =
+        Array.from(
+            document.querySelectorAll(
+                ".lego-item"
+            )
+        )
+        .find(
+            item =>
+                item.getAttribute(
+                    "onclick"
+                ) ===
+                `legoAnswer('${type}')`
+        );
+
+
+    if(clicked){
+
+        clicked.classList.add(
+            "selected"
+        );
+
+    }
+
+
+    const messages = {
 
         motor:
             "⚙️ Correcto: el motor produce movimiento.",
@@ -3527,13 +4025,22 @@ function legoAnswer(type){
 
     };
 
-    feedback.className=
+
+    feedback.className =
         "feedback correct";
 
-    feedback.textContent=
+
+    feedback.textContent =
         messages[type];
 
-    gamePoints++;
+
+    if(!legoCompleted){
+
+        legoCompleted = true;
+
+        gamePoints++;
+
+    }
 
 }
 
@@ -3542,60 +4049,100 @@ function legoAnswer(type){
    ROBLOX
 ========================================================= */
 
-let robloxCount=0;
+let robloxCount = 0;
+
+let robloxCompleted = false;
+
 
 function addRoblox(object){
 
-    if(robloxCount>=10){
+    if(
+        robloxCount >= 10
+    ){
 
-        document.getElementById("robloxFeedback")
-            .textContent=
+        document
+            .getElementById(
+                "robloxFeedback"
+            )
+            .textContent =
             "🏗️ ¡Ya construiste un mundo bastante grande!";
 
         return;
 
     }
 
-    const world=
-        document.getElementById("robloxWorld");
 
-    const item=
-        document.createElement("div");
+    const world =
+        document
+        .getElementById(
+            "robloxWorld"
+        );
 
-    item.className=
+
+    const item =
+        document.createElement(
+            "div"
+        );
+
+
+    item.className =
         "roblox-object";
 
-    item.textContent=object;
 
-    const x=
-        5+
-        Math.random()*85;
+    item.textContent =
+        object;
 
-    const y=
-        10+
-        Math.random()*60;
 
-    item.style.left=
-        x+"%";
+    const x =
+        5 +
+        Math.random() * 85;
 
-    item.style.top=
-        y+"%";
 
-    world.appendChild(item);
+    const y =
+        10 +
+        Math.random() * 60;
+
+
+    item.style.left =
+        x + "%";
+
+
+    item.style.top =
+        y + "%";
+
+
+    world.appendChild(
+        item
+    );
+
 
     robloxCount++;
 
-    document.getElementById("robloxFeedback")
-        .textContent=
-        "🏗️ Objetos colocados: "+
+
+    document
+        .getElementById(
+            "robloxFeedback"
+        )
+        .textContent =
+        "🏗️ Objetos colocados: " +
         robloxCount;
 
-    if(robloxCount===5){
+
+    if(
+        robloxCount >= 5 &&
+        !robloxCompleted
+    ){
+
+        robloxCompleted = true;
 
         gamePoints++;
 
-        document.getElementById("robloxFeedback")
-            .textContent=
+
+        document
+            .getElementById(
+                "robloxFeedback"
+            )
+            .textContent =
             "🎉 ¡Ya construiste tu propio mundo!";
 
     }
@@ -3607,39 +4154,72 @@ function addRoblox(object){
    ELECTRONICA
 ========================================================= */
 
-let circuitSelected=[];
+let circuitSelected = [];
+
+let circuitCompleted = false;
+
 
 function toggleCircuit(type){
 
-    const ids={
-        battery:"batteryComponent",
-        wire:"wireComponent",
-        led:"ledComponent"
+    const ids = {
+
+        battery:
+            "batteryComponent",
+
+        wire:
+            "wireComponent",
+
+        led:
+            "ledComponent"
+
     };
 
-    const element=
-        document.getElementById(ids[type]);
 
-    if(circuitSelected.includes(type)){
+    const element =
+        document
+        .getElementById(
+            ids[type]
+        );
 
-        circuitSelected=
+
+    if(
+        circuitSelected.includes(
+            type
+        )
+    ){
+
+        circuitSelected =
             circuitSelected.filter(
-                item=>item!==type
+                item =>
+                    item !== type
             );
 
-        element.classList.remove("selected");
+
+        element.classList.remove(
+            "selected"
+        );
 
     }else{
 
-        circuitSelected.push(type);
+        circuitSelected.push(
+            type
+        );
 
-        element.classList.add("selected");
+
+        element.classList.add(
+            "selected"
+        );
 
     }
 
-    document.getElementById("circuitCount")
-        .textContent=
+
+    document
+        .getElementById(
+            "circuitCount"
+        )
+        .textContent =
         circuitSelected.length;
+
 
     checkCircuit();
 
@@ -3648,37 +4228,71 @@ function toggleCircuit(type){
 
 function checkCircuit(){
 
-    const complete=
-        circuitSelected.includes("battery") &&
-        circuitSelected.includes("wire") &&
-        circuitSelected.includes("led");
+    const complete =
 
-    const light=
-        document.getElementById("circuitLight");
+        circuitSelected.includes(
+            "battery"
+        ) &&
 
-    const feedback=
-        document.getElementById("circuitFeedback");
+        circuitSelected.includes(
+            "wire"
+        ) &&
+
+        circuitSelected.includes(
+            "led"
+        );
+
+
+    const light =
+        document
+        .getElementById(
+            "circuitLight"
+        );
+
+
+    const feedback =
+        document
+        .getElementById(
+            "circuitFeedback"
+        );
+
 
     if(complete){
 
-        light.classList.add("on");
+        light.classList.add(
+            "on"
+        );
 
-        feedback.className=
+
+        feedback.className =
             "feedback correct";
 
-        feedback.textContent=
+
+        feedback.textContent =
             "💡 ¡Circuito completo! El LED se encendió.";
 
-        gamePoints++;
+
+        if(!circuitCompleted){
+
+            circuitCompleted = true;
+
+            gamePoints++;
+
+        }
+
 
     }else{
 
-        light.classList.remove("on");
+        light.classList.remove(
+            "on"
+        );
 
-        feedback.className=
+
+        feedback.className =
             "game-message";
 
-        feedback.textContent=
+
+        feedback.textContent =
             "🔧 Falta algún componente.";
 
     }
@@ -3687,27 +4301,37 @@ function checkCircuit(){
 
 
 /* =========================================================
-   RESULTADOS
+   RESPUESTAS
 ========================================================= */
 
 function getAnswer(name){
 
-    const selected=
+    const selected =
         document.querySelector(
-            'input[name="'+name+'"]:checked'
+            'input[name="' +
+            name +
+            '"]:checked'
         );
+
 
     if(!selected)
         return 0;
 
-    return Number(selected.value);
+
+    return Number(
+        selected.value
+    );
 
 }
 
 
+/* =========================================================
+   CALCULAR RESULTADOS
+========================================================= */
+
 function calculateResults(){
 
-    const areas={
+    const areas = {
 
         "🧩 Secuencias y lógica":
             ["q1","q2","q3","q4"],
@@ -3739,41 +4363,70 @@ function calculateResults(){
     };
 
 
-    let totalCorrect=0;
+    let totalCorrect = 0;
 
-    let totalQuestions=0;
+    let totalQuestions = 0;
 
-    let html="";
+    let html = "";
 
 
-    for(const area in areas){
+    const areasDetalle = {};
 
-        const questions=
+
+    for(
+        const area in areas
+    ){
+
+        const questions =
             areas[area];
 
-        let correct=0;
 
-        questions.forEach(question=>{
+        let correct = 0;
 
-            correct+=
-                getAnswer(question);
 
-        });
+        questions.forEach(
+            question => {
 
-        totalCorrect+=correct;
+                correct +=
+                    getAnswer(
+                        question
+                    );
 
-        totalQuestions+=
+            }
+        );
+
+
+        totalCorrect +=
+            correct;
+
+
+        totalQuestions +=
             questions.length;
 
-        const percentage=
+
+        const percentage =
             Math.round(
-                correct/
-                questions.length*
+                correct /
+                questions.length *
                 100
             );
 
 
-        html+=`
+        areasDetalle[area] = {
+
+            correct:
+                correct,
+
+            total:
+                questions.length,
+
+            porcentaje:
+                percentage
+
+        };
+
+
+        html += `
 
         <div class="result-area">
 
@@ -3802,13 +4455,19 @@ function calculateResults(){
     }
 
 
-    return{
+    return {
 
-        correct:totalCorrect,
+        correct:
+            totalCorrect,
 
-        total:totalQuestions,
+        total:
+            totalQuestions,
 
-        html:html
+        html:
+            html,
+
+        areas:
+            areasDetalle
 
     };
 
@@ -3816,157 +4475,825 @@ function calculateResults(){
 
 
 /* =========================================================
-   FINALIZAR
+   RECOPILAR RESPUESTAS
 ========================================================= */
 
-function finishExam(){
+function obtenerRespuestas(){
 
-    const name=
-        document.getElementById("studentName")
-        .value.trim();
-
-    const grade=
-        document.getElementById("grade")
-        .value;
-
-    if(!name){
-
-        alert("Falta escribir el nombre.");
-
-        currentCard=0;
-
-        showCard();
-
-        return;
-
-    }
-
-    if(!grade){
-
-        alert("Falta seleccionar el grado.");
-
-        currentCard=0;
-
-        showCard();
-
-        return;
-
-    }
+    const respuestas = {};
 
 
-    const results=
-        calculateResults();
+    document
+        .querySelectorAll(
+            'input[type="radio"]'
+        )
+        .forEach(input => {
+
+            if(input.checked){
+
+                respuestas[
+                    input.name
+                ] = {
+
+                    valor:
+                        input.value,
+
+                    correcta:
+                        Number(
+                            input.value
+                        ) === 1
+
+                };
+
+            }
+
+        });
 
 
-    const percentage=
-        Math.round(
-            results.correct/
-            results.total*
-            100
-        );
-
-
-    document.getElementById("welcomeResult")
-        .textContent=
-        name+
-        " — "+
-        grade+
-        "° de primaria";
-
-
-    document.getElementById("totalScore")
-        .textContent=
-        percentage;
-
-
-    let level="";
-
-
-    if(percentage>=90){
-
-        level=
-        "🌟 Excelente punto de partida. El explorador tiene muchos conocimientos previos.";
-
-    }else if(percentage>=75){
-
-        level=
-        "🚀 Muy buen comienzo. Ya existen varias habilidades que podemos desarrollar.";
-
-    }else if(percentage>=50){
-
-        level=
-        "🔧 Buen comienzo. Hay conocimientos que podemos fortalecer.";
-
-    }else{
-
-        level=
-        "🌱 Este es el comienzo de la aventura. ¡Hay mucho por descubrir!";
-
-    }
-
-
-    document.getElementById("levelResult")
-        .textContent=level;
-
-
-    document.getElementById("areasResults")
-        .innerHTML=
-        results.html;
-
-
-    const typingTime=
-        document.getElementById("typingTimer")
-        .textContent;
-
-    const typingAccuracy=
-        document.getElementById("accuracy")
-        .textContent;
-
-    const typingChars=
-        document.getElementById("charCount")
-        .textContent;
-
-
-    document.getElementById("typingFinal")
-        .innerHTML=
-
-        "⏱️ Tiempo: "+
-        typingTime+
-        " segundos<br>"+
-
-        "🎯 Precisión: "+
-        typingAccuracy+
-        "%<br>"+
-
-        "⌨️ Caracteres escritos: "+
-        typingChars;
-
-
-    document.getElementById("gamesFinal")
-        .innerHTML=
-
-        "🏆 Retos interactivos superados: "+
-        gamePoints+
-        "<br><br>"+
-
-        "Los minijuegos permiten observar además "+
-        "la resolución de problemas, la secuenciación, "+
-        "la coordinación y el pensamiento lógico.";
-
-
-    currentCard=
-        cards.length-1;
-
-    showCard();
+    return respuestas;
 
 }
 
 
 /* =========================================================
-   INICIALIZACION
+   ENVIAR RESULTADO A SUPABASE
 ========================================================= */
 
-updateProgress();
+async function enviarResultado(
+
+    results,
+    percentage
+
+){
+
+    if(resultadoEnviado){
+
+        return;
+
+    }
+
+
+    if(!alumnoActual){
+
+        alert(
+            "No se pudo identificar al alumno. Inicia sesión nuevamente."
+        );
+
+        return;
+
+    }
+
+
+    if(!actividadId){
+
+        alert(
+            "Esta actividad no tiene un ID. Revisa el enlace de la actividad."
+        );
+
+        return;
+
+    }
+
+
+    const typingTime =
+        Number(
+            document
+            .getElementById(
+                "typingTimer"
+            )
+            .textContent
+        );
+
+
+    const typingAccuracy =
+        Number(
+            document
+            .getElementById(
+                "accuracy"
+            )
+            .textContent
+        );
+
+
+    const typingChars =
+        Number(
+            document
+            .getElementById(
+                "charCount"
+            )
+            .textContent
+        );
+
+
+    /*
+       En México guardamos la calificación
+       en escala de 0 a 10.
+    */
+
+    const calificacion =
+        Number(
+            (
+                percentage /
+                10
+            ).toFixed(1)
+        );
+
+
+    const resultado = {
+
+        porcentaje:
+            percentage,
+
+        aciertos:
+            results.correct,
+
+        preguntas:
+            results.total,
+
+        calificacion:
+            calificacion,
+
+        areas:
+            results.areas,
+
+        mecanografia: {
+
+            tiempo:
+                typingTime,
+
+            precision:
+                typingAccuracy,
+
+            caracteres:
+                typingChars
+
+        },
+
+        minijuegos: {
+
+            puntos:
+                gamePoints,
+
+            robot:
+                robotCompleted,
+
+            programacion:
+                programCompleted,
+
+            mecanografia:
+                typingFinished,
+
+            scratch:
+                scratchCompleted,
+
+            dron:
+                droneCompleted,
+
+            pluma3D:
+                penCompleted,
+
+            lego:
+                legoCompleted,
+
+            roblox:
+                robloxCompleted,
+
+            electronica:
+                circuitCompleted
+
+        },
+
+        respuestas:
+            obtenerRespuestas(),
+
+        fecha:
+            new Date().toISOString()
+
+    };
+
+
+    const {
+
+        error
+
+    } = await supabaseClient
+
+        .from(
+            "actividad_alumnos"
+        )
+
+        .update({
+
+            estado:
+                "completada",
+
+            calificacion:
+                calificacion,
+
+            completada_at:
+                new Date().toISOString(),
+
+            resultado:
+                resultado
+
+        })
+
+        .eq(
+            "actividad_id",
+            Number(
+                actividadId
+            )
+        )
+
+        .eq(
+            "alumno_id",
+            alumnoActual.id
+        );
+
+
+    if(error){
+
+        console.error(
+            "Error guardando resultado:",
+            error
+        );
+
+
+        alert(
+            "No se pudo enviar el resultado.\n\n" +
+            error.message
+        );
+
+
+        return;
+
+    }
+
+
+    resultadoEnviado = true;
+
+
+    const button =
+        document
+        .getElementById(
+            "sendResultButton"
+        );
+
+
+    if(button){
+
+        button.disabled = true;
+
+        button.textContent =
+            "✅ Resultado enviado";
+
+    }
+
+
+    const message =
+        document
+        .getElementById(
+            "sendResultMessage"
+        );
+
+
+    if(message){
+
+        message.className =
+            "feedback correct";
+
+        message.textContent =
+            "✅ Tu resultado fue enviado correctamente al profesor.";
+
+    }
+
+}
+
+
+/* =========================================================
+   FINALIZAR EXAMEN
+========================================================= */
+
+async function finishExam(){
+
+    const name =
+        document
+        .getElementById(
+            "studentName"
+        )
+        .value
+        .trim();
+
+
+    const grade =
+        document
+        .getElementById(
+            "grade"
+        )
+        .value;
+
+
+    if(!name){
+
+        alert(
+            "Falta escribir el nombre."
+        );
+
+
+        currentCard = 0;
+
+        showCard();
+
+        return;
+
+    }
+
+
+    if(!grade){
+
+        alert(
+            "Falta seleccionar el grado."
+        );
+
+
+        currentCard = 0;
+
+        showCard();
+
+        return;
+
+    }
+
+
+    const results =
+        calculateResults();
+
+
+    const percentage =
+        Math.round(
+
+            results.correct /
+            results.total *
+            100
+
+        );
+
+
+    document
+        .getElementById(
+            "welcomeResult"
+        )
+        .textContent =
+        name +
+        " — " +
+        grade +
+        "° de primaria";
+
+
+    document
+        .getElementById(
+            "totalScore"
+        )
+        .textContent =
+        percentage;
+
+
+    let level = "";
+
+
+    if(percentage >= 90){
+
+        level =
+        "🌟 Excelente punto de partida. El explorador tiene muchos conocimientos previos.";
+
+    }
+
+    else if(percentage >= 75){
+
+        level =
+        "🚀 Muy buen comienzo. Ya existen varias habilidades que podemos desarrollar.";
+
+    }
+
+    else if(percentage >= 50){
+
+        level =
+        "🔧 Buen comienzo. Hay conocimientos que podemos fortalecer.";
+
+    }
+
+    else{
+
+        level =
+        "🌱 Este es el comienzo de la aventura. ¡Hay mucho por descubrir!";
+
+    }
+
+
+    document
+        .getElementById(
+            "levelResult"
+        )
+        .textContent =
+        level;
+
+
+    document
+        .getElementById(
+            "areasResults"
+        )
+        .innerHTML =
+        results.html;
+
+
+    const typingTime =
+        document
+        .getElementById(
+            "typingTimer"
+        )
+        .textContent;
+
+
+    const typingAccuracy =
+        document
+        .getElementById(
+            "accuracy"
+        )
+        .textContent;
+
+
+    const typingChars =
+        document
+        .getElementById(
+            "charCount"
+        )
+        .textContent;
+
+
+    document
+        .getElementById(
+            "typingFinal"
+        )
+        .innerHTML =
+
+        "⏱️ Tiempo: " +
+        typingTime +
+        " segundos<br>" +
+
+        "🎯 Precisión: " +
+        typingAccuracy +
+        "%<br>" +
+
+        "⌨️ Caracteres escritos: " +
+        typingChars;
+
+
+    document
+        .getElementById(
+            "gamesFinal"
+        )
+        .innerHTML =
+
+        "🏆 Retos interactivos superados: " +
+        gamePoints +
+        "<br><br>" +
+
+        "Los minijuegos permiten observar además " +
+        "la resolución de problemas, la secuenciación, " +
+        "la coordinación y el pensamiento lógico.";
+
+
+    currentCard =
+        cards.length - 1;
+
+
+    showCard();
+
+
+    /*
+       ENVIAMOS AUTOMÁTICAMENTE
+       EL RESULTADO.
+    */
+
+    await enviarResultado(
+        results,
+        percentage
+    );
+
+}
+
+
+/* =========================================================
+   CARGAR ALUMNO
+========================================================= */
+
+async function cargarAlumnoActual(){
+
+    const {
+
+        data: {
+            session
+
+        },
+
+        error
+
+    } =
+    await supabaseClient
+        .auth
+        .getSession();
+
+
+    if(error){
+
+        console.error(
+            error
+        );
+
+        return false;
+
+    }
+
+
+    if(!session){
+
+        alert(
+            "Debes iniciar sesión para realizar esta actividad."
+        );
+
+
+        window.location.href =
+            "login.html";
+
+
+        return false;
+
+    }
+
+
+    const {
+
+        data: alumno,
+
+        error: alumnoError
+
+    } =
+    await supabaseClient
+
+        .from(
+            "alumnos"
+        )
+
+        .select(`
+            id,
+            nombre,
+            usuario,
+            grado,
+            rol
+        `)
+
+        .eq(
+            "auth_id",
+            session.user.id
+        )
+
+        .single();
+
+
+    if(alumnoError){
+
+        console.error(
+            alumnoError
+        );
+
+
+        alert(
+            "No se encontró el alumno."
+        );
+
+
+        return false;
+
+    }
+
+
+    alumnoActual =
+        alumno;
+
+
+    /*
+       Utilizamos el nombre de la
+       cuenta, no el nombre escrito
+       manualmente.
+    */
+
+    const nameInput =
+        document
+        .getElementById(
+            "studentName"
+        );
+
+
+    if(nameInput){
+
+        nameInput.value =
+            alumno.nombre || "";
+
+        nameInput.readOnly =
+            true;
+
+    }
+
+
+    /*
+       Si el alumno tiene grado
+       guardado, lo seleccionamos.
+    */
+
+    const gradeSelect =
+        document
+        .getElementById(
+            "grade"
+        );
+
+
+    if(
+        gradeSelect &&
+        alumno.grado
+    ){
+
+        gradeSelect.value =
+            alumno.grado;
+
+    }
+
+
+    return true;
+
+}
+
+
+/* =========================================================
+   VERIFICAR ACTIVIDAD
+========================================================= */
+
+async function verificarActividad(){
+
+    if(!actividadId){
+
+        alert(
+            "⚠️ Esta actividad no tiene un ID en el enlace."
+        );
+
+        return false;
+
+    }
+
+
+    if(!alumnoActual){
+
+        return false;
+
+    }
+
+
+    const {
+
+        data,
+        error
+
+    } =
+    await supabaseClient
+
+        .from(
+            "actividad_alumnos"
+        )
+
+        .select(`
+            id,
+            actividad_id,
+            alumno_id,
+            estado,
+            calificacion,
+            resultado
+        `)
+
+        .eq(
+            "actividad_id",
+            Number(
+                actividadId
+            )
+        )
+
+        .eq(
+            "alumno_id",
+            alumnoActual.id
+        )
+
+        .maybeSingle();
+
+
+    if(error){
+
+        console.error(
+            error
+        );
+
+
+        alert(
+            "No se pudo verificar la actividad.\n\n" +
+            error.message
+        );
+
+
+        return false;
+
+    }
+
+
+    if(!data){
+
+        alert(
+            "⚠️ Esta actividad no está asignada a tu cuenta."
+        );
+
+
+        return false;
+
+    }
+
+
+    actividadActual =
+        data;
+
+
+    /*
+       Si ya fue completada,
+       mostramos el resultado guardado.
+    */
+
+    if(
+        data.estado ===
+        "completada"
+    ){
+
+        resultadoEnviado =
+            true;
+
+        alert(
+            "Esta actividad ya fue completada."
+        );
+
+    }
+
+
+    return true;
+
+}
+
+
+/* =========================================================
+   INICIALIZAR
+========================================================= */
+
+async function inicializar(){
+
+    updateProgress();
+
+
+    /*
+       Primero identificamos
+       al alumno.
+    */
+
+    const alumnoOK =
+        await cargarAlumnoActual();
+
+
+    if(!alumnoOK)
+        return;
+
+
+    /*
+       Después verificamos
+       la actividad asignada.
+    */
+
+    const actividadOK =
+        await verificarActividad();
+
+
+    if(!actividadOK)
+        return;
+
+}
+
+
+/* =========================================================
+   EJECUTAR
+========================================================= */
+
+inicializar();
 
 </script>
 
