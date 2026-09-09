@@ -1,6 +1,6 @@
-// ============================================
+// ======================================================
 // CITZ - SISTEMA UNIVERSAL DE ACTIVIDADES
-// ============================================
+// ======================================================
 
 const SUPABASE_URL =
     "https://bcfknbpkduiwgqymxkns.supabase.co";
@@ -14,9 +14,9 @@ const supabaseClient = supabase.createClient(
 );
 
 
-// ============================================
-// OBTENER ID DE LA ACTIVIDAD
-// ============================================
+// ======================================================
+// VARIABLES
+// ======================================================
 
 const parametros = new URLSearchParams(
     window.location.search
@@ -27,42 +27,55 @@ const actividadId = parametros.get("actividad");
 let alumnoActual = null;
 
 
-// ============================================
-// CARGAR ALUMNO
-// ============================================
+// ======================================================
+// OBTENER ALUMNO QUE INICIÓ SESIÓN
+// ======================================================
 
-async function cargarAlumnoActividad() {
+async function obtenerAlumno() {
 
     const {
         data: { session },
-        error: sessionError
+        error
     } = await supabaseClient.auth.getSession();
 
-    if (sessionError || !session) {
 
-        console.error("No hay sesión");
+    if (error) {
 
-        alert("Debes iniciar sesión para realizar esta actividad.");
-
-        window.location.href = "login.html";
+        console.error(
+            "Error obteniendo sesión:",
+            error
+        );
 
         return null;
     }
 
 
-    const { data: alumno, error } =
-        await supabaseClient
-            .from("alumnos")
-            .select("*")
-            .eq("auth_id", session.user.id)
-            .single();
+    if (!session) {
+
+        console.error(
+            "No hay sesión iniciada."
+        );
+
+        return null;
+    }
 
 
-    if (error || !alumno) {
+    const {
+        data: alumno,
+        error: alumnoError
+    } = await supabaseClient
+        .from("alumnos")
+        .select("*")
+        .eq("auth_id", session.user.id)
+        .single();
 
-        console.error(error);
 
-        alert("No se encontró tu perfil de alumno.");
+    if (alumnoError) {
+
+        console.error(
+            "Error obteniendo alumno:",
+            alumnoError
+        );
 
         return null;
     }
@@ -74,17 +87,16 @@ async function cargarAlumnoActividad() {
 }
 
 
-// ============================================
-// COMPROBAR QUE EL ALUMNO TENGA ASIGNADA
-// LA ACTIVIDAD
-// ============================================
+// ======================================================
+// VERIFICAR QUE LA ACTIVIDAD ESTÉ ASIGNADA
+// ======================================================
 
 async function verificarActividad() {
 
     if (!actividadId) {
 
         console.error(
-            "No se encontró ?actividad=ID en el enlace."
+            "No existe ?actividad=ID en el enlace."
         );
 
         return null;
@@ -93,26 +105,35 @@ async function verificarActividad() {
 
     if (!alumnoActual) {
 
-        await cargarAlumnoActividad();
+        await obtenerAlumno();
 
     }
 
 
-    const { data, error } =
-        await supabaseClient
-            .from("actividad_alumnos")
-            .select(`
-                id,
-                actividad_id,
-                alumno_id,
-                estado,
-                calificacion,
-                resultado,
-                completada_at
-            `)
-            .eq("actividad_id", actividadId)
-            .eq("alumno_id", alumnoActual.id)
-            .maybeSingle();
+    if (!alumnoActual) {
+
+        return null;
+
+    }
+
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("actividad_alumnos")
+        .select(`
+            id,
+            actividad_id,
+            alumno_id,
+            estado,
+            calificacion,
+            resultado,
+            completada_at
+        `)
+        .eq("actividad_id", actividadId)
+        .eq("alumno_id", alumnoActual.id)
+        .maybeSingle();
 
 
     if (error) {
@@ -128,8 +149,8 @@ async function verificarActividad() {
 
     if (!data) {
 
-        console.warn(
-            "Esta actividad no está asignada al alumno."
+        console.error(
+            "La actividad no está asignada a este alumno."
         );
 
         return null;
@@ -140,154 +161,209 @@ async function verificarActividad() {
 }
 
 
-// ============================================
-// ENVIAR RESULTADO
-// ============================================
+// ======================================================
+// ENVIAR RESULTADO DE CUALQUIER ACTIVIDAD
+// ======================================================
 
-async function enviarResultadoActividad(datos) {
+async function enviarResultadoActividad({
 
-    try {
+    calificacion,
+    resultado = {}
 
-        // ----------------------------------------
-        // Cargar alumno si todavía no existe
-        // ----------------------------------------
+}) {
 
-        if (!alumnoActual) {
+    // ----------------------------------------------
+    // Verificar alumno
+    // ----------------------------------------------
 
-            await cargarAlumnoActividad();
+    if (!alumnoActual) {
 
-        }
+        await obtenerAlumno();
 
-
-        // ----------------------------------------
-        // Validaciones
-        // ----------------------------------------
-
-        if (!alumnoActual) {
-
-            throw new Error(
-                "No se pudo identificar al alumno."
-            );
-
-        }
+    }
 
 
-        if (!actividadId) {
+    if (!alumnoActual) {
 
-            throw new Error(
-                "No se encontró el ID de la actividad."
-            );
-
-        }
-
-
-        // ----------------------------------------
-        // Buscar asignación
-        // ----------------------------------------
-
-        const { data: asignacion, error: buscarError } =
-            await supabaseClient
-                .from("actividad_alumnos")
-                .select("id, estado")
-                .eq("actividad_id", actividadId)
-                .eq("alumno_id", alumnoActual.id)
-                .maybeSingle();
-
-
-        if (buscarError) {
-
-            throw buscarError;
-
-        }
-
-
-        if (!asignacion) {
-
-            throw new Error(
-                "Esta actividad no está asignada a tu usuario."
-            );
-
-        }
-
-
-        // ----------------------------------------
-        // Calificación
-        // ----------------------------------------
-
-        let calificacion =
-            Number(datos.calificacion);
-
-
-        if (isNaN(calificacion)) {
-
-            calificacion = null;
-
-        }
-
-
-        // ----------------------------------------
-        // Actualizar actividad
-        // ----------------------------------------
-
-        const { data, error } =
-            await supabaseClient
-                .from("actividad_alumnos")
-                .update({
-
-                    estado: "completada",
-
-                    calificacion: calificacion,
-
-                    completada_at:
-                        new Date().toISOString(),
-
-                    resultado:
-                        datos.resultado || {}
-
-                })
-                .eq("id", asignacion.id)
-                .select()
-                .single();
-
-
-        if (error) {
-
-            throw error;
-
-        }
-
-
-        console.log(
-            "Resultado enviado correctamente:",
-            data
+        alert(
+            "No se pudo identificar al alumno."
         );
 
-
-        return {
-
-            success: true,
-
-            data: data
-
-        };
+        return false;
+    }
 
 
-    } catch (error) {
+    // ----------------------------------------------
+    // Verificar actividad
+    // ----------------------------------------------
+
+    if (!actividadId) {
+
+        alert(
+            "Esta actividad no tiene un ID válido."
+        );
+
+        return false;
+    }
+
+
+    // ----------------------------------------------
+    // Buscar actividad asignada
+    // ----------------------------------------------
+
+    const {
+        data: asignacion,
+        error: buscarError
+    } = await supabaseClient
+        .from("actividad_alumnos")
+        .select("id, estado")
+        .eq("actividad_id", actividadId)
+        .eq("alumno_id", alumnoActual.id)
+        .maybeSingle();
+
+
+    if (buscarError) {
 
         console.error(
-            "Error enviando resultado:",
-            error
+            "Error buscando actividad:",
+            buscarError
         );
 
+        alert(
+            "No se pudo comprobar la actividad."
+        );
 
-        return {
+        return false;
+    }
 
-            success: false,
 
-            error: error
+    if (!asignacion) {
 
-        };
+        alert(
+            "Esta actividad no está asignada a tu usuario."
+        );
+
+        return false;
+    }
+
+
+    // ----------------------------------------------
+    // Actualizar resultado
+    // ----------------------------------------------
+
+    const {
+        error: updateError
+    } = await supabaseClient
+        .from("actividad_alumnos")
+        .update({
+
+            estado: "completada",
+
+            calificacion:
+                Number(calificacion),
+
+            completada_at:
+                new Date().toISOString(),
+
+            resultado:
+                resultado
+
+        })
+        .eq("id", asignacion.id);
+
+
+    if (updateError) {
+
+        console.error(
+            "Error guardando resultado:",
+            updateError
+        );
+
+        alert(
+            "No se pudo guardar el resultado."
+        );
+
+        return false;
+    }
+
+
+    console.log(
+        "✅ Resultado guardado correctamente."
+    );
+
+
+    return true;
+}
+
+
+// ======================================================
+// INICIALIZAR ACTIVIDAD
+// ======================================================
+
+async function iniciarActividad() {
+
+    const alumno = await obtenerAlumno();
+
+
+    if (!alumno) {
+
+        alert(
+            "Debes iniciar sesión para realizar esta actividad."
+        );
+
+        return;
+    }
+
+
+    const actividad =
+        await verificarActividad();
+
+
+    if (!actividad) {
+
+        alert(
+            "Esta actividad no está asignada a tu usuario."
+        );
+
+        return;
+    }
+
+
+    console.log(
+        "Alumno:",
+        alumno.nombre
+    );
+
+    console.log(
+        "Actividad:",
+        actividadId
+    );
+
+    console.log(
+        "Estado:",
+        actividad.estado
+    );
+
+
+    // Si ya está terminada
+    if (
+        actividad.estado === "completada"
+    ) {
+
+        console.log(
+            "Esta actividad ya fue completada."
+        );
 
     }
 
 }
+
+
+// ======================================================
+// INICIAR AUTOMÁTICAMENTE
+// ======================================================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    iniciarActividad
+);
