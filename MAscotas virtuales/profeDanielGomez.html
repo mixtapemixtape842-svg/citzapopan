@@ -1272,6 +1272,7 @@ async function cargarAlumnos() {
     actualizarResumen();
 
     mostrarAlumnos();
+    mostrarAlumnosResumen();
 
 }
 
@@ -1769,12 +1770,332 @@ function cerrarModal() {
 
 function abrirAgregarAlumno() {
 
-    alert(
-        "La creación de cuentas de alumnos se habilitará en la siguiente etapa."
+    document.getElementById(
+        "nuevoNombre"
+    ).value = "";
+
+    document.getElementById(
+        "nuevoUsuario"
+    ).value = "";
+
+    document.getElementById(
+        "nuevoPassword"
+    ).value = "";
+
+    ocultarMensajeAgregar();
+
+    document.getElementById(
+        "modalAgregar"
+    ).classList.add("show");
+
+    setTimeout(() => {
+
+        document.getElementById(
+            "nuevoNombre"
+        ).focus();
+
+    }, 100);
+
+}
+
+
+/* ==========================================
+   CERRAR MODAL AGREGAR
+========================================== */
+
+function cerrarAgregarAlumno() {
+
+    document.getElementById(
+        "modalAgregar"
+    ).classList.remove(
+        "show"
     );
 
 }
 
+
+/* ==========================================
+   MENSAJE MODAL
+========================================== */
+
+function mostrarMensajeAgregar(
+    mensaje,
+    tipo = "error"
+) {
+
+    const elemento =
+        document.getElementById(
+            "mensajeAgregar"
+        );
+
+
+    elemento.style.display =
+        "block";
+
+
+    elemento.textContent =
+        mensaje;
+
+
+    if (tipo === "success") {
+
+        elemento.style.background =
+            "rgba(0,255,150,.10)";
+
+        elemento.style.border =
+            "1px solid rgba(0,255,150,.25)";
+
+        elemento.style.color =
+            "#5dffb0";
+
+    }
+    else {
+
+        elemento.style.background =
+            "rgba(255,60,80,.10)";
+
+        elemento.style.border =
+            "1px solid rgba(255,60,80,.25)";
+
+        elemento.style.color =
+            "#ff7184";
+
+    }
+
+}
+
+
+function ocultarMensajeAgregar() {
+
+    const elemento =
+        document.getElementById(
+            "mensajeAgregar"
+        );
+
+    elemento.style.display =
+        "none";
+
+}
+
+
+/* ==========================================
+   CREAR ALUMNO
+========================================== */
+
+async function crearAlumno() {
+
+    const nombre =
+        document.getElementById(
+            "nuevoNombre"
+        )
+        .value
+        .trim();
+
+
+    const usuario =
+        document.getElementById(
+            "nuevoUsuario"
+        )
+        .value
+        .trim()
+        .toLowerCase();
+
+
+    const password =
+        document.getElementById(
+            "nuevoPassword"
+        )
+        .value;
+
+
+    if (!nombre) {
+
+        mostrarMensajeAgregar(
+            "Escribe el nombre completo del alumno."
+        );
+
+        return;
+
+    }
+
+
+    if (!usuario) {
+
+        mostrarMensajeAgregar(
+            "Escribe un nombre de usuario."
+        );
+
+        return;
+
+    }
+
+
+    if (!/^[a-zA-Z0-9._-]+$/.test(usuario)) {
+
+        mostrarMensajeAgregar(
+            "El usuario solo puede contener letras, números, punto, guion y guion bajo."
+        );
+
+        return;
+
+    }
+
+
+    if (password.length < 4) {
+
+        mostrarMensajeAgregar(
+            "La contraseña debe tener al menos 4 caracteres."
+        );
+
+        return;
+
+    }
+
+
+    const boton =
+        document.getElementById(
+            "btnGuardarAlumno"
+        );
+
+
+    boton.disabled =
+        true;
+
+    boton.textContent =
+        "⏳ Creando alumno...";
+
+
+    ocultarMensajeAgregar();
+
+
+    try {
+
+        // ==========================
+        // OBTENER SESIÓN ACTUAL
+        // ==========================
+
+        const {
+            data: {
+                session
+            }
+        } =
+        await supabaseClient
+            .auth
+            .getSession();
+
+
+        if (!session) {
+
+            throw new Error(
+                "Tu sesión ha expirado. Vuelve a iniciar sesión."
+            );
+
+        }
+
+
+        // ==========================
+        // LLAMAR EDGE FUNCTION
+        // ==========================
+
+        const {
+            data,
+            error
+        } =
+        await supabaseClient.functions.invoke(
+            "crear-alumno",
+            {
+                body: {
+
+                    nombre,
+
+                    usuario,
+
+                    password
+
+                }
+            }
+        );
+
+
+        if (error) {
+
+            console.error(
+                "Error Edge Function:",
+                error
+            );
+
+            throw new Error(
+                error.message ||
+                "No se pudo crear el alumno."
+            );
+
+        }
+
+
+        if (!data || !data.success) {
+
+            throw new Error(
+                data?.error ||
+                "No se pudo crear el alumno."
+            );
+
+        }
+
+
+        // ==========================
+        // ÉXITO
+        // ==========================
+
+        mostrarMensajeAgregar(
+            "Alumno creado correctamente. ✅",
+            "success"
+        );
+
+
+        // ==========================
+        // RECARGAR LISTA
+        // ==========================
+
+        await cargarAlumnos();
+
+
+        // ==========================
+        // CERRAR DESPUÉS DE UN MOMENTO
+        // ==========================
+
+        setTimeout(() => {
+
+            cerrarAgregarAlumno();
+
+        }, 1000);
+
+
+    }
+    catch (error) {
+
+        console.error(
+            "Error creando alumno:",
+            error
+        );
+
+
+        mostrarMensajeAgregar(
+            error.message ||
+            "Ocurrió un error al crear el alumno."
+        );
+
+    }
+    finally {
+
+        boton.disabled =
+            false;
+
+        boton.textContent =
+            "➕ Crear alumno";
+
+    }
+
+}
 
 /* ==========================================
    NAVEGACIÓN
