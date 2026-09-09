@@ -1711,21 +1711,16 @@ async function cargarActividades() {
                 );
 
 
-        if (asignacionesError) {
+      if (asignacionesError) {
+    console.error("ERROR ACTIVIDAD_ALUMNOS:", asignacionesError);
 
-            console.error(
-                "Error asignaciones:",
-                asignacionesError
-            );
+    mostrarError(
+        "Error: " +
+        (asignacionesError.message || "No se pudieron cargar las actividades")
+    );
 
-            mostrarError(
-                "No se pudieron cargar tus actividades."
-            );
-
-            return;
-
-        }
-
+    return;
+}
 
         const listaAsignaciones =
             asignaciones || [];
