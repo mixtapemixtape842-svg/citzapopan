@@ -4,418 +4,408 @@
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
-    <title>ROBOT LAB | Iniciar sesión</title>
+<title>ROBOT LAB | Iniciar sesión</title>
 
 
-    <style>
+<style>
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
 
-        body {
+body {
 
-            min-height: 100vh;
+    min-height: 100vh;
 
-            background:
+    background:
+        radial-gradient(
+            circle at 20% 20%,
+            rgba(0,255,255,0.10),
+            transparent 30%
+        ),
 
-                radial-gradient(
-                    circle at 20% 20%,
-                    rgba(0, 255, 255, 0.10),
-                    transparent 30%
-                ),
+        radial-gradient(
+            circle at 80% 80%,
+            rgba(170,0,255,0.10),
+            transparent 30%
+        ),
 
-                radial-gradient(
-                    circle at 80% 80%,
-                    rgba(170, 0, 255, 0.10),
-                    transparent 30%
-                ),
+        #050509;
 
-                #050509;
+    color: white;
 
-            color: white;
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
 
-            font-family:
-                Arial,
-                Helvetica,
-                sans-serif;
+    display: flex;
 
-            display: flex;
+    justify-content: center;
 
-            justify-content: center;
+    align-items: center;
 
-            align-items: center;
+    overflow: hidden;
+}
 
-            overflow: hidden;
-        }
 
+body::before {
 
-        /* =========================================
-           FONDO DECORATIVO
-        ========================================= */
+    content: "";
 
-        body::before {
+    position: fixed;
 
-            content: "";
+    inset: 0;
 
-            position: fixed;
+    background-image:
 
-            inset: 0;
+        linear-gradient(
+            rgba(0,255,255,0.025) 1px,
+            transparent 1px
+        ),
 
-            background-image:
+        linear-gradient(
+            90deg,
+            rgba(0,255,255,0.025) 1px,
+            transparent 1px
+        );
 
-                linear-gradient(
-                    rgba(0,255,255,0.025) 1px,
-                    transparent 1px
-                ),
+    background-size: 40px 40px;
 
-                linear-gradient(
-                    90deg,
-                    rgba(0,255,255,0.025) 1px,
-                    transparent 1px
-                );
+    pointer-events: none;
+}
 
-            background-size: 40px 40px;
 
-            pointer-events: none;
-        }
+.login-container {
 
+    width: 100%;
 
-        /* =========================================
-           CONTENEDOR
-        ========================================= */
+    max-width: 450px;
 
-        .login-container {
+    padding: 25px;
 
-            width: 100%;
+    position: relative;
 
-            max-width: 450px;
+    z-index: 2;
+}
 
-            padding: 25px;
 
-            position: relative;
+.login-box {
 
-            z-index: 2;
-        }
+    background:
+        rgba(10,10,18,0.92);
 
+    border:
+        1px solid
+        rgba(0,255,255,0.35);
 
-        .login-box {
+    border-radius: 24px;
 
-            background:
-                rgba(10, 10, 18, 0.92);
+    padding: 45px 40px;
 
-            border:
-                1px solid
-                rgba(0, 255, 255, 0.35);
+    box-shadow:
 
-            border-radius: 24px;
+        0 0 30px
+        rgba(0,255,255,0.10),
 
-            padding: 45px 40px;
+        0 0 80px
+        rgba(140,0,255,0.08);
 
-            box-shadow:
+    backdrop-filter: blur(15px);
+}
 
-                0 0 30px
-                rgba(0, 255, 255, 0.10),
 
-                0 0 80px
-                rgba(140, 0, 255, 0.08);
+.logo {
 
-            backdrop-filter: blur(15px);
-        }
+    text-align: center;
 
+    margin-bottom: 35px;
+}
 
-        /* =========================================
-           LOGO
-        ========================================= */
 
-        .logo {
+.robot-icon {
 
-            text-align: center;
+    font-size: 65px;
 
-            margin-bottom: 35px;
-        }
+    margin-bottom: 10px;
 
+    filter:
+        drop-shadow(
+            0 0 10px
+            rgba(0,255,255,0.8)
+        );
+}
 
-        .robot-icon {
 
-            font-size: 65px;
+.logo h1 {
 
-            margin-bottom: 10px;
+    font-size: 28px;
 
-            filter:
-                drop-shadow(
-                    0 0 10px
-                    rgba(0,255,255,0.8)
-                );
-        }
+    letter-spacing: 5px;
 
+    color: #00ffff;
 
-        .logo h1 {
+    text-shadow:
+        0 0 10px
+        rgba(0,255,255,0.8);
+}
 
-            font-size: 28px;
 
-            letter-spacing: 5px;
+.logo p {
 
-            color: #00ffff;
+    margin-top: 8px;
 
-            text-shadow:
-                0 0 10px
-                rgba(0,255,255,0.8);
-        }
+    font-size: 12px;
 
+    letter-spacing: 3px;
 
-        .logo p {
+    color: #888;
+}
 
-            margin-top: 8px;
 
-            font-size: 12px;
+.welcome {
 
-            letter-spacing: 3px;
+    text-align: center;
 
-            color: #888;
-        }
+    margin-bottom: 30px;
+}
 
 
-        /* =========================================
-           BIENVENIDA
-        ========================================= */
+.welcome h2 {
 
-        .welcome {
+    font-size: 22px;
 
-            text-align: center;
+    margin-bottom: 8px;
+}
 
-            margin-bottom: 30px;
-        }
 
+.welcome p {
 
-        .welcome h2 {
+    color: #888;
 
-            font-size: 22px;
+    font-size: 14px;
+}
 
-            margin-bottom: 8px;
-        }
 
+.input-group {
 
-        .welcome p {
+    margin-bottom: 20px;
+}
 
-            color: #888;
 
-            font-size: 14px;
-        }
+.input-group label {
 
+    display: block;
 
-        /* =========================================
-           FORMULARIOS
-        ========================================= */
+    margin-bottom: 8px;
 
-        .input-group {
+    font-size: 12px;
 
-            margin-bottom: 20px;
-        }
+    font-weight: bold;
 
+    color: #aaa;
 
-        .input-group label {
+    letter-spacing: 1px;
+}
 
-            display: block;
 
-            margin-bottom: 8px;
+.input-group input {
 
-            font-size: 12px;
+    width: 100%;
 
-            font-weight: bold;
+    padding: 15px 16px;
 
-            color: #aaa;
+    border-radius: 12px;
 
-            letter-spacing: 1px;
-        }
+    border:
+        1px solid
+        rgba(0,255,255,0.25);
 
+    background: #08080d;
 
-        .input-group input {
+    color: white;
 
-            width: 100%;
+    font-size: 15px;
 
-            padding: 15px 16px;
+    outline: none;
 
-            border-radius: 12px;
+    transition: 0.25s;
+}
 
-            border:
-                1px solid
-                rgba(0,255,255,0.25);
 
-            background: #08080d;
+.input-group input:focus {
 
-            color: white;
+    border-color: #00ffff;
 
-            font-size: 15px;
+    box-shadow:
+        0 0 15px
+        rgba(0,255,255,0.15);
+}
 
-            outline: none;
 
-            transition: 0.25s;
-        }
+.input-group input::placeholder {
 
+    color: #555;
+}
 
-        .input-group input:focus {
 
-            border-color: #00ffff;
+.login-button {
 
-            box-shadow:
-                0 0 15px
-                rgba(0,255,255,0.15);
-        }
+    width: 100%;
 
+    padding: 16px;
 
-        .input-group input::placeholder {
+    margin-top: 5px;
 
-            color: #555;
-        }
+    border: none;
 
+    border-radius: 12px;
 
-        /* =========================================
-           BOTÓN
-        ========================================= */
+    background:
+        linear-gradient(
+            90deg,
+            #00ffff,
+            #7b2cff
+        );
 
-        .login-button {
+    color: white;
 
-            width: 100%;
+    font-size: 14px;
 
-            padding: 16px;
+    font-weight: bold;
 
-            margin-top: 5px;
+    letter-spacing: 2px;
 
-            border: none;
+    cursor: pointer;
 
-            border-radius: 12px;
+    transition: 0.25s;
 
-            background:
-                linear-gradient(
-                    90deg,
-                    #00ffff,
-                    #7b2cff
-                );
+    box-shadow:
+        0 0 20px
+        rgba(0,255,255,0.15);
+}
 
-            color: white;
 
-            font-size: 14px;
+.login-button:hover {
 
-            font-weight: bold;
+    transform:
+        translateY(-2px);
 
-            letter-spacing: 2px;
+    box-shadow:
+        0 0 30px
+        rgba(0,255,255,0.30);
+}
 
-            cursor: pointer;
 
-            transition: 0.25s;
+.login-button:disabled {
 
-            box-shadow:
-                0 0 20px
-                rgba(0,255,255,0.15);
-        }
+    opacity: 0.6;
 
+    cursor: wait;
 
-        .login-button:hover {
+    transform: none;
+}
 
-            transform:
-                translateY(-2px);
 
-            box-shadow:
-                0 0 30px
-                rgba(0,255,255,0.30);
-        }
+.error {
 
+    display: none;
 
-        .login-button:active {
+    margin-top: 20px;
 
-            transform:
-                translateY(0);
-        }
+    padding: 12px;
 
+    border-radius: 10px;
 
-        /* =========================================
-           ERROR
-        ========================================= */
+    background:
+        rgba(255,40,70,0.10);
 
-        .error {
+    border:
+        1px solid
+        rgba(255,40,70,0.40);
 
-            display: none;
+    color: #ff6075;
 
-            margin-top: 20px;
+    text-align: center;
 
-            padding: 12px;
+    font-size: 13px;
 
-            border-radius: 10px;
+    line-height: 1.5;
+}
 
-            background:
-                rgba(255, 40, 70, 0.10);
 
-            border:
-                1px solid
-                rgba(255, 40, 70, 0.40);
+.success {
 
-            color: #ff6075;
+    display: none;
 
-            text-align: center;
+    margin-top: 20px;
 
-            font-size: 13px;
-        }
+    padding: 12px;
 
+    border-radius: 10px;
 
-        /* =========================================
-           FOOTER
-        ========================================= */
+    background:
+        rgba(0,255,157,0.08);
 
-        .footer {
+    border:
+        1px solid
+        rgba(0,255,157,0.30);
 
-            text-align: center;
+    color: #00ff9d;
 
-            margin-top: 30px;
+    text-align: center;
 
-            color: #555;
+    font-size: 13px;
+}
 
-            font-size: 11px;
 
-            letter-spacing: 1px;
-        }
+.footer {
 
+    text-align: center;
 
-        /* =========================================
-           RESPONSIVE
-        ========================================= */
+    margin-top: 30px;
 
-        @media (max-width: 500px) {
+    color: #555;
 
-            .login-container {
+    font-size: 11px;
 
-                padding: 18px;
-            }
+    letter-spacing: 1px;
+}
 
 
-            .login-box {
+@media (max-width:500px) {
 
-                padding: 35px 25px;
-            }
+    .login-container {
 
+        padding: 18px;
+    }
 
-            .logo h1 {
+    .login-box {
 
-                font-size: 24px;
-            }
+        padding: 35px 25px;
+    }
 
+    .logo h1 {
 
-            .robot-icon {
+        font-size: 24px;
+    }
 
-                font-size: 55px;
-            }
+    .robot-icon {
 
-        }
+        font-size: 55px;
+    }
 
-    </style>
+}
+
+</style>
 
 </head>
 
@@ -423,263 +413,297 @@
 <body>
 
 
-    <div class="login-container">
+<div class="login-container">
 
-        <div class="login-box">
-
-
-            <!-- =================================
-                 LOGO
-            ================================== -->
-
-            <div class="logo">
-
-                <div class="robot-icon">
-                    🤖
-                </div>
-
-                <h1>
-                    ROBOT LAB
-                </h1>
-
-                <p>
-                    CAMPUS VIRTUAL
-                </p>
-
-            </div>
+<div class="login-box">
 
 
-            <!-- =================================
-                 BIENVENIDA
-            ================================== -->
+    <!-- LOGO -->
 
-            <div class="welcome">
+    <div class="logo">
 
-                <h2>
-                    ¡Bienvenido!
-                </h2>
-
-                <p>
-                    Ingresa para continuar tu aventura tecnológica.
-                </p>
-
-            </div>
-
-
-            <!-- =================================
-                 FORMULARIO
-            ================================== -->
-
-            <form id="loginForm">
-
-
-                <div class="input-group">
-
-                    <label for="usuario">
-                        USUARIO
-                    </label>
-
-                    <input
-                        type="text"
-                        id="usuario"
-                        placeholder="Escribe tu usuario"
-                        autocomplete="username"
-                        required
-                    >
-
-                </div>
-
-
-                <div class="input-group">
-
-                    <label for="password">
-                        CONTRASEÑA
-                    </label>
-
-                    <input
-                        type="password"
-                        id="password"
-                        placeholder="Escribe tu contraseña"
-                        autocomplete="current-password"
-                        required
-                    >
-
-                </div>
-
-
-                <button
-                    type="submit"
-                    class="login-button"
-                    id="loginButton"
-                >
-
-                    🚀 ENTRAR AL CAMPUS
-
-                </button>
-
-
-            </form>
-
-
-            <!-- =================================
-                 MENSAJE DE ERROR
-            ================================== -->
-
-            <div
-                id="error"
-                class="error"
-            >
-
-                ❌ Usuario o contraseña incorrectos.
-
-            </div>
-
-
-            <!-- =================================
-                 FOOTER
-            ================================== -->
-
-            <div class="footer">
-
-                ROBOT LAB © 2026
-
-            </div>
-
-
+        <div class="robot-icon">
+            🤖
         </div>
+
+        <h1>
+            ROBOT LAB
+        </h1>
+
+        <p>
+            CAMPUS VIRTUAL
+        </p>
 
     </div>
 
 
+    <!-- BIENVENIDA -->
 
-    <!-- =========================================
-         SUPABASE JAVASCRIPT
-    ========================================= -->
+    <div class="welcome">
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+        <h2>
+            ¡Bienvenido!
+        </h2>
 
+        <p>
+            Ingresa para continuar tu aventura tecnológica.
+        </p>
 
-    <script>
-
-
-        // =========================================
-        // CONFIGURACIÓN DE SUPABASE
-        // =========================================
-
-        const SUPABASE_URL =
-            "https://bcfknbpkduiwgqymxkns.supabase.co";
+    </div>
 
 
-        const SUPABASE_KEY =
-            "sb_publishable_END5KZ8gA4e9YDpicG-aLw_aRaIzo7E";
+    <!-- LOGIN -->
+
+    <form id="loginForm">
 
 
-        const supabase =
-            window.supabase.createClient(
-                SUPABASE_URL,
-                SUPABASE_KEY
+        <div class="input-group">
+
+            <label for="usuario">
+                USUARIO
+            </label>
+
+            <input
+                type="text"
+                id="usuario"
+                placeholder="Escribe tu usuario"
+                autocomplete="username"
+                required
+            >
+
+        </div>
+
+
+        <div class="input-group">
+
+            <label for="password">
+                CONTRASEÑA
+            </label>
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Escribe tu contraseña"
+                autocomplete="current-password"
+                required
+            >
+
+        </div>
+
+
+        <button
+            type="submit"
+            class="login-button"
+            id="loginButton"
+        >
+
+            🚀 ENTRAR AL CAMPUS
+
+        </button>
+
+    </form>
+
+
+    <!-- ERROR -->
+
+    <div
+        id="error"
+        class="error"
+    ></div>
+
+
+    <!-- ÉXITO -->
+
+    <div
+        id="success"
+        class="success"
+    >
+
+        ✅ Acceso correcto. Entrando al campus...
+
+    </div>
+
+
+    <div class="footer">
+
+        ROBOT LAB © 2026
+
+    </div>
+
+
+</div>
+
+</div>
+
+
+
+<!-- =========================================
+     SUPABASE
+========================================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script>
+
+console.log("ROBOT LAB: iniciando sistema...");
+
+
+// =========================================
+// CONFIGURACIÓN SUPABASE
+// =========================================
+
+const SUPABASE_URL =
+    "https://bcfknbpkduiwgqymxkns.supabase.co";
+
+
+const SUPABASE_KEY =
+    "sb_publishable_END5KZ8gA4e9YDpicG-aLw_aRaIzo7E";
+
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+console.log("ROBOT LAB: Supabase conectado.");
+
+
+// =========================================
+// ELEMENTOS
+// =========================================
+
+const loginForm =
+    document.getElementById("loginForm");
+
+const usuarioInput =
+    document.getElementById("usuario");
+
+const passwordInput =
+    document.getElementById("password");
+
+const loginButton =
+    document.getElementById("loginButton");
+
+const error =
+    document.getElementById("error");
+
+const success =
+    document.getElementById("success");
+
+
+// =========================================
+// MOSTRAR ERROR
+// =========================================
+
+function mostrarError(mensaje) {
+
+    error.textContent =
+        "❌ " + mensaje;
+
+    error.style.display =
+        "block";
+
+    success.style.display =
+        "none";
+
+    loginButton.disabled =
+        false;
+
+    loginButton.textContent =
+        "🚀 ENTRAR AL CAMPUS";
+}
+
+
+// =========================================
+// LOGIN
+// =========================================
+
+loginForm.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+
+        console.log(
+            "Intentando iniciar sesión..."
+        );
+
+
+        error.style.display =
+            "none";
+
+
+        success.style.display =
+            "none";
+
+
+        const usuario =
+            usuarioInput.value
+                .trim()
+                .toLowerCase();
+
+
+        const password =
+            passwordInput.value;
+
+
+        if (!usuario || !password) {
+
+            mostrarError(
+                "Escribe tu usuario y contraseña."
             );
 
+            return;
+        }
 
 
-        // =========================================
-        // ELEMENTOS DEL FORMULARIO
-        // =========================================
+        // =====================================
+        // BOTÓN
+        // =====================================
 
-        const loginForm =
-            document.getElementById("loginForm");
+        loginButton.disabled =
+            true;
 
-
-        const usuarioInput =
-            document.getElementById("usuario");
-
-
-        const passwordInput =
-            document.getElementById("password");
+        loginButton.textContent =
+            "⏳ INICIANDO...";
 
 
-        const error =
-            document.getElementById("error");
+        // =====================================
+        // EMAIL INTERNO
+        // =====================================
+
+        const email =
+            usuario + "@citzapopan.com";
 
 
-        const loginButton =
-            document.getElementById("loginButton");
+        console.log(
+            "Usuario:",
+            usuario
+        );
 
 
-
-        // =========================================
-        // LOGIN
-        // =========================================
-
-        loginForm.addEventListener(
-            "submit",
-            async function(event) {
+        console.log(
+            "Email utilizado:",
+            email
+        );
 
 
-                event.preventDefault();
+        // =====================================
+        // SUPABASE AUTH
+        // =====================================
 
+        try {
 
-                // Ocultar error anterior
-
-                error.style.display =
-                    "none";
-
-
-                // =====================================
-                // OBTENER DATOS
-                // =====================================
-
-                const usuario =
-                    usuarioInput.value
-                        .trim()
-                        .toLowerCase();
-
-
-                const password =
-                    passwordInput.value;
-
-
-
-                // =====================================
-                // CORREO INTERNO
-                // =====================================
-
-                /*
-                    El alumno escribe:
-
-                    alumno04
-
-                    Pero Supabase utiliza:
-
-                    alumno04@citzapopan.com
-                */
-
-                const email =
-                    usuario + "@citzapopan.com";
-
-
-
-                // =====================================
-                // CAMBIAR ESTADO DEL BOTÓN
-                // =====================================
-
-                loginButton.disabled =
-                    true;
-
-                loginButton.textContent =
-                    "⏳ INICIANDO...";
-
-
-
-                // =====================================
-                // AUTENTICAR CON SUPABASE
-                // =====================================
-
-                const {
-                    data,
-                    error: loginError
-                } =
-                    await supabase.auth.signInWithPassword({
+            const {
+                data,
+                error: loginError
+            } =
+                await supabaseClient.auth
+                    .signInWithPassword({
 
                         email: email,
 
@@ -688,157 +712,210 @@
                     });
 
 
-
-                // =====================================
-                // ERROR DE AUTENTICACIÓN
-                // =====================================
-
-                if (loginError) {
-
-
-                    console.error(
-                        "Error de login:",
-                        loginError
-                    );
+            console.log(
+                "Respuesta Supabase:",
+                data,
+                loginError
+            );
 
 
-                    error.textContent =
-                        "❌ Usuario o contraseña incorrectos.";
+            // =================================
+            // ERROR DE LOGIN
+            // =================================
 
+            if (loginError) {
 
-                    error.style.display =
-                        "block";
-
-
-                    passwordInput.value =
-                        "";
-
-
-                    passwordInput.focus();
-
-
-                    loginButton.disabled =
-                        false;
-
-
-                    loginButton.textContent =
-                        "🚀 ENTRAR AL CAMPUS";
-
-
-                    return;
-
-                }
-
-
-
-                // =====================================
-                // BUSCAR ALUMNO
-                // =====================================
-
-                const {
-                    data: alumno,
-                    error: alumnoError
-                } =
-                    await supabase
-
-                        .from("alumnos")
-
-                        .select("*")
-
-                        .eq(
-                            "auth_id",
-                            data.user.id
-                        )
-
-                        .single();
-
-
-
-                // =====================================
-                // PERFIL NO ENCONTRADO
-                // =====================================
-
-                if (
-                    alumnoError ||
-                    !alumno
-                ) {
-
-
-                    console.error(
-                        "Error buscando alumno:",
-                        alumnoError
-                    );
-
-
-                    error.textContent =
-                        "❌ No se encontró el perfil del alumno.";
-
-
-                    error.style.display =
-                        "block";
-
-
-                    await supabase.auth.signOut();
-
-
-                    loginButton.disabled =
-                        false;
-
-
-                    loginButton.textContent =
-                        "🚀 ENTRAR AL CAMPUS";
-
-
-                    return;
-
-                }
-
-
-
-                // =====================================
-                // GUARDAR USUARIO ACTIVO
-                // =====================================
-
-                sessionStorage.setItem(
-                    "usuarioActivo",
-                    alumno.usuario
+                console.error(
+                    "Error Supabase:",
+                    loginError
                 );
 
 
+                mostrarError(
+                    "Usuario o contraseña incorrectos."
+                );
 
-                // =====================================
-                // REVISAR SI TIENE MASCOTA
-                // =====================================
-
-                if (
-                    alumno.mascota
-                ) {
-
-
-                    // Ya tiene mascota
-
-                    window.location.href =
-                        "index.html";
-
-
-                }
-
-                else {
-
-
-                    // Es su primer acceso
-
-                    window.location.href =
-                        "elegir-mascota.html";
-
-                }
-
-
+                return;
             }
-        );
 
 
-    </script>
+            // =================================
+            // USUARIO AUTENTICADO
+            // =================================
+
+            if (!data.user) {
+
+                mostrarError(
+                    "Supabase no devolvió el usuario."
+                );
+
+                return;
+            }
+
+
+            console.log(
+                "Usuario autenticado:",
+                data.user.id
+            );
+
+
+            // =================================
+            // BUSCAR ALUMNO
+            // =================================
+
+            const {
+                data: alumno,
+                error: alumnoError
+            } =
+                await supabaseClient
+                    .from("alumnos")
+                    .select("*")
+                    .eq(
+                        "auth_id",
+                        data.user.id
+                    )
+                    .maybeSingle();
+
+
+            console.log(
+                "Alumno encontrado:",
+                alumno,
+                alumnoError
+            );
+
+
+            // =================================
+            // ERROR AL BUSCAR PERFIL
+            // =================================
+
+            if (alumnoError) {
+
+                console.error(
+                    "Error tabla alumnos:",
+                    alumnoError
+                );
+
+
+                await supabaseClient.auth
+                    .signOut();
+
+
+                mostrarError(
+                    "No se pudo consultar el perfil del alumno."
+                );
+
+                return;
+            }
+
+
+            // =================================
+            // NO EXISTE PERFIL
+            // =================================
+
+            if (!alumno) {
+
+                await supabaseClient.auth
+                    .signOut();
+
+
+                mostrarError(
+                    "El usuario existe, pero todavía no tiene un perfil de alumno."
+                );
+
+                return;
+            }
+
+
+            // =================================
+            // GUARDAR SESIÓN
+            // =================================
+
+            sessionStorage.setItem(
+                "usuarioActivo",
+                alumno.usuario
+            );
+
+
+            sessionStorage.setItem(
+                "alumnoId",
+                alumno.id
+            );
+
+
+            // =================================
+            // MOSTRAR ÉXITO
+            // =================================
+
+            success.style.display =
+                "block";
+
+
+            loginButton.textContent =
+                "✅ ACCESO CORRECTO";
+
+
+            console.log(
+                "Login correcto."
+            );
+
+
+            // =================================
+            // REVISAR MASCOTA
+            // =================================
+
+            setTimeout(
+                function() {
+
+                    if (alumno.mascota) {
+
+                        console.log(
+                            "Mascota encontrada:",
+                            alumno.mascota
+                        );
+
+
+                        window.location.href =
+                            "index.html";
+
+                    }
+
+                    else {
+
+                        console.log(
+                            "Alumno sin mascota."
+                        );
+
+
+                        window.location.href =
+                            "elegir-mascota.html";
+
+                    }
+
+                },
+                500
+            );
+
+        }
+
+
+        catch (e) {
+
+            console.error(
+                "Error inesperado:",
+                e
+            );
+
+
+            mostrarError(
+                "Ocurrió un error al conectar con el sistema."
+            );
+
+        }
+
+    }
+);
+
+</script>
 
 
 </body>
