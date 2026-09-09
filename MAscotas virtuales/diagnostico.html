@@ -6,146 +6,147 @@
 
     <title>CITZ · Robot Lab | Diagnóstico</title>
 
+    <!-- jsPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
     <style>
+
         * {
             box-sizing: border-box;
-            margin: 0;
-            padding: 0;
         }
 
         body {
+            margin: 0;
             font-family: Arial, Helvetica, sans-serif;
-            background: linear-gradient(135deg, #071426, #102a43, #164e63);
+            background:
+                radial-gradient(circle at top, #123b66 0%, #071525 45%, #030a12 100%);
             color: #ffffff;
             min-height: 100vh;
-            padding: 20px;
         }
 
         .container {
+            width: 100%;
             max-width: 1000px;
             margin: auto;
+            padding: 20px;
         }
 
         /* HEADER */
 
         .header {
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(10, 25, 42, 0.95);
+            border: 1px solid rgba(0, 200, 255, 0.25);
             border-radius: 20px;
             padding: 20px;
-            margin-bottom: 25px;
-            backdrop-filter: blur(10px);
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,.25);
         }
 
         .header-top {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            gap: 15px;
+            justify-content: space-between;
+            gap: 20px;
         }
 
         .logo {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: bold;
+            color: #00d9ff;
         }
 
-        .logo span {
-            color: #38bdf8;
-        }
-
-        .student-badge {
-            background: rgba(56,189,248,0.15);
-            border: 1px solid rgba(56,189,248,0.35);
-            border-radius: 30px;
-            padding: 10px 16px;
+        .subtitle {
+            margin-top: 5px;
+            color: #a8bfd4;
             font-size: 14px;
         }
 
         /* CARDS */
 
         .card {
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(10, 25, 42, 0.95);
+            border: 1px solid rgba(0, 200, 255, 0.18);
             border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 25px;
-            backdrop-filter: blur(10px);
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,.2);
         }
-
-        .card h1,
-        .card h2 {
-            margin-bottom: 15px;
-        }
-
-        .card p {
-            line-height: 1.6;
-            color: #dbeafe;
-        }
-
-        /* LOADING */
-
-        #loading {
-            text-align: center;
-            padding: 60px 20px;
-        }
-
-        .spinner {
-            width: 45px;
-            height: 45px;
-            border: 4px solid rgba(255,255,255,0.2);
-            border-top-color: #38bdf8;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* HIDDEN */
 
         .hidden {
             display: none !important;
         }
 
-        /* INTRO */
+        h1,
+        h2,
+        h3 {
+            margin-top: 0;
+        }
+
+        h1 {
+            font-size: 30px;
+        }
+
+        h2 {
+            color: #00d9ff;
+        }
+
+        h3 {
+            color: #ffffff;
+        }
+
+        p {
+            color: #c5d6e6;
+            line-height: 1.6;
+        }
+
+        /* INFO */
 
         .exam-info {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 15px;
-            margin: 25px 0;
+            margin: 20px 0;
         }
 
         .info-box {
-            background: rgba(0,0,0,0.18);
-            border-radius: 15px;
-            padding: 18px;
+            background: rgba(0, 0, 0, .2);
+            border: 1px solid rgba(255,255,255,.08);
+            padding: 15px;
+            border-radius: 14px;
             text-align: center;
         }
 
         .info-box strong {
             display: block;
-            font-size: 25px;
-            color: #38bdf8;
+            color: #00d9ff;
+            font-size: 22px;
             margin-bottom: 5px;
+        }
+
+        .info-box span {
+            color: #a8bfd4;
+            font-size: 13px;
         }
 
         /* BUTTONS */
 
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
         .btn {
             border: none;
             border-radius: 12px;
-            padding: 14px 22px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.2s;
-            background: #0ea5e9;
+            padding: 13px 20px;
+            background: #00a8d6;
             color: white;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+            transition: .2s;
         }
 
         .btn:hover {
@@ -154,180 +155,160 @@
         }
 
         .btn-secondary {
-            background: #475569;
+            background: #34495e;
         }
 
         .btn-success {
-            background: #16a34a;
+            background: #159957;
         }
 
         .btn-danger {
-            background: #dc2626;
+            background: #c0392b;
         }
 
-        /* EXAM */
+        /* EXAM HEADER */
 
         .exam-header {
-            position: sticky;
-            top: 10px;
-            z-index: 10;
-            background: rgba(7,20,38,0.95);
-            border-radius: 15px;
-            padding: 15px;
             margin-bottom: 25px;
-            backdrop-filter: blur(10px);
         }
 
         .progress-info {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 8px;
+            color: #a8bfd4;
             font-size: 14px;
+            margin-bottom: 8px;
         }
 
         .progress-container {
+            width: 100%;
             height: 10px;
-            background: #1e293b;
+            background: #17293b;
             border-radius: 20px;
             overflow: hidden;
         }
 
         #progressBar {
-            height: 100%;
             width: 0%;
-            background: #38bdf8;
-            transition: width 0.3s;
+            height: 100%;
+            background: linear-gradient(90deg, #00d9ff, #00ff9d);
+            transition: width .3s;
         }
 
         /* QUESTIONS */
 
         .question {
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 18px;
-            padding: 25px;
+            padding: 20px;
             margin-bottom: 20px;
+            background: rgba(255,255,255,.035);
+            border: 1px solid rgba(255,255,255,.07);
+            border-radius: 16px;
         }
 
         .question-number {
-            color: #38bdf8;
+            display: inline-block;
+            color: #00d9ff;
+            font-size: 13px;
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .question-text {
-            font-size: 19px;
-            font-weight: bold;
+            font-size: 18px;
             line-height: 1.5;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .options {
-            display: grid;
+            display: flex;
+            flex-direction: column;
             gap: 10px;
         }
 
         .option {
-            display: block;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255,255,255,.04);
+            border: 1px solid rgba(255,255,255,.08);
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .option:hover {
+            background: rgba(0,217,255,.08);
+            border-color: rgba(0,217,255,.35);
         }
 
         .option input {
-            display: none;
+            accent-color: #00d9ff;
         }
 
         .option label {
-            display: block;
-            padding: 15px;
-            border-radius: 12px;
-            background: rgba(255,255,255,0.07);
-            border: 1px solid rgba(255,255,255,0.1);
             cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .option label:hover {
-            background: rgba(56,189,248,0.12);
-        }
-
-        .option input:checked + label {
-            background: rgba(56,189,248,0.2);
-            border-color: #38bdf8;
-        }
-
-        /* AREAS */
-
-        .area-title {
-            margin: 35px 0 15px;
-            font-size: 22px;
-            color: #7dd3fc;
+            width: 100%;
+            color: #d7e5f0;
         }
 
         /* MINIGAMES */
 
         .minigame {
-            background: rgba(255,255,255,0.06);
-            border-radius: 18px;
-            padding: 25px;
             margin-bottom: 25px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .minigame h3 {
-            margin-bottom: 10px;
+            padding: 20px;
+            background: rgba(255,255,255,.035);
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,.07);
         }
 
         .minigame-description {
-            color: #cbd5e1;
-            margin-bottom: 20px;
-            line-height: 1.5;
+            color: #b9cad9;
+            margin-bottom: 18px;
         }
 
         .game-options {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            gap: 10px;
         }
 
         .game-option {
-            border: 1px solid rgba(255,255,255,0.15);
-            background: rgba(255,255,255,0.07);
-            color: white;
+            padding: 15px;
+            background: #10263a;
+            border: 1px solid #24425b;
             border-radius: 12px;
-            padding: 16px;
             cursor: pointer;
-            font-size: 16px;
-            transition: 0.2s;
+            text-align: center;
+            transition: .2s;
+            user-select: none;
         }
 
         .game-option:hover {
-            background: rgba(56,189,248,0.15);
+            border-color: #00d9ff;
+            transform: translateY(-2px);
         }
 
         .game-option.selected {
-            border-color: #38bdf8;
-            background: rgba(56,189,248,0.2);
+            border-color: #00d9ff;
+            background: rgba(0,217,255,.15);
         }
 
         .game-option.correct {
-            background: rgba(22,163,74,0.3);
-            border-color: #22c55e;
+            border-color: #00ff9d;
+            background: rgba(0,255,157,.15);
         }
 
         .game-option.incorrect {
-            background: rgba(220,38,38,0.3);
-            border-color: #ef4444;
+            border-color: #ff4d4d;
+            background: rgba(255,77,77,.15);
         }
 
         .game-result {
-            display: none;
             margin-top: 15px;
-            padding: 15px;
-            border-radius: 12px;
-            background: rgba(0,0,0,0.2);
-        }
-
-        .game-result.show {
-            display: block;
+            padding: 12px;
+            border-radius: 10px;
+            display: none;
         }
 
         /* RESULTS */
@@ -339,105 +320,68 @@
         .score-circle {
             width: 180px;
             height: 180px;
+            margin: 20px auto;
             border-radius: 50%;
-            border: 8px solid #38bdf8;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            margin: 25px auto;
+            background:
+                radial-gradient(circle, #102b43 55%, transparent 56%),
+                conic-gradient(#00d9ff 0%, #00ff9d 100%);
         }
 
         .score-number {
-            font-size: 48px;
+            font-size: 42px;
             font-weight: bold;
         }
 
         .score-label {
-            color: #cbd5e1;
+            font-size: 13px;
+            color: #b9cad9;
         }
 
         .areas {
             display: grid;
-            gap: 15px;
-            margin-top: 30px;
-            text-align: left;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 25px;
         }
 
         .area-result {
-            background: rgba(255,255,255,0.07);
-            padding: 18px;
-            border-radius: 15px;
+            background: rgba(255,255,255,.04);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: left;
+            border: 1px solid rgba(255,255,255,.07);
         }
 
         .area-result strong {
             display: block;
-            margin-bottom: 8px;
+            color: #00d9ff;
+            margin-bottom: 5px;
         }
 
-        .area-bar {
-            height: 8px;
-            background: #1e293b;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .area-bar-fill {
-            height: 100%;
-            background: #38bdf8;
+        .area-result span {
+            color: #c5d6e6;
         }
 
         .save-status {
             margin-top: 20px;
-            padding: 15px;
-            border-radius: 12px;
-            background: rgba(22,163,74,0.15);
-            color: #bbf7d0;
-        }
-
-        .actions {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 25px;
-            flex-wrap: wrap;
-        }
-
-        /* ERROR */
-
-        #errorScreen {
-            text-align: center;
-        }
-
-        #errorScreen h2 {
-            color: #fca5a5;
-        }
-
-        #errorMessage {
-            margin: 20px 0;
-        }
-
-        #errorDetail {
-            color: #94a3b8;
-            font-size: 14px;
-            margin-bottom: 20px;
+            color: #9db4c7;
         }
 
         /* MOBILE */
 
         @media (max-width: 700px) {
 
-            body {
-                padding: 10px;
+            .container {
+                padding: 12px;
             }
 
             .header-top {
                 flex-direction: column;
                 align-items: flex-start;
-            }
-
-            .card {
-                padding: 20px;
             }
 
             .exam-info {
@@ -448,15 +392,27 @@
                 grid-template-columns: 1fr;
             }
 
-            .question-text {
-                font-size: 17px;
+            .areas {
+                grid-template-columns: 1fr;
             }
 
-            .score-circle {
-                width: 150px;
-                height: 150px;
+            .actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            h1 {
+                font-size: 25px;
+            }
+
+            .question-text {
+                font-size: 16px;
             }
         }
+
     </style>
 </head>
 
@@ -465,16 +421,19 @@
 <div class="container">
 
     <!-- HEADER -->
+
     <header class="header">
 
         <div class="header-top">
 
-            <div class="logo">
-                <span>⚙</span> CITZ · Robot Lab
-            </div>
+            <div>
+                <div class="logo">
+                    ⚙ CITZ · Robot Lab
+                </div>
 
-            <div class="student-badge">
-                Diagnóstico de Robótica y Tecnología
+                <div class="subtitle">
+                    Diagnóstico de Robótica y Tecnología
+                </div>
             </div>
 
         </div>
@@ -483,63 +442,77 @@
 
 
     <!-- INTRO -->
-    <section id="intro" class="card">
 
-        <h1>🤖 Diagnóstico de Robótica y Tecnología</h1>
+    <section id="introSection" class="card">
+
+        <h1>
+            🤖 Diagnóstico de Robótica y Tecnología
+        </h1>
 
         <p>
             Este diagnóstico nos ayudará a conocer tus conocimientos
-            actuales sobre tecnología, programación, robótica y herramientas digitales.
+            actuales sobre tecnología, programación, robótica y herramientas
+            digitales.
         </p>
+
+        <p>
+            Responde las preguntas con honestidad. No importa si algunas
+            respuestas no las conoces: el objetivo es identificar qué sabes
+            y qué podemos aprender.
+        </p>
+
 
         <div class="exam-info">
 
             <div class="info-box">
-                <strong id="questionCount">28</strong>
-                preguntas
+                <strong>28</strong>
+                <span>Preguntas</span>
             </div>
 
             <div class="info-box">
-                <strong id="minigameCount">8</strong>
-                retos
+                <strong>8</strong>
+                <span>Retos interactivos</span>
             </div>
 
             <div class="info-box">
-                <strong>∞</strong>
-                sin límite de tiempo
+                <strong>36</strong>
+                <span>Puntos posibles</span>
             </div>
 
         </div>
 
-        <p style="margin-bottom:20px;">
-            <strong>Importante:</strong>
-            responde de acuerdo con lo que realmente sabes.
-            No importa si algunas preguntas no las conoces.
-        </p>
 
-        <button
-            id="startExam"
-            class="btn btn-success"
-        >
-            🚀 COMENZAR DIAGNÓSTICO
-        </button>
+        <div class="actions">
+
+            <button
+                id="startBtn"
+                class="btn"
+            >
+                🚀 COMENZAR DIAGNÓSTICO
+            </button>
+
+        </div>
 
     </section>
 
 
     <!-- EXAMEN -->
-    <section id="exam" class="hidden">
+
+    <section
+        id="examSection"
+        class="card hidden"
+    >
 
         <div class="exam-header">
 
             <div class="progress-info">
 
                 <span id="progressText">
-                    0 / 28
+                    0 de 28
                 </span>
 
-                <span>
-                    Diagnóstico
+                <span id="progressPercent">
+                    0%
                 </span>
 
             </div>
@@ -553,223 +526,49 @@
         </div>
 
 
-        <!-- QUESTIONS -->
-        <div class="card">
+        <div id="questionsContainer"></div>
 
-            <h2>🧠 Preguntas</h2>
 
-            <div id="questions"></div>
+        <div class="actions">
+
+            <button
+                id="finishBtn"
+                class="btn btn-success"
+            >
+                ✅ TERMINAR DIAGNÓSTICO
+            </button>
 
         </div>
 
-
-        <!-- MINIGAMES -->
-        <div class="card">
-
-            <h2>🎮 Retos interactivos</h2>
-
-            <p style="margin-bottom:25px;">
-                En cada reto selecciona los elementos en el orden
-                que consideres correcto.
-            </p>
+    </section>
 
 
-            <!-- GAME 1 -->
-            <div id="game1" class="minigame">
+    <!-- MINIJUEGOS -->
 
-                <h3>🤖 Reto 1 · Movimiento de un robot</h3>
+    <section
+        id="gamesSection"
+        class="card hidden"
+    >
 
-                <p class="minigame-description">
-                    Ordena los pasos para hacer que un robot avance,
-                    detecte un obstáculo y cambie de dirección.
-                </p>
+        <h2>
+            🎮 Retos interactivos
+        </h2>
 
-                <div
-                    id="gameOptions1"
-                    class="game-options"
-                ></div>
+        <p>
+            Ahora demuestra tus conocimientos resolviendo pequeños retos
+            de lógica y tecnología.
+        </p>
 
-                <div
-                    id="gameResult1"
-                    class="game-result"
-                ></div>
+        <div id="gamesContainer"></div>
 
-            </div>
+        <div class="actions">
 
-
-            <!-- GAME 2 -->
-            <div id="game2" class="minigame">
-
-                <h3>💻 Reto 2 · Programación</h3>
-
-                <p class="minigame-description">
-                    Ordena correctamente los pasos de un programa.
-                </p>
-
-                <div
-                    id="gameOptions2"
-                    class="game-options"
-                ></div>
-
-                <div
-                    id="gameResult2"
-                    class="game-result"
-                ></div>
-
-            </div>
-
-
-            <!-- GAME 3 -->
-            <div id="game3" class="minigame">
-
-                <h3>🐱 Reto 3 · Scratch</h3>
-
-                <p class="minigame-description">
-                    Ordena las acciones necesarias para crear
-                    un programa sencillo en Scratch.
-                </p>
-
-                <div
-                    id="gameOptions3"
-                    class="game-options"
-                ></div>
-
-                <div
-                    id="gameResult3"
-                    class="game-result"
-                ></div>
-
-            </div>
-
-
-            <!-- GAME 4 -->
-            <div id="game4" class="minigame">
-
-                <h3>🚁 Reto 4 · Drones</h3>
-
-                <p class="minigame-description">
-                    Ordena una secuencia básica para realizar
-                    un vuelo seguro.
-                </p>
-
-                <div
-                    id="gameOptions4"
-                    class="game-options"
-                ></div>
-
-                <div
-                    id="gameResult4"
-                    class="game-result"
-                ></div>
-
-            </div>
-
-
-            <!-- GAME 5 -->
-            <div id="game5" class="minigame">
-
-                <h3>🖊️ Reto 5 · Pluma 3D</h3>
-
-                <p class="minigame-description">
-                    Ordena los pasos para crear una pieza
-                    utilizando una pluma 3D.
-                </p>
-
-                <div
-                    id="gameOptions5"
-                    class="game-options"
-                ></div>
-
-                <div
-                    id="gameResult5"
-                    class="game-result"
-                ></div>
-
-            </div>
-
-
-            <!-- GAME 6 -->
-            <div id="game6" class="minigame">
-
-                <h3>🧱 Reto 6 · LEGO Robotics</h3>
-
-                <p class="minigame-description">
-                    Ordena los pasos para construir y programar
-                    un robot LEGO.
-                </p>
-
-                <div
-                    id="gameOptions6"
-                    class="game-options"
-                ></div>
-
-                <div
-                    id="gameResult6"
-                    class="game-result"
-                ></div>
-
-            </div>
-
-
-            <!-- GAME 7 -->
-            <div id="game7" class="minigame">
-
-                <h3>🎮 Reto 7 · Roblox Studio</h3>
-
-                <p class="minigame-description">
-                    Ordena los pasos básicos para crear
-                    una experiencia sencilla en Roblox Studio.
-                </p>
-
-                <div
-                    id="gameOptions7"
-                    class="game-options"
-                ></div>
-
-                <div
-                    id="gameResult7"
-                    class="game-result"
-                ></div>
-
-            </div>
-
-
-            <!-- GAME 8 -->
-            <div id="game8" class="minigame">
-
-                <h3>⚡ Reto 8 · Electrónica</h3>
-
-                <p class="minigame-description">
-                    Ordena los pasos para conectar y probar
-                    un circuito electrónico.
-                </p>
-
-                <div
-                    id="gameOptions8"
-                    class="game-options"
-                ></div>
-
-                <div
-                    id="gameResult8"
-                    class="game-result"
-                ></div>
-
-            </div>
-
-
-            <div
-                id="finishContainer"
-                style="text-align:center;margin-top:30px;"
+            <button
+                id="finishGamesBtn"
+                class="btn btn-success"
             >
-
-                <button
-                    id="finishExam"
-                    class="btn btn-success"
-                >
-                    🏆 TERMINAR DIAGNÓSTICO
-                </button>
-
-            </div>
+                🏆 VER RESULTADOS
+            </button>
 
         </div>
 
@@ -777,16 +576,20 @@
 
 
     <!-- RESULTADOS -->
+
     <section
-        id="results"
-        class="card result-card hidden"
+        id="resultsSection"
+        class="card hidden result-card"
     >
 
-        <h1>🎉 Diagnóstico terminado</h1>
+        <h2>
+            🎉 Diagnóstico terminado
+        </h2>
 
         <p>
-            Estos son tus resultados.
+            Este es el resultado de tu diagnóstico.
         </p>
+
 
         <div class="score-circle">
 
@@ -798,32 +601,51 @@
             </div>
 
             <div class="score-label">
-                resultado
+                Resultado
             </div>
 
         </div>
 
 
-        <h2 id="resultMessage">
-            ¡Buen trabajo!
-        </h2>
+        <div id="scoreDetails"></div>
 
+
+        <h3>
+            📊 Desempeño por área
+        </h3>
 
         <div
-            id="areas"
+            id="areasContainer"
             class="areas"
         ></div>
+
+
+        <h3 style="margin-top:30px;">
+            🎮 Retos interactivos
+        </h3>
+
+        <div id="gamesResults"></div>
 
 
         <div
             id="saveStatus"
             class="save-status"
         >
-            ✅ Tu diagnóstico terminó correctamente.
+            Este diagnóstico funciona de manera independiente y
+            no guarda información en Supabase.
         </div>
 
 
         <div class="actions">
+
+            <!-- NUEVO BOTÓN PDF -->
+
+            <button
+                id="downloadPDF"
+                class="btn btn-success"
+            >
+                📄 DESCARGAR PDF
+            </button>
 
             <button
                 id="retrySave"
@@ -848,1363 +670,1623 @@
 
 <script>
 
-/* =========================================================
-   CITZ · ROBOT LAB
-   DIAGNÓSTICO INDEPENDIENTE
-   SIN SUPABASE
-   SIN ACTIVIDADES
-   SIN PERFILES
-   ========================================================= */
+    /* =========================================================
+       PREGUNTAS
+    ========================================================= */
+
+    const preguntas = [
+
+        {
+            area: "Secuencias y lógica",
+            pregunta: "¿Qué debería hacer primero un robot antes de comenzar una tarea?",
+            opciones: [
+                "Seguir una secuencia de instrucciones",
+                "Apagarse",
+                "Cambiar de color",
+                "Moverse sin instrucciones"
+            ],
+            correcta: 0
+        },
+
+        {
+            area: "Secuencias y lógica",
+            pregunta: "Si una instrucción debe repetirse 5 veces, ¿qué concepto de programación utilizarías?",
+            opciones: [
+                "Un ciclo",
+                "Una imagen",
+                "Un archivo",
+                "Un comentario"
+            ],
+            correcta: 0
+        },
+
+        {
+            area: "Secuencias y lógica",
+            pregunta: "¿Qué significa seguir una secuencia?",
+            opciones: [
+                "Realizar acciones en un orden determinado",
+                "Hacer todas las acciones al mismo tiempo",
+                "No seguir instrucciones",
+                "Realizar acciones al azar"
+            ],
+            correcta: 0
+        },
+
+        {
+            area: "Secuencias y lógica",
+            pregunta: "Un robot debe avanzar, detenerse y después girar. ¿Qué debe hacer?",
+            opciones: [
+                "Seguir las instrucciones en ese orden",
+                "Girar primero",
+                "Hacer todo al azar",
+                "Solo detenerse"
+            ],
+            correcta: 0
+        },
 
 
-/* =========================================================
-   PREGUNTAS
-   ========================================================= */
+        /* PROGRAMACIÓN */
 
-const preguntas = [
+        {
+            area: "Programación",
+            pregunta: "¿Qué es un algoritmo?",
+            opciones: [
+                "Una serie ordenada de instrucciones para resolver un problema",
+                "Un componente electrónico",
+                "Una computadora",
+                "Un videojuego"
+            ],
+            correcta: 0
+        },
 
-    {
-        area: "Secuencias y lógica",
-        pregunta: "¿Qué debe hacer primero un robot antes de ejecutar una tarea?",
-        opciones: [
-            "Recibir o tener definido el programa",
-            "Apagar sus motores",
-            "Desconectar la batería",
-            "Eliminar sus sensores"
-        ],
-        correcta: 0
-    },
+        {
+            area: "Programación",
+            pregunta: "¿Para qué sirve una variable?",
+            opciones: [
+                "Para almacenar información que puede cambiar",
+                "Para conectar un motor",
+                "Para imprimir papel",
+                "Para encender una computadora"
+            ],
+            correcta: 0
+        },
 
-    {
-        area: "Secuencias y lógica",
-        pregunta: "Si un robot debe avanzar 3 segundos y después girar, ¿qué concepto estás utilizando?",
-        opciones: [
-            "Una secuencia",
-            "Una fotografía",
-            "Un archivo de texto",
-            "Un componente electrónico"
-        ],
-        correcta: 0
-    },
-
-    {
-        area: "Secuencias y lógica",
-        pregunta: "¿Qué permite tomar decisiones diferentes dependiendo de una condición?",
-        opciones: [
-            "Una estructura condicional",
-            "Un cable USB",
-            "Un motor",
-            "Una batería"
-        ],
-        correcta: 0
-    },
-
-    {
-        area: "Secuencias y lógica",
-        pregunta: "Si algo debe repetirse varias veces en un programa, ¿qué puedes utilizar?",
-        opciones: [
-            "Un ciclo",
-            "Una imagen",
-            "Un teclado",
-            "Una pantalla"
-        ],
-        correcta: 0
-    },
+        {
+            area: "Programación",
+            pregunta: "¿Qué es un error o bug en un programa?",
+            opciones: [
+                "Un problema que provoca que el programa no funcione como esperamos",
+                "Una pieza de hardware",
+                "Un tipo de sensor",
+                "Una batería"
+            ],
+            correcta: 0
+        },
 
 
-    {
-        area: "Programación",
-        pregunta: "¿Qué es una variable?",
-        opciones: [
-            "Un espacio donde se almacena información",
-            "Un tipo de motor",
-            "Una batería",
-            "Un sensor"
-        ],
-        correcta: 0
-    },
+        /* MECANOGRAFÍA */
 
-    {
-        area: "Programación",
-        pregunta: "¿Qué hace una condición IF?",
-        opciones: [
-            "Permite tomar una decisión",
-            "Apaga siempre el programa",
-            "Construye una pieza",
-            "Conecta un motor"
-        ],
-        correcta: 0
-    },
-
-    {
-        area: "Programación",
-        pregunta: "¿Qué es un algoritmo?",
-        opciones: [
-            "Una serie ordenada de pasos para resolver un problema",
-            "Una pieza mecánica",
-            "Una batería",
-            "Una pantalla"
-        ],
-        correcta: 0
-    },
+        {
+            area: "Mecanografía",
+            pregunta: "¿Cuál es una buena práctica al escribir en computadora?",
+            opciones: [
+                "Utilizar correctamente las dos manos y mantener una postura adecuada",
+                "Utilizar solamente un dedo",
+                "No mirar la pantalla",
+                "Golpear las teclas con fuerza"
+            ],
+            correcta: 0
+        },
 
 
-    {
-        area: "Mecanografía",
-        pregunta: "¿Qué tecla se utiliza normalmente para iniciar un nuevo renglón?",
-        opciones: [
-            "Enter",
-            "Shift",
-            "Ctrl",
-            "Alt"
-        ],
-        correcta: 0
-    },
+        /* SCRATCH */
+
+        {
+            area: "Scratch",
+            pregunta: "¿Qué es Scratch?",
+            opciones: [
+                "Un lenguaje de programación visual basado en bloques",
+                "Un sistema operativo",
+                "Una impresora 3D",
+                "Un robot"
+            ],
+            correcta: 0
+        },
+
+        {
+            area: "Scratch",
+            pregunta: "¿Qué podemos controlar en Scratch?",
+            opciones: [
+                "Sprites y escenarios mediante programación",
+                "Solamente archivos PDF",
+                "Solamente impresoras",
+                "Únicamente fotografías"
+            ],
+            correcta: 0
+        },
+
+        {
+            area: "Scratch",
+            pregunta: "¿Qué bloque se utiliza para repetir instrucciones?",
+            opciones: [
+                "Un bloque de control como repetir",
+                "Un bloque de sonido únicamente",
+                "Un bloque de apariencia únicamente",
+                "Un bloque de movimiento únicamente"
+            ],
+            correcta: 0
+        },
 
 
-    {
-        area: "Scratch",
-        pregunta: "¿Qué es Scratch?",
-        opciones: [
-            "Un lenguaje y entorno de programación visual",
-            "Un sistema operativo",
-            "Un robot físico",
-            "Un editor de fotografías"
-        ],
-        correcta: 0
-    },
+        /* DRONES */
 
-    {
-        area: "Scratch",
-        pregunta: "¿Qué ocurre cuando utilizas un bloque de repetición?",
-        opciones: [
-            "Las instrucciones se ejecutan varias veces",
-            "El personaje desaparece",
-            "Se apaga la computadora",
-            "Se elimina el proyecto"
-        ],
-        correcta: 0
-    },
+        {
+            area: "Drones",
+            pregunta: "¿Qué permite que un dron pueda mantenerse en el aire?",
+            opciones: [
+                "La fuerza generada por sus hélices",
+                "El peso de la batería",
+                "La cámara",
+                "El control remoto por sí solo"
+            ],
+            correcta: 0
+        },
 
-    {
-        area: "Scratch",
-        pregunta: "¿Qué es un sprite?",
-        opciones: [
-            "Un personaje u objeto dentro del proyecto",
-            "Una batería",
-            "Un cable",
-            "Una impresora"
-        ],
-        correcta: 0
-    },
+        {
+            area: "Drones",
+            pregunta: "¿Qué componente ayuda a detectar la orientación y movimiento de un dron?",
+            opciones: [
+                "Un sensor IMU",
+                "Una impresora",
+                "Un teclado",
+                "Un altavoz"
+            ],
+            correcta: 0
+        },
 
-
-    {
-        area: "Drones",
-        pregunta: "¿Qué permite controlar la altura de un dron?",
-        opciones: [
-            "La potencia de sus motores",
-            "El color del dron",
-            "El tamaño de la pantalla",
-            "El teclado"
-        ],
-        correcta: 0
-    },
-
-    {
-        area: "Drones",
-        pregunta: "¿Qué es importante revisar antes de volar un dron?",
-        opciones: [
-            "Batería, hélices y zona de vuelo",
-            "El fondo de pantalla",
-            "El teclado",
-            "El volumen de la computadora"
-        ],
-        correcta: 0
-    },
-
-    {
-        area: "Drones",
-        pregunta: "¿Para qué sirven las hélices?",
-        opciones: [
-            "Generar la fuerza necesaria para volar",
-            "Guardar fotografías",
-            "Programar aplicaciones",
-            "Cargar la batería"
-        ],
-        correcta: 0
-    },
+        {
+            area: "Drones",
+            pregunta: "¿Qué debemos hacer antes de volar un dron?",
+            opciones: [
+                "Revisar el equipo y asegurarnos de tener un espacio seguro",
+                "Lanzarlo inmediatamente",
+                "Desconectar la batería",
+                "Quitar las hélices"
+            ],
+            correcta: 0
+        },
 
 
-    {
-        area: "Pluma 3D",
-        pregunta: "¿Qué material utiliza normalmente una pluma 3D?",
-        opciones: [
-            "Filamento plástico",
-            "Agua",
-            "Papel",
-            "Arena"
-        ],
-        correcta: 0
-    },
+        /* PLUMA 3D */
 
-    {
-        area: "Pluma 3D",
-        pregunta: "¿Qué ocurre con el filamento dentro de la pluma 3D?",
-        opciones: [
-            "Se calienta y sale por la boquilla",
-            "Se convierte en agua",
-            "Se congela",
-            "Se vuelve electricidad"
-        ],
-        correcta: 0
-    },
+        {
+            area: "Pluma 3D",
+            pregunta: "¿Para qué sirve una pluma 3D?",
+            opciones: [
+                "Para crear formas utilizando filamento plástico",
+                "Para programar robots automáticamente",
+                "Para cortar madera",
+                "Para imprimir documentos"
+            ],
+            correcta: 0
+        },
 
-    {
-        area: "Pluma 3D",
-        pregunta: "¿Para qué sirve una plantilla al trabajar con una pluma 3D?",
-        opciones: [
-            "Ayuda a mantener la forma del diseño",
-            "Aumenta la batería",
-            "Programa el robot",
-            "Conecta el USB"
-        ],
-        correcta: 0
-    },
+        {
+            area: "Pluma 3D",
+            pregunta: "¿Qué material utiliza normalmente una pluma 3D?",
+            opciones: [
+                "Filamento plástico",
+                "Agua",
+                "Papel",
+                "Arena"
+            ],
+            correcta: 0
+        },
 
-    {
-        area: "Pluma 3D",
-        pregunta: "¿Qué precaución es importante al utilizar una pluma 3D?",
-        opciones: [
-            "Evitar tocar la boquilla caliente",
-            "Mojar el filamento",
-            "Desconectar el motor",
-            "Cubrir la computadora"
-        ],
-        correcta: 0
-    },
+        {
+            area: "Pluma 3D",
+            pregunta: "¿Qué debemos tener en cuenta al utilizar una pluma 3D?",
+            opciones: [
+                "Que la punta puede alcanzar una temperatura elevada",
+                "Que funciona con agua",
+                "Que nunca se calienta",
+                "Que debe utilizarse sin filamento"
+            ],
+            correcta: 0
+        },
 
-
-    {
-        area: "LEGO",
-        pregunta: "¿Qué puede hacer un sensor en un robot LEGO?",
-        opciones: [
-            "Detectar información del entorno",
-            "Servir como batería",
-            "Reemplazar todas las piezas",
-            "Crear electricidad por sí solo"
-        ],
-        correcta: 0
-    },
-
-    {
-        area: "LEGO",
-        pregunta: "¿Para qué sirven los motores?",
-        opciones: [
-            "Generar movimiento",
-            "Guardar programas",
-            "Mostrar imágenes",
-            "Medir temperatura solamente"
-        ],
-        correcta: 0
-    },
-
-    {
-        area: "LEGO",
-        pregunta: "¿Qué combina normalmente la robótica educativa?",
-        opciones: [
-            "Construcción, programación y resolución de problemas",
-            "Únicamente dibujo",
-            "Únicamente música",
-            "Únicamente escritura"
-        ],
-        correcta: 0
-    },
+        {
+            area: "Pluma 3D",
+            pregunta: "¿Qué podemos construir con una pluma 3D?",
+            opciones: [
+                "Modelos y estructuras tridimensionales",
+                "Solamente fotografías",
+                "Solamente sonidos",
+                "Páginas web automáticamente"
+            ],
+            correcta: 0
+        },
 
 
-    {
-        area: "Roblox",
-        pregunta: "¿Para qué sirve Roblox Studio?",
-        opciones: [
-            "Para crear experiencias y juegos en Roblox",
-            "Para reparar computadoras",
-            "Para imprimir documentos",
-            "Para editar fotografías únicamente"
-        ],
-        correcta: 0
-    },
+        /* LEGO */
 
-    {
-        area: "Roblox",
-        pregunta: "¿Qué lenguaje se utiliza principalmente para programar en Roblox Studio?",
-        opciones: [
-            "Luau",
-            "HTML",
-            "SQL",
-            "CSS"
-        ],
-        correcta: 0
-    },
+        {
+            area: "LEGO Robotics",
+            pregunta: "¿Qué podemos hacer con un kit de robótica LEGO?",
+            opciones: [
+                "Construir y programar robots",
+                "Únicamente construir casas",
+                "Solamente hacer dibujos",
+                "Crear fotografías"
+            ],
+            correcta: 0
+        },
 
-    {
-        area: "Roblox",
-        pregunta: "¿Qué es un objeto dentro de Roblox Studio?",
-        opciones: [
-            "Un elemento que puede formar parte del juego",
-            "Una batería física",
-            "Un sensor Arduino",
-            "Una impresora"
-        ],
-        correcta: 0
-    },
+        {
+            area: "LEGO Robotics",
+            pregunta: "¿Para qué sirve un sensor en un robot?",
+            opciones: [
+                "Para detectar información del entorno",
+                "Para decorar el robot",
+                "Para aumentar su peso",
+                "Para almacenar tornillos"
+            ],
+            correcta: 0
+        },
+
+        {
+            area: "LEGO Robotics",
+            pregunta: "¿Qué permite que un robot ejecute instrucciones automáticamente?",
+            opciones: [
+                "Un programa",
+                "Una pieza decorativa",
+                "Una fotografía",
+                "Una caja"
+            ],
+            correcta: 0
+        },
 
 
-    {
-        area: "Electrónica",
-        pregunta: "¿Qué componente puede detectar distancia utilizando ondas de sonido?",
-        opciones: [
-            "Sensor ultrasónico",
-            "Motor",
-            "LED",
-            "Batería"
-        ],
-        correcta: 0
-    },
+        /* ROBLOX */
 
-    {
-        area: "Electrónica",
-        pregunta: "¿Para qué sirve una resistencia?",
-        opciones: [
-            "Limitar la corriente eléctrica",
-            "Crear una imagen",
-            "Mover un robot por sí sola",
-            "Guardar programas"
-        ],
-        correcta: 0
-    },
+        {
+            area: "Roblox Studio",
+            pregunta: "¿Qué es Roblox Studio?",
+            opciones: [
+                "Una herramienta para crear experiencias y juegos en Roblox",
+                "Un navegador web",
+                "Un sistema operativo",
+                "Una impresora 3D"
+            ],
+            correcta: 0
+        },
 
-    {
-        area: "Electrónica",
-        pregunta: "¿Qué componente puede emitir luz?",
-        opciones: [
-            "LED",
-            "Sensor ultrasónico",
-            "Motor",
-            "Interruptor"
-        ],
-        correcta: 0
-    },
+        {
+            area: "Roblox Studio",
+            pregunta: "¿Qué lenguaje se utiliza principalmente para programar en Roblox Studio?",
+            opciones: [
+                "Luau",
+                "HTML",
+                "SQL",
+                "CSS"
+            ],
+            correcta: 0
+        },
 
-    {
-        area: "Electrónica",
-        pregunta: "¿Qué plataforma es muy utilizada para aprender electrónica y programación mediante microcontroladores?",
-        opciones: [
-            "Arduino",
-            "Photoshop",
-            "Word",
-            "PowerPoint"
-        ],
-        correcta: 0
+        {
+            area: "Roblox Studio",
+            pregunta: "¿Qué es un modelo en Roblox Studio?",
+            opciones: [
+                "Un conjunto de objetos que puede formar una estructura o personaje",
+                "Un archivo de música",
+                "Una contraseña",
+                "Un navegador"
+            ],
+            correcta: 0
+        },
+
+
+        /* ELECTRÓNICA */
+
+        {
+            area: "Electrónica",
+            pregunta: "¿Qué es Arduino?",
+            opciones: [
+                "Una plataforma electrónica programable",
+                "Un videojuego",
+                "Un navegador",
+                "Una impresora"
+            ],
+            correcta: 0
+        },
+
+        {
+            area: "Electrónica",
+            pregunta: "¿Qué componente puede utilizarse para detectar distancia?",
+            opciones: [
+                "Sensor ultrasónico",
+                "LED",
+                "Buzzer",
+                "Motor"
+            ],
+            correcta: 0
+        },
+
+        {
+            area: "Electrónica",
+            pregunta: "¿Qué componente produce luz?",
+            opciones: [
+                "LED",
+                "Motor",
+                "Resistencia",
+                "Joystick"
+            ],
+            correcta: 0
+        },
+
+        {
+            area: "Electrónica",
+            pregunta: "¿Para qué sirve una resistencia eléctrica?",
+            opciones: [
+                "Para limitar la corriente eléctrica",
+                "Para crear imágenes",
+                "Para almacenar archivos",
+                "Para mover un robot por sí sola"
+            ],
+            correcta: 0
+        }
+
+    ];
+
+
+    /* =========================================================
+       MINIJUEGOS
+    ========================================================= */
+
+    const minijuegos = [
+
+        {
+            titulo: "🤖 Movimiento de un robot",
+
+            descripcion:
+                "Ordena las acciones para que el robot pueda realizar correctamente su recorrido.",
+
+            opciones: [
+                "Encender robot",
+                "Avanzar",
+                "Detenerse",
+                "Girar"
+            ]
+        },
+
+        {
+            titulo: "💻 Programación",
+
+            descripcion:
+                "Ordena los pasos básicos para crear y ejecutar un programa.",
+
+            opciones: [
+                "Identificar el problema",
+                "Crear instrucciones",
+                "Probar el programa",
+                "Corregir errores"
+            ]
+        },
+
+        {
+            titulo: "🟠 Scratch",
+
+            descripcion:
+                "Ordena los pasos para crear una animación sencilla.",
+
+            opciones: [
+                "Elegir un personaje",
+                "Agregar bloques",
+                "Ejecutar el programa",
+                "Observar el resultado"
+            ]
+        },
+
+        {
+            titulo: "🚁 Drones",
+
+            descripcion:
+                "Ordena las acciones necesarias antes de realizar un vuelo seguro.",
+
+            opciones: [
+                "Revisar el dron",
+                "Encender el equipo",
+                "Despegar",
+                "Controlar el vuelo"
+            ]
+        },
+
+        {
+            titulo: "🖊️ Pluma 3D",
+
+            descripcion:
+                "Ordena los pasos para realizar una creación utilizando una pluma 3D.",
+
+            opciones: [
+                "Preparar el filamento",
+                "Encender la pluma",
+                "Esperar a que caliente",
+                "Dibujar con el filamento"
+            ]
+        },
+
+        {
+            titulo: "🧱 LEGO Robotics",
+
+            descripcion:
+                "Ordena el proceso para construir y programar un robot.",
+
+            opciones: [
+                "Diseñar el robot",
+                "Construirlo",
+                "Programarlo",
+                "Probarlo"
+            ]
+        },
+
+        {
+            titulo: "🎮 Roblox Studio",
+
+            descripcion:
+                "Ordena los pasos básicos para crear una experiencia.",
+
+            opciones: [
+                "Crear un proyecto",
+                "Construir el escenario",
+                "Programar elementos",
+                "Probar el juego"
+            ]
+        },
+
+        {
+            titulo: "⚡ Electrónica",
+
+            descripcion:
+                "Ordena los pasos básicos para realizar un circuito electrónico.",
+
+            opciones: [
+                "Diseñar el circuito",
+                "Identificar componentes",
+                "Conectar componentes",
+                "Probar el circuito"
+            ]
+        }
+
+    ];
+
+
+    /* =========================================================
+       VARIABLES
+    ========================================================= */
+
+    let respuestas = [];
+
+    let resultadosMinijuegos = [];
+
+    let seleccionJuegos = [];
+
+    let diagnosticoTerminado = false;
+
+
+    /* =========================================================
+       ELEMENTOS
+    ========================================================= */
+
+    const introSection =
+        document.getElementById("introSection");
+
+    const examSection =
+        document.getElementById("examSection");
+
+    const gamesSection =
+        document.getElementById("gamesSection");
+
+    const resultsSection =
+        document.getElementById("resultsSection");
+
+    const questionsContainer =
+        document.getElementById("questionsContainer");
+
+    const gamesContainer =
+        document.getElementById("gamesContainer");
+
+    const areasContainer =
+        document.getElementById("areasContainer");
+
+    const gamesResults =
+        document.getElementById("gamesResults");
+
+    const progressBar =
+        document.getElementById("progressBar");
+
+    const progressText =
+        document.getElementById("progressText");
+
+    const progressPercent =
+        document.getElementById("progressPercent");
+
+    const scoreNumber =
+        document.getElementById("scoreNumber");
+
+    const scoreDetails =
+        document.getElementById("scoreDetails");
+
+
+    /* =========================================================
+       CREAR PREGUNTAS
+    ========================================================= */
+
+    function crearPreguntas() {
+
+        questionsContainer.innerHTML = "";
+
+        preguntas.forEach((pregunta, index) => {
+
+            const div =
+                document.createElement("div");
+
+            div.className = "question";
+
+            div.innerHTML = `
+
+                <div class="question-number">
+                    PREGUNTA ${index + 1} · ${pregunta.area}
+                </div>
+
+                <div class="question-text">
+                    ${pregunta.pregunta}
+                </div>
+
+                <div class="options">
+
+                    ${pregunta.opciones.map(
+                        (opcion, opcionIndex) => `
+
+                        <div class="option">
+
+                            <input
+                                type="radio"
+                                name="pregunta-${index}"
+                                id="p${index}-o${opcionIndex}"
+                                value="${opcionIndex}"
+                            >
+
+                            <label
+                                for="p${index}-o${opcionIndex}"
+                            >
+                                ${opcion}
+                            </label>
+
+                        </div>
+
+                    `
+                    ).join("")}
+
+                </div>
+            `;
+
+            questionsContainer.appendChild(div);
+
+        });
+
+
+        document
+            .querySelectorAll(
+                'input[type="radio"]'
+            )
+            .forEach(input => {
+
+                input.addEventListener(
+                    "change",
+                    actualizarProgreso
+                );
+
+            });
+
     }
 
-];
+
+    /* =========================================================
+       CREAR MINIJUEGOS
+    ========================================================= */
+
+    function crearMinijuegos() {
+
+        gamesContainer.innerHTML = "";
+
+        seleccionJuegos =
+            minijuegos.map(() => []);
+
+        resultadosMinijuegos =
+            minijuegos.map(() => false);
 
 
-/* =========================================================
-   MINIJUEGOS
-   ========================================================= */
+        minijuegos.forEach(
+            (juego, index) => {
 
-const minijuegos = [
+                crearMinijuegoIndividual(
+                    juego,
+                    index
+                );
 
-    {
-        titulo: "Movimiento de un robot",
+            }
+        );
 
-        opciones: [
-            "Detectar el obstáculo",
-            "Avanzar",
-            "Detener los motores",
-            "Cambiar de dirección"
-        ],
-
-        correcta: [
-            "Avanzar",
-            "Detectar el obstáculo",
-            "Detener los motores",
-            "Cambiar de dirección"
-        ]
-    },
-
-    {
-        titulo: "Programación",
-
-        opciones: [
-            "Ejecutar el programa",
-            "Diseñar el algoritmo",
-            "Probar el programa",
-            "Detectar y corregir errores"
-        ],
-
-        correcta: [
-            "Diseñar el algoritmo",
-            "Ejecutar el programa",
-            "Probar el programa",
-            "Detectar y corregir errores"
-        ]
-    },
-
-    {
-        titulo: "Scratch",
-
-        opciones: [
-            "Programar las acciones",
-            "Elegir un personaje",
-            "Probar el proyecto",
-            "Agregar un escenario"
-        ],
-
-        correcta: [
-            "Elegir un personaje",
-            "Agregar un escenario",
-            "Programar las acciones",
-            "Probar el proyecto"
-        ]
-    },
-
-    {
-        titulo: "Drones",
-
-        opciones: [
-            "Despegar",
-            "Revisar batería y hélices",
-            "Aterrizar",
-            "Realizar el vuelo"
-        ],
-
-        correcta: [
-            "Revisar batería y hélices",
-            "Despegar",
-            "Realizar el vuelo",
-            "Aterrizar"
-        ]
-    },
-
-    {
-        titulo: "Pluma 3D",
-
-        opciones: [
-            "Dibujar la pieza",
-            "Seleccionar el diseño",
-            "Calentar la pluma",
-            "Dejar enfriar la pieza"
-        ],
-
-        correcta: [
-            "Seleccionar el diseño",
-            "Calentar la pluma",
-            "Dibujar la pieza",
-            "Dejar enfriar la pieza"
-        ]
-    },
-
-    {
-        titulo: "LEGO Robotics",
-
-        opciones: [
-            "Programar",
-            "Construir el robot",
-            "Probar el robot",
-            "Identificar el problema"
-        ],
-
-        correcta: [
-            "Identificar el problema",
-            "Construir el robot",
-            "Programar",
-            "Probar el robot"
-        ]
-    },
-
-    {
-        titulo: "Roblox Studio",
-
-        opciones: [
-            "Probar el juego",
-            "Diseñar el escenario",
-            "Programar las mecánicas",
-            "Publicar el proyecto"
-        ],
-
-        correcta: [
-            "Diseñar el escenario",
-            "Programar las mecánicas",
-            "Probar el juego",
-            "Publicar el proyecto"
-        ]
-    },
-
-    {
-        titulo: "Electrónica",
-
-        opciones: [
-            "Conectar el circuito",
-            "Identificar los componentes",
-            "Probar el circuito",
-            "Corregir conexiones"
-        ],
-
-        correcta: [
-            "Identificar los componentes",
-            "Conectar el circuito",
-            "Probar el circuito",
-            "Corregir conexiones"
-        ]
     }
 
-];
 
+    function crearMinijuegoIndividual(
+        juego,
+        index
+    ) {
 
-/* =========================================================
-   VARIABLES
-   ========================================================= */
-
-let respuestas = [];
-
-let resultadosMinijuegos = [];
-
-let diagnosticoTerminado = false;
-
-
-/* =========================================================
-   ELEMENTOS
-   ========================================================= */
-
-const intro = document.getElementById("intro");
-
-const exam = document.getElementById("exam");
-
-const results = document.getElementById("results");
-
-const questionsContainer =
-    document.getElementById("questions");
-
-const progressText =
-    document.getElementById("progressText");
-
-const progressBar =
-    document.getElementById("progressBar");
-
-const startExam =
-    document.getElementById("startExam");
-
-const finishExam =
-    document.getElementById("finishExam");
-
-const scoreNumber =
-    document.getElementById("scoreNumber");
-
-const resultMessage =
-    document.getElementById("resultMessage");
-
-const areasContainer =
-    document.getElementById("areas");
-
-const retrySave =
-    document.getElementById("retrySave");
-
-const backCampus =
-    document.getElementById("backCampus");
-
-
-/* =========================================================
-   CREAR PREGUNTAS
-   ========================================================= */
-
-function crearPreguntas() {
-
-    questionsContainer.innerHTML = "";
-
-    preguntas.forEach((pregunta, index) => {
-
-        const questionDiv =
+        const div =
             document.createElement("div");
 
-        questionDiv.className = "question";
+        div.className = "minigame";
 
-        let opcionesHTML = "";
+        div.innerHTML = `
 
-        pregunta.opciones.forEach(
-            (opcion, opcionIndex) => {
+            <h3>
+                ${juego.titulo}
+            </h3>
 
-                opcionesHTML += `
-                    <div class="option">
+            <div class="minigame-description">
+                ${juego.descripcion}
+            </div>
 
-                        <input
-                            type="radio"
-                            id="pregunta_${index}_${opcionIndex}"
-                            name="pregunta_${index}"
-                            value="${opcionIndex}"
-                        >
+            <p>
+                <strong>
+                    Haz clic en los elementos en el orden correcto.
+                </strong>
+            </p>
 
-                        <label
-                            for="pregunta_${index}_${opcionIndex}"
-                        >
-                            ${opcion}
-                        </label>
+            <div
+                class="game-options"
+                id="game-options-${index}"
+            >
 
+                ${juego.opciones.map(
+                    (opcion, opcionIndex) => `
+
+                    <div
+                        class="game-option"
+                        data-game="${index}"
+                        data-option="${opcionIndex}"
+                    >
+                        ${opcion}
                     </div>
-                `;
+
+                `
+                ).join("")}
+
+            </div>
+
+            <div
+                id="game-result-${index}"
+                class="game-result"
+            ></div>
+
+        `;
+
+        gamesContainer.appendChild(div);
+
+
+        div
+            .querySelectorAll(".game-option")
+            .forEach(option => {
+
+                option.addEventListener(
+                    "click",
+                    seleccionarOpcionJuego
+                );
+
+            });
+
+    }
+
+
+    /* =========================================================
+       SELECCIONAR MINIJUEGO
+    ========================================================= */
+
+    function seleccionarOpcionJuego(event) {
+
+        if (diagnosticoTerminado) {
+            return;
+        }
+
+        const element =
+            event.currentTarget;
+
+        const gameIndex =
+            Number(
+                element.dataset.game
+            );
+
+        const optionIndex =
+            Number(
+                element.dataset.option
+            );
+
+
+        if (
+            resultadosMinijuegos[gameIndex]
+        ) {
+            return;
+        }
+
+
+        const juego =
+            minijuegos[gameIndex];
+
+        const seleccion =
+            seleccionJuegos[gameIndex];
+
+
+        /*
+            Evitar seleccionar dos veces
+        */
+
+        if (
+            seleccion.includes(optionIndex)
+        ) {
+            return;
+        }
+
+
+        /*
+            El siguiente elemento esperado
+        */
+
+        const siguiente =
+            seleccion.length;
+
+
+        /*
+            Si no es el correcto
+        */
+
+        if (
+            optionIndex !== siguiente
+        ) {
+
+            element.classList.add(
+                "incorrect"
+            );
+
+            const resultado =
+                document.getElementById(
+                    `game-result-${gameIndex}`
+                );
+
+            resultado.style.display =
+                "block";
+
+            resultado.innerHTML =
+                "❌ Ese no es el siguiente paso. Inténtalo nuevamente.";
+
+            setTimeout(() => {
+
+                element.classList.remove(
+                    "incorrect"
+                );
+
+                resultado.style.display =
+                    "none";
+
+            }, 1200);
+
+            return;
+        }
+
+
+        /*
+            Correcto
+        */
+
+        seleccion.push(
+            optionIndex
+        );
+
+        element.classList.add(
+            "correct"
+        );
+
+
+        /*
+            ¿Terminó?
+        */
+
+        if (
+            seleccion.length ===
+            juego.opciones.length
+        ) {
+
+            resultadosMinijuegos[
+                gameIndex
+            ] = true;
+
+            const resultado =
+                document.getElementById(
+                    `game-result-${gameIndex}`
+                );
+
+            resultado.style.display =
+                "block";
+
+            resultado.innerHTML =
+                "✅ ¡Reto completado correctamente!";
+
+        }
+
+    }
+
+
+    /* =========================================================
+       PROGRESO
+    ========================================================= */
+
+    function actualizarProgreso() {
+
+        let contestadas = 0;
+
+        preguntas.forEach(
+            (_, index) => {
+
+                const seleccion =
+                    document.querySelector(
+                        `input[name="pregunta-${index}"]:checked`
+                    );
+
+                if (seleccion) {
+                    contestadas++;
+                }
 
             }
         );
 
 
-        questionDiv.innerHTML = `
+        const porcentaje =
+            Math.round(
+                (contestadas /
+                preguntas.length) *
+                100
+            );
 
-            <div class="question-number">
-                Pregunta ${index + 1}
-            </div>
 
-            <div class="question-text">
-                ${pregunta.pregunta}
-            </div>
+        progressBar.style.width =
+            porcentaje + "%";
 
-            <div class="options">
-                ${opcionesHTML}
-            </div>
+        progressText.textContent =
+            `${contestadas} de ${preguntas.length}`;
+
+        progressPercent.textContent =
+            porcentaje + "%";
+
+    }
+
+
+    /* =========================================================
+       CALIFICAR PREGUNTAS
+    ========================================================= */
+
+    function calificarPreguntas() {
+
+        respuestas = [];
+
+        preguntas.forEach(
+            (pregunta, index) => {
+
+                const seleccion =
+                    document.querySelector(
+                        `input[name="pregunta-${index}"]:checked`
+                    );
+
+                const respuesta =
+                    seleccion
+                        ? Number(
+                            seleccion.value
+                        )
+                        : null;
+
+                respuestas.push({
+
+                    respuesta: respuesta,
+
+                    correcta:
+                        respuesta ===
+                        pregunta.correcta
+
+                });
+
+            }
+        );
+
+
+        return respuestas;
+
+    }
+
+
+    /* =========================================================
+       CALCULAR ÁREAS
+    ========================================================= */
+
+    function calcularAreas() {
+
+        const areas = {};
+
+
+        preguntas.forEach(
+            (pregunta, index) => {
+
+                if (
+                    !areas[pregunta.area]
+                ) {
+
+                    areas[pregunta.area] = {
+
+                        correctas: 0,
+
+                        total: 0
+
+                    };
+
+                }
+
+
+                areas[pregunta.area].total++;
+
+
+                if (
+                    respuestas[index] &&
+                    respuestas[index].correcta
+                ) {
+
+                    areas[
+                        pregunta.area
+                    ].correctas++;
+
+                }
+
+            }
+        );
+
+
+        return areas;
+
+    }
+
+
+    /* =========================================================
+       MOSTRAR RESULTADOS
+    ========================================================= */
+
+    function mostrarResultados() {
+
+        diagnosticoTerminado =
+            true;
+
+
+        calificarPreguntas();
+
+
+        const correctas =
+            respuestas.filter(
+                r => r.correcta
+            ).length;
+
+
+        const juegosCorrectos =
+            resultadosMinijuegos.filter(
+                Boolean
+            ).length;
+
+
+        const total =
+            preguntas.length +
+            minijuegos.length;
+
+
+        const puntos =
+            correctas +
+            juegosCorrectos;
+
+
+        const porcentaje =
+            Math.round(
+                (puntos / total) *
+                100
+            );
+
+
+        scoreNumber.textContent =
+            porcentaje + "%";
+
+
+        scoreDetails.innerHTML = `
+
+            <p>
+                <strong>
+                    ${correctas}
+                </strong>
+                de
+                <strong>
+                    ${preguntas.length}
+                </strong>
+                preguntas correctas.
+            </p>
+
+            <p>
+                <strong>
+                    ${juegosCorrectos}
+                </strong>
+                de
+                <strong>
+                    ${minijuegos.length}
+                </strong>
+                retos interactivos completados.
+            </p>
+
+            <p>
+                <strong>
+                    ${puntos}
+                </strong>
+                de
+                <strong>
+                    ${total}
+                </strong>
+                puntos totales.
+            </p>
 
         `;
 
 
-        questionsContainer.appendChild(questionDiv);
+        /* ÁREAS */
 
-    });
-
-
-    actualizarProgreso();
-
-}
+        const areas =
+            calcularAreas();
 
 
-/* =========================================================
-   CREAR MINIJUEGOS
-   ========================================================= */
-
-function crearMinijuegos() {
-
-    resultadosMinijuegos =
-        new Array(minijuegos.length).fill(false);
+        areasContainer.innerHTML = "";
 
 
-    minijuegos.forEach((juego, index) => {
+        Object.entries(areas)
+            .forEach(
+                ([nombre, datos]) => {
 
-        const container =
-            document.getElementById(
-                `gameOptions${index + 1}`
+                    const porcentajeArea =
+                        Math.round(
+                            (datos.correctas /
+                            datos.total) *
+                            100
+                        );
+
+
+                    const div =
+                        document.createElement(
+                            "div"
+                        );
+
+                    div.className =
+                        "area-result";
+
+
+                    div.innerHTML = `
+
+                        <strong>
+                            ${nombre}
+                        </strong>
+
+                        <span>
+                            ${datos.correctas}
+                            /
+                            ${datos.total}
+                            correctas
+                            ·
+                            ${porcentajeArea}%
+                        </span>
+
+                    `;
+
+
+                    areasContainer.appendChild(
+                        div
+                    );
+
+                }
             );
 
-        const result =
-            document.getElementById(
-                `gameResult${index + 1}`
+
+        /* RETOS */
+
+        gamesResults.innerHTML = "";
+
+
+        minijuegos.forEach(
+            (juego, index) => {
+
+                const resultado =
+                    resultadosMinijuegos[
+                        index
+                    ]
+                        ? "✅ Completado"
+                        : "❌ No completado";
+
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+                div.className =
+                    "area-result";
+
+
+                div.innerHTML = `
+
+                    <strong>
+                        ${juego.titulo}
+                    </strong>
+
+                    <span>
+                        ${resultado}
+                    </span>
+
+                `;
+
+
+                gamesResults.appendChild(
+                    div
+                );
+
+            }
+        );
+
+
+        examSection.classList.add(
+            "hidden"
+        );
+
+        gamesSection.classList.add(
+            "hidden"
+        );
+
+        resultsSection.classList.remove(
+            "hidden"
+        );
+
+    }
+
+
+    /* =========================================================
+       INICIAR DIAGNÓSTICO
+    ========================================================= */
+
+    function iniciarDiagnostico() {
+
+        respuestas = [];
+
+        resultadosMinijuegos =
+            minijuegos.map(
+                () => false
             );
 
-
-        container.innerHTML = "";
-
-        result.innerHTML = "";
-
-        result.classList.remove("show");
-
-
-        /*
-         * Copiamos las opciones y las mezclamos.
-         */
-        const opciones =
-            [...juego.opciones]
-                .sort(() => Math.random() - 0.5);
-
-
-        opciones.forEach((opcion) => {
-
-            const button =
-                document.createElement("button");
-
-            button.type = "button";
-
-            button.className = "game-option";
-
-            button.textContent = opcion;
-
-            button.addEventListener(
-                "click",
-                () => seleccionarOpcionJuego(
-                    index,
-                    opcion,
-                    button
-                )
+        seleccionJuegos =
+            minijuegos.map(
+                () => []
             );
 
-            container.appendChild(button);
+        diagnosticoTerminado =
+            false;
 
+
+        crearPreguntas();
+
+        crearMinijuegos();
+
+
+        introSection.classList.add(
+            "hidden"
+        );
+
+        resultsSection.classList.add(
+            "hidden"
+        );
+
+        gamesSection.classList.add(
+            "hidden"
+        );
+
+        examSection.classList.remove(
+            "hidden"
+        );
+
+
+        actualizarProgreso();
+
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
         });
 
-    });
-
-}
-
-
-/* =========================================================
-   ESTADO DE CADA MINIJUEGO
-   ========================================================= */
-
-const seleccionJuegos =
-    minijuegos.map(() => []);
-
-
-/* =========================================================
-   SELECCIONAR OPCIÓN DE MINIJUEGO
-   ========================================================= */
-
-function seleccionarOpcionJuego(
-    juegoIndex,
-    opcion,
-    button
-) {
-
-    /*
-     * Si ya terminó correctamente,
-     * no permitimos modificarlo.
-     */
-    if (resultadosMinijuegos[juegoIndex]) {
-        return;
     }
 
 
-    const seleccion =
-        seleccionJuegos[juegoIndex];
+    /* =========================================================
+       EVENTOS
+    ========================================================= */
 
-
-    /*
-     * Evitar seleccionar dos veces
-     */
-    if (seleccion.includes(opcion)) {
-        return;
-    }
-
-
-    seleccion.push(opcion);
-
-    button.classList.add("selected");
-
-
-    const correctoHastaAhora =
-        seleccion.every(
-            (valor, index) =>
-                valor ===
-                minijuegos[juegoIndex].correcta[index]
-        );
-
-
-    const result =
-        document.getElementById(
-            `gameResult${juegoIndex + 1}`
-        );
-
-
-    /*
-     * Si la secuencia ya es incorrecta
-     */
-    if (!correctoHastaAhora) {
-
-        result.className =
-            "game-result show";
-
-        result.innerHTML =
-            "❌ Ese no es el orden correcto. " +
-            "El reto se reiniciará.";
-
-
-        setTimeout(() => {
-
-            seleccionJuegos[juegoIndex] = [];
-
-            resultadosMinijuegos[juegoIndex] = false;
-
-            crearMinijuegoIndividual(juegoIndex);
-
-            result.classList.remove("show");
-
-        }, 1200);
-
-
-        return;
-    }
-
-
-    /*
-     * Si completó todo correctamente
-     */
-    if (
-        seleccion.length ===
-        minijuegos[juegoIndex].correcta.length
-    ) {
-
-        resultadosMinijuegos[juegoIndex] = true;
-
-        result.className =
-            "game-result show";
-
-        result.innerHTML =
-            "🎉 ¡Excelente! Reto completado correctamente.";
-
-    }
-
-}
-
-
-/* =========================================================
-   RECREAR UN MINIJUEGO
-   ========================================================= */
-
-function crearMinijuegoIndividual(index) {
-
-    const juego = minijuegos[index];
-
-    const container =
-        document.getElementById(
-            `gameOptions${index + 1}`
-        );
-
-    container.innerHTML = "";
-
-
-    const opciones =
-        [...juego.opciones]
-            .sort(() => Math.random() - 0.5);
-
-
-    opciones.forEach((opcion) => {
-
-        const button =
-            document.createElement("button");
-
-        button.type = "button";
-
-        button.className = "game-option";
-
-        button.textContent = opcion;
-
-        button.addEventListener(
+    document
+        .getElementById("startBtn")
+        .addEventListener(
             "click",
-            () => seleccionarOpcionJuego(
-                index,
-                opcion,
-                button
-            )
-        );
-
-        container.appendChild(button);
-
-    });
-
-}
-
-
-/* =========================================================
-   ACTUALIZAR PROGRESO
-   ========================================================= */
-
-function actualizarProgreso() {
-
-    let contestadas = 0;
-
-
-    preguntas.forEach((_, index) => {
-
-        const seleccionada =
-            document.querySelector(
-                `input[name="pregunta_${index}"]:checked`
-            );
-
-        if (seleccionada) {
-            contestadas++;
-        }
-
-    });
-
-
-    progressText.textContent =
-        `${contestadas} / ${preguntas.length}`;
-
-
-    const porcentaje =
-        (contestadas / preguntas.length) * 100;
-
-
-    progressBar.style.width =
-        `${porcentaje}%`;
-
-}
-
-
-/* =========================================================
-   CALIFICAR PREGUNTAS
-   ========================================================= */
-
-function calificarPreguntas() {
-
-    let correctas = 0;
-
-    respuestas = [];
-
-
-    preguntas.forEach((pregunta, index) => {
-
-        const seleccionada =
-            document.querySelector(
-                `input[name="pregunta_${index}"]:checked`
-            );
-
-
-        const respuesta =
-            seleccionada
-                ? Number(seleccionada.value)
-                : null;
-
-
-        const correcta =
-            respuesta === pregunta.correcta;
-
-
-        if (correcta) {
-            correctas++;
-        }
-
-
-        respuestas.push({
-
-            pregunta: index + 1,
-
-            respuesta,
-
-            respuestaCorrecta:
-                pregunta.correcta,
-
-            correcta
-
-        });
-
-    });
-
-
-    return correctas;
-
-}
-
-
-/* =========================================================
-   CALCULAR ÁREAS
-   ========================================================= */
-
-function calcularAreas() {
-
-    const areas = {};
-
-
-    preguntas.forEach((pregunta, index) => {
-
-        if (!areas[pregunta.area]) {
-
-            areas[pregunta.area] = {
-                total: 0,
-                correctas: 0
-            };
-
-        }
-
-
-        areas[pregunta.area].total++;
-
-
-        if (respuestas[index].correcta) {
-
-            areas[pregunta.area].correctas++;
-
-        }
-
-    });
-
-
-    return areas;
-
-}
-
-
-/* =========================================================
-   MOSTRAR RESULTADOS
-   ========================================================= */
-
-function mostrarResultados() {
-
-    const correctas =
-        calificarPreguntas();
-
-
-    const juegosCorrectos =
-        resultadosMinijuegos.filter(Boolean).length;
-
-
-    const totalPreguntas =
-        preguntas.length;
-
-
-    const totalRetos =
-        minijuegos.length;
-
-
-    const totalPuntos =
-        totalPreguntas + totalRetos;
-
-
-    const puntosObtenidos =
-        correctas + juegosCorrectos;
-
-
-    const porcentaje =
-        Math.round(
-            (puntosObtenidos / totalPuntos) * 100
+            iniciarDiagnostico
         );
 
 
-    scoreNumber.textContent =
-        `${porcentaje}%`;
+    document
+        .getElementById("finishBtn")
+        .addEventListener(
+            "click",
+            function() {
+
+                calificarPreguntas();
 
 
-    /*
-     * Mensaje general
-     */
+                /*
+                    Pasamos a los retos
+                */
 
-    if (porcentaje >= 90) {
+                examSection.classList.add(
+                    "hidden"
+                );
 
-        resultMessage.textContent =
-            "🏆 ¡Excelente dominio de la tecnología!";
-
-    } else if (porcentaje >= 75) {
-
-        resultMessage.textContent =
-            "🚀 ¡Muy buen nivel!";
-
-    } else if (porcentaje >= 60) {
-
-        resultMessage.textContent =
-            "👍 ¡Buen comienzo!";
-
-    } else if (porcentaje >= 40) {
-
-        resultMessage.textContent =
-            "💡 Tienes conocimientos que podemos desarrollar.";
-
-    } else {
-
-        resultMessage.textContent =
-            "🌱 ¡No te preocupes! Aquí venimos a aprender.";
-
-    }
-
-
-    /*
-     * Áreas
-     */
-
-    const areas =
-        calcularAreas();
-
-
-    areasContainer.innerHTML =
-        "<h2>📊 Tus áreas</h2>";
-
-
-    Object.entries(areas).forEach(
-        ([nombre, datos]) => {
-
-            const porcentajeArea =
-                Math.round(
-                    (datos.correctas / datos.total) * 100
+                gamesSection.classList.remove(
+                    "hidden"
                 );
 
 
-            const div =
-                document.createElement("div");
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                });
 
-            div.className =
-                "area-result";
-
-
-            div.innerHTML = `
-
-                <strong>
-                    ${nombre}
-                </strong>
-
-                <div style="margin-bottom:8px;">
-                    ${datos.correctas}
-                    de
-                    ${datos.total}
-                    correctas
-                    ·
-                    ${porcentajeArea}%
-                </div>
-
-                <div class="area-bar">
-
-                    <div
-                        class="area-bar-fill"
-                        style="width:${porcentajeArea}%"
-                    ></div>
-
-                </div>
-
-            `;
+            }
+        );
 
 
-            areasContainer.appendChild(div);
+    document
+        .getElementById("finishGamesBtn")
+        .addEventListener(
+            "click",
+            mostrarResultados
+        );
 
-        }
+
+    /* REPETIR */
+
+    document
+        .getElementById("retrySave")
+        .addEventListener(
+            "click",
+            iniciarDiagnostico
+        );
+
+
+    /* VOLVER */
+
+    document
+        .getElementById("backCampus")
+        .addEventListener(
+            "click",
+            function() {
+
+                window.location.href =
+                    "index.html";
+
+            }
+        );
+
+
+    /* =========================================================
+       DESCARGAR PDF
+    ========================================================= */
+
+    document
+        .getElementById("downloadPDF")
+        .addEventListener(
+            "click",
+            function() {
+
+                const {
+                    jsPDF
+                } = window.jspdf;
+
+
+                const doc =
+                    new jsPDF();
+
+
+                /*
+                    CALIFICACIONES
+                */
+
+                const correctas =
+                    respuestas.filter(
+                        r => r.correcta
+                    ).length;
+
+
+                const juegosCorrectos =
+                    resultadosMinijuegos.filter(
+                        Boolean
+                    ).length;
+
+
+                const total =
+                    preguntas.length +
+                    minijuegos.length;
+
+
+                const puntos =
+                    correctas +
+                    juegosCorrectos;
+
+
+                const porcentaje =
+                    Math.round(
+                        (puntos / total) *
+                        100
+                    );
+
+
+                const areas =
+                    calcularAreas();
+
+
+                const fecha =
+                    new Date()
+                        .toLocaleString(
+                            "es-MX"
+                        );
+
+
+                let y = 20;
+
+
+                /* TITULO */
+
+                doc.setFontSize(20);
+
+                doc.text(
+                    "CITZ - Robot Lab",
+                    20,
+                    y
+                );
+
+
+                y += 12;
+
+
+                doc.setFontSize(15);
+
+                doc.text(
+                    "Diagnostico de Robotica y Tecnologia",
+                    20,
+                    y
+                );
+
+
+                y += 12;
+
+
+                doc.setFontSize(11);
+
+                doc.text(
+                    `Fecha: ${fecha}`,
+                    20,
+                    y
+                );
+
+
+                y += 10;
+
+
+                doc.text(
+                    `Preguntas correctas: ${correctas} de ${preguntas.length}`,
+                    20,
+                    y
+                );
+
+
+                y += 8;
+
+
+                doc.text(
+                    `Retos completados: ${juegosCorrectos} de ${minijuegos.length}`,
+                    20,
+                    y
+                );
+
+
+                y += 15;
+
+
+                doc.setFontSize(24);
+
+                doc.text(
+                    `RESULTADO: ${porcentaje}%`,
+                    20,
+                    y
+                );
+
+
+                y += 18;
+
+
+                /* AREAS */
+
+                doc.setFontSize(14);
+
+                doc.text(
+                    "Desempeno por area",
+                    20,
+                    y
+                );
+
+
+                y += 10;
+
+
+                doc.setFontSize(11);
+
+
+                Object.entries(areas)
+                    .forEach(
+                        ([nombre, datos]) => {
+
+                            const porcentajeArea =
+                                Math.round(
+                                    (datos.correctas /
+                                    datos.total) *
+                                    100
+                                );
+
+
+                            doc.text(
+                                `${nombre}: ${datos.correctas}/${datos.total} (${porcentajeArea}%)`,
+                                20,
+                                y
+                            );
+
+
+                            y += 8;
+
+
+                            if (y > 270) {
+
+                                doc.addPage();
+
+                                y = 20;
+
+                            }
+
+                        }
+                    );
+
+
+                y += 10;
+
+
+                /* MINIJUEGOS */
+
+                doc.setFontSize(14);
+
+                doc.text(
+                    "Resultado de retos interactivos",
+                    20,
+                    y
+                );
+
+
+                y += 10;
+
+
+                doc.setFontSize(11);
+
+
+                minijuegos.forEach(
+                    (juego, index) => {
+
+                        const resultado =
+                            resultadosMinijuegos[
+                                index
+                            ]
+                                ? "COMPLETADO"
+                                : "NO COMPLETADO";
+
+
+                        /*
+                            Quitamos emojis para
+                            evitar problemas de
+                            fuentes en PDF.
+                        */
+
+                        const titulo =
+                            juego.titulo
+                                .replace(
+                                    /[^\x00-\x7F]/g,
+                                    ""
+                                )
+                                .trim();
+
+
+                        doc.text(
+                            `${index + 1}. ${titulo}: ${resultado}`,
+                            20,
+                            y
+                        );
+
+
+                        y += 8;
+
+
+                        if (y > 270) {
+
+                            doc.addPage();
+
+                            y = 20;
+
+                        }
+
+                    }
+                );
+
+
+                y += 15;
+
+
+                doc.setFontSize(10);
+
+
+                doc.text(
+                    "CITZ - Centro de Innovacion Tecnologica de Zapopan",
+                    20,
+                    y
+                );
+
+
+                /*
+                    DESCARGAR
+                */
+
+                doc.save(
+                    "diagnostico-CITZ.pdf"
+                );
+
+            }
+        );
+
+
+    /* =========================================================
+       INICIO
+    ========================================================= */
+
+    console.log(
+        "=== DIAGNÓSTICO CITZ ==="
     );
 
-
-    /*
-     * Resultado de minijuegos
-     */
-
-    const juegosDiv =
-        document.createElement("div");
-
-
-    juegosDiv.className =
-        "area-result";
-
-
-    juegosDiv.style.marginTop =
-        "15px";
-
-
-    juegosDiv.innerHTML = `
-
-        <strong>
-            🎮 Retos interactivos
-        </strong>
-
-        <div>
-            ${juegosCorrectos}
-            de
-            ${totalRetos}
-            retos completados correctamente.
-        </div>
-
-    `;
-
-
-    areasContainer.appendChild(juegosDiv);
-
-
-    /*
-     * Mostrar resultados
-     */
-
-    intro.classList.add("hidden");
-
-    exam.classList.add("hidden");
-
-    results.classList.remove("hidden");
-
-
-    diagnosticoTerminado = true;
-
-
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
-
-}
-
-
-/* =========================================================
-   INICIAR DIAGNÓSTICO
-   ========================================================= */
-
-function iniciarDiagnostico() {
-
-    respuestas = [];
-
-    seleccionJuegos.fill(null);
-
-    for (
-        let i = 0;
-        i < minijuegos.length;
-        i++
-    ) {
-
-        seleccionJuegos[i] = [];
-
-    }
-
-
-    resultadosMinijuegos =
-        new Array(minijuegos.length).fill(false);
-
-
-    crearPreguntas();
-
-    crearMinijuegos();
-
-
-    intro.classList.add("hidden");
-
-    results.classList.add("hidden");
-
-    exam.classList.remove("hidden");
-
-
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
-
-}
-
-
-/* =========================================================
-   EVENTOS DE RESPUESTAS
-   ========================================================= */
-
-document.addEventListener(
-    "change",
-    function(event) {
-
-        if (
-            event.target.matches(
-                'input[type="radio"]'
-            )
-        ) {
-
-            actualizarProgreso();
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   BOTÓN COMENZAR
-   ========================================================= */
-
-startExam.addEventListener(
-    "click",
-    iniciarDiagnostico
-);
-
-
-/* =========================================================
-   BOTÓN TERMINAR
-   ========================================================= */
-
-finishExam.addEventListener(
-    "click",
-    function() {
-
-        const preguntasContestadas =
-            document.querySelectorAll(
-                'input[type="radio"]:checked'
-            ).length;
-
-
-        /*
-         * Permitimos terminar aunque haya
-         * preguntas sin contestar.
-         */
-
-        const confirmar =
-            confirm(
-                `Has contestado ${preguntasContestadas} de ${preguntas.length} preguntas.\n\n` +
-                `¿Quieres terminar el diagnóstico?`
-            );
-
-
-        if (!confirmar) {
-            return;
-        }
-
-
-        mostrarResultados();
-
-    }
-);
-
-
-/* =========================================================
-   REPETIR
-   ========================================================= */
-
-retrySave.addEventListener(
-    "click",
-    function() {
-
-        diagnosticoTerminado = false;
-
-        iniciarDiagnostico();
-
-    }
-);
-
-
-/* =========================================================
-   VOLVER
-   ========================================================= */
-
-backCampus.addEventListener(
-    "click",
-    function() {
-
-        /*
-         * Cambia "index.html" si tu campus
-         * utiliza otro nombre.
-         */
-
-        window.location.href =
-            "index.html";
-
-    }
-);
-
-
-/* =========================================================
-   INICIALIZACIÓN
-   ========================================================= */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    function() {
-
-        console.log(
-            "=== DIAGNÓSTICO CITZ ==="
-        );
-
-        console.log(
-            "Diagnóstico independiente iniciado."
-        );
-
-        console.log(
-            `Preguntas: ${preguntas.length}`
-        );
-
-        console.log(
-            `Retos: ${minijuegos.length}`
-        );
-
-    }
-);
+    console.log(
+        "Diagnóstico independiente iniciado."
+    );
 
 </script>
 
