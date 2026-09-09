@@ -1,466 +1,897 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Robot Lab | Elige tu mascota</title>
+<meta charset="UTF-8">
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
-        body {
-            min-height: 100vh;
-            background: #050505;
-            color: white;
-            font-family: Arial, Helvetica, sans-serif;
-            padding: 40px 20px;
-        }
+<title>ROBOT LAB | Elige tu mascota</title>
 
-        .glow {
-            position: fixed;
-            width: 350px;
-            height: 350px;
-            border-radius: 50%;
-            filter: blur(120px);
-            opacity: .12;
-            pointer-events: none;
-        }
 
-        .glow-1 {
-            background: #00eaff;
-            top: -100px;
-            left: -100px;
-        }
+<style>
 
-        .glow-2 {
-            background: #a855f7;
-            right: -100px;
-            bottom: -100px;
-        }
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-        .container {
-            width: 1100px;
-            max-width: 100%;
-            margin: auto;
-            position: relative;
-            z-index: 1;
-        }
 
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
+body {
 
-        .logo {
-            color: #00eaff;
-            font-size: 14px;
-            font-weight: bold;
-            letter-spacing: 4px;
-            margin-bottom: 20px;
-        }
+    min-height: 100vh;
 
-        h1 {
-            font-size: clamp(30px, 5vw, 48px);
-            margin-bottom: 12px;
-        }
+    background:
+        radial-gradient(
+            circle at 20% 20%,
+            rgba(0,255,255,0.10),
+            transparent 30%
+        ),
 
-        .subtitle {
-            color: #777;
-            font-size: 16px;
-        }
+        radial-gradient(
+            circle at 80% 80%,
+            rgba(124,60,255,0.12),
+            transparent 30%
+        ),
 
-        .student-name {
-            color: #00eaff;
-            font-weight: bold;
-        }
+        #000;
 
-        .mascotas {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 18px;
-        }
+    color: white;
 
-        .mascota {
-            background: rgba(15, 15, 15, .9);
-            border: 1px solid #242424;
-            border-radius: 20px;
-            padding: 18px;
-            cursor: pointer;
-            text-align: center;
-            transition: .25s;
-        }
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
 
-        .mascota:hover {
-            transform: translateY(-8px);
-            border-color: #00eaff;
-            box-shadow: 0 0 25px rgba(0, 234, 255, .15);
-        }
+    display: flex;
 
-        .mascota.seleccionada {
-            border-color: #00eaff;
-            box-shadow:
-                0 0 30px rgba(0, 234, 255, .25),
-                inset 0 0 20px rgba(0, 234, 255, .05);
-            transform: translateY(-8px);
-        }
+    justify-content: center;
 
-        .imagen-container {
-            height: 190px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 15px;
-        }
+    align-items: center;
 
-        .imagen-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            transition: .25s;
-        }
+    padding: 30px;
+}
 
-        .mascota:hover img {
-            transform: scale(1.06);
-        }
 
-        .nombre {
-            font-size: 18px;
-            font-weight: bold;
-        }
+.container {
 
-        .tipo {
-            color: #666;
-            font-size: 11px;
-            margin-top: 5px;
-            letter-spacing: 2px;
-        }
+    width: 100%;
 
-        .check {
-            display: none;
-            margin-top: 12px;
-            color: #00eaff;
-            font-size: 12px;
-            font-weight: bold;
-        }
+    max-width: 1100px;
 
-        .mascota.seleccionada .check {
-            display: block;
-        }
+    text-align: center;
+}
 
-        .confirmar {
-            display: block;
-            width: 300px;
-            max-width: 100%;
-            margin: 40px auto 0;
-            padding: 16px;
 
-            background: #00eaff;
-            color: #001014;
+.header {
 
-            border: none;
-            border-radius: 10px;
+    margin-bottom: 45px;
+}
 
-            font-weight: 900;
-            letter-spacing: 1px;
-            cursor: pointer;
 
-            opacity: .35;
-            pointer-events: none;
-            transition: .2s;
-        }
+.label {
 
-        .confirmar.activo {
-            opacity: 1;
-            pointer-events: auto;
-        }
+    color: #00f5ff;
 
-        .confirmar.activo:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 25px rgba(0, 234, 255, .35);
-        }
+    font-size: 11px;
 
-        @media (max-width: 900px) {
-            .mascotas {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
+    font-weight: bold;
 
-        @media (max-width: 500px) {
-            .mascotas {
-                grid-template-columns: 1fr;
-            }
+    letter-spacing: 4px;
 
-            .imagen-container {
-                height: 230px;
-            }
-        }
-    </style>
+    margin-bottom: 12px;
+}
+
+
+h1 {
+
+    font-size:
+        clamp(32px, 5vw, 55px);
+
+    margin-bottom: 12px;
+}
+
+
+.subtitle {
+
+    color: #777;
+
+    font-size: 15px;
+
+    line-height: 1.6;
+}
+
+
+.mascotas {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, 1fr);
+
+    gap: 18px;
+}
+
+
+.mascota {
+
+    position: relative;
+
+    padding: 20px;
+
+    border-radius: 22px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #101010,
+            #050505
+        );
+
+    border:
+        1px solid
+        rgba(255,255,255,0.08);
+
+    cursor: pointer;
+
+    transition:
+        transform 0.25s,
+        border-color 0.25s,
+        box-shadow 0.25s;
+}
+
+
+.mascota:hover {
+
+    transform:
+        translateY(-8px);
+
+    border-color:
+        rgba(0,245,255,0.5);
+
+    box-shadow:
+        0 15px 40px
+        rgba(0,245,255,0.12);
+}
+
+
+.mascota.seleccionada {
+
+    border-color:
+        #00f5ff;
+
+    box-shadow:
+        0 0 30px
+        rgba(0,245,255,0.25);
+
+    transform:
+        translateY(-8px);
+}
+
+
+.mascota img {
+
+    width: 100%;
+
+    max-width: 170px;
+
+    aspect-ratio: 1 / 1;
+
+    object-fit: contain;
+
+    display: block;
+
+    margin: auto;
+
+    background: transparent;
+}
+
+
+.mascota h2 {
+
+    margin-top: 15px;
+
+    font-size: 17px;
+
+    letter-spacing: 1px;
+}
+
+
+.mascota p {
+
+    margin-top: 6px;
+
+    color: #666;
+
+    font-size: 11px;
+}
+
+
+.check {
+
+    position: absolute;
+
+    top: 12px;
+
+    right: 12px;
+
+    width: 25px;
+
+    height: 25px;
+
+    border-radius: 50%;
+
+    background:
+        #00f5ff;
+
+    color: #000;
+
+    display: none;
+
+    justify-content: center;
+
+    align-items: center;
+
+    font-weight: bold;
+}
+
+
+.mascota.seleccionada .check {
+
+    display: flex;
+}
+
+
+.continuar {
+
+    margin-top: 35px;
+
+    padding: 16px 45px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #00f5ff,
+            #7c3cff
+        );
+
+    color: white;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+    cursor: pointer;
+
+    opacity: 0.4;
+
+    pointer-events: none;
+
+    transition: 0.25s;
+}
+
+
+.continuar.activo {
+
+    opacity: 1;
+
+    pointer-events: auto;
+}
+
+
+.continuar:hover {
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 0 30px
+        rgba(0,245,255,0.25);
+}
+
+
+.mensaje {
+
+    margin-top: 20px;
+
+    color: #00ff9d;
+
+    font-size: 13px;
+
+    display: none;
+}
+
+
+.error {
+
+    margin-top: 20px;
+
+    color: #ff6075;
+
+    font-size: 13px;
+
+    display: none;
+}
+
+
+@media (max-width: 900px) {
+
+    .mascotas {
+
+        grid-template-columns:
+            repeat(3, 1fr);
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    body {
+
+        padding: 20px 12px;
+
+        align-items: flex-start;
+    }
+
+
+    .container {
+
+        margin-top: 30px;
+    }
+
+
+    .mascotas {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        gap: 12px;
+    }
+
+
+    .mascota {
+
+        padding: 12px;
+    }
+
+
+    .mascota img {
+
+        max-width: 140px;
+    }
+
+}
+
+</style>
+
 </head>
+
 
 <body>
 
-    <div class="glow glow-1"></div>
-    <div class="glow glow-2"></div>
 
-    <main class="container">
+<div class="container">
 
-        <header class="header">
 
-            <div class="logo">
-                ROBOT LAB • CAMPUS VIRTUAL
+    <div class="header">
+
+        <div class="label">
+            ROBOT LAB
+        </div>
+
+        <h1>
+            Elige tu mascota 🐾
+        </h1>
+
+        <p class="subtitle">
+            Esta será tu compañera durante tu aventura
+            en el Campus Virtual.
+            <br>
+            ¡Elige con cuidado!
+        </p>
+
+    </div>
+
+
+
+    <div class="mascotas">
+
+
+        <!-- ROBOT -->
+
+        <div
+            class="mascota"
+            data-mascota="robot"
+        >
+
+            <div class="check">
+                ✓
             </div>
 
-            <h1>
-                Elige a tu compañero
-            </h1>
+            <img
+                src="Mascotas/robot.png"
+                alt="Robot"
+            >
 
-            <p class="subtitle">
-                ¡Hola, <span id="nombreAlumno" class="student-name"></span>!
-                <br>
-                Elige la mascota que te acompañará durante tu aventura.
+            <h2>
+                ROBOT
+            </h2>
+
+            <p>
+                Tu compañero tecnológico
             </p>
 
-        </header>
+        </div>
 
 
-        <section class="mascotas">
 
-            <div class="mascota" data-mascota="robot">
+        <!-- DINOSAURIO -->
 
-                <div class="imagen-container">
-                    <img src="Mascotas/robot.png" alt="Robot">
-                </div>
+        <div
+            class="mascota"
+            data-mascota="dinosaurio"
+        >
 
-                <div class="nombre">
-                    Robot
-                </div>
-
-                <div class="tipo">
-                    TECNOLÓGICO
-                </div>
-
-                <div class="check">
-                    ✓ SELECCIONADO
-                </div>
-
+            <div class="check">
+                ✓
             </div>
 
+            <img
+                src="Mascotas/dinosaurio.png"
+                alt="Dinosaurio"
+            >
 
-            <div class="mascota" data-mascota="dinosaurio">
+            <h2>
+                DINOSAURIO
+            </h2>
 
-                <div class="imagen-container">
-                    <img src="Mascotas/dinosaurio.png" alt="Dinosaurio">
-                </div>
+            <p>
+                Fuerza y aventura
+            </p>
 
-                <div class="nombre">
-                    Dinosaurio
-                </div>
+        </div>
 
-                <div class="tipo">
-                    EXPLORADOR
-                </div>
 
-                <div class="check">
-                    ✓ SELECCIONADO
-                </div>
 
+        <!-- GATO -->
+
+        <div
+            class="mascota"
+            data-mascota="gato"
+        >
+
+            <div class="check">
+                ✓
             </div>
 
+            <img
+                src="Mascotas/gato.png"
+                alt="Gato"
+            >
 
-            <div class="mascota" data-mascota="gato">
+            <h2>
+                GATO
+            </h2>
 
-                <div class="imagen-container">
-                    <img src="Mascotas/gato.png" alt="Gato">
-                </div>
+            <p>
+                Inteligencia y curiosidad
+            </p>
 
-                <div class="nombre">
-                    Gato
-                </div>
+        </div>
 
-                <div class="tipo">
-                    CURIOSO
-                </div>
 
-                <div class="check">
-                    ✓ SELECCIONADO
-                </div>
 
+        <!-- ALIEN -->
+
+        <div
+            class="mascota"
+            data-mascota="alien"
+        >
+
+            <div class="check">
+                ✓
             </div>
 
+            <img
+                src="Mascotas/alien.png"
+                alt="Alien"
+            >
 
-            <div class="mascota" data-mascota="alien">
+            <h2>
+                ALIEN
+            </h2>
 
-                <div class="imagen-container">
-                    <img src="Mascotas/alien.png" alt="Alien">
-                </div>
+            <p>
+                Explorador del espacio
+            </p>
 
-                <div class="nombre">
-                    Alien
-                </div>
+        </div>
 
-                <div class="tipo">
-                    INNOVADOR
-                </div>
 
-                <div class="check">
-                    ✓ SELECCIONADO
-                </div>
 
+        <!-- ZORRO -->
+
+        <div
+            class="mascota"
+            data-mascota="zorro"
+        >
+
+            <div class="check">
+                ✓
             </div>
 
+            <img
+                src="Mascotas/zorro.png"
+                alt="Zorro"
+            >
 
-            <div class="mascota" data-mascota="zorro">
+            <h2>
+                ZORRO
+            </h2>
 
-                <div class="imagen-container">
-                    <img src="Mascotas/zorro.png" alt="Zorro">
-                </div>
+            <p>
+                Astucia y creatividad
+            </p>
 
-                <div class="nombre">
-                    Zorro
-                </div>
-
-                <div class="tipo">
-                    ESTRATEGA
-                </div>
-
-                <div class="check">
-                    ✓ SELECCIONADO
-                </div>
-
-            </div>
-
-        </section>
+        </div>
 
 
-        <button id="confirmar" class="confirmar">
-            ELEGIR ESTA MASCOTA →
-        </button>
-
-    </main>
+    </div>
 
 
-    <script src="alumnos.js"></script>
 
-    <script>
+    <button
+        id="continuar"
+        class="continuar"
+    >
 
-        // ----------------------------------------
-        // IDENTIFICAR ALUMNO
-        // ----------------------------------------
+        🚀 ELEGIR MASCOTA
 
-        const usuarioActivo =
-            sessionStorage.getItem("usuarioActivo");
+    </button>
 
 
-        // Si no inició sesión, regresar al login
+    <div
+        id="mensaje"
+        class="mensaje"
+    >
+        ✅ Mascota guardada correctamente.
+    </div>
 
-        if (!usuarioActivo || !alumnos[usuarioActivo]) {
 
-            window.location.href = "login.html";
+    <div
+        id="error"
+        class="error"
+    ></div>
+
+
+</div>
+
+
+
+<!-- =========================================
+     SUPABASE
+========================================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script>
+
+
+const SUPABASE_URL =
+    "https://bcfknbpkduiwgqymxkns.supabase.co";
+
+
+const SUPABASE_KEY =
+    "sb_publishable_END5KZ8gA4e9YDpicG-aLw_aRaIzo7E";
+
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+
+const tarjetas =
+    document.querySelectorAll(".mascota");
+
+
+const boton =
+    document.getElementById("continuar");
+
+
+const mensaje =
+    document.getElementById("mensaje");
+
+
+const error =
+    document.getElementById("error");
+
+
+let mascotaSeleccionada =
+    null;
+
+
+
+// =========================================
+// SELECCIONAR MASCOTA
+// =========================================
+
+tarjetas.forEach(function(tarjeta) {
+
+    tarjeta.addEventListener(
+        "click",
+        function() {
+
+
+            tarjetas.forEach(function(item) {
+
+                item.classList.remove(
+                    "seleccionada"
+                );
+
+            });
+
+
+            tarjeta.classList.add(
+                "seleccionada"
+            );
+
+
+            mascotaSeleccionada =
+                tarjeta.dataset.mascota;
+
+
+            boton.classList.add(
+                "activo"
+            );
+
+
+            error.style.display =
+                "none";
+
+        }
+    );
+
+});
+
+
+
+// =========================================
+// GUARDAR MASCOTA
+// =========================================
+
+boton.addEventListener(
+    "click",
+    async function() {
+
+
+        if (!mascotaSeleccionada) {
+
+            return;
+        }
+
+
+        boton.disabled =
+            true;
+
+        boton.textContent =
+            "⏳ GUARDANDO...";
+
+
+        error.style.display =
+            "none";
+
+
+        try {
+
+
+            // =====================================
+            // COMPROBAR SESIÓN
+            // =====================================
+
+            const {
+                data: sessionData,
+                error: sessionError
+            } =
+                await supabaseClient.auth
+                    .getSession();
+
+
+            if (
+                sessionError ||
+                !sessionData.session
+            ) {
+
+                throw new Error(
+                    "La sesión no está activa."
+                );
+
+            }
+
+
+            const usuarioAuth =
+                sessionData.session.user;
+
+
+            console.log(
+                "Usuario:",
+                usuarioAuth.id
+            );
+
+
+
+            // =====================================
+            // ACTUALIZAR MASCOTA
+            // =====================================
+
+            const {
+                data,
+                error: updateError
+            } =
+                await supabaseClient
+
+                    .from("alumnos")
+
+                    .update({
+
+                        mascota:
+                            mascotaSeleccionada
+
+                    })
+
+                    .eq(
+                        "auth_id",
+                        usuarioAuth.id
+                    )
+
+                    .select();
+
+
+
+            if (updateError) {
+
+                console.error(
+                    "Error guardando mascota:",
+                    updateError
+                );
+
+                throw updateError;
+
+            }
+
+
+            console.log(
+                "Mascota guardada:",
+                data
+            );
+
+
+
+            // =====================================
+            // VERIFICAR QUE REALMENTE SE GUARDÓ
+            // =====================================
+
+            const {
+                data: comprobacion,
+                error: comprobacionError
+            } =
+                await supabaseClient
+
+                    .from("alumnos")
+
+                    .select("mascota")
+
+                    .eq(
+                        "auth_id",
+                        usuarioAuth.id
+                    )
+
+                    .single();
+
+
+
+            if (comprobacionError) {
+
+                throw comprobacionError;
+
+            }
+
+
+            console.log(
+                "Mascota en Supabase:",
+                comprobacion.mascota
+            );
+
+
+            if (
+                comprobacion.mascota !==
+                mascotaSeleccionada
+            ) {
+
+                throw new Error(
+                    "La mascota no se pudo guardar correctamente."
+                );
+
+            }
+
+
+
+            // =====================================
+            // ÉXITO
+            // =====================================
+
+            mensaje.style.display =
+                "block";
+
+
+            boton.textContent =
+                "✅ MASCOTA GUARDADA";
+
+
+            // =====================================
+            // IR AL DASHBOARD
+            // =====================================
+
+            setTimeout(
+                function() {
+
+                    window.location.href =
+                        "index.html";
+
+                },
+                800
+            );
+
 
         }
 
 
-        const alumno = alumnos[usuarioActivo];
+        catch (e) {
 
 
-        // Mostrar nombre
-
-        document.getElementById("nombreAlumno").textContent =
-            alumno.nombre;
-
-
-        // ----------------------------------------
-        // SELECCIÓN DE MASCOTA
-        // ----------------------------------------
-
-        const tarjetas =
-            document.querySelectorAll(".mascota");
-
-        const boton =
-            document.getElementById("confirmar");
-
-        let mascotaSeleccionada = null;
+            console.error(
+                "Error:",
+                e
+            );
 
 
-        tarjetas.forEach(tarjeta => {
-
-            tarjeta.addEventListener("click", () => {
-
-                // Quitar selección anterior
-
-                tarjetas.forEach(t =>
-                    t.classList.remove("seleccionada")
+            error.textContent =
+                "❌ " + (
+                    e.message ||
+                    "No se pudo guardar la mascota."
                 );
 
 
-                // Seleccionar nueva
-
-                tarjeta.classList.add("seleccionada");
-
-
-                mascotaSeleccionada =
-                    tarjeta.dataset.mascota;
+            error.style.display =
+                "block";
 
 
-                boton.classList.add("activo");
-
-            });
-
-        });
+            boton.disabled =
+                false;
 
 
-        // ----------------------------------------
-        // GUARDAR MASCOTA
-        // ----------------------------------------
+            boton.textContent =
+                "🚀 ELEGIR MASCOTA";
 
-        boton.addEventListener("click", () => {
+        }
 
-            if (!mascotaSeleccionada) return;
+    }
+);
 
+</script>
 
-            /*
-                Guardamos la elección en el alumno
-            */
-
-            alumno.mascota = mascotaSeleccionada;
-
-
-            /*
-                Guardamos los alumnos actualizados
-                temporalmente en el navegador
-            */
-
-            localStorage.setItem(
-                "alumnos",
-                JSON.stringify(alumnos)
-            );
-
-
-            /*
-                Guardamos también la mascota
-                directamente asociada al usuario.
-            */
-
-            localStorage.setItem(
-                "mascota_" + usuarioActivo,
-                mascotaSeleccionada
-            );
-
-
-            /*
-                Ir al dashboard
-            */
-
-            window.location.href = "index.html";
-
-        });
-
-    </script>
 
 </body>
+
 </html>
