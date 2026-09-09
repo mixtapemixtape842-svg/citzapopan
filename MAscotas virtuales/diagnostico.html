@@ -506,32 +506,7 @@ footer{
             </ul>
         </div>
 
-        <div class="profile">
-
-            <div>
-                <label><strong>Nombre del alumno</strong></label>
-                <input
-                    type="text"
-                    id="studentName"
-                    readonly
-                >
-            </div>
-
-            <div>
-                <label><strong>Grado</strong></label>
-
-                <select id="grade" disabled>
-                    <option value="">Seleccionar</option>
-                    <option value="1">1°</option>
-                    <option value="2">2°</option>
-                    <option value="3">3°</option>
-                    <option value="4">4°</option>
-                    <option value="5">5°</option>
-                    <option value="6">6°</option>
-                </select>
-            </div>
-
-        </div>
+      
 
         <br>
 
@@ -2249,19 +2224,38 @@ function mostrarError(mensaje){
 
 async function cargarAlumnoActual(){
 
+    console.log("=== IDENTIFICANDO ALUMNO ===");
+
+    // Obtener sesión actual
     const {
         data: sessionData,
         error: sessionError
     } = await supabaseClient.auth.getSession();
 
+    console.log("sessionData:", sessionData);
+    console.log("sessionError:", sessionError);
+
     if(sessionError){
-        throw sessionError;
+
+        console.error(
+            "ERROR OBTENIENDO SESIÓN:",
+            sessionError
+        );
+
+        mostrarError(
+            "No fue posible obtener tu sesión."
+        );
+
+        return false;
     }
 
-    const session =
-        sessionData.session;
+    const session = sessionData?.session;
 
     if(!session){
+
+        console.error(
+            "NO EXISTE SESIÓN ACTIVA"
+        );
 
         mostrarError(
             "Tu sesión no está activa. Inicia sesión para realizar el diagnóstico."
@@ -2271,6 +2265,24 @@ async function cargarAlumnoActual(){
     }
 
 
+    // Mostrar información del usuario autenticado
+    console.log(
+        "USUARIO AUTENTICADO:",
+        session.user
+    );
+
+    console.log(
+        "AUTH UUID:",
+        session.user.id
+    );
+
+    console.log(
+        "EMAIL:",
+        session.user.email
+    );
+
+
+    // Buscar alumno relacionado con ese usuario
     const {
         data: alumno,
         error: alumnoError
@@ -2283,7 +2295,8 @@ async function cargarAlumnoActual(){
             nombre,
             usuario,
             grado,
-            rol
+            rol,
+            auth_id
         `)
 
         .eq(
@@ -2291,57 +2304,118 @@ async function cargarAlumnoActual(){
             session.user.id
         )
 
-        .single();
+        .maybeSingle();
 
 
+    // Mostrar respuesta completa en consola
+    console.log(
+        "ALUMNO ENCONTRADO:",
+        alumno
+    );
+
+    console.log(
+        "ERROR DE ALUMNO:",
+        alumnoError
+    );
+
+
+    // Error real de Supabase
     if(alumnoError){
 
         console.error(
-            "Error buscando alumno:",
-            alumnoError
+            "=== ERROR CONSULTANDO ALUMNOS ==="
         );
 
+        console.error(
+            "Código:",
+            alumnoError.code
+        );
+
+        console.error(
+            "Mensaje:",
+            alumnoError.message
+        );
+
+        console.error(
+            "Detalles:",
+            alumnoError.details
+        );
+
+        console.error(
+            "Hint:",
+            alumnoError.hint
+        );
+
+
         mostrarError(
-            "No encontramos tu perfil de alumno en el sistema."
+            `Error consultando tu perfil.<br><br>
+             <strong>Código:</strong> ${alumnoError.code || "N/A"}<br>
+             <strong>Mensaje:</strong> ${alumnoError.message || "Error desconocido"}`
         );
 
         return false;
     }
 
 
+    // No existe un alumno relacionado
+    if(!alumno){
+
+        console.error(
+            "NO SE ENCONTRÓ ALUMNO"
+        );
+
+        console.error(
+            "UUID QUE SE BUSCÓ:",
+            session.user.id
+        );
+
+
+        mostrarError(
+            `Tu cuenta está autenticada, pero no está vinculada a un alumno.<br><br>
+             <strong>UUID:</strong> ${session.user.id}`
+        );
+
+        return false;
+    }
+
+
+    // Alumno encontrado
+    console.log(
+        "=== ALUMNO IDENTIFICADO CORRECTAMENTE ==="
+    );
+
+    console.log(
+        alumno
+    );
+
+
     alumnoActual = alumno;
 
 
-    /*
-        IMPORTANTE:
-
-        Estos valores vienen de Supabase.
-        El alumno NO puede modificar su identidad
-        desde el formulario.
-    */
-
+    // Nombre
     document
         .getElementById("studentName")
         .value =
             alumno.nombre || "";
 
 
+    // Grado
     document
         .getElementById("grade")
         .value =
             String(alumno.grado || "");
 
 
+    // Badge
     document
         .getElementById("studentBadge")
         .textContent =
-            `${alumno.nombre || "Alumno"} · ${alumno.grado || ""}°`;
+            `${alumno.nombre || "Alumno"} · ${alumno.grado || ""}°`;F
 
 
     return true;
 
 }
-
 
 /* =========================================================
    VERIFICAR ACTIVIDAD
