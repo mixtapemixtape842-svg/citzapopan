@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Examen Diagnóstico de Robótica</title>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 
 /* =========================================================
@@ -2642,11 +2642,7 @@ No representa una calificación definitiva.
 </div>
 
 
-<button
-    class="green"
-    onclick="window.print()">
-🖨️ Imprimir resultado
-</button>
+<button class="green" onclick="guardarResultadoPDF()">📄 Guardar resultado</button>
 
 <button
     onclick="location.reload()">
@@ -3967,6 +3963,405 @@ function finishExam(){
 ========================================================= */
 
 updateProgress();
+
+
+   function guardarResultadoPDF(){
+
+    if(!window.jspdf){
+        alert("No se pudo cargar el generador de PDF. Revisa tu conexión a internet.");
+        return;
+    }
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    const nombre = document.getElementById("studentName").value.trim();
+    const grado = document.getElementById("grade").value;
+
+    const resultados = calculateResults();
+
+    const porcentajePreguntas = Math.round(
+        resultados.correct / resultados.total * 100
+    );
+
+    const porcentajeRetos = Math.round(
+        gamePoints / 8 * 100
+    );
+
+    // Resultado global considerando preguntas + retos
+    const puntosTotales = resultados.correct + gamePoints;
+    const puntosMaximos = resultados.total + 8;
+    const porcentajeGlobal = Math.round(
+        puntosTotales / puntosMaximos * 100
+    );
+
+    const fecha = new Date().toLocaleDateString("es-MX");
+
+    // -----------------------------
+    // ENCABEZADO
+    // -----------------------------
+
+    doc.setFont("helvetica","bold");
+    doc.setFontSize(20);
+    doc.text("CITZ - Robot Lab",20,20);
+
+    doc.setFontSize(13);
+    doc.setFont("helvetica","normal");
+    doc.text("Diagnostico de Robotica y Tecnologia",20,29);
+
+    doc.line(20,34,190,34);
+
+    // -----------------------------
+    // DATOS DEL ALUMNO
+    // -----------------------------
+
+    doc.setFont("helvetica","bold");
+    doc.setFontSize(12);
+
+    doc.text("Alumno:",20,45);
+    doc.setFont("helvetica","normal");
+    doc.text(nombre,48,45);
+
+    doc.setFont("helvetica","bold");
+    doc.text("Grado:",20,53);
+    doc.setFont("helvetica","normal");
+    doc.text(grado + " de primaria",48,53);
+
+    doc.setFont("helvetica","bold");
+    doc.text("Fecha:",20,61);
+    doc.setFont("helvetica","normal");
+    doc.text(fecha,48,61);
+
+    // -----------------------------
+    // RESULTADO GLOBAL
+    // -----------------------------
+
+    doc.setFont("helvetica","bold");
+    doc.setFontSize(16);
+    doc.text("Resultado global",20,75);
+
+    doc.setFontSize(30);
+    doc.text(porcentajeGlobal + "%",20,91);
+
+    doc.setFontSize(11);
+    doc.setFont("helvetica","normal");
+
+    doc.text(
+        "Puntos obtenidos: " + puntosTotales +
+        " de " + puntosMaximos,
+        60,87
+    );
+
+    doc.text(
+        "Preguntas correctas: " +
+        resultados.correct + " de " + resultados.total,
+        60,94
+    );
+
+    doc.text(
+        "Retos interactivos superados: " +
+        gamePoints + " de 8",
+        60,101
+    );
+
+    // -----------------------------
+    // NIVEL
+    // -----------------------------
+
+    let nivel="";
+
+    if(porcentajeGlobal>=90){
+        nivel="Excelente punto de partida.";
+    }else if(porcentajeGlobal>=75){
+        nivel="Muy buen comienzo.";
+    }else if(porcentajeGlobal>=50){
+        nivel="Buen comienzo. Hay habilidades por fortalecer.";
+    }else{
+        nivel="Este es el comienzo de la aventura.";
+    }
+
+    doc.setFont("helvetica","bold");
+    doc.text("Nivel:",20,112);
+
+    doc.setFont("helvetica","normal");
+    doc.text(nivel,42,112);
+
+    // -----------------------------
+    // RESULTADOS POR AREA
+    // -----------------------------
+
+    doc.setFont("helvetica","bold");
+    doc.setFontSize(15);
+    doc.text("Desempeno por area",20,127);
+
+    const areas = {
+        "Secuencias y logica":["q1","q2","q3","q4"],
+        "Programacion":["q5","q6","q7"],
+        "Mecanografia":["q8"],
+        "Scratch":["q10","q11","q12"],
+        "Dron":["q13","q14","q15"],
+        "Pluma 3D":["q16","q17","q18","q19"],
+        "LEGO WeDo":["q20","q21","q22"],
+        "Roblox Studio":["q24","q25","q26"],
+        "Electronica":["q27","q28","q29","q30"]
+    };
+
+    let y=137;
+
+    doc.setFontSize(10);
+
+    for(const area in areas){
+
+        const preguntas=areas[area];
+
+        let correctas=0;
+
+        preguntas.forEach(q=>{
+            correctas+=getAnswer(q);
+        });
+
+        const porcentaje=Math.round(
+            correctas/preguntas.length*100
+        );
+
+        doc.setFont("helvetica","bold");
+        doc.text(area,20,y);
+
+        doc.setFont("helvetica","normal");
+
+        doc.text(
+            correctas + " de " +
+            preguntas.length +
+            " (" + porcentaje + "%)",
+            125,y
+        );
+
+        // Barra
+        doc.rect(20,y+3,160,5);
+
+        if(porcentaje>0){
+            doc.setFillColor(91,92,226);
+            doc.rect(
+                20,
+                y+3,
+                160*(porcentaje/100),
+                5,
+                "F"
+            );
+        }
+
+        y+=14;
+
+        if(y>270){
+            doc.addPage();
+            y=20;
+        }
+    }
+
+    // -----------------------------
+    // MECANOGRAFIA
+    // -----------------------------
+
+    if(y>245){
+        doc.addPage();
+        y=20;
+    }
+
+    doc.setFont("helvetica","bold");
+    doc.setFontSize(14);
+    doc.text("Resultados de mecanografia",20,y);
+
+    y+=10;
+
+    doc.setFont("helvetica","normal");
+    doc.setFontSize(10);
+
+    const typingTime=
+        document.getElementById("typingTimer").textContent;
+
+    const typingAccuracy=
+        document.getElementById("accuracy").textContent;
+
+    const typingChars=
+        document.getElementById("charCount").textContent;
+
+    const typingWords=
+        document.getElementById("wordCount").textContent;
+
+    doc.text("Tiempo: " + typingTime + " segundos",20,y);
+    y+=6;
+
+    doc.text("Precision: " + typingAccuracy + "%",20,y);
+    y+=6;
+
+    doc.text("Caracteres escritos: " + typingChars,20,y);
+    y+=6;
+
+    doc.text("Palabras escritas: " + typingWords,20,y);
+
+    // -----------------------------
+    // RETOS INTERACTIVOS
+    // -----------------------------
+
+    y+=15;
+
+    if(y>245){
+        doc.addPage();
+        y=20;
+    }
+
+    doc.setFont("helvetica","bold");
+    doc.setFontSize(14);
+    doc.text("Retos interactivos",20,y);
+
+    y+=9;
+
+    doc.setFont("helvetica","normal");
+    doc.setFontSize(10);
+
+    doc.text(
+        "Retos superados: " +
+        gamePoints + " de 8",
+        20,y
+    );
+
+    y+=10;
+
+    const retos = [
+        "Robot Explorador",
+        "Programacion por instrucciones",
+        "Mecanografia",
+        "Scratch",
+        "Pilotaje de dron",
+        "Pluma 3D",
+        "LEGO WeDo 2.0",
+        "Electronica basica"
+    ];
+
+    retos.forEach((reto,index)=>{
+
+        const superado = gamePoints > index;
+
+        doc.text(
+            (superado ? "[OK] " : "[ ] ") + reto,
+            20,y
+        );
+
+        y+=7;
+
+    });
+
+    // -----------------------------
+    // EXPERIENCIA PREVIA
+    // -----------------------------
+
+    y+=8;
+
+    if(y>245){
+        doc.addPage();
+        y=20;
+    }
+
+    doc.setFont("helvetica","bold");
+    doc.setFontSize(14);
+    doc.text("Experiencia previa",20,y);
+
+    y+=9;
+
+    doc.setFont("helvetica","normal");
+    doc.setFontSize(10);
+
+    const scratch =
+        document.querySelector('input[name="scratchUsed"]:checked');
+
+    const roblox =
+        document.querySelector('input[name="robloxUsed"]:checked');
+
+    doc.text(
+        "Scratch: " +
+        (scratch ? (scratch.value==="1" ? "Si" : "No") : "Sin respuesta"),
+        20,y
+    );
+
+    y+=7;
+
+    doc.text(
+        "Roblox Studio: " +
+        (roblox ? (roblox.value==="1" ? "Si" : "No") : "Sin respuesta"),
+        20,y
+    );
+
+    // -----------------------------
+    // NOTA DIAGNOSTICA
+    // -----------------------------
+
+    y+=15;
+
+    if(y>245){
+        doc.addPage();
+        y=20;
+    }
+
+    doc.setFont("helvetica","bold");
+    doc.setFontSize(14);
+    doc.text("Nota diagnostica",20,y);
+
+    y+=8;
+
+    doc.setFont("helvetica","normal");
+    doc.setFontSize(10);
+
+    const nota =
+        "Este resultado es diagnostico y permite identificar " +
+        "conocimientos previos, habilidades de pensamiento logico, " +
+        "programacion, resolucion de problemas y familiaridad " +
+        "con herramientas tecnologicas. No representa una calificacion escolar.";
+
+    const lineas = doc.splitTextToSize(nota,170);
+
+    doc.text(lineas,20,y);
+
+    // -----------------------------
+    // PIE DE PAGINA
+    // -----------------------------
+
+    const paginas=doc.getNumberOfPages();
+
+    for(let i=1;i<=paginas;i++){
+
+        doc.setPage(i);
+
+        doc.setFontSize(8);
+        doc.setFont("helvetica","normal");
+
+        doc.text(
+            "CITZ - Centro de Innovacion Tecnologica de Zapopan",
+            20,
+            285
+        );
+
+        doc.text(
+            "Pagina " + i + " de " + paginas,
+            165,
+            285
+        );
+    }
+
+    // -----------------------------
+    // GUARDAR
+    // -----------------------------
+
+    const nombreArchivo =
+        nombre
+        .replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ ]/g,"")
+        .replace(/\s+/g,"-");
+
+    doc.save(
+        "Diagnostico-CITZ-" +
+        (nombreArchivo || "Alumno") +
+        ".pdf"
+    );
+}
 
 </script>
 
