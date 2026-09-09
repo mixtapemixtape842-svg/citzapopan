@@ -1,18 +1,28 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Examen Diagnóstico de Robótica</title>
-   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<title>Diagnóstico de Robótica | CITZ</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-
-/* =========================================================
-   ESTILOS GENERALES
-========================================================= */
+:root{
+    --primary:#2563eb;
+    --primary-dark:#1d4ed8;
+    --green:#16a34a;
+    --green-dark:#15803d;
+    --red:#dc2626;
+    --orange:#f59e0b;
+    --purple:#7c3aed;
+    --dark:#172033;
+    --gray:#64748b;
+    --light:#f1f5f9;
+    --white:#ffffff;
+    --border:#e2e8f0;
+}
 
 *{
     box-sizing:border-box;
@@ -20,2657 +30,1973 @@
 
 body{
     margin:0;
-    font-family:Arial, Helvetica, sans-serif;
-    color:#263238;
-    background:
-        radial-gradient(circle at top left,#e5efff,transparent 40%),
-        radial-gradient(circle at bottom right,#fff1c9,transparent 40%),
-        #f5f7ff;
+    font-family:Arial,Helvetica,sans-serif;
+    background:linear-gradient(135deg,#eff6ff,#f8fafc);
+    color:var(--dark);
+}
+
+.hidden{
+    display:none !important;
 }
 
 .container{
-    width:95%;
-    max-width:1050px;
-    margin:auto;
-    padding:20px 0 60px;
+    width:min(1100px,94%);
+    margin:0 auto;
 }
 
 header{
-    background:linear-gradient(135deg,#5b5ce2,#7657e8);
+    background:linear-gradient(135deg,#1d4ed8,#7c3aed);
     color:white;
-    padding:30px 20px;
-    border-radius:28px;
-    text-align:center;
-    box-shadow:0 12px 30px rgba(0,0,0,.15);
+    padding:22px 0;
+    box-shadow:0 5px 20px rgba(0,0,0,.15);
 }
 
-header h1{
-    margin:0;
-    font-size:clamp(30px,6vw,48px);
+.header-content{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
 }
 
-header p{
-    font-size:19px;
-    margin-bottom:0;
+.logo{
+    font-size:25px;
+    font-weight:800;
 }
 
-/* =========================================================
-   PROGRESO
-========================================================= */
+.subtitle{
+    opacity:.9;
+    font-size:14px;
+    margin-top:4px;
+}
 
-.progress-container{
+.student-badge{
+    background:rgba(255,255,255,.15);
+    border:1px solid rgba(255,255,255,.3);
+    padding:10px 15px;
+    border-radius:12px;
+    font-size:14px;
+}
+
+main{
+    padding:30px 0 60px;
+}
+
+.card{
     background:white;
-    padding:10px;
+    border:1px solid var(--border);
     border-radius:20px;
-    margin:20px 0;
-    box-shadow:0 4px 12px rgba(0,0,0,.08);
+    padding:28px;
+    margin-bottom:25px;
+    box-shadow:0 8px 30px rgba(15,23,42,.07);
+}
+
+.card h2{
+    margin-top:0;
+    color:#1e3a8a;
+}
+
+.card h3{
+    color:#334155;
+}
+
+.intro{
+    text-align:center;
+}
+
+.robot{
+    font-size:70px;
+    margin-bottom:10px;
+}
+
+.instructions{
+    text-align:left;
+    background:#eff6ff;
+    border-left:5px solid var(--primary);
+    padding:18px;
+    border-radius:12px;
+    line-height:1.6;
+}
+
+.profile{
+    display:grid;
+    grid-template-columns:1fr 180px;
+    gap:15px;
+    margin-top:20px;
+}
+
+input,
+select{
+    width:100%;
+    padding:14px;
+    border:2px solid var(--border);
+    border-radius:10px;
+    font-size:16px;
+    background:white;
+}
+
+input:read-only,
+select:disabled{
+    background:#f8fafc;
+    color:#475569;
+}
+
+button{
+    border:none;
+    border-radius:12px;
+    padding:13px 20px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.2s;
+}
+
+button:hover{
+    transform:translateY(-1px);
+}
+
+button:disabled{
+    opacity:.5;
+    cursor:not-allowed;
+    transform:none;
+}
+
+.primary{
+    background:var(--primary);
+    color:white;
+}
+
+.primary:hover{
+    background:var(--primary-dark);
+}
+
+.green{
+    background:var(--green);
+    color:white;
+}
+
+.green:hover{
+    background:var(--green-dark);
+}
+
+.red{
+    background:var(--red);
+    color:white;
+}
+
+.orange{
+    background:var(--orange);
+    color:white;
+}
+
+.purple{
+    background:var(--purple);
+    color:white;
+}
+
+.center{
+    text-align:center;
+}
+
+.progress-wrapper{
+    margin-bottom:20px;
+}
+
+.progress-info{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:8px;
+    font-size:14px;
+    color:var(--gray);
 }
 
 .progress{
-    height:16px;
-    background:#ddd;
+    width:100%;
+    height:12px;
+    background:#e2e8f0;
     border-radius:20px;
     overflow:hidden;
 }
 
 .progress-bar{
-    width:0%;
     height:100%;
-    background:#ffb703;
-    transition:.4s;
-}
-
-/* =========================================================
-   TARJETAS
-========================================================= */
-
-.card{
-    display:none;
-    background:white;
-    padding:25px;
-    border-radius:25px;
-    box-shadow:0 8px 25px rgba(0,0,0,.10);
-    animation:showCard .3s ease;
-}
-
-.card.active{
-    display:block;
-}
-
-@keyframes showCard{
-
-    from{
-        opacity:0;
-        transform:translateY(15px);
-    }
-
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
-
-}
-
-h2{
-    color:#5b5ce2;
-    font-size:30px;
-    margin-top:0;
-}
-
-h3{
-    color:#444;
-}
-
-.intro{
-    font-size:19px;
-    line-height:1.6;
+    width:0%;
+    background:linear-gradient(90deg,#2563eb,#7c3aed);
+    transition:.3s;
 }
 
 .question{
-    background:#f5f6ff;
-    padding:18px;
-    border-radius:18px;
-    margin:18px 0;
-}
-
-.question p{
     font-size:19px;
     font-weight:bold;
-}
-
-input[type=text],
-select,
-textarea{
-    width:100%;
-    padding:14px;
-    border:2px solid #ccd2e0;
-    border-radius:12px;
-    font-size:17px;
-}
-
-textarea{
-    min-height:130px;
-    resize:vertical;
+    line-height:1.5;
+    margin-bottom:18px;
 }
 
 .option{
     display:block;
-    background:white;
-    border:2px solid #ddd;
-    padding:13px;
-    border-radius:13px;
-    margin:9px 0;
+    border:2px solid var(--border);
+    border-radius:12px;
+    padding:14px;
+    margin:10px 0;
     cursor:pointer;
-    font-size:17px;
     transition:.2s;
 }
 
 .option:hover{
-    border-color:#5b5ce2;
-    background:#f0f0ff;
+    border-color:#93c5fd;
+    background:#eff6ff;
 }
 
 .option input{
+    width:auto;
     margin-right:10px;
 }
 
-.navigation{
+.feedback{
+    margin-top:15px;
+    padding:14px;
+    border-radius:10px;
+    font-weight:bold;
+}
+
+.feedback.success{
+    background:#dcfce7;
+    color:#166534;
+}
+
+.feedback.error{
+    background:#fee2e2;
+    color:#991b1b;
+}
+
+.feedback.info{
+    background:#dbeafe;
+    color:#1e40af;
+}
+
+.nav-buttons{
     display:flex;
+    justify-content:space-between;
     gap:10px;
     margin-top:25px;
 }
 
-.navigation button{
-    flex:1;
-}
-
-button{
-    border:0;
-    border-radius:14px;
-    padding:13px 20px;
-    font-size:17px;
-    font-weight:bold;
-    cursor:pointer;
-    background:#5b5ce2;
-    color:white;
-    margin:5px;
-}
-
-button:hover{
-    filter:brightness(.94);
-    transform:translateY(-1px);
-}
-
-button.green{
-    background:#2a9d8f;
-}
-
-button.orange{
-    background:#f4a261;
-}
-
-button.red{
-    background:#e63946;
-}
-
-button.gray{
-    background:#64748b;
-}
-
-.feedback{
-    padding:14px;
-    border-radius:12px;
-    margin-top:15px;
-    font-weight:bold;
-}
-
-.feedback.correct{
-    background:#d9f8e9;
-    color:#18794e;
-}
-
-.feedback.incorrect{
-    background:#ffe0e0;
-    color:#a51d2d;
-}
-
-.hidden{
-    display:none!important;
-}
-
-.small{
-    font-size:14px;
-    color:#667085;
-}
-
-
-/* =========================================================
-   MINIJUEGO 1
-   ROBOT Y ESTRELLA
-========================================================= */
-
-.robot-game{
-    max-width:720px;
-    margin:20px auto;
-}
-
-.robot-board{
-    position:relative;
-    width:100%;
-    height:360px;
-
-    background:
-        linear-gradient(#ffffff66 1px,transparent 1px),
-        linear-gradient(90deg,#ffffff66 1px,transparent 1px),
-        #bde8ff;
-
-    background-size:60px 60px;
-
-    border:5px solid #5d9fc3;
-    border-radius:20px;
-
-    overflow:hidden;
-}
-
-/*
-   Todos los elementos tienen posiciones
-   y capas claras.
-*/
-
-.board-object{
-    position:absolute;
-    width:55px;
-    height:55px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border-radius:12px;
-}
-
-.start{
-    background:#8be28b;
-    z-index:5;
-}
-
-.goal{
-    background:#ffd166;
-    z-index:5;
-    font-size:30px;
-}
-
-.obstacle{
-    background:#707070;
-    z-index:10;
-    color:white;
-    font-size:28px;
-}
-
-.player-robot{
-    position:absolute;
-
-    width:55px;
-    height:55px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    background:#70c470;
-
-    border-radius:12px;
-
-    font-size:31px;
-
-    /*
-      EL ROBOT SIEMPRE VA POR DELANTE
-    */
-
-    z-index:1000;
-
-    box-shadow:0 5px 12px rgba(0,0,0,.3);
-
-    transition:.2s;
-}
-
-.game-info{
-    display:flex;
-    justify-content:space-between;
-    gap:10px;
-    flex-wrap:wrap;
-    margin:10px 0;
-}
-
-.info-box{
-    background:#eef0ff;
-    padding:10px 15px;
-    border-radius:12px;
-    font-weight:bold;
-}
-
-.arrow-controls{
-    text-align:center;
-    margin:15px 0;
-}
-
-.arrow-controls button{
-    width:65px;
-    height:50px;
-    padding:5px;
-    font-size:25px;
-}
-
-
-/* =========================================================
-   MINIJUEGO 2
-   BLOQUES
-========================================================= */
-
-.block-program{
-    background:#eef1ff;
-    padding:20px;
-    border-radius:20px;
-}
-
-.program-screen{
-    position:relative;
-    height:250px;
-    background:#dff5ff;
-    border:4px solid #8ac4dd;
-    border-radius:18px;
-    overflow:hidden;
-    margin-bottom:20px;
-}
-
-.program-character{
-    position:absolute;
-    left:25px;
-    top:90px;
-    font-size:48px;
-    transition:.4s;
-}
-
-.program-goal{
-    position:absolute;
-    right:30px;
-    top:90px;
-    font-size:45px;
-}
-
-.program-ground{
-    position:absolute;
-    bottom:25px;
-    left:20px;
-    right:20px;
-    height:5px;
-    background:#555;
-}
-
-.blocks-palette{
-    display:flex;
-    flex-wrap:wrap;
-    gap:10px;
-}
-
-.program-block{
-    padding:13px 16px;
-    border-radius:12px;
-    background:#5b5ce2;
-    color:white;
-    font-weight:bold;
-    cursor:pointer;
-    user-select:none;
-}
-
-.program-block:hover{
-    transform:scale(1.04);
-}
-
-.selected-program{
-    display:flex;
-    flex-wrap:wrap;
-    gap:8px;
-    min-height:60px;
-    padding:10px;
-    background:white;
-    border:3px dashed #9da5d8;
+.game-box{
+    background:#f8fafc;
+    border:2px dashed #cbd5e1;
     border-radius:15px;
-    margin:15px 0;
-}
-
-.selected-item{
-    background:#ffb703;
-    color:#222;
-    padding:10px 14px;
-    border-radius:10px;
-    font-weight:bold;
-}
-
-
-/* =========================================================
-   SCRATCH
-========================================================= */
-
-.scratch-stage{
-    position:relative;
-    height:300px;
-    background:
-        linear-gradient(#ffffff66 1px,transparent 1px),
-        linear-gradient(90deg,#ffffff66 1px,transparent 1px),
-        #8bd5f5;
-
-    background-size:50px 50px;
-
-    border:4px solid #65a9c6;
-    border-radius:18px;
-    overflow:hidden;
-}
-
-.scratch-cat{
-    position:absolute;
-    left:45px;
-    bottom:55px;
-    font-size:65px;
-}
-
-.scratch-bubble{
-    position:absolute;
-    left:130px;
-    bottom:140px;
-    background:white;
-    padding:12px 18px;
-    border-radius:18px;
-    font-weight:bold;
-    display:none;
-}
-
-.scratch-flag{
-    position:absolute;
-    top:15px;
-    left:15px;
-    font-size:32px;
-}
-
-.scratch-code{
+    padding:20px;
     margin-top:20px;
 }
 
-.scratch-run{
-    background:#eef1ff;
-    padding:15px;
-    border-radius:18px;
+.robot-area{
+    height:220px;
+    background:
+        linear-gradient(#e2e8f0 1px,transparent 1px),
+        linear-gradient(90deg,#e2e8f0 1px,transparent 1px);
+    background-size:40px 40px;
+    position:relative;
+    border:2px solid #cbd5e1;
+    border-radius:15px;
+    overflow:hidden;
+    margin:15px 0;
 }
 
-.scratch-block{
-    display:inline-block;
-    padding:12px 15px;
-    border-radius:10px;
-    color:white;
-    font-weight:bold;
-    margin:4px;
-    cursor:pointer;
+.robot-character{
+    position:absolute;
+    font-size:38px;
+    transition:.35s;
+    left:15px;
+    top:85px;
 }
 
-.block-event{
-    background:#ff9f43;
+.star{
+    position:absolute;
+    right:25px;
+    top:75px;
+    font-size:45px;
 }
 
-.block-motion{
-    background:#4dabf7;
+.game-buttons{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
 }
-
-.block-say{
-    background:#9b59b6;
-}
-
-.block-stop{
-    background:#e63946;
-}
-
-
-/* =========================================================
-   MECANOGRAFIA
-========================================================= */
 
 .typing-text{
-    background:#fff7c7;
-    padding:20px;
-    border-radius:18px;
-    font-family:Georgia,serif;
-    font-size:21px;
-    line-height:1.8;
-    white-space:pre-line;
-}
-
-.typing-instruction{
-    background:#fff0d5;
-    border-left:5px solid #f4a261;
-    padding:13px;
-    border-radius:10px;
-    margin:15px 0;
-}
-
-.timer{
-    text-align:center;
-    color:#5b5ce2;
-    font-size:28px;
-    font-weight:bold;
-    margin:15px;
-}
-
-.stats{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:10px;
-    margin:15px 0;
-}
-
-.stat{
-    background:#eef0ff;
-    padding:12px 18px;
-    border-radius:14px;
-    font-weight:bold;
-}
-
-
-/* =========================================================
-   DRON
-========================================================= */
-
-.drone-arena{
-    position:relative;
-    height:350px;
-    background:
-        linear-gradient(#ffffff44 1px,transparent 1px),
-        linear-gradient(90deg,#ffffff44 1px,transparent 1px),
-        #bdefff;
-
-    background-size:50px 50px;
-
-    border:5px solid #67b6d0;
-    border-radius:20px;
-    overflow:hidden;
-}
-
-.drone{
-    position:absolute;
-    left:20px;
-    top:20px;
-    font-size:45px;
-    z-index:20;
-    transition:.2s;
-}
-
-.landing-zone{
-    position:absolute;
-    right:30px;
-    bottom:30px;
-    width:100px;
-    height:100px;
-    border-radius:50%;
-    background:#d8f8e9;
-    border:5px dashed #2a9d8f;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:38px;
-}
-
-
-/* =========================================================
-   PLUMA 3D
-========================================================= */
-
-.pen-workspace{
-    position:relative;
-    height:300px;
-    background:
-        repeating-linear-gradient(
-            0deg,
-            #eeeeee,
-            #eeeeee 29px,
-            #dddddd 30px
-        );
-    border:4px solid #ccc;
-    border-radius:18px;
-    overflow:hidden;
-}
-
-.pen-drawing{
-    position:absolute;
-    left:50%;
-    top:50%;
-    transform:translate(-50%,-50%);
-    font-size:100px;
-    transition:.4s;
-}
-
-.pen-tools{
-    text-align:center;
-}
-
-
-/* =========================================================
-   LEGO
-========================================================= */
-
-.lego-table{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:15px;
-}
-
-.lego-item{
-    background:#eef1ff;
-    border:3px solid transparent;
-    padding:20px;
-    border-radius:18px;
-    text-align:center;
-    font-size:20px;
-    cursor:pointer;
-}
-
-.lego-item:hover{
-    border-color:#5b5ce2;
-}
-
-.lego-item.selected{
-    background:#e1e3ff;
-    border-color:#5b5ce2;
-}
-
-.lego-result{
-    margin-top:15px;
-}
-
-
-/* =========================================================
-   ROBLOX
-========================================================= */
-
-.roblox-world{
-    position:relative;
-    height:320px;
-    background:#9edcff;
-    border:5px solid #5d9db9;
-    border-radius:20px;
-    overflow:hidden;
-}
-
-.roblox-sky{
-    position:absolute;
-    top:20px;
-    left:30px;
-    font-size:35px;
-}
-
-.roblox-ground{
-    position:absolute;
-    bottom:0;
-    left:0;
-    right:0;
-    height:75px;
-    background:#67bd6e;
-}
-
-.roblox-object{
-    position:absolute;
-    font-size:45px;
-    z-index:10;
-    animation:appear .2s ease;
-}
-
-@keyframes appear{
-
-    from{
-        transform:scale(0);
-    }
-
-    to{
-        transform:scale(1);
-    }
-
-}
-
-
-/* =========================================================
-   ELECTRONICA
-========================================================= */
-
-.circuit-board{
-    background:#263238;
-    color:white;
-    padding:25px;
-    border-radius:20px;
-}
-
-.circuit-components{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:10px;
-}
-
-.circuit-component{
-    background:#455a64;
-    padding:15px 20px;
+    font-size:19px;
+    background:#0f172a;
+    color:#f8fafc;
+    padding:18px;
     border-radius:12px;
-    cursor:pointer;
-    font-weight:bold;
+    line-height:1.7;
+    margin-bottom:15px;
 }
 
-.circuit-component.selected{
-    background:#ffb703;
-    color:#222;
+.typing-input{
+    font-family:monospace;
 }
 
-.circuit-light{
-    width:70px;
-    height:70px;
-    margin:30px auto;
-    border-radius:50%;
-    background:#333;
-}
-
-.circuit-light.on{
-    background:#fff;
-    box-shadow:
-        0 0 15px white,
-        0 0 35px yellow,
-        0 0 70px yellow;
-}
-
-
-/* =========================================================
-   RESULTADOS
-========================================================= */
-
-.result{
+.result-main{
     text-align:center;
 }
 
-.big-score{
-    font-size:75px;
-    color:#2a9d8f;
-    font-weight:bold;
+.score{
+    font-size:70px;
+    font-weight:900;
+    color:var(--primary);
 }
 
-.result-area{
-    background:#f7f8ff;
-    padding:16px;
+.score-label{
+    color:var(--gray);
+    font-size:18px;
+}
+
+.result-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:15px;
+    margin-top:25px;
+}
+
+.area-card{
+    border:1px solid var(--border);
     border-radius:15px;
-    margin:15px 0;
+    padding:18px;
+    background:#f8fafc;
 }
 
-.result-bar{
-    height:15px;
-    background:#ddd;
+.area-name{
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+.area-percent{
+    font-size:28px;
+    font-weight:800;
+    color:var(--primary);
+}
+
+.minigame-status{
+    display:inline-block;
+    padding:7px 11px;
     border-radius:20px;
-    overflow:hidden;
+    font-size:13px;
+    font-weight:bold;
+    background:#e2e8f0;
+    color:#475569;
 }
 
-.result-fill{
-    height:100%;
-    background:#5b5ce2;
+.minigame-status.done{
+    background:#dcfce7;
+    color:#166534;
 }
 
-@media(max-width:650px){
+.summary{
+    background:#f8fafc;
+    border-radius:15px;
+    padding:20px;
+    margin-top:25px;
+    text-align:left;
+}
 
-    .card{
-        padding:17px;
-    }
+.loading{
+    text-align:center;
+    padding:60px 20px;
+}
 
-    .lego-table{
+.spinner{
+    width:45px;
+    height:45px;
+    border:5px solid #e2e8f0;
+    border-top-color:var(--primary);
+    border-radius:50%;
+    animation:spin .8s linear infinite;
+    margin:0 auto 15px;
+}
+
+@keyframes spin{
+    to{transform:rotate(360deg)}
+}
+
+footer{
+    text-align:center;
+    padding:30px;
+    color:#64748b;
+    font-size:13px;
+}
+
+@media(max-width:700px){
+    .profile{
         grid-template-columns:1fr;
     }
 
-    .navigation{
+    .header-content{
         flex-direction:column;
+        align-items:flex-start;
     }
 
-    button{
-        width:100%;
+    .card{
+        padding:20px;
     }
 
+    .score{
+        font-size:55px;
+    }
 }
-
 </style>
-
 </head>
 
 <body>
 
-<div class="container">
-
-
 <header>
+    <div class="container header-content">
+        <div>
+            <div class="logo">🤖 CITZ | Misión Robótica</div>
+            <div class="subtitle">Diagnóstico interactivo de habilidades tecnológicas</div>
+        </div>
 
-<h1>🤖 Misión: Robot Explorador</h1>
-
-<p>
-Examen Diagnóstico Interactivo de Robótica
-</p>
-
+        <div class="student-badge" id="studentBadge">
+            Cargando alumno...
+        </div>
+    </div>
 </header>
 
+<main class="container">
+
+    <!-- CARGANDO -->
+    <section id="loadingCard" class="card loading">
+        <div class="spinner"></div>
+        <h2>Cargando tu misión...</h2>
+        <p>Estamos verificando tu cuenta y preparando el diagnóstico.</p>
+    </section>
+
+    <!-- ERROR -->
+    <section id="errorCard" class="card hidden">
+        <div class="center">
+            <div style="font-size:60px;">⚠️</div>
+            <h2>No fue posible iniciar el diagnóstico</h2>
+            <p id="errorMessage"></p>
+            <button class="primary" onclick="location.href='login.html'">
+                🔐 Ir al inicio de sesión
+            </button>
+        </div>
+    </section>
+
+    <!-- INTRO -->
+    <section id="introCard" class="card intro hidden">
+
+        <div class="robot">🤖</div>
+
+        <h1>¡Bienvenido a tu misión robótica!</h1>
+
+        <p>
+            Este diagnóstico nos ayudará a conocer tus habilidades actuales
+            en programación, robótica, electrónica y tecnología.
+        </p>
+
+        <div class="instructions">
+            <strong>🎯 ¿Cómo funciona?</strong>
 
-<div class="progress-container">
+            <ul>
+                <li>Contesta las preguntas de opción múltiple.</li>
+                <li>Realiza pequeños retos interactivos.</li>
+                <li>No necesitas saberlo todo.</li>
+                <li>El diagnóstico sirve para conocer tu nivel actual.</li>
+                <li>Tu resultado se guardará automáticamente en tu perfil.</li>
+            </ul>
+        </div>
+
+        <div class="profile">
+
+            <div>
+                <label><strong>Nombre del alumno</strong></label>
+                <input
+                    type="text"
+                    id="studentName"
+                    readonly
+                >
+            </div>
+
+            <div>
+                <label><strong>Grado</strong></label>
+
+                <select id="grade" disabled>
+                    <option value="">Seleccionar</option>
+                    <option value="1">1°</option>
+                    <option value="2">2°</option>
+                    <option value="3">3°</option>
+                    <option value="4">4°</option>
+                    <option value="5">5°</option>
+                    <option value="6">6°</option>
+                </select>
+            </div>
 
-<div class="progress">
+        </div>
 
-<div
-    class="progress-bar"
-    id="progressBar">
-</div>
+        <br>
 
-</div>
+        <button class="primary" onclick="startExam()">
+            🚀 Comenzar misión
+        </button>
+
+    </section>
 
-</div>
 
+    <!-- EXAMEN -->
+    <section id="examCard" class="card hidden">
 
-<!-- =====================================================
-     0. INICIO
-===================================================== -->
+        <div class="progress-wrapper">
+
+            <div class="progress-info">
+                <span id="progressText">Pregunta 1 de 28</span>
+                <span id="pointsText">Puntos: 0</span>
+            </div>
+
+            <div class="progress">
+                <div id="progressBar" class="progress-bar"></div>
+            </div>
+
+        </div>
 
-<section class="card active">
+        <!-- PREGUNTA 1 -->
+        <div class="exam-step" data-step="1">
 
-<h2>👋 ¡Hola, explorador!</h2>
+            <h2>🧠 Secuencias y lógica</h2>
 
-<div class="intro">
+            <div class="question">
+                1. Un robot debe avanzar 3 pasos y después girar a la derecha.
+                ¿Qué debe hacer primero?
+            </div>
 
-<p>
-En esta misión vamos a descubrir cuánto sabes sobre
-programación, robots, computadoras, drones y electrónica.
-</p>
+            <label class="option">
+                <input type="radio" name="q1" value="a">
+                Girar a la derecha
+            </label>
 
-<p>
-🚀 Encontrarás preguntas y pequeños retos.
-</p>
+            <label class="option">
+                <input type="radio" name="q1" value="b">
+                Avanzar 3 pasos
+            </label>
 
-<p>
-No pasa nada si no sabes alguna respuesta.
-Este examen sirve para conocer lo que ya sabes.
-</p>
+            <label class="option">
+                <input type="radio" name="q1" value="c">
+                Detenerse
+            </label>
 
-</div>
+            <label class="option">
+                <input type="radio" name="q1" value="d">
+                Repetir todo
+            </label>
 
+        </div>
 
-<div class="question">
 
-<p>👤 ¿Cómo te llamas?</p>
+        <!-- PREGUNTA 2 -->
+        <div class="exam-step hidden" data-step="2">
 
-<input
-    type="text"
-    id="studentName"
-    placeholder="Escribe tu nombre">
+            <h2>🧠 Secuencias y lógica</h2>
 
-</div>
+            <div class="question">
+                2. Si una secuencia es:
+                avanzar, avanzar, girar, avanzar...
+                ¿qué acción sigue después del giro?
+            </div>
 
+            <label class="option">
+                <input type="radio" name="q2" value="a">
+                Avanzar
+            </label>
 
-<div class="question">
+            <label class="option">
+                <input type="radio" name="q2" value="b">
+                Girar otra vez
+            </label>
 
-<p>🎒 ¿En qué grado estás?</p>
+            <label class="option">
+                <input type="radio" name="q2" value="c">
+                Apagar el robot
+            </label>
 
-<select id="grade">
+            <label class="option">
+                <input type="radio" name="q2" value="d">
+                Retroceder
+            </label>
 
-<option value="">Selecciona tu grado</option>
+        </div>
 
-<option value="1">1° de primaria</option>
-<option value="2">2° de primaria</option>
-<option value="3">3° de primaria</option>
-<option value="4">4° de primaria</option>
-<option value="5">5° de primaria</option>
-<option value="6">6° de primaria</option>
 
-</select>
+        <!-- PREGUNTA 3 -->
+        <div class="exam-step hidden" data-step="3">
 
-</div>
+            <h2>🧠 Secuencias y lógica</h2>
 
+            <div class="question">
+                3. ¿Qué estructura sirve para repetir instrucciones varias veces?
+            </div>
 
-<div class="navigation">
+            <label class="option">
+                <input type="radio" name="q3" value="a">
+                Variable
+            </label>
 
-<button onclick="startExam()">
-🚀 Comenzar misión
-</button>
+            <label class="option">
+                <input type="radio" name="q3" value="b">
+                Bucle
+            </label>
 
-</div>
+            <label class="option">
+                <input type="radio" name="q3" value="c">
+                Comentario
+            </label>
 
-</section>
+            <label class="option">
+                <input type="radio" name="q3" value="d">
+                Sensor
+            </label>
 
+        </div>
 
-<!-- =====================================================
-     1. SECUENCIAS
-===================================================== -->
 
-<section class="card">
+        <!-- PREGUNTA 4 -->
+        <div class="exam-step hidden" data-step="4">
 
-<h2>🧩 1. Secuencias y lógica</h2>
+            <h2>🧠 Secuencias y lógica</h2>
 
-<p>
-Un robot solamente puede hacer las instrucciones que nosotros
-le damos. ¡Piensa como programador!
-</p>
+            <div class="question">
+                4. Si un robot debe detenerse cuando encuentra un obstáculo,
+                ¿qué necesita utilizar?
+            </div>
 
+            <label class="option">
+                <input type="radio" name="q4" value="a">
+                Sensor
+            </label>
 
-<div class="question">
+            <label class="option">
+                <input type="radio" name="q4" value="b">
+                Bocina
+            </label>
 
-<p>
-1. ¿Qué es una secuencia?
-</p>
+            <label class="option">
+                <input type="radio" name="q4" value="c">
+                Pantalla
+            </label>
 
-<div class="options" data-question="q1">
+            <label class="option">
+                <input type="radio" name="q4" value="d">
+                Teclado
+            </label>
 
-<label class="option">
-<input type="radio" name="q1" value="1">
-Un conjunto de instrucciones ordenadas
-</label>
+        </div>
 
-<label class="option">
-<input type="radio" name="q1" value="0">
-Un dibujo
-</label>
 
-<label class="option">
-<input type="radio" name="q1" value="0">
-Una canción
-</label>
+        <!-- PREGUNTA 5 -->
+        <div class="exam-step hidden" data-step="5">
 
-</div>
+            <h2>💻 Programación</h2>
 
-</div>
+            <div class="question">
+                5. ¿Qué es una variable?
+            </div>
 
+            <label class="option">
+                <input type="radio" name="q5" value="a">
+                Un lugar para guardar un dato
+            </label>
 
-<div class="question">
+            <label class="option">
+                <input type="radio" name="q5" value="b">
+                Un motor
+            </label>
 
-<p>
-2. Si el robot debe avanzar tres lugares, ¿qué debería hacer?
-</p>
+            <label class="option">
+                <input type="radio" name="q5" value="c">
+                Una batería
+            </label>
 
-<div class="options" data-question="q2">
+            <label class="option">
+                <input type="radio" name="q5" value="d">
+                Un sensor
+            </label>
 
-<label class="option">
-<input type="radio" name="q2" value="1">
-Avanzar, avanzar, avanzar
-</label>
+        </div>
 
-<label class="option">
-<input type="radio" name="q2" value="0">
-Girar tres veces
-</label>
 
-<label class="option">
-<input type="radio" name="q2" value="0">
-Detenerse
-</label>
+        <!-- PREGUNTA 6 -->
+        <div class="exam-step hidden" data-step="6">
 
-</div>
+            <h2>💻 Programación</h2>
 
-</div>
+            <div class="question">
+                6. ¿Cuál de estas instrucciones representa una condición?
+            </div>
 
+            <label class="option">
+                <input type="radio" name="q6" value="a">
+                Si...
+            </label>
 
-<div class="question">
+            <label class="option">
+                <input type="radio" name="q6" value="b">
+                Repetir
+            </label>
 
-<p>
-3. Si estás mirando hacia arriba y giras a la derecha,
-¿hacia dónde mirarás?
-</p>
+            <label class="option">
+                <input type="radio" name="q6" value="c">
+                Esperar
+            </label>
 
-<div class="options" data-question="q3">
+            <label class="option">
+                <input type="radio" name="q6" value="d">
+                Mostrar
+            </label>
 
-<label class="option">
-<input type="radio" name="q3" value="1">
-➡️ Derecha
-</label>
+        </div>
 
-<label class="option">
-<input type="radio" name="q3" value="0">
-⬅️ Izquierda
-</label>
 
-<label class="option">
-<input type="radio" name="q3" value="0">
-⬇️ Abajo
-</label>
+        <!-- PREGUNTA 7 -->
+        <div class="exam-step hidden" data-step="7">
 
-</div>
+            <h2>💻 Programación</h2>
 
-</div>
+            <div class="question">
+                7. ¿Qué sucede cuando un programa tiene un error de código?
+            </div>
 
+            <label class="option">
+                <input type="radio" name="q7" value="a">
+                Siempre funciona correctamente
+            </label>
 
-<h3>🎮 Minijuego: lleva al robot hasta ⭐</h3>
+            <label class="option">
+                <input type="radio" name="q7" value="b">
+                Puede producir un comportamiento incorrecto
+            </label>
 
-<p>
-El robot comienza en 🟢.
-Debes llevarlo hasta ⭐.
-Los bloques grises son obstáculos.
-</p>
+            <label class="option">
+                <input type="radio" name="q7" value="c">
+                El robot se convierte en humano
+            </label>
 
+            <label class="option">
+                <input type="radio" name="q7" value="d">
+                La computadora se apaga siempre
+            </label>
 
-<div class="robot-game">
+        </div>
 
-<div class="robot-board" id="robotBoard">
 
-<!-- INICIO -->
+        <!-- MECANOGRAFÍA -->
+        <div class="exam-step hidden" data-step="8">
 
-<div
-    class="board-object start"
-    style="left:10px;top:10px">
-🟢
-</div>
+            <h2>⌨️ Mecanografía</h2>
 
+            <div class="question">
+                8. Escribe exactamente el siguiente texto:
+            </div>
 
-<!-- OBSTACULOS -->
+            <div id="typingText" class="typing-text"></div>
 
-<div
-    class="board-object obstacle"
-    style="left:130px;top:10px">
-⬛
-</div>
+            <input
+                id="typingInput"
+                class="typing-input"
+                type="text"
+                autocomplete="off"
+                placeholder="Escribe el texto aquí..."
+            >
 
-<div
-    class="board-object obstacle"
-    style="left:130px;top:70px">
-⬛
-</div>
+            <div id="typingFeedback"></div>
 
-<div
-    class="board-object obstacle"
-    style="left:130px;top:130px">
-⬛
-</div>
+        </div>
 
-<div
-    class="board-object obstacle"
-    style="left:130px;top:190px">
-⬛
-</div>
 
+        <!-- SCRATCH 9 -->
+        <div class="exam-step hidden" data-step="9">
 
-<div
-    class="board-object obstacle"
-    style="left:310px;top:70px">
-⬛
-</div>
+            <h2>🐱 Scratch</h2>
 
-<div
-    class="board-object obstacle"
-    style="left:310px;top:130px">
-⬛
-</div>
+            <div class="question">
+                9. En Scratch, ¿qué bloque permite que un personaje se mueva?
+            </div>
 
-<div
-    class="board-object obstacle"
-    style="left:310px;top:190px">
-⬛
-</div>
+            <label class="option">
+                <input type="radio" name="q9" value="a">
+                Mover 10 pasos
+            </label>
 
+            <label class="option">
+                <input type="radio" name="q9" value="b">
+                Decir Hola
+            </label>
 
-<div
-    class="board-object obstacle"
-    style="left:490px;top:130px">
-⬛
-</div>
+            <label class="option">
+                <input type="radio" name="q9" value="c">
+                Detener todos
+            </label>
 
+            <label class="option">
+                <input type="radio" name="q9" value="d">
+                Esperar
+            </label>
 
-<!-- META -->
+        </div>
 
-<div
-    class="board-object goal"
-    style="right:10px;bottom:10px">
-⭐
-</div>
 
+        <!-- SCRATCH 10 -->
+        <div class="exam-step hidden" data-step="10">
 
-<!-- ROBOT -->
+            <h2>🐱 Scratch</h2>
 
-<div
-    id="robotPlayer"
-    class="player-robot"
-    style="left:10px;top:10px">
-🤖
-</div>
+            <div class="question">
+                10. ¿Qué bloque permite que un personaje diga algo?
+            </div>
 
-</div>
+            <label class="option">
+                <input type="radio" name="q10" value="a">
+                Mover 10 pasos
+            </label>
 
+            <label class="option">
+                <input type="radio" name="q10" value="b">
+                Decir Hola
+            </label>
 
-<div class="game-info">
+            <label class="option">
+                <input type="radio" name="q10" value="c">
+                Girar
+            </label>
 
-<div class="info-box">
-🤖 Robot: <span id="robotMoves">0</span> movimientos
-</div>
+            <label class="option">
+                <input type="radio" name="q10" value="d">
+                Repetir
+            </label>
 
-<div class="info-box">
-🎯 Meta: ⭐
-</div>
+        </div>
 
-</div>
 
+        <!-- SCRATCH 11 -->
+        <div class="exam-step hidden" data-step="11">
 
-<div class="arrow-controls">
+            <h2>🐱 Scratch</h2>
 
-<div>
-<button onclick="moveRobot('up')">⬆️</button>
-</div>
+            <div class="question">
+                11. ¿Qué bloque sirve para repetir una acción continuamente?
+            </div>
 
-<button onclick="moveRobot('left')">⬅️</button>
+            <label class="option">
+                <input type="radio" name="q11" value="a">
+                Por siempre
+            </label>
 
-<button onclick="moveRobot('down')">⬇️</button>
+            <label class="option">
+                <input type="radio" name="q11" value="b">
+                Decir
+            </label>
 
-<button onclick="moveRobot('right')">➡️</button>
+            <label class="option">
+                <input type="radio" name="q11" value="c">
+                Mover
+            </label>
 
-</div>
+            <label class="option">
+                <input type="radio" name="q11" value="d">
+                Detener
+            </label>
 
+        </div>
 
-<p
-    id="robotFeedback"
-    class="game-message">
-¡Busca un camino hasta la estrella!
-</p>
 
-</div>
+        <!-- DRON 12 -->
+        <div class="exam-step hidden" data-step="12">
 
+            <h2>🚁 Drones</h2>
 
-<div class="question">
+            <div class="question">
+                12. ¿Qué permite controlar la dirección de un dron?
+            </div>
 
-<p>
-4. ¿Qué debemos hacer si una instrucción no lleva al robot
-al lugar correcto?
-</p>
+            <label class="option">
+                <input type="radio" name="q12" value="a">
+                Los controles
+            </label>
 
-<div class="options" data-question="q4">
+            <label class="option">
+                <input type="radio" name="q12" value="b">
+                Una hoja de papel
+            </label>
 
-<label class="option">
-<input type="radio" name="q4" value="1">
-Cambiar o corregir la secuencia
-</label>
+            <label class="option">
+                <input type="radio" name="q12" value="c">
+                Un lápiz
+            </label>
 
-<label class="option">
-<input type="radio" name="q4" value="0">
-Dejar el programa así
-</label>
+            <label class="option">
+                <input type="radio" name="q12" value="d">
+                Un tornillo
+            </label>
 
-<label class="option">
-<input type="radio" name="q4" value="0">
-Apagar la computadora
-</label>
+        </div>
 
-</div>
 
-</div>
+        <!-- DRON 13 -->
+        <div class="exam-step hidden" data-step="13">
 
+            <h2>🚁 Drones</h2>
 
-<div class="navigation">
+            <div class="question">
+                13. ¿Qué componente ayuda a un dron a mantenerse estable?
+            </div>
 
-<button class="gray" onclick="prevCard()">← Atrás</button>
+            <label class="option">
+                <input type="radio" name="q13" value="a">
+                Sensor/IMU
+            </label>
 
-<button onclick="nextCard()">Continuar →</button>
+            <label class="option">
+                <input type="radio" name="q13" value="b">
+                Bocina
+            </label>
 
-</div>
+            <label class="option">
+                <input type="radio" name="q13" value="c">
+                LED decorativo
+            </label>
 
-</section>
+            <label class="option">
+                <input type="radio" name="q13" value="d">
+                Cable USB solamente
+            </label>
 
+        </div>
 
-<!-- =====================================================
-     2. PROGRAMACION
-===================================================== -->
 
-<section class="card">
+        <!-- DRON 14 -->
+        <div class="exam-step hidden" data-step="14">
 
-<h2>🧠 2. Programación por instrucciones</h2>
+            <h2>🚁 Drones</h2>
 
-<p>
-Ahora tendrás que construir un pequeño programa.
-</p>
+            <div class="question">
+                14. Antes de volar un dron es importante:
+            </div>
 
+            <label class="option">
+                <input type="radio" name="q14" value="a">
+                Revisar el equipo y el entorno
+            </label>
 
-<h3>🎮 Minijuego: programa al robot</h3>
+            <label class="option">
+                <input type="radio" name="q14" value="b">
+                Lanzarlo inmediatamente
+            </label>
 
-<div class="block-program">
+            <label class="option">
+                <input type="radio" name="q14" value="c">
+                Quitar las hélices
+            </label>
 
+            <label class="option">
+                <input type="radio" name="q14" value="d">
+                Apagar el control
+            </label>
 
-<div class="program-screen">
+        </div>
 
-<div
-    class="program-character"
-    id="programCharacter">
-🤖
-</div>
 
-<div class="program-goal">
-⭐
-</div>
+        <!-- PLUMA 15 -->
+        <div class="exam-step hidden" data-step="15">
 
-<div class="program-ground"></div>
+            <h2>🖊️ Pluma 3D</h2>
 
-</div>
+            <div class="question">
+                15. ¿Qué material utiliza normalmente una pluma 3D?
+            </div>
 
+            <label class="option">
+                <input type="radio" name="q15" value="a">
+                Filamento plástico
+            </label>
 
-<p>
-Haz clic en las instrucciones en el orden correcto.
-</p>
+            <label class="option">
+                <input type="radio" name="q15" value="b">
+                Agua
+            </label>
 
+            <label class="option">
+                <input type="radio" name="q15" value="c">
+                Arena
+            </label>
 
-<div
-    class="selected-program"
-    id="programSelected">
-</div>
+            <label class="option">
+                <input type="radio" name="q15" value="d">
+                Gasolina
+            </label>
 
+        </div>
 
-<div class="blocks-palette">
 
-<div
-    class="program-block"
-    onclick="addProgramBlock('avanzar')">
-⬆️ Avanzar
-</div>
+        <!-- PLUMA 16 -->
+        <div class="exam-step hidden" data-step="16">
 
-<div
-    class="program-block"
-    onclick="addProgramBlock('derecha')">
-➡️ Girar derecha
-</div>
+            <h2>🖊️ Pluma 3D</h2>
 
-<div
-    class="program-block"
-    onclick="addProgramBlock('izquierda')">
-⬅️ Girar izquierda
-</div>
+            <div class="question">
+                16. ¿Qué ocurre con el filamento dentro de una pluma 3D?
+            </div>
 
-<div
-    class="program-block"
-    onclick="addProgramBlock('detener')">
-⏹️ Detener
-</div>
+            <label class="option">
+                <input type="radio" name="q16" value="a">
+                Se calienta y sale por una boquilla
+            </label>
 
-</div>
+            <label class="option">
+                <input type="radio" name="q16" value="b">
+                Se convierte en agua
+            </label>
 
+            <label class="option">
+                <input type="radio" name="q16" value="c">
+                Se vuelve electricidad
+            </label>
 
-<button
-    class="green"
-    onclick="runProgram()">
-▶️ Ejecutar programa
-</button>
+            <label class="option">
+                <input type="radio" name="q16" value="d">
+                Desaparece
+            </label>
 
-<button
-    class="gray"
-    onclick="clearProgram()">
-🗑️ Borrar
-</button>
+        </div>
 
 
-<p id="programFeedback"></p>
+        <!-- PLUMA 17 -->
+        <div class="exam-step hidden" data-step="17">
 
-</div>
+            <h2>🖊️ Pluma 3D</h2>
 
+            <div class="question">
+                17. ¿Qué debes hacer para realizar una figura 3D?
+            </div>
 
-<div class="question">
+            <label class="option">
+                <input type="radio" name="q17" value="a">
+                Controlar el movimiento de la pluma
+            </label>
 
-<p>
-5. ¿Qué pasa si colocamos las instrucciones en otro orden?
-</p>
+            <label class="option">
+                <input type="radio" name="q17" value="b">
+                Mojar el filamento
+            </label>
 
-<div class="options" data-question="q5">
+            <label class="option">
+                <input type="radio" name="q17" value="c">
+                Apagarla
+            </label>
 
-<label class="option">
-<input type="radio" name="q5" value="1">
-El resultado puede cambiar
-</label>
+            <label class="option">
+                <input type="radio" name="q17" value="d">
+                Romper el filamento
+            </label>
 
-<label class="option">
-<input type="radio" name="q5" value="0">
-Siempre pasa exactamente lo mismo
-</label>
+        </div>
 
-<label class="option">
-<input type="radio" name="q5" value="0">
-No importa el orden
-</label>
 
-</div>
+        <!-- PLUMA 18 -->
+        <div class="exam-step hidden" data-step="18">
 
-</div>
+            <h2>🖊️ Pluma 3D</h2>
 
+            <div class="question">
+                18. ¿Qué riesgo debes considerar al utilizar una pluma 3D?
+            </div>
 
-<div class="question">
+            <label class="option">
+                <input type="radio" name="q18" value="a">
+                La boquilla puede estar caliente
+            </label>
 
-<p>
-6. ¿Qué significa repetir una instrucción?
-</p>
+            <label class="option">
+                <input type="radio" name="q18" value="b">
+                El plástico produce lluvia
+            </label>
 
-<div class="options" data-question="q6">
+            <label class="option">
+                <input type="radio" name="q18" value="c">
+                El lápiz se vuelve invisible
+            </label>
 
-<label class="option">
-<input type="radio" name="q6" value="1">
-Hacerla varias veces
-</label>
+            <label class="option">
+                <input type="radio" name="q18" value="d">
+                Ninguno
+            </label>
 
-<label class="option">
-<input type="radio" name="q6" value="0">
-Borrarla
-</label>
+        </div>
 
-<label class="option">
-<input type="radio" name="q6" value="0">
-Apagar el programa
-</label>
 
-</div>
+        <!-- LEGO 19 -->
+        <div class="exam-step hidden" data-step="19">
 
-</div>
+            <h2>🧱 LEGO WeDo</h2>
 
+            <div class="question">
+                19. ¿Qué componente permite detectar una condición en un robot?
+            </div>
 
-<div class="question">
+            <label class="option">
+                <input type="radio" name="q19" value="a">
+                Sensor
+            </label>
 
-<p>
-7. ¿Qué es un algoritmo?
-</p>
+            <label class="option">
+                <input type="radio" name="q19" value="b">
+                Ladrillo decorativo
+            </label>
 
-<div class="options" data-question="q7">
+            <label class="option">
+                <input type="radio" name="q19" value="c">
+                Pegamento
+            </label>
 
-<label class="option">
-<input type="radio" name="q7" value="1">
-Una serie de pasos para resolver algo
-</label>
+            <label class="option">
+                <input type="radio" name="q19" value="d">
+                Papel
+            </label>
 
-<label class="option">
-<input type="radio" name="q7" value="0">
-Una pieza de robot
-</label>
+        </div>
 
-<label class="option">
-<input type="radio" name="q7" value="0">
-Una batería
-</label>
 
-</div>
+        <!-- LEGO 20 -->
+        <div class="exam-step hidden" data-step="20">
 
-</div>
+            <h2>🧱 LEGO WeDo</h2>
 
+            <div class="question">
+                20. ¿Qué componente puede producir movimiento?
+            </div>
 
-<div class="navigation">
+            <label class="option">
+                <input type="radio" name="q20" value="a">
+                Motor
+            </label>
 
-<button class="gray" onclick="prevCard()">← Atrás</button>
+            <label class="option">
+                <input type="radio" name="q20" value="b">
+                Sensor
+            </label>
 
-<button onclick="nextCard()">Continuar →</button>
+            <label class="option">
+                <input type="radio" name="q20" value="c">
+                Cable solamente
+            </label>
 
-</div>
+            <label class="option">
+                <input type="radio" name="q20" value="d">
+                Pantalla
+            </label>
 
-</section>
+        </div>
 
 
-<!-- =====================================================
-     3. MECANOGRAFIA
-===================================================== -->
+        <!-- LEGO 21 -->
+        <div class="exam-step hidden" data-step="21">
 
-<section class="card">
+            <h2>🧱 LEGO WeDo</h2>
 
-<h2>⌨️ 3. Mecanografía</h2>
+            <div class="question">
+                21. ¿Qué representa un programa de robótica?
+            </div>
 
-<p>
-Escribe exactamente el texto que aparece.
-El nivel cambia dependiendo de tu grado.
-</p>
+            <label class="option">
+                <input type="radio" name="q21" value="a">
+                Una serie de instrucciones
+            </label>
 
+            <label class="option">
+                <input type="radio" name="q21" value="b">
+                Una pieza física
+            </label>
 
-<div
-    class="typing-instruction"
-    id="typingInstruction">
-</div>
+            <label class="option">
+                <input type="radio" name="q21" value="c">
+                Una batería
+            </label>
 
+            <label class="option">
+                <input type="radio" name="q21" value="d">
+                Un tornillo
+            </label>
 
-<div
-    class="typing-text"
-    id="typingSource">
-</div>
+        </div>
 
 
-<div class="timer">
+        <!-- ROBLOX 22 -->
+        <div class="exam-step hidden" data-step="22">
 
-⏱️
-<span id="typingTimer">
-0.0
-</span>
-segundos
+            <h2>🎮 Roblox Studio</h2>
 
-</div>
+            <div class="question">
+                22. ¿Para qué sirve Roblox Studio?
+            </div>
 
+            <label class="option">
+                <input type="radio" name="q22" value="a">
+                Crear experiencias y juegos
+            </label>
 
-<textarea
-    id="typingInput"
-    placeholder="Comienza a escribir aquí..."
-    oninput="typingStarted()">
-</textarea>
+            <label class="option">
+                <input type="radio" name="q22" value="b">
+                Reparar motores físicos
+            </label>
 
+            <label class="option">
+                <input type="radio" name="q22" value="c">
+                Imprimir documentos
+            </label>
 
-<div class="stats">
+            <label class="option">
+                <input type="radio" name="q22" value="d">
+                Editar fotografías solamente
+            </label>
 
-<div class="stat">
-⌨️ Caracteres:
-<span id="charCount">0</span>
-</div>
+        </div>
 
-<div class="stat">
-📝 Palabras:
-<span id="wordCount">0</span>
-</div>
 
-<div class="stat">
-🎯 Precisión:
-<span id="accuracy">100</span>%
-</div>
+        <!-- ROBLOX 23 -->
+        <div class="exam-step hidden" data-step="23">
 
-</div>
+            <h2>🎮 Roblox Studio</h2>
 
+            <div class="question">
+                23. ¿Qué lenguaje se utiliza principalmente para programar
+                en Roblox Studio?
+            </div>
 
-<button
-    class="green"
-    onclick="finishTyping()">
-✅ Terminé
-</button>
+            <label class="option">
+                <input type="radio" name="q23" value="a">
+                Lua
+            </label>
 
+            <label class="option">
+                <input type="radio" name="q23" value="b">
+                HTML
+            </label>
 
-<p id="typingResult"></p>
+            <label class="option">
+                <input type="radio" name="q23" value="c">
+                SQL
+            </label>
 
+            <label class="option">
+                <input type="radio" name="q23" value="d">
+                CSS
+            </label>
 
-<div class="question">
+        </div>
 
-<p>
-8. ¿Qué ayuda a mejorar la mecanografía?
-</p>
 
-<div class="options" data-question="q8">
+        <!-- ROBLOX 24 -->
+        <div class="exam-step hidden" data-step="24">
 
-<label class="option">
-<input type="radio" name="q8" value="1">
-Practicar y escribir correctamente
-</label>
+            <h2>🎮 Roblox Studio</h2>
 
-<label class="option">
-<input type="radio" name="q8" value="0">
-Presionar todas las teclas al mismo tiempo
-</label>
+            <div class="question">
+                24. ¿Qué es un NPC?
+            </div>
 
-<label class="option">
-<input type="radio" name="q8" value="0">
-No mirar lo que escribimos
-</label>
+            <label class="option">
+                <input type="radio" name="q24" value="a">
+                Personaje no controlado directamente por el jugador
+            </label>
 
-</div>
+            <label class="option">
+                <input type="radio" name="q24" value="b">
+                Una batería
+            </label>
 
-</div>
+            <label class="option">
+                <input type="radio" name="q24" value="c">
+                Un tipo de monitor
+            </label>
 
+            <label class="option">
+                <input type="radio" name="q24" value="d">
+                Un sensor
+            </label>
 
-<div class="navigation">
+        </div>
 
-<button class="gray" onclick="prevCard()">← Atrás</button>
 
-<button onclick="nextCard()">Continuar →</button>
+        <!-- ELECTRONICA 25 -->
+        <div class="exam-step hidden" data-step="25">
 
-</div>
+            <h2>⚡ Electrónica</h2>
 
-</section>
+            <div class="question">
+                25. ¿Qué componente permite detectar distancia mediante ultrasonido?
+            </div>
 
+            <label class="option">
+                <input type="radio" name="q25" value="a">
+                Sensor ultrasónico
+            </label>
 
-<!-- =====================================================
-     4. SCRATCH
-===================================================== -->
+            <label class="option">
+                <input type="radio" name="q25" value="b">
+                LED
+            </label>
 
-<section class="card">
+            <label class="option">
+                <input type="radio" name="q25" value="c">
+                Motor
+            </label>
 
-<h2>🐱 4. Scratch</h2>
+            <label class="option">
+                <input type="radio" name="q25" value="d">
+                Resistencia
+            </label>
 
+        </div>
 
-<div class="question">
 
-<p>
-9. ¿Has utilizado Scratch?
-</p>
+        <!-- ELECTRONICA 26 -->
+        <div class="exam-step hidden" data-step="26">
 
-<div class="options" data-question="scratchUsed">
+            <h2>⚡ Electrónica</h2>
 
-<label class="option">
-<input type="radio" name="scratchUsed" value="1">
-Sí
-</label>
+            <div class="question">
+                26. ¿Para qué sirve una resistencia?
+            </div>
 
-<label class="option">
-<input type="radio" name="scratchUsed" value="0">
-No
-</label>
+            <label class="option">
+                <input type="radio" name="q26" value="a">
+                Limitar la corriente
+            </label>
 
-</div>
+            <label class="option">
+                <input type="radio" name="q26" value="b">
+                Crear una imagen
+            </label>
 
-</div>
+            <label class="option">
+                <input type="radio" name="q26" value="c">
+                Medir sonido únicamente
+            </label>
 
+            <label class="option">
+                <input type="radio" name="q26" value="d">
+                Mover una rueda directamente
+            </label>
 
-<div class="question">
+        </div>
 
-<p>
-10. ¿Para qué podemos utilizar Scratch?
-</p>
 
-<div class="options" data-question="q9">
+        <!-- ELECTRONICA 27 -->
+        <div class="exam-step hidden" data-step="27">
 
-<label class="option">
-<input type="radio" name="q9" value="1">
-Para crear juegos, historias y animaciones
-</label>
+            <h2>⚡ Electrónica</h2>
 
-<label class="option">
-<input type="radio" name="q9" value="0">
-Para reparar computadoras
-</label>
+            <div class="question">
+                27. En Arduino, ¿qué pin puede utilizarse para leer
+                un sensor conectado como entrada digital?
+            </div>
 
-<label class="option">
-<input type="radio" name="q9" value="0">
-Para imprimir objetos
-</label>
+            <label class="option">
+                <input type="radio" name="q27" value="a">
+                Un pin digital configurado como INPUT
+            </label>
 
-</div>
+            <label class="option">
+                <input type="radio" name="q27" value="b">
+                Solo VIN
+            </label>
 
-</div>
+            <label class="option">
+                <input type="radio" name="q27" value="c">
+                Solo GND
+            </label>
 
+            <label class="option">
+                <input type="radio" name="q27" value="d">
+                El puerto USB directamente
+            </label>
 
-<div class="question">
+        </div>
 
-<p>
-11. ¿Qué hace un bloque de movimiento?
-</p>
 
-<div class="options" data-question="q10">
+        <!-- ELECTRONICA 28 -->
+        <div class="exam-step hidden" data-step="28">
 
-<label class="option">
-<input type="radio" name="q10" value="1">
-Mueve al personaje
-</label>
+            <h2>⚡ Electrónica</h2>
 
-<label class="option">
-<input type="radio" name="q10" value="0">
-Apaga Scratch
-</label>
+            <div class="question">
+                28. ¿Qué sucede si conectamos incorrectamente componentes
+                electrónicos?
+            </div>
 
-<label class="option">
-<input type="radio" name="q10" value="0">
-Cambia la contraseña
-</label>
+            <label class="option">
+                <input type="radio" name="q28" value="a">
+                Podemos dañar los componentes
+            </label>
 
-</div>
+            <label class="option">
+                <input type="radio" name="q28" value="b">
+                Siempre funciona mejor
+            </label>
 
-</div>
+            <label class="option">
+                <input type="radio" name="q28" value="c">
+                Aumenta automáticamente la potencia
+            </label>
 
+            <label class="option">
+                <input type="radio" name="q28" value="d">
+                No ocurre nada nunca
+            </label>
 
-<h3>🎮 Minijuego: crea un programa de Scratch</h3>
+        </div>
 
-<div class="scratch-stage">
 
-<div class="scratch-flag">
-🟢
-</div>
+        <!-- MINIJUEGO ROBOT -->
+        <div class="exam-step hidden" data-step="game1">
 
-<div
-    class="scratch-cat"
-    id="scratchCat">
-🐱
-</div>
+            <h2>🤖 Minijuego 1: Lleva al robot hasta la estrella</h2>
 
-<div
-    class="scratch-bubble"
-    id="scratchBubble">
-hola
-</div>
+            <p>
+                Utiliza los botones para mover el robot hasta llegar a la estrella.
+            </p>
 
-</div>
+            <div class="robot-area">
 
+                <div id="robotCharacter" class="robot-character">
+                    🤖
+                </div>
 
-<div class="scratch-code">
+                <div class="star">
+                    ⭐
+                </div>
 
-<p>
-Construye este programa:
-</p>
+            </div>
 
-<p>
-🟢 Al presionar bandera → 🟦 mover → 🟪 decir hola
-</p>
+            <div class="game-buttons">
 
+                <button class="primary" onclick="moveRobot(20,0)">
+                    ➡️ Derecha
+                </button>
 
-<div class="scratch-run">
+                <button class="primary" onclick="moveRobot(-20,0)">
+                    ⬅️ Izquierda
+                </button>
 
-<div
-    id="scratchSelected">
-</div>
+                <button class="primary" onclick="moveRobot(0,-20)">
+                    ⬆️ Arriba
+                </button>
 
+                <button class="primary" onclick="moveRobot(0,20)">
+                    ⬇️ Abajo
+                </button>
 
-<div style="margin-top:15px">
+            </div>
 
-<div
-    class="scratch-block block-event"
-    onclick="addScratchBlock('bandera')">
-🟢 Al presionar bandera
-</div>
+            <div id="robotFeedback"></div>
 
-<div
-    class="scratch-block block-motion"
-    onclick="addScratchBlock('mover')">
-🟦 Mover 10 pasos
-</div>
+        </div>
 
-<div
-    class="scratch-block block-say"
-    onclick="addScratchBlock('decir')">
-🟪 Decir "hola"
-</div>
 
-<div
-    class="scratch-block block-stop"
-    onclick="addScratchBlock('detener')">
-🟥 Detener
-</div>
+        <!-- MINIJUEGO PROGRAMACIÓN -->
+        <div class="exam-step hidden" data-step="game2">
 
-</div>
+            <h2>💻 Minijuego 2: Programa al robot</h2>
 
+            <p>
+                Selecciona las instrucciones en el orden correcto.
+            </p>
 
-<button
-    class="green"
-    onclick="runScratch()">
-▶️ Ejecutar
-</button>
+            <div class="game-box">
 
-<button
-    class="gray"
-    onclick="clearScratch()">
-🗑️ Borrar
-</button>
+                <p><strong>Objetivo:</strong></p>
 
+                <p>
+                    1. Mover al robot<br>
+                    2. Hacer que hable<br>
+                    3. Detenerlo
+                </p>
 
-<p id="scratchFeedback"></p>
+                <div class="game-buttons">
 
-</div>
+                    <button class="primary" onclick="addProgramInstruction('move')">
+                        ➡️ Mover 10 pasos
+                    </button>
 
-</div>
+                    <button class="purple" onclick="addProgramInstruction('say')">
+                        💬 Hablar
+                    </button>
 
+                    <button class="red" onclick="addProgramInstruction('stop')">
+                        🛑 Detener
+                    </button>
 
-<div class="question">
+                </div>
 
-<p>
-12. ¿Qué significa que un personaje tenga un comportamiento programado?
-</p>
+                <p>
+                    <strong>Tu programa:</strong>
+                </p>
 
-<div class="options" data-question="q11">
+                <div id="programSequence">
+                    Ninguna instrucción
+                </div>
 
-<label class="option">
-<input type="radio" name="q11" value="1">
-Que hará algo cuando se cumpla una instrucción
-</label>
+                <button
+                    class="green"
+                    style="margin-top:15px"
+                    onclick="checkProgram()"
+                >
+                    ▶️ Ejecutar programa
+                </button>
 
-<label class="option">
-<input type="radio" name="q11" value="0">
-Que la computadora se apagará
-</label>
+                <div id="programFeedback"></div>
 
-<label class="option">
-<input type="radio" name="q11" value="0">
-Que el personaje se convierte en una fotografía
-</label>
+            </div>
 
-</div>
+        </div>
 
-</div>
 
+        <!-- MINIJUEGO SCRATCH -->
+        <div class="exam-step hidden" data-step="game3">
 
-<div class="navigation">
+            <h2>🐱 Minijuego 3: Scratch</h2>
 
-<button class="gray" onclick="prevCard()">← Atrás</button>
+            <p>
+                Ordena mentalmente el programa para que el personaje
+                llegue a la estrella y después diga "¡Llegué!".
+            </p>
 
-<button onclick="nextCard()">Continuar →</button>
+            <div class="game-box">
 
-</div>
+                <p>
+                    <strong>Selecciona las instrucciones en orden:</strong>
+                </p>
 
-</section>
+                <div class="game-buttons">
 
+                    <button class="primary" onclick="addScratch('move')">
+                        ➡️ Mover 10 pasos
+                    </button>
 
-<!-- =====================================================
-     5. DRON
-===================================================== -->
+                    <button class="purple" onclick="addScratch('say')">
+                        💬 Decir "¡Llegué!"
+                    </button>
 
-<section class="card">
+                    <button class="orange" onclick="addScratch('repeat')">
+                        🔁 Repetir
+                    </button>
 
-<h2>🚁 5. Pilotaje de dron</h2>
+                </div>
 
+                <p>
+                    <strong>Programa:</strong>
+                </p>
 
-<div class="question">
+                <div id="scratchSequence">
+                    Ninguna instrucción
+                </div>
 
-<p>
-13. ¿Qué debemos revisar antes de volar un dron?
-</p>
+                <button
+                    class="green"
+                    style="margin-top:15px"
+                    onclick="checkScratch()"
+                >
+                    ▶️ Ejecutar
+                </button>
 
-<div class="options" data-question="q12">
+                <div id="scratchFeedback"></div>
 
-<label class="option">
-<input type="radio" name="q12" value="1">
-Que el lugar sea seguro
-</label>
+            </div>
 
-<label class="option">
-<input type="radio" name="q12" value="0">
-Nada
-</label>
+        </div>
 
-<label class="option">
-<input type="radio" name="q12" value="0">
-Que haya muchas personas cerca
-</label>
 
-</div>
+        <!-- MINIJUEGO DRON -->
+        <div class="exam-step hidden" data-step="game4">
 
-</div>
+            <h2>🚁 Minijuego 4: Pilota el dron</h2>
 
+            <p>
+                Lleva el dron hasta la zona de aterrizaje.
+            </p>
 
-<div class="question">
+            <div class="robot-area">
 
-<p>
-14. ¿Qué control sirve para subir o bajar?
-</p>
+                <div id="drone" class="robot-character">
+                    🚁
+                </div>
 
-<div class="options" data-question="q13">
+                <div
+                    style="
+                    position:absolute;
+                    right:20px;
+                    top:70px;
+                    font-size:45px;
+                    "
+                >
+                    🛬
+                </div>
 
-<label class="option">
-<input type="radio" name="q13" value="1">
-Altura
-</label>
+            </div>
 
-<label class="option">
-<input type="radio" name="q13" value="0">
-Cámara
-</label>
+            <div class="game-buttons">
 
-<label class="option">
-<input type="radio" name="q13" value="0">
-Volumen
-</label>
+                <button class="primary" onclick="moveDrone(20,0)">
+                    ➡️
+                </button>
 
-</div>
+                <button class="primary" onclick="moveDrone(-20,0)">
+                    ⬅️
+                </button>
 
-</div>
+                <button class="primary" onclick="moveDrone(0,-20)">
+                    ⬆️
+                </button>
 
+                <button class="primary" onclick="moveDrone(0,20)">
+                    ⬇️
+                </button>
 
-<div class="question">
+            </div>
 
-<p>
-15. ¿Por qué debemos mantener distancia de otras personas?
-</p>
+            <div id="droneFeedback"></div>
 
-<div class="options" data-question="q14">
+        </div>
 
-<label class="option">
-<input type="radio" name="q14" value="1">
-Para evitar accidentes
-</label>
 
-<label class="option">
-<input type="radio" name="q14" value="0">
-Porque el dron no puede volar
-</label>
+        <!-- MINIJUEGO PLUMA -->
+        <div class="exam-step hidden" data-step="game5">
 
-<label class="option">
-<input type="radio" name="q14" value="0">
-Porque el dron se vuelve invisible
-</label>
+            <h2>🖊️ Minijuego 5: Pluma 3D</h2>
 
-</div>
+            <p>
+                Selecciona las acciones necesarias para crear una pieza 3D.
+            </p>
 
-</div>
+            <div class="game-box">
 
+                <div class="game-buttons">
 
-<h3>🎮 Minijuego: aterriza el dron</h3>
+                    <button class="primary" onclick="addPen('heat')">
+                        🔥 Calentar
+                    </button>
 
-<p>
-Mueve el dron 🚁 hasta la zona verde 🟢.
-</p>
+                    <button class="purple" onclick="addPen('filament')">
+                        🧵 Insertar filamento
+                    </button>
 
+                    <button class="green" onclick="addPen('draw')">
+                        ✏️ Dibujar
+                    </button>
 
-<div class="drone-arena" id="droneArena">
+                </div>
 
-<div
-    class="drone"
-    id="drone">
-🚁
-</div>
+                <p>
+                    <strong>Proceso:</strong>
+                </p>
 
-<div class="landing-zone">
-🟢
-</div>
+                <div id="penSequence">
+                    Ninguna acción
+                </div>
 
-</div>
+                <button
+                    class="green"
+                    style="margin-top:15px"
+                    onclick="checkPen()"
+                >
+                    ▶️ Crear pieza
+                </button>
 
+                <div id="penFeedback"></div>
 
-<div class="arrow-controls">
+            </div>
 
-<div>
+        </div>
 
-<button onclick="moveDrone('up')">
-⬆️
-</button>
 
-</div>
+        <!-- MINIJUEGO LEGO -->
+        <div class="exam-step hidden" data-step="game6">
 
-<button onclick="moveDrone('left')">
-⬅️
-</button>
+            <h2>🧱 Minijuego 6: LEGO WeDo</h2>
 
-<button onclick="moveDrone('down')">
-⬇️
-</button>
+            <p>
+                Construye la lógica básica de un robot.
+            </p>
 
-<button onclick="moveDrone('right')">
-➡️
-</button>
+            <div class="game-box">
 
-</div>
+                <p>
+                    <strong>Objetivo:</strong>
+                    detectar → actuar
+                </p>
 
+                <div class="game-buttons">
 
-<p
-    id="droneFeedback"
-    class="game-message">
-Aterriza dentro del círculo verde.
-</p>
+                    <button class="primary" onclick="addLego('sensor')">
+                        👁️ Sensor
+                    </button>
 
+                    <button class="purple" onclick="addLego('motor')">
+                        ⚙️ Motor
+                    </button>
 
-<div class="navigation">
+                    <button class="orange" onclick="addLego('wait')">
+                        ⏱️ Esperar
+                    </button>
 
-<button class="gray" onclick="prevCard()">← Atrás</button>
+                </div>
 
-<button onclick="nextCard()">Continuar →</button>
+                <p>
+                    <strong>Programa:</strong>
+                </p>
 
-</div>
+                <div id="legoSequence">
+                    Ninguna instrucción
+                </div>
 
-</section>
+                <button
+                    class="green"
+                    style="margin-top:15px"
+                    onclick="checkLego()"
+                >
+                    ▶️ Ejecutar
+                </button>
 
+                <div id="legoFeedback"></div>
 
-<!-- =====================================================
-     6. PLUMA 3D
-===================================================== -->
+            </div>
 
-<section class="card">
+        </div>
 
-<h2>🖊️ 6. Pluma 3D</h2>
 
+        <!-- MINIJUEGO ROBLOX -->
+        <div class="exam-step hidden" data-step="game7">
 
-<div class="question">
+            <h2>🎮 Minijuego 7: Roblox Studio</h2>
 
-<p>
-16. ¿Para qué sirve una pluma 3D?
-</p>
+            <p>
+                Construye una pequeña secuencia lógica.
+            </p>
 
-<div class="options" data-question="q15">
+            <div class="game-box">
 
-<label class="option">
-<input type="radio" name="q15" value="1">
-Para crear figuras con plástico
-</label>
+                <p>
+                    Selecciona:
+                    <strong>evento → acción → condición</strong>
+                </p>
 
-<label class="option">
-<input type="radio" name="q15" value="0">
-Para escribir con tinta
-</label>
+                <div class="game-buttons">
 
-<label class="option">
-<input type="radio" name="q15" value="0">
-Para controlar un dron
-</label>
+                    <button class="primary" onclick="addRoblox('event')">
+                        🟢 Evento
+                    </button>
 
-</div>
+                    <button class="purple" onclick="addRoblox('action')">
+                        ⚙️ Acción
+                    </button>
 
-</div>
+                    <button class="orange" onclick="addRoblox('condition')">
+                        ❓ Condición
+                    </button>
 
+                </div>
 
-<div class="question">
+                <p>
+                    <strong>Secuencia:</strong>
+                </p>
 
-<p>
-17. ¿Qué material utiliza normalmente?
-</p>
+                <div id="robloxSequence">
+                    Ninguna instrucción
+                </div>
 
-<div class="options" data-question="q16">
+                <button
+                    class="green"
+                    style="margin-top:15px"
+                    onclick="checkRoblox()"
+                >
+                    ▶️ Ejecutar
+                </button>
 
-<label class="option">
-<input type="radio" name="q16" value="1">
-Filamento plástico
-</label>
+                <div id="robloxFeedback"></div>
 
-<label class="option">
-<input type="radio" name="q16" value="0">
-Agua
-</label>
+            </div>
 
-<label class="option">
-<input type="radio" name="q16" value="0">
-Arena
-</label>
+        </div>
 
-</div>
 
-</div>
+        <!-- MINIJUEGO ELECTRONICA -->
+        <div class="exam-step hidden" data-step="game8">
 
+            <h2>⚡ Minijuego 8: Circuito electrónico</h2>
 
-<div class="question">
+            <p>
+                Construye la conexión básica de un LED.
+            </p>
 
-<p>
-18. ¿Por qué debemos tener cuidado con la punta?
-</p>
+            <div class="game-box">
 
-<div class="options" data-question="q17">
+                <p>
+                    <strong>Orden recomendado:</strong>
+                    resistencia → LED → GND
+                </p>
 
-<label class="option">
-<input type="radio" name="q17" value="1">
-Porque puede calentarse
-</label>
+                <div class="game-buttons">
 
-<label class="option">
-<input type="radio" name="q17" value="0">
-Porque tiene agua
-</label>
+                    <button class="primary" onclick="addCircuit('resistor')">
+                        🔲 Resistencia
+                    </button>
 
-<label class="option">
-<input type="radio" name="q17" value="0">
-Porque puede volar
-</label>
+                    <button class="orange" onclick="addCircuit('led')">
+                        💡 LED
+                    </button>
 
-</div>
+                    <button class="purple" onclick="addCircuit('gnd')">
+                        ⏚ GND
+                    </button>
 
-</div>
+                </div>
 
+                <p>
+                    <strong>Circuito:</strong>
+                </p>
 
-<h3>🎨 Minijuego: construye una figura</h3>
+                <div id="circuitSequence">
+                    Ningún componente
+                </div>
 
-<div class="pen-workspace">
+                <button
+                    class="green"
+                    style="margin-top:15px"
+                    onclick="checkCircuit()"
+                >
+                    ⚡ Probar circuito
+                </button>
 
-<div
-    class="pen-drawing"
-    id="penDrawing">
-⭐
-</div>
+                <div id="circuitFeedback"></div>
 
-</div>
+            </div>
 
+        </div>
 
-<div class="pen-tools">
 
-<button onclick="draw3D('⭐')">
-⭐ Estrella
-</button>
+        <!-- CONTROLES -->
+        <div class="nav-buttons">
 
-<button onclick="draw3D('🤖')">
-🤖 Robot
-</button>
+            <button
+                id="previousButton"
+                class="primary"
+                onclick="previousCard()"
+            >
+                ← Anterior
+            </button>
 
-<button onclick="draw3D('🏠')">
-🏠 Casa
-</button>
+            <button
+                id="nextButton"
+                class="primary"
+                onclick="nextCard()"
+            >
+                Siguiente →
+            </button>
 
-<button onclick="draw3D('🚗')">
-🚗 Auto
-</button>
+        </div>
 
-</div>
+    </section>
 
 
-<div class="question">
+    <!-- RESULTADO -->
+    <section id="resultCard" class="card hidden">
 
-<p>
-19. ¿Qué debemos hacer cuando utilizamos una herramienta caliente?
-</p>
+        <div class="result-main">
 
-<div class="options" data-question="q18">
+            <div style="font-size:65px;">🏆</div>
 
-<label class="option">
-<input type="radio" name="q18" value="1">
-Seguir las indicaciones de seguridad
-</label>
+            <h1>¡Misión completada!</h1>
 
-<label class="option">
-<input type="radio" name="q18" value="0">
-Tocar la punta
-</label>
+            <p id="resultStudent"></p>
 
-<label class="option">
-<input type="radio" name="q18" value="0">
-Dejarla encendida sin supervisión
-</label>
+            <div id="score" class="score">
+                0%
+            </div>
 
-</div>
+            <div class="score-label">
+                Resultado del diagnóstico
+            </div>
 
-</div>
+        </div>
 
 
-<div class="navigation">
+        <div id="resultSummary" class="summary"></div>
 
-<button class="gray" onclick="prevCard()">← Atrás</button>
+        <h2>📊 Resultados por área</h2>
 
-<button onclick="nextCard()">Continuar →</button>
+        <div id="areasResult" class="result-grid"></div>
 
-</div>
 
-</section>
+        <h2>🎮 Minijuegos</h2>
 
+        <div id="minigameResults" class="result-grid"></div>
 
-<!-- =====================================================
-     7. LEGO
-===================================================== -->
 
-<section class="card">
+        <div
+            id="saveResultBox"
+            class="game-box"
+            style="text-align:center"
+        >
 
-<h2>🤖 7. LEGO WeDo 2.0</h2>
+            <div id="saveSpinner" class="spinner hidden"></div>
 
+            <h3 id="saveTitle">
+                📤 Guardando resultado...
+            </h3>
 
-<div class="question">
+            <p id="sendResultMessage" class="feedback hidden"></p>
 
-<p>
-20. ¿Qué podemos construir con LEGO WeDo?
-</p>
+            <button
+                id="sendResultButton"
+                class="green"
+                onclick="reenviarResultado()"
+                style="display:none;"
+            >
+                📤 Guardar resultado
+            </button>
 
-<div class="options" data-question="q19">
+        </div>
 
-<label class="option">
-<input type="radio" name="q19" value="1">
-Modelos y robots programables
-</label>
 
-<label class="option">
-<input type="radio" name="q19" value="0">
-Solamente casas
-</label>
+        <div class="center" style="margin-top:25px">
 
-<label class="option">
-<input type="radio" name="q19" value="0">
-Solamente dibujos
-</label>
+            <button
+                class="primary"
+                onclick="location.href='alumno.html'"
+            >
+                🏠 Volver al campus
+            </button>
 
-</div>
+            <button
+                class="orange"
+                onclick="location.reload()"
+                style="margin-left:8px"
+            >
+                🔄 Realizar nuevamente
+            </button>
 
-</div>
+        </div>
 
+    </section>
 
-<div class="question">
+</main>
 
-<p>
-21. ¿Qué hace un motor?
-</p>
 
-<div class="options" data-question="q20">
-
-<label class="option">
-<input type="radio" name="q20" value="1">
-Produce movimiento
-</label>
-
-<label class="option">
-<input type="radio" name="q20" value="0">
-Mide colores
-</label>
-
-<label class="option">
-<input type="radio" name="q20" value="0">
-Guarda fotografías
-</label>
-
-</div>
-
-</div>
-
-
-<div class="question">
-
-<p>
-22. ¿Qué hace un sensor?
-</p>
-
-<div class="options" data-question="q21">
-
-<label class="option">
-<input type="radio" name="q21" value="1">
-Detecta algo del entorno
-</label>
-
-<label class="option">
-<input type="radio" name="q21" value="0">
-Produce electricidad
-</label>
-
-<label class="option">
-<input type="radio" name="q21" value="0">
-Construye piezas
-</label>
-
-</div>
-
-</div>
-
-
-<h3>🎮 Minijuego: ¿qué componente necesita el robot?</h3>
-
-<p>
-Haz clic en el componente que corresponde a cada función.
-</p>
-
-
-<div class="lego-table">
-
-<div
-    class="lego-item"
-    onclick="legoAnswer('motor')">
-⚙️ Motor<br>
-<span class="small">
-Hace que algo se mueva
-</span>
-</div>
-
-<div
-    class="lego-item"
-    onclick="legoAnswer('sensor')">
-👁️ Sensor<br>
-<span class="small">
-Detecta algo
-</span>
-</div>
-
-<div
-    class="lego-item"
-    onclick="legoAnswer('hub')">
-🧠 Hub<br>
-<span class="small">
-Conecta y controla
-</span>
-</div>
-
-<div
-    class="lego-item"
-    onclick="legoAnswer('energia')">
-🔋 Energía<br>
-<span class="small">
-Permite funcionar
-</span>
-</div>
-
-</div>
-
-
-<p
-    id="legoFeedback"
-    class="feedback">
-</p>
-
-
-<div class="navigation">
-
-<button class="gray" onclick="prevCard()">← Atrás</button>
-
-<button onclick="nextCard()">Continuar →</button>
-
-</div>
-
-</section>
-
-
-<!-- =====================================================
-     8. ROBLOX
-===================================================== -->
-
-<section class="card">
-
-<h2>🎮 8. Roblox Studio</h2>
-
-
-<div class="question">
-
-<p>
-23. ¿Has utilizado Roblox Studio?
-</p>
-
-<div class="options" data-question="robloxUsed">
-
-<label class="option">
-<input type="radio" name="robloxUsed" value="1">
-Sí
-</label>
-
-<label class="option">
-<input type="radio" name="robloxUsed" value="0">
-No
-</label>
-
-</div>
-
-</div>
-
-
-<div class="question">
-
-<p>
-24. ¿Qué podemos crear en Roblox Studio?
-</p>
-
-<div class="options" data-question="q22">
-
-<label class="option">
-<input type="radio" name="q22" value="1">
-Nuestros propios juegos y mundos
-</label>
-
-<label class="option">
-<input type="radio" name="q22" value="0">
-Solamente jugar
-</label>
-
-<label class="option">
-<input type="radio" name="q22" value="0">
-Documentos
-</label>
-
-</div>
-
-</div>
-
-
-<div class="question">
-
-<p>
-25. ¿Qué es una Part?
-</p>
-
-<div class="options" data-question="q23">
-
-<label class="option">
-<input type="radio" name="q23" value="1">
-Un objeto que podemos colocar en el mundo
-</label>
-
-<label class="option">
-<input type="radio" name="q23" value="0">
-Una fotografía
-</label>
-
-<label class="option">
-<input type="radio" name="q23" value="0">
-Un sonido
-</label>
-
-</div>
-
-</div>
-
-
-<div class="question">
-
-<p>
-26. ¿Para qué sirve programar en Roblox Studio?
-</p>
-
-<div class="options" data-question="q24">
-
-<label class="option">
-<input type="radio" name="q24" value="1">
-Para crear comportamientos e interacciones
-</label>
-
-<label class="option">
-<input type="radio" name="q24" value="0">
-Para cambiar el brillo
-</label>
-
-<label class="option">
-<input type="radio" name="q24" value="0">
-Para imprimir el juego
-</label>
-
-</div>
-
-</div>
-
-
-<h3>🏗️ Minijuego: construye tu mundo</h3>
-
-<div
-    class="roblox-world"
-    id="robloxWorld">
-
-<div class="roblox-sky">
-☁️ ☁️
-</div>
-
-<div class="roblox-ground"></div>
-
-</div>
-
-
-<p>
-Haz clic en objetos para agregarlos a tu mundo.
-</p>
-
-
-<div>
-
-<button onclick="addRoblox('🏠')">
-🏠 Casa
-</button>
-
-<button onclick="addRoblox('🌳')">
-🌳 Árbol
-</button>
-
-<button onclick="addRoblox('🚗')">
-🚗 Auto
-</button>
-
-<button onclick="addRoblox('🤖')">
-🤖 Robot
-</button>
-
-<button onclick="addRoblox('💎')">
-💎 Tesoro
-</button>
-
-</div>
-
-
-<p
-    id="robloxFeedback"
-    class="game-message">
-Objetos colocados: 0
-</p>
-
-
-<div class="navigation">
-
-<button class="gray" onclick="prevCard()">← Atrás</button>
-
-<button onclick="nextCard()">Continuar →</button>
-
-</div>
-
-</section>
-
-
-<!-- =====================================================
-     9. ELECTRONICA
-===================================================== -->
-
-<section class="card">
-
-<h2>⚡ 9. Electrónica básica</h2>
-
-
-<div class="question">
-
-<p>
-27. ¿Qué necesita un circuito para funcionar?
-</p>
-
-<div class="options" data-question="q25">
-
-<label class="option">
-<input type="radio" name="q25" value="1">
-Una fuente de energía y un camino cerrado
-</label>
-
-<label class="option">
-<input type="radio" name="q25" value="0">
-Solamente un cable
-</label>
-
-<label class="option">
-<input type="radio" name="q25" value="0">
-Una hoja
-</label>
-
-</div>
-
-</div>
-
-
-<div class="question">
-
-<p>
-28. ¿Qué hace un LED?
-</p>
-
-<div class="options" data-question="q26">
-
-<label class="option">
-<input type="radio" name="q26" value="1">
-Produce luz
-</label>
-
-<label class="option">
-<input type="radio" name="q26" value="0">
-Produce agua
-</label>
-
-<label class="option">
-<input type="radio" name="q26" value="0">
-Guarda archivos
-</label>
-
-</div>
-
-</div>
-
-
-<div class="question">
-
-<p>
-29. ¿Para qué sirve una batería?
-</p>
-
-<div class="options" data-question="q27">
-
-<label class="option">
-<input type="radio" name="q27" value="1">
-Proporcionar energía eléctrica
-</label>
-
-<label class="option">
-<input type="radio" name="q27" value="0">
-Medir el tiempo
-</label>
-
-<label class="option">
-<input type="radio" name="q27" value="0">
-Guardar fotografías
-</label>
-
-</div>
-
-</div>
-
-
-<div class="question">
-
-<p>
-30. ¿Qué hace un pulsador?
-</p>
-
-<div class="options" data-question="q28">
-
-<label class="option">
-<input type="radio" name="q28" value="1">
-Puede abrir o cerrar un circuito
-</label>
-
-<label class="option">
-<input type="radio" name="q28" value="0">
-Produce comida
-</label>
-
-<label class="option">
-<input type="radio" name="q28" value="0">
-Crea un videojuego
-</label>
-
-</div>
-
-</div>
-
-
-<h3>💡 Minijuego: enciende el LED</h3>
-
-<p>
-Selecciona los tres elementos necesarios:
-🔋 batería + 🔌 cable + 💡 LED.
-</p>
-
-
-<div class="circuit-board">
-
-<div class="circuit-components">
-
-<div
-    class="circuit-component"
-    id="batteryComponent"
-    onclick="toggleCircuit('battery')">
-🔋 Batería
-</div>
-
-<div
-    class="circuit-component"
-    id="wireComponent"
-    onclick="toggleCircuit('wire')">
-🔌 Cable
-</div>
-
-<div
-    class="circuit-component"
-    id="ledComponent"
-    onclick="toggleCircuit('led')">
-💡 LED
-</div>
-
-</div>
-
-
-<div
-    class="circuit-light"
-    id="circuitLight">
-</div>
-
-
-<p style="text-align:center">
-
-Componentes seleccionados:
-<span id="circuitCount">0</span>/3
-
-</p>
-
-</div>
-
-
-<p
-    id="circuitFeedback"
-    class="game-message">
-Selecciona los tres componentes.
-</p>
-
-
-<div class="navigation">
-
-<button class="gray" onclick="prevCard()">← Atrás</button>
-
-<button class="green" onclick="finishExam()">
-🏁 Terminar y enviar resultado
-</button>
-
-</div>
-
-</section>
-
-
-<!-- =====================================================
-     RESULTADO
-===================================================== -->
-
-<section class="card">
-
-<div class="result">
-
-<h2>🎉 ¡Misión completada!</h2>
-
-<p id="welcomeResult"></p>
-
-<div class="big-score">
-
-<span id="totalScore">
-0
-</span>%
-
-</div>
-
-<p id="levelResult"></p>
-
-</div>
-
-
-<h2>📊 Resultado por áreas</h2>
-
-<div id="areasResults"></div>
-
-
-<div class="question">
-
-<h3>⌨️ Mecanografía</h3>
-
-<p id="typingFinal"></p>
-
-</div>
-
-
-<div class="question">
-
-<h3>🎮 Minijuegos</h3>
-
-<p id="gamesFinal"></p>
-
-</div>
-
-
-<div class="question">
-
-<h3>🧠 Diagnóstico</h3>
-
-<p>
-Este resultado es diagnóstico y sirve para conocer
-los conocimientos previos del alumno.
-No representa una calificación definitiva.
-</p>
-
-</div>
-
-
-<button
-    id="sendResultButton"
-    class="green"
-    onclick="enviarResultado()"
-    style="display:none;">
-📤 Enviar resultado al profesor
-</button>
-
-<p
-    id="sendResultMessage"
-    class="feedback hidden">
-</p>
-
-<button
-    onclick="location.reload()">
-🔄 Realizar nuevamente
-</button>
-
-</section>
-
-
-</div>
+<footer>
+    CITZ · Centro de Innovación Tecnológica de Zapopan
+</footer>
 
 
 <script>
 
 /* =========================================================
-   SUPABASE
+   CONFIGURACIÓN SUPABASE
 ========================================================= */
 
 const SUPABASE_URL =
@@ -2687,581 +2013,137 @@ const supabaseClient =
 
 
 /* =========================================================
-   ACTIVIDAD Y ALUMNO
+   VARIABLES GLOBALES
 ========================================================= */
 
 const parametros =
-    new URLSearchParams(
-        window.location.search
-    );
+    new URLSearchParams(window.location.search);
 
-const actividadId =
+const actividadIdRaw =
     parametros.get("actividad");
 
-let alumnoActual = null;
+const actividadId =
+    Number(actividadIdRaw);
 
+let alumnoActual = null;
 let actividadActual = null;
+let actividadInfo = null;
 
 let resultadoEnviado = false;
 
-
-/* =========================================================
-   VARIABLES GENERALES
-========================================================= */
+let ultimoResultado = null;
+let ultimaCalificacionPorcentaje = null;
 
 let currentCard = 0;
 
-const cards =
-    document.querySelectorAll(".card");
-
 let gamePoints = 0;
 
-
-/* =========================================================
-   INICIO
-========================================================= */
-
-async function startExam(){
-
-    const name =
-        document
-        .getElementById("studentName")
-        .value
-        .trim();
-
-    const grade =
-        document
-        .getElementById("grade")
-        .value;
-
-
-    if(!name){
-
-        alert(
-            "Primero escribe tu nombre."
-        );
-
-        return;
-
-    }
-
-
-    if(!grade){
-
-        alert(
-            "Primero selecciona tu grado."
-        );
-
-        return;
-
-    }
-
-
-    setupTyping();
-
-    shuffleAllAnswers();
-
-    nextCard();
-
-}
-
-
-/* =========================================================
-   NAVEGACION
-========================================================= */
-
-function updateProgress(){
-
-    const percentage =
-        currentCard /
-        (cards.length - 1) *
-        100;
-
-    document
-        .getElementById("progressBar")
-        .style.width =
-        percentage + "%";
-
-}
-
-
-function showCard(){
-
-    cards.forEach(card => {
-
-        card.classList.remove("active");
-
-    });
-
-
-    cards[currentCard]
-        .classList.add("active");
-
-
-    updateProgress();
-
-
-    window.scrollTo({
-
-        top:0,
-
-        behavior:"smooth"
-
-    });
-
-}
-
-
-function nextCard(){
-
-    if(
-        currentCard <
-        cards.length - 1
-    ){
-
-        currentCard++;
-
-        showCard();
-
-    }
-
-}
-
-
-function prevCard(){
-
-    if(currentCard > 0){
-
-        currentCard--;
-
-        showCard();
-
-    }
-
-}
-
-
-/* =========================================================
-   MEZCLAR RESPUESTAS
-========================================================= */
-
-function shuffleArray(array){
-
-    for(
-        let i = array.length - 1;
-        i > 0;
-        i--
-    ){
-
-        const j =
-            Math.floor(
-                Math.random() *
-                (i + 1)
-            );
-
-
-        [
-            array[i],
-            array[j]
-        ] =
-        [
-            array[j],
-            array[i]
-        ];
-
-    }
-
-    return array;
-
-}
-
-
-function shuffleAllAnswers(){
-
-    document
-        .querySelectorAll(".options")
-        .forEach(container => {
-
-            const options =
-                Array.from(
-                    container.children
-                );
-
-
-            shuffleArray(options);
-
-
-            options.forEach(option => {
-
-                container.appendChild(
-                    option
-                );
-
-            });
-
-        });
-
-}
-
-
-/* =========================================================
-   ROBOT
-========================================================= */
-
-let robotGridX = 0;
-
-let robotGridY = 0;
-
-let robotMoves = 0;
-
 let robotCompleted = false;
-
-const robotStep = 60;
-
-
-const robotWalls = [
-
-    {x:2,y:0},
-    {x:2,y:1},
-    {x:2,y:2},
-    {x:2,y:3},
-
-    {x:5,y:1},
-    {x:5,y:2},
-    {x:5,y:3},
-
-    {x:8,y:2}
-
-];
-
-
-function isRobotWall(x,y){
-
-    return robotWalls.some(
-
-        wall =>
-            wall.x === x &&
-            wall.y === y
-
-    );
-
-}
-
-
-function moveRobot(direction){
-
-    let newX =
-        robotGridX;
-
-    let newY =
-        robotGridY;
-
-
-    if(direction === "right")
-        newX++;
-
-
-    if(direction === "left")
-        newX--;
-
-
-    if(direction === "up")
-        newY--;
-
-
-    if(direction === "down")
-        newY++;
-
-
-    if(
-        newX < 0 ||
-        newX > 10 ||
-        newY < 0 ||
-        newY > 5
-    ){
-
-        document
-            .getElementById("robotFeedback")
-            .textContent =
-            "🧱 No puedes salir del tablero.";
-
-        return;
-
-    }
-
-
-    if(
-        isRobotWall(
-            newX,
-            newY
-        )
-    ){
-
-        document
-            .getElementById("robotFeedback")
-            .textContent =
-            "🧱 ¡Hay un obstáculo! Busca otro camino.";
-
-        return;
-
-    }
-
-
-    robotGridX = newX;
-
-    robotGridY = newY;
-
-    robotMoves++;
-
-
-    const robot =
-        document
-        .getElementById(
-            "robotPlayer"
-        );
-
-
-    robot.style.left =
-        (
-            newX * 60 + 10
-        ) + "px";
-
-
-    robot.style.top =
-        (
-            newY * 60 + 10
-        ) + "px";
-
-
-    document
-        .getElementById(
-            "robotMoves"
-        )
-        .textContent =
-        robotMoves;
-
-
-    if(
-        newX === 10 &&
-        newY === 5
-    ){
-
-        document
-            .getElementById(
-                "robotFeedback"
-            )
-            .textContent =
-            "🎉 ¡Excelente! El robot llegó a la estrella.";
-
-
-        if(!robotCompleted){
-
-            robotCompleted = true;
-
-            gamePoints++;
-
-        }
-
-    }else{
-
-        document
-            .getElementById(
-                "robotFeedback"
-            )
-            .textContent =
-            "🤖 ¡Sigue buscando el camino!";
-
-    }
-
-}
-
-
-/* =========================================================
-   PROGRAMACION
-========================================================= */
-
-let programBlocks = [];
-
 let programCompleted = false;
-
-
-function addProgramBlock(block){
-
-    if(
-        programBlocks.length >= 6
-    )
-        return;
-
-
-    programBlocks.push(block);
-
-    renderProgram();
-
-}
-
-
-function renderProgram(){
-
-    const container =
-        document
-        .getElementById(
-            "programSelected"
-        );
-
-
-    container.innerHTML = "";
-
-
-    programBlocks.forEach(
-        (block,index) => {
-
-            const div =
-                document.createElement(
-                    "div"
-                );
-
-
-            div.className =
-                "selected-item";
-
-
-            const names = {
-
-                avanzar:
-                    "⬆️ Avanzar",
-
-                derecha:
-                    "➡️ Girar derecha",
-
-                izquierda:
-                    "⬅️ Girar izquierda",
-
-                detener:
-                    "⏹️ Detener"
-
-            };
-
-
-            div.textContent =
-                (
-                    index + 1
-                ) +
-                ". " +
-                names[block];
-
-
-            container.appendChild(
-                div
-            );
-
-        }
-    );
-
-}
-
-
-function clearProgram(){
-
-    programBlocks = [];
-
-    programCompleted = false;
-
-    renderProgram();
-
-
-    document
-        .getElementById(
-            "programFeedback"
-        )
-        .textContent = "";
-
-}
-
-
-function runProgram(){
-
-    const expected = [
-
-        "avanzar",
-        "avanzar",
-        "derecha",
-        "avanzar"
-
-    ];
-
-
-    const correct =
-        JSON.stringify(
-            programBlocks
-        ) ===
-        JSON.stringify(
-            expected
-        );
-
-
-    const feedback =
-        document
-        .getElementById(
-            "programFeedback"
-        );
-
-
-    if(correct){
-
-        feedback.className =
-            "feedback correct";
-
-
-        feedback.textContent =
-            "🎉 ¡Programa correcto! El robot llegó a la estrella.";
-
-
-        const character =
-            document
-            .getElementById(
-                "programCharacter"
-            );
-
-
-        character.style.left =
-            "80%";
-
-
-        if(!programCompleted){
-
-            programCompleted = true;
-
-            gamePoints++;
-
-        }
-
-
-    }else{
-
-        feedback.className =
-            "feedback incorrect";
-
-
-        feedback.textContent =
-            "💡 Pista: primero avanza dos veces, gira a la derecha y después avanza.";
-
-    }
-
-}
+let typingFinished = false;
+let scratchCompleted = false;
+let droneCompleted = false;
+let penCompleted = false;
+let legoCompleted = false;
+let robloxCompleted = false;
+let circuitCompleted = false;
 
 
 /* =========================================================
-   MECANOGRAFIA
+   PREGUNTAS CORRECTAS
 ========================================================= */
 
-let typingStartedFlag = false;
+const respuestasCorrectas = {
 
-let typingStartTime = 0;
+    q1:"b",
+    q2:"a",
+    q3:"b",
+    q4:"a",
 
-let typingInterval = null;
+    q5:"a",
+    q6:"a",
+    q7:"b",
 
-let typingFinished = false;
+    q8:"typing",
 
+    q9:"a",
+    q10:"b",
+    q11:"a",
+
+    q12:"a",
+    q13:"a",
+    q14:"a",
+
+    q15:"a",
+    q16:"a",
+    q17:"a",
+    q18:"a",
+
+    q19:"a",
+    q20:"a",
+    q21:"a",
+
+    q22:"a",
+    q23:"a",
+    q24:"a",
+
+    q25:"a",
+    q26:"a",
+    q27:"a",
+    q28:"a"
+};
+
+
+/* =========================================================
+   ÁREAS
+========================================================= */
+
+const areas = {
+
+    "Secuencias y lógica":{
+        preguntas:["q1","q2","q3","q4"]
+    },
+
+    "Programación":{
+        preguntas:["q5","q6","q7"]
+    },
+
+    "Mecanografía":{
+        preguntas:["q8"]
+    },
+
+    "Scratch":{
+        preguntas:["q9","q10","q11"]
+    },
+
+    "Drones":{
+        preguntas:["q12","q13","q14"]
+    },
+
+    "Pluma 3D":{
+        preguntas:["q15","q16","q17","q18"]
+    },
+
+    "LEGO WeDo":{
+        preguntas:["q19","q20","q21"]
+    },
+
+    "Roblox Studio":{
+        preguntas:["q22","q23","q24"]
+    },
+
+    "Electrónica":{
+        preguntas:["q25","q26","q27","q28"]
+    }
+
+};
+
+
+/* =========================================================
+   TEXTO DE MECANOGRAFÍA
+   IMPORTANTE:
+   ESTA VARIABLE ESTÁ DECLARADA ANTES DE setupTyping()
+========================================================= */
 
 const typingTexts = {
 
@@ -3286,320 +2168,46 @@ const typingTexts = {
 };
 
 
-function setupTyping(){
+/* =========================================================
+   INICIO
+========================================================= */
 
-    const grade =
-        Number(
-            document
-            .getElementById(
-                "grade"
-            )
-            .value
-        );
+async function inicializar(){
 
+    try{
 
-    const text =
-        typingTexts[grade] ||
-        typingTexts[1];
+        updateProgress();
 
+        const alumnoOk =
+            await cargarAlumnoActual();
 
-    document
-        .getElementById(
-            "typingSource"
-        )
-        .textContent =
-        text;
-
-
-    let instruction = "";
-
-
-    if(grade <= 3){
-
-        instruction =
-            "1° a 3°: escribe respetando las letras, los espacios y el orden del texto.";
-
-    }
-
-    else if(grade <= 5){
-
-        instruction =
-            "4° y 5°: debes respetar MAYÚSCULAS, minúsculas, espacios y signos.";
-
-    }
-
-    else{
-
-        instruction =
-            "6°: debes respetar MAYÚSCULAS, minúsculas, acentos, espacios y signos.";
-
-    }
-
-
-    document
-        .getElementById(
-            "typingInstruction"
-        )
-        .textContent =
-        instruction;
-
-}
-
-
-function typingStarted(){
-
-    const input =
-        document
-        .getElementById(
-            "typingInput"
-        );
-
-
-    if(
-        !typingStartedFlag &&
-        input.value.length > 0
-    ){
-
-        typingStartedFlag = true;
-
-        typingStartTime =
-            Date.now();
-
-
-        typingInterval =
-            setInterval(
-                updateTypingTimer,
-                100
-            );
-
-    }
-
-
-    updateTypingStats();
-
-}
-
-
-function updateTypingTimer(){
-
-    if(!typingStartedFlag)
-        return;
-
-
-    const seconds =
-        (
-            Date.now() -
-            typingStartTime
-        ) / 1000;
-
-
-    document
-        .getElementById(
-            "typingTimer"
-        )
-        .textContent =
-        seconds.toFixed(1);
-
-}
-
-
-function updateTypingStats(){
-
-    const input =
-        document
-        .getElementById(
-            "typingInput"
-        )
-        .value;
-
-
-    const source =
-        document
-        .getElementById(
-            "typingSource"
-        )
-        .textContent;
-
-
-    let correct = 0;
-
-
-    const max =
-        Math.min(
-            input.length,
-            source.length
-        );
-
-
-    for(
-        let i = 0;
-        i < max;
-        i++
-    ){
-
-        if(
-            input[i] ===
-            source[i]
-        ){
-
-            correct++;
-
+        if(!alumnoOk){
+            return;
         }
 
-    }
+        const actividadOk =
+            await verificarActividad();
 
-
-    let accuracy = 100;
-
-
-    if(input.length > 0){
-
-        accuracy =
-            Math.round(
-
-                correct /
-                Math.max(
-                    input.length,
-                    source.length
-                ) *
-                100
-
-            );
-
-    }
-
-
-    document
-        .getElementById(
-            "charCount"
-        )
-        .textContent =
-        input.length;
-
-
-    document
-        .getElementById(
-            "accuracy"
-        )
-        .textContent =
-        accuracy;
-
-
-    const words =
-        input
-        .trim()
-        .split(/\s+/)
-        .filter(Boolean);
-
-
-    document
-        .getElementById(
-            "wordCount"
-        )
-        .textContent =
-
-        input.trim() === ""
-        ? 0
-        : words.length;
-
-}
-
-
-function finishTyping(){
-
-    if(!typingStartedFlag){
-
-        alert(
-            "Primero comienza a escribir."
-        );
-
-        return;
-
-    }
-
-
-    clearInterval(
-        typingInterval
-    );
-
-
-    updateTypingStats();
-
-
-    const source =
-        document
-        .getElementById(
-            "typingSource"
-        )
-        .textContent;
-
-
-    const input =
-        document
-        .getElementById(
-            "typingInput"
-        )
-        .value;
-
-
-    const time =
-        document
-        .getElementById(
-            "typingTimer"
-        )
-        .textContent;
-
-
-    const accuracy =
-        document
-        .getElementById(
-            "accuracy"
-        )
-        .textContent;
-
-
-    if(input === source){
-
-        document
-            .getElementById(
-                "typingResult"
-            )
-            .className =
-            "feedback correct";
-
-
-        document
-            .getElementById(
-                "typingResult"
-            )
-            .textContent =
-            "🎉 ¡Perfecto! Escribiste exactamente el texto.";
-
-
-        if(!typingFinished){
-
-            typingFinished = true;
-
-            gamePoints++;
-
+        if(!actividadOk){
+            return;
         }
 
-    }else{
+        document
+            .getElementById("loadingCard")
+            .classList.add("hidden");
 
         document
-            .getElementById(
-                "typingResult"
-            )
-            .className =
-            "feedback incorrect";
+            .getElementById("introCard")
+            .classList.remove("hidden");
 
+    }catch(error){
 
-        document
-            .getElementById(
-                "typingResult"
-            )
-            .textContent =
-            "👍 Buen intento. Revisa mayúsculas, acentos, espacios y signos.";
+        console.error(error);
+
+        mostrarError(
+            error.message ||
+            "Ocurrió un error inesperado."
+        );
 
     }
 
@@ -3607,1443 +2215,68 @@ function finishTyping(){
 
 
 /* =========================================================
-   SCRATCH
+   ERROR
 ========================================================= */
 
-let scratchBlocks = [];
-
-let scratchCompleted = false;
-
-
-function addScratchBlock(block){
-
-    if(
-        scratchBlocks.length >= 5
-    )
-        return;
-
-
-    scratchBlocks.push(block);
-
-    renderScratch();
-
-}
-
-
-function renderScratch(){
-
-    const container =
-        document
-        .getElementById(
-            "scratchSelected"
-        );
-
-
-    container.innerHTML = "";
-
-
-    const names = {
-
-        bandera:
-            "🟢 Al presionar bandera",
-
-        mover:
-            "🟦 Mover 10 pasos",
-
-        decir:
-            '🟪 Decir "hola"',
-
-        detener:
-            "🟥 Detener"
-
-    };
-
-
-    scratchBlocks.forEach(
-        (block,index) => {
-
-            const div =
-                document.createElement(
-                    "div"
-                );
-
-
-            div.className =
-                "selected-item";
-
-
-            div.textContent =
-                (
-                    index + 1
-                ) +
-                ". " +
-                names[block];
-
-
-            container.appendChild(
-                div
-            );
-
-        }
-    );
-
-}
-
-
-function clearScratch(){
-
-    scratchBlocks = [];
-
-    scratchCompleted = false;
-
-    renderScratch();
-
+function mostrarError(mensaje){
 
     document
-        .getElementById(
-            "scratchFeedback"
-        )
-        .textContent = "";
-
+        .getElementById("loadingCard")
+        .classList.add("hidden");
 
     document
-        .getElementById(
-            "scratchBubble"
-        )
-        .style.display =
-        "none";
+        .getElementById("introCard")
+        .classList.add("hidden");
 
-}
+    document
+        .getElementById("examCard")
+        .classList.add("hidden");
 
+    document
+        .getElementById("errorCard")
+        .classList.remove("hidden");
 
-function runScratch(){
-
-    const expected = [
-
-        "bandera",
-        "mover",
-        "decir"
-
-    ];
-
-
-    const correct =
-        JSON.stringify(
-            scratchBlocks
-        ) ===
-        JSON.stringify(
-            expected
-        );
-
-
-    const feedback =
-        document
-        .getElementById(
-            "scratchFeedback"
-        );
-
-
-    if(correct){
-
-        feedback.className =
-            "feedback correct";
-
-
-        feedback.textContent =
-            "🎉 ¡Correcto! El gato se mueve y dice hola.";
-
-
-        const cat =
-            document
-            .getElementById(
-                "scratchCat"
-            );
-
-
-        cat.style.left =
-            "65%";
-
-
-        document
-            .getElementById(
-                "scratchBubble"
-            )
-            .style.display =
-            "block";
-
-
-        if(!scratchCompleted){
-
-            scratchCompleted = true;
-
-            gamePoints++;
-
-        }
-
-
-    }else{
-
-        feedback.className =
-            "feedback incorrect";
-
-
-        feedback.textContent =
-            '💡 El orden correcto es: bandera → mover 10 pasos → decir "hola".';
-
-    }
+    document
+        .getElementById("errorMessage")
+        .textContent = mensaje;
 
 }
 
 
 /* =========================================================
-   DRON
-========================================================= */
-
-let droneX = 20;
-
-let droneY = 20;
-
-let droneCompleted = false;
-
-
-function moveDrone(direction){
-
-    const step = 35;
-
-
-    if(direction === "right")
-        droneX += step;
-
-
-    if(direction === "left")
-        droneX -= step;
-
-
-    if(direction === "up")
-        droneY -= step;
-
-
-    if(direction === "down")
-        droneY += step;
-
-
-    droneX =
-        Math.max(
-            0,
-            Math.min(
-                600,
-                droneX
-            )
-        );
-
-
-    droneY =
-        Math.max(
-            0,
-            Math.min(
-                290,
-                droneY
-            )
-        );
-
-
-    const drone =
-        document
-        .getElementById(
-            "drone"
-        );
-
-
-    drone.style.left =
-        droneX + "px";
-
-
-    drone.style.top =
-        droneY + "px";
-
-
-    if(
-        droneX > 500 &&
-        droneY > 220
-    ){
-
-        document
-            .getElementById(
-                "droneFeedback"
-            )
-            .className =
-            "feedback correct";
-
-
-        document
-            .getElementById(
-                "droneFeedback"
-            )
-            .textContent =
-            "🎉 ¡Aterrizaje perfecto!";
-
-
-        if(!droneCompleted){
-
-            droneCompleted = true;
-
-            gamePoints++;
-
-        }
-
-
-    }else{
-
-        document
-            .getElementById(
-                "droneFeedback"
-            )
-            .className =
-            "game-message";
-
-
-        document
-            .getElementById(
-                "droneFeedback"
-            )
-            .textContent =
-            "🚁 Sigue controlando el dron hasta la zona verde.";
-
-    }
-
-}
-
-
-/* =========================================================
-   PLUMA 3D
-========================================================= */
-
-let penCompleted = false;
-
-
-function draw3D(object){
-
-    const drawing =
-        document
-        .getElementById(
-            "penDrawing"
-        );
-
-
-    drawing.textContent =
-        object;
-
-
-    drawing.style.transform =
-        "translate(-50%,-50%) rotate(8deg) scale(1.1)";
-
-
-    setTimeout(() => {
-
-        drawing.style.transform =
-            "translate(-50%,-50%) rotate(0deg) scale(1)";
-
-    },400);
-
-
-    if(!penCompleted){
-
-        penCompleted = true;
-
-        gamePoints++;
-
-    }
-
-}
-
-
-/* =========================================================
-   LEGO
-========================================================= */
-
-let legoCompleted = false;
-
-
-function legoAnswer(type){
-
-    const feedback =
-        document
-        .getElementById(
-            "legoFeedback"
-        );
-
-
-    document
-        .querySelectorAll(
-            ".lego-item"
-        )
-        .forEach(item => {
-
-            item.classList.remove(
-                "selected"
-            );
-
-        });
-
-
-    const clicked =
-        Array.from(
-            document.querySelectorAll(
-                ".lego-item"
-            )
-        )
-        .find(
-            item =>
-                item.getAttribute(
-                    "onclick"
-                ) ===
-                `legoAnswer('${type}')`
-        );
-
-
-    if(clicked){
-
-        clicked.classList.add(
-            "selected"
-        );
-
-    }
-
-
-    const messages = {
-
-        motor:
-            "⚙️ Correcto: el motor produce movimiento.",
-
-        sensor:
-            "👁️ Correcto: un sensor detecta algo.",
-
-        hub:
-            "🧠 Correcto: el hub conecta y controla.",
-
-        energia:
-            "🔋 Correcto: la energía permite funcionar al sistema."
-
-    };
-
-
-    feedback.className =
-        "feedback correct";
-
-
-    feedback.textContent =
-        messages[type];
-
-
-    if(!legoCompleted){
-
-        legoCompleted = true;
-
-        gamePoints++;
-
-    }
-
-}
-
-
-/* =========================================================
-   ROBLOX
-========================================================= */
-
-let robloxCount = 0;
-
-let robloxCompleted = false;
-
-
-function addRoblox(object){
-
-    if(
-        robloxCount >= 10
-    ){
-
-        document
-            .getElementById(
-                "robloxFeedback"
-            )
-            .textContent =
-            "🏗️ ¡Ya construiste un mundo bastante grande!";
-
-        return;
-
-    }
-
-
-    const world =
-        document
-        .getElementById(
-            "robloxWorld"
-        );
-
-
-    const item =
-        document.createElement(
-            "div"
-        );
-
-
-    item.className =
-        "roblox-object";
-
-
-    item.textContent =
-        object;
-
-
-    const x =
-        5 +
-        Math.random() * 85;
-
-
-    const y =
-        10 +
-        Math.random() * 60;
-
-
-    item.style.left =
-        x + "%";
-
-
-    item.style.top =
-        y + "%";
-
-
-    world.appendChild(
-        item
-    );
-
-
-    robloxCount++;
-
-
-    document
-        .getElementById(
-            "robloxFeedback"
-        )
-        .textContent =
-        "🏗️ Objetos colocados: " +
-        robloxCount;
-
-
-    if(
-        robloxCount >= 5 &&
-        !robloxCompleted
-    ){
-
-        robloxCompleted = true;
-
-        gamePoints++;
-
-
-        document
-            .getElementById(
-                "robloxFeedback"
-            )
-            .textContent =
-            "🎉 ¡Ya construiste tu propio mundo!";
-
-    }
-
-}
-
-
-/* =========================================================
-   ELECTRONICA
-========================================================= */
-
-let circuitSelected = [];
-
-let circuitCompleted = false;
-
-
-function toggleCircuit(type){
-
-    const ids = {
-
-        battery:
-            "batteryComponent",
-
-        wire:
-            "wireComponent",
-
-        led:
-            "ledComponent"
-
-    };
-
-
-    const element =
-        document
-        .getElementById(
-            ids[type]
-        );
-
-
-    if(
-        circuitSelected.includes(
-            type
-        )
-    ){
-
-        circuitSelected =
-            circuitSelected.filter(
-                item =>
-                    item !== type
-            );
-
-
-        element.classList.remove(
-            "selected"
-        );
-
-    }else{
-
-        circuitSelected.push(
-            type
-        );
-
-
-        element.classList.add(
-            "selected"
-        );
-
-    }
-
-
-    document
-        .getElementById(
-            "circuitCount"
-        )
-        .textContent =
-        circuitSelected.length;
-
-
-    checkCircuit();
-
-}
-
-
-function checkCircuit(){
-
-    const complete =
-
-        circuitSelected.includes(
-            "battery"
-        ) &&
-
-        circuitSelected.includes(
-            "wire"
-        ) &&
-
-        circuitSelected.includes(
-            "led"
-        );
-
-
-    const light =
-        document
-        .getElementById(
-            "circuitLight"
-        );
-
-
-    const feedback =
-        document
-        .getElementById(
-            "circuitFeedback"
-        );
-
-
-    if(complete){
-
-        light.classList.add(
-            "on"
-        );
-
-
-        feedback.className =
-            "feedback correct";
-
-
-        feedback.textContent =
-            "💡 ¡Circuito completo! El LED se encendió.";
-
-
-        if(!circuitCompleted){
-
-            circuitCompleted = true;
-
-            gamePoints++;
-
-        }
-
-
-    }else{
-
-        light.classList.remove(
-            "on"
-        );
-
-
-        feedback.className =
-            "game-message";
-
-
-        feedback.textContent =
-            "🔧 Falta algún componente.";
-
-    }
-
-}
-
-
-/* =========================================================
-   RESPUESTAS
-========================================================= */
-
-function getAnswer(name){
-
-    const selected =
-        document.querySelector(
-            'input[name="' +
-            name +
-            '"]:checked'
-        );
-
-
-    if(!selected)
-        return 0;
-
-
-    return Number(
-        selected.value
-    );
-
-}
-
-
-/* =========================================================
-   CALCULAR RESULTADOS
-========================================================= */
-
-function calculateResults(){
-
-    const areas = {
-
-        "🧩 Secuencias y lógica":
-            ["q1","q2","q3","q4"],
-
-        "🧠 Programación":
-            ["q5","q6","q7"],
-
-        "⌨️ Mecanografía":
-            ["q8"],
-
-        "🐱 Scratch":
-            ["q9","q10","q11"],
-
-        "🚁 Dron":
-            ["q12","q13","q14"],
-
-        "🖊️ Pluma 3D":
-            ["q15","q16","q17","q18"],
-
-        "🤖 LEGO WeDo":
-            ["q19","q20","q21"],
-
-        "🎮 Roblox Studio":
-            ["q22","q23","q24"],
-
-        "⚡ Electrónica":
-            ["q25","q26","q27","q28"]
-
-    };
-
-
-    let totalCorrect = 0;
-
-    let totalQuestions = 0;
-
-    let html = "";
-
-
-    const areasDetalle = {};
-
-
-    for(
-        const area in areas
-    ){
-
-        const questions =
-            areas[area];
-
-
-        let correct = 0;
-
-
-        questions.forEach(
-            question => {
-
-                correct +=
-                    getAnswer(
-                        question
-                    );
-
-            }
-        );
-
-
-        totalCorrect +=
-            correct;
-
-
-        totalQuestions +=
-            questions.length;
-
-
-        const percentage =
-            Math.round(
-                correct /
-                questions.length *
-                100
-            );
-
-
-        areasDetalle[area] = {
-
-            correct:
-                correct,
-
-            total:
-                questions.length,
-
-            porcentaje:
-                percentage
-
-        };
-
-
-        html += `
-
-        <div class="result-area">
-
-            <h3>${area}</h3>
-
-            <p>
-                ${correct} de ${questions.length}
-                respuestas correctas
-            </p>
-
-            <div class="result-bar">
-
-                <div
-                    class="result-fill"
-                    style="width:${percentage}%">
-                </div>
-
-            </div>
-
-            <p>${percentage}%</p>
-
-        </div>
-
-        `;
-
-    }
-
-
-    return {
-
-        correct:
-            totalCorrect,
-
-        total:
-            totalQuestions,
-
-        html:
-            html,
-
-        areas:
-            areasDetalle
-
-    };
-
-}
-
-
-/* =========================================================
-   RECOPILAR RESPUESTAS
-========================================================= */
-
-function obtenerRespuestas(){
-
-    const respuestas = {};
-
-
-    document
-        .querySelectorAll(
-            'input[type="radio"]'
-        )
-        .forEach(input => {
-
-            if(input.checked){
-
-                respuestas[
-                    input.name
-                ] = {
-
-                    valor:
-                        input.value,
-
-                    correcta:
-                        Number(
-                            input.value
-                        ) === 1
-
-                };
-
-            }
-
-        });
-
-
-    return respuestas;
-
-}
-
-
-/* =========================================================
-   ENVIAR RESULTADO A SUPABASE
-========================================================= */
-
-async function enviarResultado(
-
-    results,
-    percentage
-
-){
-
-    if(resultadoEnviado){
-
-        return;
-
-    }
-
-
-    if(!alumnoActual){
-
-        alert(
-            "No se pudo identificar al alumno. Inicia sesión nuevamente."
-        );
-
-        return;
-
-    }
-
-
-    if(!actividadId){
-
-        alert(
-            "Esta actividad no tiene un ID. Revisa el enlace de la actividad."
-        );
-
-        return;
-
-    }
-
-
-    const typingTime =
-        Number(
-            document
-            .getElementById(
-                "typingTimer"
-            )
-            .textContent
-        );
-
-
-    const typingAccuracy =
-        Number(
-            document
-            .getElementById(
-                "accuracy"
-            )
-            .textContent
-        );
-
-
-    const typingChars =
-        Number(
-            document
-            .getElementById(
-                "charCount"
-            )
-            .textContent
-        );
-
-
-    /*
-       En México guardamos la calificación
-       en escala de 0 a 10.
-    */
-
-    const calificacion =
-        Number(
-            (
-                percentage /
-                10
-            ).toFixed(1)
-        );
-
-
-    const resultado = {
-
-        porcentaje:
-            percentage,
-
-        aciertos:
-            results.correct,
-
-        preguntas:
-            results.total,
-
-        calificacion:
-            calificacion,
-
-        areas:
-            results.areas,
-
-        mecanografia: {
-
-            tiempo:
-                typingTime,
-
-            precision:
-                typingAccuracy,
-
-            caracteres:
-                typingChars
-
-        },
-
-        minijuegos: {
-
-            puntos:
-                gamePoints,
-
-            robot:
-                robotCompleted,
-
-            programacion:
-                programCompleted,
-
-            mecanografia:
-                typingFinished,
-
-            scratch:
-                scratchCompleted,
-
-            dron:
-                droneCompleted,
-
-            pluma3D:
-                penCompleted,
-
-            lego:
-                legoCompleted,
-
-            roblox:
-                robloxCompleted,
-
-            electronica:
-                circuitCompleted
-
-        },
-
-        respuestas:
-            obtenerRespuestas(),
-
-        fecha:
-            new Date().toISOString()
-
-    };
-
-
-    const {
-
-        error
-
-    } = await supabaseClient
-
-        .from(
-            "actividad_alumnos"
-        )
-
-        .update({
-
-            estado:
-                "completada",
-
-            calificacion:
-                calificacion,
-
-            completada_at:
-                new Date().toISOString(),
-
-            resultado:
-                resultado
-
-        })
-
-        .eq(
-            "actividad_id",
-            Number(
-                actividadId
-            )
-        )
-
-        .eq(
-            "alumno_id",
-            alumnoActual.id
-        );
-
-
-    if(error){
-
-        console.error(
-            "Error guardando resultado:",
-            error
-        );
-
-
-        alert(
-            "No se pudo enviar el resultado.\n\n" +
-            error.message
-        );
-
-
-        return;
-
-    }
-
-
-    resultadoEnviado = true;
-
-
-    const button =
-        document
-        .getElementById(
-            "sendResultButton"
-        );
-
-
-    if(button){
-
-        button.disabled = true;
-
-        button.textContent =
-            "✅ Resultado enviado";
-
-    }
-
-
-    const message =
-        document
-        .getElementById(
-            "sendResultMessage"
-        );
-
-
-    if(message){
-
-        message.className =
-            "feedback correct";
-
-        message.textContent =
-            "✅ Tu resultado fue enviado correctamente al profesor.";
-
-    }
-
-}
-
-
-/* =========================================================
-   FINALIZAR EXAMEN
-========================================================= */
-
-async function finishExam(){
-
-    const name =
-        document
-        .getElementById(
-            "studentName"
-        )
-        .value
-        .trim();
-
-
-    const grade =
-        document
-        .getElementById(
-            "grade"
-        )
-        .value;
-
-
-    if(!name){
-
-        alert(
-            "Falta escribir el nombre."
-        );
-
-
-        currentCard = 0;
-
-        showCard();
-
-        return;
-
-    }
-
-
-    if(!grade){
-
-        alert(
-            "Falta seleccionar el grado."
-        );
-
-
-        currentCard = 0;
-
-        showCard();
-
-        return;
-
-    }
-
-
-    const results =
-        calculateResults();
-
-
-    const percentage =
-        Math.round(
-
-            results.correct /
-            results.total *
-            100
-
-        );
-
-
-    document
-        .getElementById(
-            "welcomeResult"
-        )
-        .textContent =
-        name +
-        " — " +
-        grade +
-        "° de primaria";
-
-
-    document
-        .getElementById(
-            "totalScore"
-        )
-        .textContent =
-        percentage;
-
-
-    let level = "";
-
-
-    if(percentage >= 90){
-
-        level =
-        "🌟 Excelente punto de partida. El explorador tiene muchos conocimientos previos.";
-
-    }
-
-    else if(percentage >= 75){
-
-        level =
-        "🚀 Muy buen comienzo. Ya existen varias habilidades que podemos desarrollar.";
-
-    }
-
-    else if(percentage >= 50){
-
-        level =
-        "🔧 Buen comienzo. Hay conocimientos que podemos fortalecer.";
-
-    }
-
-    else{
-
-        level =
-        "🌱 Este es el comienzo de la aventura. ¡Hay mucho por descubrir!";
-
-    }
-
-
-    document
-        .getElementById(
-            "levelResult"
-        )
-        .textContent =
-        level;
-
-
-    document
-        .getElementById(
-            "areasResults"
-        )
-        .innerHTML =
-        results.html;
-
-
-    const typingTime =
-        document
-        .getElementById(
-            "typingTimer"
-        )
-        .textContent;
-
-
-    const typingAccuracy =
-        document
-        .getElementById(
-            "accuracy"
-        )
-        .textContent;
-
-
-    const typingChars =
-        document
-        .getElementById(
-            "charCount"
-        )
-        .textContent;
-
-
-    document
-        .getElementById(
-            "typingFinal"
-        )
-        .innerHTML =
-
-        "⏱️ Tiempo: " +
-        typingTime +
-        " segundos<br>" +
-
-        "🎯 Precisión: " +
-        typingAccuracy +
-        "%<br>" +
-
-        "⌨️ Caracteres escritos: " +
-        typingChars;
-
-
-    document
-        .getElementById(
-            "gamesFinal"
-        )
-        .innerHTML =
-
-        "🏆 Retos interactivos superados: " +
-        gamePoints +
-        "<br><br>" +
-
-        "Los minijuegos permiten observar además " +
-        "la resolución de problemas, la secuenciación, " +
-        "la coordinación y el pensamiento lógico.";
-
-
-    currentCard =
-        cards.length - 1;
-
-
-    showCard();
-
-
-    /*
-       ENVIAMOS AUTOMÁTICAMENTE
-       EL RESULTADO.
-    */
-
-    await enviarResultado(
-        results,
-        percentage
-    );
-
-}
-
-
-/* =========================================================
-   CARGAR ALUMNO
+   CARGAR ALUMNO AUTENTICADO
 ========================================================= */
 
 async function cargarAlumnoActual(){
 
     const {
+        data: sessionData,
+        error: sessionError
+    } = await supabaseClient.auth.getSession();
 
-        data: {
-            session
-
-        },
-
-        error
-
-    } =
-    await supabaseClient
-        .auth
-        .getSession();
-
-
-    if(error){
-
-        console.error(
-            error
-        );
-
-        return false;
-
+    if(sessionError){
+        throw sessionError;
     }
 
+    const session =
+        sessionData.session;
 
     if(!session){
 
-        alert(
-            "Debes iniciar sesión para realizar esta actividad."
+        mostrarError(
+            "Tu sesión no está activa. Inicia sesión para realizar el diagnóstico."
         );
 
-
-        window.location.href =
-            "login.html";
-
-
         return false;
-
     }
 
 
     const {
-
         data: alumno,
-
         error: alumnoError
+    } = await supabaseClient
 
-    } =
-    await supabaseClient
-
-        .from(
-            "alumnos"
-        )
+        .from("alumnos")
 
         .select(`
             id,
@@ -5064,69 +2297,45 @@ async function cargarAlumnoActual(){
     if(alumnoError){
 
         console.error(
+            "Error buscando alumno:",
             alumnoError
         );
 
-
-        alert(
-            "No se encontró el alumno."
+        mostrarError(
+            "No encontramos tu perfil de alumno en el sistema."
         );
-
 
         return false;
-
     }
 
 
-    alumnoActual =
-        alumno;
+    alumnoActual = alumno;
 
 
     /*
-       Utilizamos el nombre de la
-       cuenta, no el nombre escrito
-       manualmente.
+        IMPORTANTE:
+
+        Estos valores vienen de Supabase.
+        El alumno NO puede modificar su identidad
+        desde el formulario.
     */
 
-    const nameInput =
-        document
-        .getElementById(
-            "studentName"
-        );
-
-
-    if(nameInput){
-
-        nameInput.value =
+    document
+        .getElementById("studentName")
+        .value =
             alumno.nombre || "";
 
-        nameInput.readOnly =
-            true;
 
-    }
-
-
-    /*
-       Si el alumno tiene grado
-       guardado, lo seleccionamos.
-    */
-
-    const gradeSelect =
-        document
-        .getElementById(
-            "grade"
-        );
+    document
+        .getElementById("grade")
+        .value =
+            String(alumno.grado || "");
 
 
-    if(
-        gradeSelect &&
-        alumno.grado
-    ){
-
-        gradeSelect.value =
-            alumno.grado;
-
-    }
+    document
+        .getElementById("studentBadge")
+        .textContent =
+            `${alumno.nombre || "Alumno"} · ${alumno.grado || ""}°`;
 
 
     return true;
@@ -5140,35 +2349,76 @@ async function cargarAlumnoActual(){
 
 async function verificarActividad(){
 
-    if(!actividadId){
+    if(
+        !actividadIdRaw ||
+        !Number.isInteger(actividadId) ||
+        actividadId <= 0
+    ){
 
-        alert(
-            "⚠️ Esta actividad no tiene un ID en el enlace."
+        mostrarError(
+            "Esta página necesita un ID de actividad válido. Ejemplo: diagnostico.html?actividad=15"
         );
 
         return false;
-
     }
 
 
-    if(!alumnoActual){
-
-        return false;
-
-    }
-
+    /*
+        Verificamos que la actividad exista.
+    */
 
     const {
+        data: actividad,
+        error: actividadError
+    } = await supabaseClient
 
+        .from("actividades")
+
+        .select(`
+            id,
+            titulo,
+            descripcion,
+            puntos,
+            activa
+        `)
+
+        .eq(
+            "id",
+            actividadId
+        )
+
+        .single();
+
+
+    if(actividadError){
+
+        console.error(
+            "Error actividad:",
+            actividadError
+        );
+
+        mostrarError(
+            "La actividad indicada no existe."
+        );
+
+        return false;
+    }
+
+
+    actividadInfo = actividad;
+
+
+    /*
+        Buscamos exclusivamente la asignación
+        de ESTA actividad para ESTE alumno.
+    */
+
+    const {
         data,
         error
+    } = await supabaseClient
 
-    } =
-    await supabaseClient
-
-        .from(
-            "actividad_alumnos"
-        )
+        .from("actividad_alumnos")
 
         .select(`
             id,
@@ -5176,14 +2426,13 @@ async function verificarActividad(){
             alumno_id,
             estado,
             calificacion,
+            completada_at,
             resultado
         `)
 
         .eq(
             "actividad_id",
-            Number(
-                actividadId
-            )
+            actividadId
         )
 
         .eq(
@@ -5197,52 +2446,44 @@ async function verificarActividad(){
     if(error){
 
         console.error(
+            "Error actividad_alumnos:",
             error
         );
 
-
-        alert(
-            "No se pudo verificar la actividad.\n\n" +
-            error.message
+        mostrarError(
+            "No fue posible verificar tu actividad."
         );
 
-
         return false;
-
     }
 
 
     if(!data){
 
-        alert(
-            "⚠️ Esta actividad no está asignada a tu cuenta."
+        mostrarError(
+            "Esta actividad no está asignada a tu perfil."
         );
 
-
         return false;
-
     }
 
 
-    actividadActual =
-        data;
+    actividadActual = data;
 
 
     /*
-       Si ya fue completada,
-       mostramos el resultado guardado.
+        Si ya existe un resultado,
+        informamos pero permitimos volver a realizarlo.
     */
 
     if(
-        data.estado ===
-        "completada"
+        data.estado === "completada" &&
+        data.resultado
     ){
 
-        resultadoEnviado =
-            true;
-
-        alert(
-            "Esta actividad ya fue completada."
+        console.log(
+            "Esta actividad ya tiene un resultado:",
+            data.resultado
         );
 
     }
@@ -5254,44 +2495,2029 @@ async function verificarActividad(){
 
 
 /* =========================================================
-   INICIALIZAR
+   COMENZAR EXAMEN
 ========================================================= */
 
-async function inicializar(){
+function startExam(){
 
-    updateProgress();
+    if(!alumnoActual){
 
+        alert(
+            "No se ha cargado el perfil del alumno."
+        );
 
-    /*
-       Primero identificamos
-       al alumno.
-    */
-
-    const alumnoOK =
-        await cargarAlumnoActual();
-
-
-    if(!alumnoOK)
         return;
+    }
 
 
-    /*
-       Después verificamos
-       la actividad asignada.
-    */
+    if(!actividadActual){
 
-    const actividadOK =
-        await verificarActividad();
+        alert(
+            "No se ha verificado la actividad."
+        );
 
-
-    if(!actividadOK)
         return;
+    }
+
+
+    document
+        .getElementById("introCard")
+        .classList.add("hidden");
+
+
+    document
+        .getElementById("examCard")
+        .classList.remove("hidden");
+
+
+    currentCard = 0;
+
+    setupTyping();
+
+    nextCard(true);
 
 }
 
 
 /* =========================================================
-   EJECUTAR
+   TARJETAS DEL EXAMEN
+========================================================= */
+
+function getExamSteps(){
+
+    return Array.from(
+        document.querySelectorAll(".exam-step")
+    );
+
+}
+
+
+function showCard(index){
+
+    const steps =
+        getExamSteps();
+
+
+    if(index < 0){
+        index = 0;
+    }
+
+
+    if(index >= steps.length){
+        index = steps.length - 1;
+    }
+
+
+    steps.forEach(
+        step =>
+            step.classList.add("hidden")
+    );
+
+
+    steps[index]
+        .classList.remove("hidden");
+
+
+    currentCard = index;
+
+    updateProgress();
+
+}
+
+
+/* =========================================================
+   SIGUIENTE
+========================================================= */
+
+function nextCard(skipValidation=false){
+
+    const steps =
+        getExamSteps();
+
+
+    if(!skipValidation){
+
+        const current =
+            steps[currentCard];
+
+        if(!validateCurrentStep(current)){
+            return;
+        }
+
+    }
+
+
+    if(currentCard < steps.length - 1){
+
+        showCard(
+            currentCard + 1
+        );
+
+    }else{
+
+        finishExam();
+
+    }
+
+}
+
+
+/* =========================================================
+   ANTERIOR
+========================================================= */
+
+function previousCard(){
+
+    if(currentCard > 0){
+
+        showCard(
+            currentCard - 1
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   VALIDAR PASO
+========================================================= */
+
+function validateCurrentStep(step){
+
+    if(!step){
+        return true;
+    }
+
+
+    const stepNumber =
+        step.dataset.step;
+
+
+    /*
+        Los minijuegos tienen sus
+        propias validaciones.
+    */
+
+    if(stepNumber === "game1"){
+        return robotCompleted;
+    }
+
+    if(stepNumber === "game2"){
+        return programCompleted;
+    }
+
+    if(stepNumber === "game3"){
+        return scratchCompleted;
+    }
+
+    if(stepNumber === "game4"){
+        return droneCompleted;
+    }
+
+    if(stepNumber === "game5"){
+        return penCompleted;
+    }
+
+    if(stepNumber === "game6"){
+        return legoCompleted;
+    }
+
+    if(stepNumber === "game7"){
+        return robloxCompleted;
+    }
+
+    if(stepNumber === "game8"){
+        return circuitCompleted;
+    }
+
+
+    if(stepNumber === "8"){
+
+        if(!typingFinished){
+
+            const input =
+                document.getElementById(
+                    "typingInput"
+                );
+
+            if(
+                !input.value.trim()
+            ){
+
+                showFeedback(
+                    "typingFeedback",
+                    "Escribe el texto antes de continuar.",
+                    "error"
+                );
+
+                return false;
+            }
+
+            checkTyping();
+
+            if(!typingFinished){
+                return false;
+            }
+
+        }
+
+        return true;
+    }
+
+
+    /*
+        Preguntas normales
+    */
+
+    const radio =
+        step.querySelector(
+            'input[type="radio"]:checked'
+        );
+
+
+    if(!radio){
+
+        alert(
+            "Selecciona una respuesta antes de continuar."
+        );
+
+        return false;
+    }
+
+
+    return true;
+
+}
+
+
+/* =========================================================
+   PROGRESO
+========================================================= */
+
+function updateProgress(){
+
+    const steps =
+        getExamSteps();
+
+    if(!steps.length){
+        return;
+    }
+
+
+    const total =
+        steps.length;
+
+
+    const current =
+        currentCard + 1;
+
+
+    const percentage =
+        Math.round(
+            (current / total) * 100
+        );
+
+
+    const progressText =
+        document.getElementById(
+            "progressText"
+        );
+
+
+    const progressBar =
+        document.getElementById(
+            "progressBar"
+        );
+
+
+    const pointsText =
+        document.getElementById(
+            "pointsText"
+        );
+
+
+    if(progressText){
+
+        progressText.textContent =
+            `Misión ${current} de ${total}`;
+
+    }
+
+
+    if(progressBar){
+
+        progressBar.style.width =
+            `${percentage}%`;
+
+    }
+
+
+    if(pointsText){
+
+        pointsText.textContent =
+            `Puntos: ${gamePoints}`;
+
+    }
+
+
+    const previous =
+        document.getElementById(
+            "previousButton"
+        );
+
+
+    const next =
+        document.getElementById(
+            "nextButton"
+        );
+
+
+    if(previous){
+
+        previous.disabled =
+            currentCard === 0;
+
+    }
+
+
+    if(next){
+
+        next.textContent =
+            currentCard === total - 1
+                ? "🏁 Terminar"
+                : "Siguiente →";
+
+    }
+
+}
+
+
+/* =========================================================
+   MECANOGRAFÍA
+========================================================= */
+
+let typingStartTime = null;
+
+let typingErrors = 0;
+
+let typingAttempts = 0;
+
+
+function setupTyping(){
+
+    const gradeValue =
+        Number(
+            alumnoActual?.grado || 1
+        );
+
+
+    /*
+        AQUÍ ya no existe el problema
+        "Cannot access typingTexts before initialization"
+        porque typingTexts está declarado arriba.
+    */
+
+    const text =
+        typingTexts[gradeValue] ||
+        typingTexts[1];
+
+
+    document
+        .getElementById("typingText")
+        .textContent = text;
+
+
+    const input =
+        document
+            .getElementById("typingInput");
+
+
+    input.value = "";
+
+    typingStartTime = null;
+
+    typingErrors = 0;
+
+    typingAttempts = 0;
+
+    typingFinished = false;
+
+
+    input.onfocus = function(){
+
+        if(!typingStartTime){
+
+            typingStartTime =
+                Date.now();
+
+        }
+
+    };
+
+
+    input.oninput = function(){
+
+        const expected =
+            text.substring(
+                0,
+                input.value.length
+            );
+
+
+        typingErrors = 0;
+
+
+        for(
+            let i = 0;
+            i < input.value.length;
+            i++
+        ){
+
+            if(
+                input.value[i] !==
+                text[i]
+            ){
+
+                typingErrors++;
+
+            }
+
+        }
+
+
+        if(
+            input.value === text
+        ){
+
+            checkTyping();
+
+        }
+
+    };
+
+}
+
+
+/* =========================================================
+   COMPROBAR MECANOGRAFÍA
+========================================================= */
+
+function checkTyping(){
+
+    const input =
+        document.getElementById(
+            "typingInput"
+        );
+
+
+    const expected =
+        document.getElementById(
+            "typingText"
+        ).textContent;
+
+
+    typingAttempts++;
+
+
+    if(
+        input.value === expected
+    ){
+
+        const elapsed =
+            typingStartTime
+                ? Date.now() -
+                  typingStartTime
+                : 0;
+
+
+        const seconds =
+            Math.max(
+                1,
+                elapsed / 1000
+            );
+
+
+        const words =
+            expected
+                .trim()
+                .split(/\s+/)
+                .length;
+
+
+        const wpm =
+            Math.round(
+                (words / seconds) * 60
+            );
+
+
+        typingFinished = true;
+
+
+        showFeedback(
+            "typingFeedback",
+            `✅ ¡Correcto! Velocidad aproximada: ${wpm} palabras por minuto.`,
+            "success"
+        );
+
+
+    }else{
+
+        showFeedback(
+            "typingFeedback",
+            "❌ El texto todavía no coincide exactamente.",
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   ROBOT
+========================================================= */
+
+let robotX = 15;
+let robotY = 85;
+
+
+function moveRobot(dx,dy){
+
+    robotX += dx;
+    robotY += dy;
+
+
+    robotX =
+        Math.max(
+            5,
+            Math.min(
+                robotX,
+                370
+            )
+        );
+
+
+    robotY =
+        Math.max(
+            5,
+            Math.min(
+                robotY,
+                165
+            )
+        );
+
+
+    const robot =
+        document.getElementById(
+            "robotCharacter"
+        );
+
+
+    robot.style.left =
+        `${robotX}px`;
+
+
+    robot.style.top =
+        `${robotY}px`;
+
+
+    /*
+        Zona aproximada de la estrella.
+    */
+
+    if(
+        robotX >= 320 &&
+        robotY >= 45 &&
+        robotY <= 120
+    ){
+
+        if(!robotCompleted){
+
+            robotCompleted = true;
+
+            gamePoints += 1;
+
+            showFeedback(
+                "robotFeedback",
+                "⭐ ¡Excelente! Llegaste a la estrella.",
+                "success"
+            );
+
+            updateProgress();
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   PROGRAMACIÓN
+========================================================= */
+
+let programSequence = [];
+
+
+function addProgramInstruction(value){
+
+    if(programCompleted){
+        return;
+    }
+
+
+    programSequence.push(value);
+
+    renderSequence(
+        "programSequence",
+        programSequence,
+        {
+            move:"➡️ Mover 10 pasos",
+            say:"💬 Hablar",
+            stop:"🛑 Detener"
+        }
+    );
+
+}
+
+
+function checkProgram(){
+
+    const correct =
+        ["move","say","stop"];
+
+
+    if(
+        JSON.stringify(programSequence) ===
+        JSON.stringify(correct)
+    ){
+
+        programCompleted = true;
+
+        gamePoints += 1;
+
+        showFeedback(
+            "programFeedback",
+            "✅ ¡Programa correcto!",
+            "success"
+        );
+
+        updateProgress();
+
+    }else{
+
+        showFeedback(
+            "programFeedback",
+            "❌ Orden incorrecto. Inténtalo nuevamente.",
+            "error"
+        );
+
+        programSequence = [];
+
+        renderSequence(
+            "programSequence",
+            [],
+            {}
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   SCRATCH
+========================================================= */
+
+let scratchSequence = [];
+
+
+function addScratch(value){
+
+    if(scratchCompleted){
+        return;
+    }
+
+
+    scratchSequence.push(value);
+
+
+    renderSequence(
+        "scratchSequence",
+        scratchSequence,
+        {
+            move:"➡️ Mover",
+            say:"💬 Decir",
+            repeat:"🔁 Repetir"
+        }
+    );
+
+}
+
+
+function checkScratch(){
+
+    const correct =
+        ["move","say"];
+
+
+    if(
+        JSON.stringify(scratchSequence) ===
+        JSON.stringify(correct)
+    ){
+
+        scratchCompleted = true;
+
+        gamePoints += 1;
+
+        showFeedback(
+            "scratchFeedback",
+            "🐱 ¡Correcto! El personaje llegó y habló.",
+            "success"
+        );
+
+        updateProgress();
+
+    }else{
+
+        showFeedback(
+            "scratchFeedback",
+            "❌ La secuencia correcta es mover y después hablar.",
+            "error"
+        );
+
+        scratchSequence = [];
+
+        renderSequence(
+            "scratchSequence",
+            [],
+            {}
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   DRON
+========================================================= */
+
+let droneX = 15;
+let droneY = 85;
+
+
+function moveDrone(dx,dy){
+
+    droneX += dx;
+    droneY += dy;
+
+
+    droneX =
+        Math.max(
+            5,
+            Math.min(
+                droneX,
+                370
+            )
+        );
+
+
+    droneY =
+        Math.max(
+            5,
+            Math.min(
+                droneY,
+                165
+            )
+        );
+
+
+    const drone =
+        document.getElementById(
+            "drone"
+        );
+
+
+    drone.style.left =
+        `${droneX}px`;
+
+
+    drone.style.top =
+        `${droneY}px`;
+
+
+    if(
+        droneX >= 320 &&
+        droneY >= 40 &&
+        droneY <= 125
+    ){
+
+        if(!droneCompleted){
+
+            droneCompleted = true;
+
+            gamePoints += 1;
+
+            showFeedback(
+                "droneFeedback",
+                "🚁 ¡Aterrizaje exitoso!",
+                "success"
+            );
+
+            updateProgress();
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   PLUMA 3D
+========================================================= */
+
+let penSequence = [];
+
+
+function addPen(value){
+
+    if(penCompleted){
+        return;
+    }
+
+
+    penSequence.push(value);
+
+
+    renderSequence(
+        "penSequence",
+        penSequence,
+        {
+            heat:"🔥 Calentar",
+            filament:"🧵 Insertar filamento",
+            draw:"✏️ Dibujar"
+        }
+    );
+
+}
+
+
+function checkPen(){
+
+    const correct =
+        ["heat","filament","draw"];
+
+
+    if(
+        JSON.stringify(penSequence) ===
+        JSON.stringify(correct)
+    ){
+
+        penCompleted = true;
+
+        gamePoints += 1;
+
+        showFeedback(
+            "penFeedback",
+            "🖊️ ¡Pieza creada correctamente!",
+            "success"
+        );
+
+        updateProgress();
+
+    }else{
+
+        showFeedback(
+            "penFeedback",
+            "❌ Revisa el orden del proceso.",
+            "error"
+        );
+
+        penSequence = [];
+
+        renderSequence(
+            "penSequence",
+            [],
+            {}
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   LEGO
+========================================================= */
+
+let legoSequence = [];
+
+
+function addLego(value){
+
+    if(legoCompleted){
+        return;
+    }
+
+
+    legoSequence.push(value);
+
+
+    renderSequence(
+        "legoSequence",
+        legoSequence,
+        {
+            sensor:"👁️ Sensor",
+            motor:"⚙️ Motor",
+            wait:"⏱️ Esperar"
+        }
+    );
+
+}
+
+
+function checkLego(){
+
+    const correct =
+        ["sensor","motor"];
+
+
+    if(
+        JSON.stringify(legoSequence) ===
+        JSON.stringify(correct)
+    ){
+
+        legoCompleted = true;
+
+        gamePoints += 1;
+
+        showFeedback(
+            "legoFeedback",
+            "🧱 ¡Robot programado correctamente!",
+            "success"
+        );
+
+        updateProgress();
+
+    }else{
+
+        showFeedback(
+            "legoFeedback",
+            "❌ Primero debes detectar y después actuar.",
+            "error"
+        );
+
+        legoSequence = [];
+
+        renderSequence(
+            "legoSequence",
+            [],
+            {}
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   ROBLOX
+========================================================= */
+
+let robloxSequence = [];
+
+
+function addRoblox(value){
+
+    if(robloxCompleted){
+        return;
+    }
+
+
+    robloxSequence.push(value);
+
+
+    renderSequence(
+        "robloxSequence",
+        robloxSequence,
+        {
+            event:"🟢 Evento",
+            action:"⚙️ Acción",
+            condition:"❓ Condición"
+        }
+    );
+
+}
+
+
+function checkRoblox(){
+
+    const correct =
+        ["event","action","condition"];
+
+
+    if(
+        JSON.stringify(robloxSequence) ===
+        JSON.stringify(correct)
+    ){
+
+        robloxCompleted = true;
+
+        gamePoints += 1;
+
+        showFeedback(
+            "robloxFeedback",
+            "🎮 ¡Secuencia lógica correcta!",
+            "success"
+        );
+
+        updateProgress();
+
+    }else{
+
+        showFeedback(
+            "robloxFeedback",
+            "❌ El orden correcto es evento → acción → condición.",
+            "error"
+        );
+
+        robloxSequence = [];
+
+        renderSequence(
+            "robloxSequence",
+            [],
+            {}
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   CIRCUITO
+========================================================= */
+
+let circuitSequence = [];
+
+
+function addCircuit(value){
+
+    if(circuitCompleted){
+        return;
+    }
+
+
+    circuitSequence.push(value);
+
+
+    renderSequence(
+        "circuitSequence",
+        circuitSequence,
+        {
+            resistor:"🔲 Resistencia",
+            led:"💡 LED",
+            gnd:"⏚ GND"
+        }
+    );
+
+}
+
+
+function checkCircuit(){
+
+    const correct =
+        ["resistor","led","gnd"];
+
+
+    if(
+        JSON.stringify(circuitSequence) ===
+        JSON.stringify(correct)
+    ){
+
+        circuitCompleted = true;
+
+        gamePoints += 1;
+
+        showFeedback(
+            "circuitFeedback",
+            "⚡ ¡Circuito correcto!",
+            "success"
+        );
+
+        updateProgress();
+
+    }else{
+
+        showFeedback(
+            "circuitFeedback",
+            "❌ Revisa la conexión del circuito.",
+            "error"
+        );
+
+        circuitSequence = [];
+
+        renderSequence(
+            "circuitSequence",
+            [],
+            {}
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   RENDER SECUENCIA
+========================================================= */
+
+function renderSequence(
+    elementId,
+    sequence,
+    labels
+){
+
+    const element =
+        document.getElementById(
+            elementId
+        );
+
+
+    if(!sequence.length){
+
+        element.textContent =
+            "Ninguna instrucción";
+
+        return;
+
+    }
+
+
+    element.innerHTML =
+        sequence
+            .map(
+                (item,index) =>
+                    `<span style="
+                        display:inline-block;
+                        background:#dbeafe;
+                        padding:8px 10px;
+                        border-radius:8px;
+                        margin:3px;
+                    ">
+                        ${index+1}. ${labels[item] || item}
+                    </span>`
+            )
+            .join("");
+
+}
+
+
+/* =========================================================
+   FEEDBACK
+========================================================= */
+
+function showFeedback(
+    elementId,
+    message,
+    type
+){
+
+    const element =
+        document.getElementById(
+            elementId
+        );
+
+
+    if(!element){
+        return;
+    }
+
+
+    element.className =
+        `feedback ${type}`;
+
+
+    element.textContent =
+        message;
+
+}
+
+
+/* =========================================================
+   CALCULAR RESULTADOS
+========================================================= */
+
+function calcularResultados(){
+
+    let totalCorrect = 0;
+
+    const totalQuestions = 28;
+
+    const areasDetalle = {};
+
+
+    for(
+        const [area,config]
+        of Object.entries(areas)
+    ){
+
+        let correct = 0;
+
+
+        config.preguntas.forEach(
+            question => {
+
+                if(
+                    question === "q8"
+                ){
+
+                    if(
+                        typingFinished
+                    ){
+                        correct++;
+                    }
+
+                    return;
+
+                }
+
+
+                const selected =
+                    document.querySelector(
+                        `input[name="${question}"]:checked`
+                    );
+
+
+                if(
+                    selected &&
+                    selected.value ===
+                    respuestasCorrectas[question]
+                ){
+
+                    correct++;
+
+                }
+
+            }
+        );
+
+
+        totalCorrect += correct;
+
+
+        const total =
+            config.preguntas.length;
+
+
+        const porcentaje =
+            Math.round(
+                (correct / total) * 100
+            );
+
+
+        areasDetalle[area] = {
+
+            correct,
+
+            total,
+
+            porcentaje
+
+        };
+
+    }
+
+
+    return {
+
+        correct:
+            totalCorrect,
+
+        total:
+            totalQuestions,
+
+        areas:
+            areasDetalle
+
+    };
+
+}
+
+
+/* =========================================================
+   OBTENER RESPUESTAS
+========================================================= */
+
+function obtenerRespuestas(){
+
+    const respuestas = {};
+
+
+    for(let i=1;i<=28;i++){
+
+        const selected =
+            document.querySelector(
+                `input[name="q${i}"]:checked`
+            );
+
+
+        respuestas[`q${i}`] =
+            selected
+                ? selected.value
+                : null;
+
+    }
+
+
+    return respuestas;
+
+}
+
+
+/* =========================================================
+   FINALIZAR EXAMEN
+========================================================= */
+
+async function finishExam(){
+
+    const steps =
+        getExamSteps();
+
+
+    const current =
+        steps[currentCard];
+
+
+    if(
+        current &&
+        !validateCurrentStep(current)
+    ){
+
+        return;
+
+    }
+
+
+    const results =
+        calcularResultados();
+
+
+    const percentage =
+        Math.round(
+            (
+                results.correct /
+                results.total
+            ) * 100
+        );
+
+
+    ultimoResultado =
+        results;
+
+
+    ultimaCalificacionPorcentaje =
+        percentage;
+
+
+    mostrarResultado(
+        results,
+        percentage
+    );
+
+
+    /*
+        Guardamos automáticamente.
+    */
+
+    await guardarResultado();
+
+}
+
+
+/* =========================================================
+   MOSTRAR RESULTADO
+========================================================= */
+
+function mostrarResultado(
+    results,
+    percentage
+){
+
+    document
+        .getElementById("examCard")
+        .classList.add("hidden");
+
+
+    document
+        .getElementById("resultCard")
+        .classList.remove("hidden");
+
+
+    document
+        .getElementById("score")
+        .textContent =
+            `${percentage}%`;
+
+
+    document
+        .getElementById("resultStudent")
+        .textContent =
+            `${alumnoActual.nombre} · ${alumnoActual.grado}° grado`;
+
+
+    let mensaje;
+
+
+    if(percentage >= 90){
+
+        mensaje =
+            "🌟 Excelente nivel. Tienes una base muy sólida.";
+
+    }else if(percentage >= 75){
+
+        mensaje =
+            "🚀 Muy buen nivel. Hay una excelente base para continuar.";
+
+    }else if(percentage >= 60){
+
+        mensaje =
+            "👍 Buen comienzo. Seguiremos fortaleciendo tus habilidades.";
+
+    }else if(percentage >= 40){
+
+        mensaje =
+            "🔧 Tienes varias habilidades por desarrollar. ¡Vamos a trabajar en ellas!";
+
+    }else{
+
+        mensaje =
+            "🌱 Este diagnóstico es nuestro punto de partida. ¡Vamos a aprender robótica juntos!";
+
+    }
+
+
+    document
+        .getElementById("resultSummary")
+        .innerHTML =
+            `
+            <strong>${mensaje}</strong>
+
+            <br><br>
+
+            Aciertos:
+            <strong>
+                ${results.correct}
+                /
+                ${results.total}
+            </strong>
+
+            <br>
+
+            Calificación:
+            <strong>
+                ${(percentage / 10).toFixed(1)}
+                / 10
+            </strong>
+            `;
+
+
+    renderAreas(
+        results.areas
+    );
+
+
+    renderMinigames();
+
+}
+
+
+/* =========================================================
+   RESULTADOS POR ÁREA
+========================================================= */
+
+function renderAreas(areasDetalle){
+
+    const container =
+        document.getElementById(
+            "areasResult"
+        );
+
+
+    container.innerHTML = "";
+
+
+    for(
+        const [area,data]
+        of Object.entries(areasDetalle)
+    ){
+
+        container.innerHTML +=
+            `
+            <div class="area-card">
+
+                <div class="area-name">
+                    ${area}
+                </div>
+
+                <div class="area-percent">
+                    ${data.porcentaje}%
+                </div>
+
+                <div>
+                    ${data.correct}
+                    /
+                    ${data.total}
+                    correctas
+                </div>
+
+            </div>
+            `;
+
+    }
+
+}
+
+
+/* =========================================================
+   RESULTADOS MINIJUEGOS
+========================================================= */
+
+function renderMinigames(){
+
+    const container =
+        document.getElementById(
+            "minigameResults"
+        );
+
+
+    const juegos = [
+
+        ["🤖 Robot",robotCompleted],
+
+        ["💻 Programación",programCompleted],
+
+        ["⌨️ Mecanografía",typingFinished],
+
+        ["🐱 Scratch",scratchCompleted],
+
+        ["🚁 Dron",droneCompleted],
+
+        ["🖊️ Pluma 3D",penCompleted],
+
+        ["🧱 LEGO",legoCompleted],
+
+        ["🎮 Roblox",robloxCompleted],
+
+        ["⚡ Electrónica",circuitCompleted]
+
+    ];
+
+
+    container.innerHTML = "";
+
+
+    juegos.forEach(
+        ([nombre,completado]) => {
+
+            container.innerHTML +=
+                `
+                <div class="area-card">
+
+                    <div class="area-name">
+                        ${nombre}
+                    </div>
+
+                    <span class="
+                        minigame-status
+                        ${completado ? "done" : ""}
+                    ">
+                        ${
+                            completado
+                            ? "✅ Completado"
+                            : "❌ No completado"
+                        }
+                    </span>
+
+                </div>
+                `;
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   GUARDAR RESULTADO EN SUPABASE
+========================================================= */
+
+async function guardarResultado(){
+
+    if(resultadoEnviado){
+
+        return true;
+
+    }
+
+
+    if(!alumnoActual){
+
+        mostrarSaveError(
+            "No se encontró el alumno autenticado."
+        );
+
+        return false;
+
+    }
+
+
+    if(!actividadActual){
+
+        mostrarSaveError(
+            "No se encontró la asignación de esta actividad."
+        );
+
+        return false;
+
+    }
+
+
+    if(!ultimoResultado){
+
+        mostrarSaveError(
+            "No hay resultados para guardar."
+        );
+
+        return false;
+
+    }
+
+
+    mostrarGuardando();
+
+
+    try{
+
+        const percentage =
+            ultimaCalificacionPorcentaje;
+
+
+        const calificacion =
+            Number(
+                (
+                    percentage /
+                    10
+                ).toFixed(1)
+            );
+
+
+        /*
+            IDENTIDAD:
+
+            Estos valores vienen directamente
+            del registro alumnos.
+
+            NO del formulario.
+        */
+
+        const resultado = {
+
+            tipo:
+                "examen_diagnostico_robotica",
+
+            nombre:
+                alumnoActual.nombre,
+
+            grado:
+                alumnoActual.grado,
+
+            actividad_id:
+                actividadId,
+
+            porcentaje:
+                percentage,
+
+            aciertos:
+                ultimoResultado.correct,
+
+            preguntas:
+                ultimoResultado.total,
+
+            calificacion:
+                calificacion,
+
+            areas:
+                ultimoResultado.areas,
+
+            mecanografia:{
+
+                completado:
+                    typingFinished,
+
+                errores:
+                    typingErrors,
+
+                intentos:
+                    typingAttempts
+
+            },
+
+            minijuegos:{
+
+                robot:
+                    robotCompleted,
+
+                programacion:
+                    programCompleted,
+
+                scratch:
+                    scratchCompleted,
+
+                dron:
+                    droneCompleted,
+
+                pluma3d:
+                    penCompleted,
+
+                lego:
+                    legoCompleted,
+
+                roblox:
+                    robloxCompleted,
+
+                electronica:
+                    circuitCompleted
+
+            },
+
+            puntos_minijuegos:
+                gamePoints,
+
+            respuestas:
+                obtenerRespuestas(),
+
+            fecha:
+                new Date().toISOString()
+
+        };
+
+
+        /*
+            ACTUALIZAMOS LA FILA EXACTA
+            DE actividad_alumnos.
+        */
+
+        const {
+            error
+        } = await supabaseClient
+
+            .from("actividad_alumnos")
+
+            .update({
+
+                estado:
+                    "completada",
+
+                calificacion:
+                    calificacion,
+
+                completada_at:
+                    new Date().toISOString(),
+
+                resultado:
+                    resultado
+
+            })
+
+            .eq(
+                "id",
+                actividadActual.id
+            );
+
+
+        if(error){
+
+            throw error;
+
+        }
+
+
+        resultadoEnviado = true;
+
+
+        document
+            .getElementById(
+                "saveSpinner"
+            )
+            .classList.add("hidden");
+
+
+        document
+            .getElementById(
+                "saveTitle"
+            )
+            .textContent =
+                "✅ Resultado guardado";
+
+
+        const message =
+            document.getElementById(
+                "sendResultMessage"
+            );
+
+
+        message.className =
+            "feedback success";
+
+
+        message.textContent =
+            "Tu resultado fue guardado correctamente en tu actividad.";
+
+
+        message.classList.remove(
+            "hidden"
+        );
+
+
+        document
+            .getElementById(
+                "sendResultButton"
+            )
+            .style.display =
+                "none";
+
+
+        return true;
+
+
+    }catch(error){
+
+        console.error(
+            "Error guardando resultado:",
+            error
+        );
+
+
+        mostrarSaveError(
+            error.message ||
+            "No fue posible guardar el resultado."
+        );
+
+
+        return false;
+
+    }
+
+}
+
+
+/* =========================================================
+   REENVIAR RESULTADO
+========================================================= */
+
+async function reenviarResultado(){
+
+    if(resultadoEnviado){
+
+        return;
+
+    }
+
+
+    await guardarResultado();
+
+}
+
+
+/* =========================================================
+   UI GUARDADO
+========================================================= */
+
+function mostrarGuardando(){
+
+    document
+        .getElementById(
+            "saveSpinner"
+        )
+        .classList.remove(
+            "hidden"
+        );
+
+
+    document
+        .getElementById(
+            "saveTitle"
+        )
+        .textContent =
+            "📤 Guardando resultado...";
+
+
+    document
+        .getElementById(
+            "sendResultButton"
+        )
+        .style.display =
+            "none";
+
+
+    document
+        .getElementById(
+            "sendResultMessage"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+}
+
+
+function mostrarSaveError(mensaje){
+
+    document
+        .getElementById(
+            "saveSpinner"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+
+    document
+        .getElementById(
+            "saveTitle"
+        )
+        .textContent =
+            "⚠️ No se pudo guardar";
+
+
+    const message =
+        document.getElementById(
+            "sendResultMessage"
+        );
+
+
+    message.className =
+        "feedback error";
+
+
+    message.textContent =
+        mensaje;
+
+
+    message.classList.remove(
+        "hidden"
+    );
+
+
+    document
+        .getElementById(
+            "sendResultButton"
+        )
+        .style.display =
+            "inline-block";
+
+}
+
+
+/* =========================================================
+   EVITAR SALIR ACCIDENTALMENTE
+========================================================= */
+
+window.addEventListener(
+    "beforeunload",
+    function(event){
+
+        const examVisible =
+            !document
+                .getElementById(
+                    "examCard"
+                )
+                .classList.contains(
+                    "hidden"
+                );
+
+
+        if(
+            examVisible &&
+            !resultadoEnviado
+        ){
+
+            event.preventDefault();
+
+            event.returnValue = "";
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   INICIAR
 ========================================================= */
 
 inicializar();
@@ -5299,5 +4525,4 @@ inicializar();
 </script>
 
 </body>
-
 </html>
