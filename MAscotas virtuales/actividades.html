@@ -1782,16 +1782,17 @@ async function cargarActividades() {
             await supabaseClient
                 .from("actividades")
                 .select(`
-                    id,
-                    titulo,
-                    descripcion,
-                    tipo,
-                    enlace,
-                    imagen_url,
-                    puntos,
-                    fecha_limite,
-                    activo,
-                    created_at
+                id,
+            profesorid,
+            titulo,
+            descripción,
+            tipo,
+            enlace,
+            "imagen url",
+            puntos,
+            fecha,
+            activa,
+            created
                 `)
                 .in(
                     "id",
@@ -1799,12 +1800,24 @@ async function cargarActividades() {
                 );
 
 
-        if (actividadesError) {
+      if (actividadesError) {
+    console.error("ERROR COMPLETO DE ACTIVIDADES:", actividadesError);
+    
+    alert(
+        "ERROR DE ACTIVIDADES\n\n" +
+        "Mensaje: " + (actividadesError.message || "") +
+        "\nCódigo: " + (actividadesError.code || "") +
+        "\nDetalles: " + (actividadesError.details || "") +
+        "\nHint: " + (actividadesError.hint || "")
+    );
 
-            console.error(
-                "Error actividades:",
-                actividadesError
-            );
+    mostrarError(
+        "Error: " +
+        (actividadesError.message || "No se pudieron cargar las actividades.")
+    );
+
+    return;
+}
 
             mostrarError(
                 "No se pudo cargar la información de las actividades."
