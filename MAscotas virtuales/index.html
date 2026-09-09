@@ -2515,19 +2515,26 @@ async function cargarActividades(alumnoId) {
             error: actividadesError
         } =
             await supabaseClient
-                .from("actividades")
-                .select(`
-                    id,
-                    titulo,
-                    descripcion,
-                    tipo,
-                    enlace,
-                    imagen_url,
-                    puntos,
-                    fecha_limite,
-                    activo,
-                    created_at
-                `)
+            const {
+    data: actividades,
+    error: actividadesError
+} = await supabaseClient
+    .from("actividades")
+    .select(`
+        id,
+        profesor_id,
+        titulo,
+        descripcion,
+        tipo,
+        enlace,
+        imagen_url,
+        puntos,
+        fecha_limite,
+        activa,
+        created_at
+    `)
+    .in("id", ids)
+    .eq("activa", true);
                 .in(
                     "id",
                     idsActividades
