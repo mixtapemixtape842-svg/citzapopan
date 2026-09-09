@@ -3,1169 +3,1099 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Actividades | Robot Lab</title>
+    <title>Actividades | Robot Lab</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap"
-    rel="stylesheet"
->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
-<style>
+    <style>
 
-/* =========================================
-   VARIABLES
-========================================= */
+        :root {
 
-:root {
+            --black: #000000;
+            --panel: #090909;
+            --panel-2: #0d0d0d;
 
-    --black: #000000;
-    --panel: #090909;
-    --panel-2: #0d0d0d;
+            --border: rgba(255,255,255,0.08);
 
-    --border:
-        rgba(255,255,255,0.08);
+            --text: #ffffff;
+            --muted: #777777;
 
-    --text: #ffffff;
-    --muted: #777777;
+            --neon: #00f5ff;
+            --neon-2: #7c3cff;
 
-    --neon: #00f5ff;
-    --neon-2: #7c3cff;
+            --green: #00ff9d;
+            --yellow: #ffe600;
+            --red: #ff3b5c;
 
-    --green: #00ff9d;
-    --yellow: #ffe600;
-    --red: #ff3b5c;
+        }
 
-}
 
+        * {
 
-/* =========================================
-   RESET
-========================================= */
+            margin: 0;
+            padding: 0;
 
-* {
+            box-sizing: border-box;
 
-    margin: 0;
-    padding: 0;
+        }
 
-    box-sizing: border-box;
 
-}
+        html {
 
+            scroll-behavior: smooth;
 
-html {
+        }
 
-    scroll-behavior: smooth;
 
-}
+        body {
 
+            min-height: 100vh;
 
-body {
+            font-family: "Inter", sans-serif;
 
-    min-height: 100vh;
+            color: var(--text);
 
-    font-family:
-        "Inter",
-        sans-serif;
+            background:
 
-    color: var(--text);
+                radial-gradient(
+                    circle at 50% 0%,
+                    rgba(0,245,255,0.05),
+                    transparent 35%
+                ),
 
-    background:
+                #000000;
 
-        radial-gradient(
-            circle at 50% 0%,
-            rgba(0,245,255,0.05),
-            transparent 35%
-        ),
+            overflow-x: hidden;
 
-        #000000;
+        }
 
-    overflow-x: hidden;
 
-}
+        body::before {
 
+            content: "";
 
-/* GRID DE FONDO */
+            position: fixed;
 
-body::before {
+            inset: 0;
 
-    content: "";
+            pointer-events: none;
 
-    position: fixed;
+            opacity: 0.20;
 
-    inset: 0;
+            background-image:
 
-    pointer-events: none;
+                linear-gradient(
+                    rgba(255,255,255,0.025) 1px,
+                    transparent 1px
+                ),
 
-    opacity: 0.20;
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,0.025) 1px,
+                    transparent 1px
+                );
 
-    background-image:
+            background-size: 45px 45px;
 
-        linear-gradient(
-            rgba(255,255,255,0.025) 1px,
-            transparent 1px
-        ),
+            mask-image:
+                linear-gradient(
+                    to bottom,
+                    black,
+                    transparent 85%
+                );
 
-        linear-gradient(
-            90deg,
-            rgba(255,255,255,0.025) 1px,
-            transparent 1px
-        );
+        }
 
-    background-size: 45px 45px;
 
-    mask-image:
-        linear-gradient(
-            to bottom,
-            black,
-            transparent 85%
-        );
+        /* =========================================
+           HEADER
+        ========================================= */
 
-}
+        header {
 
+            position: relative;
 
-/* =========================================
-   HEADER
-========================================= */
+            z-index: 20;
 
-header {
+            height: 76px;
 
-    position: relative;
+            padding: 0 40px;
 
-    z-index: 20;
+            display: flex;
 
-    height: 76px;
+            align-items: center;
 
-    padding:
-        0 40px;
+            justify-content: space-between;
 
-    display: flex;
+            background: rgba(0,0,0,0.90);
 
-    align-items: center;
+            border-bottom: 1px solid var(--border);
 
-    justify-content: space-between;
+            backdrop-filter: blur(20px);
 
-    background:
-        rgba(0,0,0,0.90);
+        }
 
-    border-bottom:
-        1px solid var(--border);
 
-    backdrop-filter:
-        blur(20px);
+        .logo {
 
-}
+            display: flex;
 
+            align-items: center;
 
-.logo {
+            gap: 13px;
 
-    display: flex;
+        }
 
-    align-items: center;
 
-    gap: 13px;
+        .logo-icon {
 
-}
+            width: 44px;
+            height: 44px;
 
+            display: flex;
 
-.logo-icon {
+            align-items: center;
+            justify-content: center;
 
-    width: 44px;
-    height: 44px;
+            border-radius: 12px;
 
-    display: flex;
+            background: #050505;
 
-    align-items: center;
-    justify-content: center;
+            border: 1px solid rgba(0,245,255,0.35);
 
-    border-radius: 12px;
+            box-shadow:
+                0 0 20px rgba(0,245,255,0.10);
 
-    background: #050505;
+            font-size: 23px;
 
-    border:
-        1px solid
-        rgba(0,245,255,0.35);
+        }
 
-    box-shadow:
-        0 0 20px
-        rgba(0,245,255,0.10);
 
-    font-size: 23px;
+        .logo-title {
 
-}
+            font-family: "Orbitron", sans-serif;
 
+            font-size: 15px;
 
-.logo-title {
+            letter-spacing: 2px;
 
-    font-family:
-        "Orbitron",
-        sans-serif;
+        }
 
-    font-size: 15px;
 
-    letter-spacing: 2px;
+        .logo-subtitle {
 
-}
+            margin-top: 3px;
 
+            font-size: 9px;
 
-.logo-subtitle {
+            letter-spacing: 2px;
 
-    margin-top: 3px;
+            color: #666;
 
-    font-size: 9px;
+        }
 
-    letter-spacing: 2px;
 
-    color: #666;
+        /* =========================================
+           NAV
+        ========================================= */
 
-}
+        nav {
 
+            display: flex;
 
-/* =========================================
-   NAV
-========================================= */
+            align-items: center;
 
-nav {
+            gap: 8px;
 
-    display: flex;
+        }
 
-    align-items: center;
 
-    gap: 8px;
+        nav a {
 
-}
+            color: #777;
 
+            text-decoration: none;
 
-nav a {
+            padding: 10px 16px;
 
-    color: #777;
+            border-radius: 9px;
 
-    text-decoration: none;
+            font-size: 12px;
 
-    padding:
-        10px 16px;
+            font-weight: 600;
 
-    border-radius: 9px;
+            transition: 0.25s;
 
-    font-size: 12px;
+        }
 
-    font-weight: 600;
 
-    transition:
-        0.25s;
+        nav a:hover,
+        nav a.active {
 
-}
+            color: white;
 
+            background: rgba(255,255,255,0.045);
 
-nav a:hover,
-nav a.active {
+            box-shadow:
+                inset 0 0 0 1px
+                rgba(255,255,255,0.07);
 
-    color: white;
+        }
 
-    background:
-        rgba(255,255,255,0.045);
 
-    box-shadow:
-        inset 0 0 0 1px
-        rgba(255,255,255,0.07);
+        .logout-button {
 
-}
+            border: 1px solid rgba(255,59,92,0.20);
 
+            background: rgba(255,59,92,0.04);
 
-.logout-button {
+            color: #ff6075;
 
-    border:
-        1px solid
-        rgba(255,59,92,0.20);
+            padding: 10px 14px;
 
-    background:
-        rgba(255,59,92,0.04);
+            border-radius: 9px;
 
-    color: #ff6075;
+            cursor: pointer;
 
-    padding:
-        10px 14px;
+            font-size: 11px;
 
-    border-radius: 9px;
+            font-weight: 600;
 
-    cursor: pointer;
+            transition: 0.25s;
 
-    font-size: 11px;
+        }
 
-    font-weight: 600;
 
-    transition:
-        0.25s;
+        .logout-button:hover {
 
-}
+            background: rgba(255,59,92,0.10);
 
+            border-color: rgba(255,59,92,0.40);
 
-.logout-button:hover {
+        }
 
-    background:
-        rgba(255,59,92,0.10);
 
-    border-color:
-        rgba(255,59,92,0.40);
+        /* =========================================
+           MAIN
+        ========================================= */
 
-}
+        main {
 
+            position: relative;
 
-/* =========================================
-   MAIN
-========================================= */
+            z-index: 2;
 
-main {
+            max-width: 1400px;
 
-    position: relative;
+            margin: auto;
 
-    z-index: 2;
+            padding: 45px 40px 70px;
 
-    max-width: 1400px;
+        }
 
-    margin: auto;
 
-    padding: 45px 40px 70px;
+        /* =========================================
+           ENCABEZADO
+        ========================================= */
 
-}
+        .page-header {
 
+            margin-bottom: 30px;
 
-/* =========================================
-   ENCABEZADO
-========================================= */
+        }
 
-.page-header {
 
-    margin-bottom: 30px;
+        .page-label {
 
-}
+            color: var(--neon);
 
+            font-family: "Orbitron", sans-serif;
 
-.page-label {
+            font-size: 9px;
 
-    color: var(--neon);
+            letter-spacing: 3px;
 
-    font-family:
-        "Orbitron",
-        sans-serif;
+            margin-bottom: 9px;
 
-    font-size: 9px;
+        }
 
-    letter-spacing: 3px;
 
-    margin-bottom: 9px;
+        .page-header h1 {
 
-}
+            font-size: clamp(30px, 4vw, 44px);
 
+            font-weight: 800;
 
-.page-header h1 {
+            letter-spacing: -1px;
 
-    font-size:
-        clamp(30px, 4vw, 44px);
+        }
 
-    font-weight: 800;
 
-    letter-spacing: -1px;
+        .page-header p {
 
-}
+            margin-top: 9px;
 
+            color: #666;
 
-.page-header p {
+            font-size: 13px;
 
-    margin-top: 9px;
+            line-height: 1.6;
 
-    color: #666;
+        }
 
-    font-size: 13px;
 
-    line-height: 1.6;
+        /* =========================================
+           RESUMEN
+        ========================================= */
 
-}
+        .summary {
 
+            display: grid;
 
-/* =========================================
-   RESUMEN
-========================================= */
+            grid-template-columns: repeat(3, 1fr);
 
-.summary {
+            gap: 15px;
 
-    display: grid;
+            margin-bottom: 28px;
 
-    grid-template-columns:
-        repeat(3, 1fr);
+        }
 
-    gap: 15px;
 
-    margin-bottom: 28px;
+        .summary-card {
 
-}
+            padding: 20px;
 
+            background:
+                linear-gradient(
+                    145deg,
+                    #0b0b0b,
+                    #050505
+                );
 
-.summary-card {
+            border: 1px solid var(--border);
 
-    padding: 20px;
+            border-radius: 17px;
 
-    background:
-        linear-gradient(
-            145deg,
-            #0b0b0b,
-            #050505
-        );
+        }
 
-    border:
-        1px solid var(--border);
 
-    border-radius: 17px;
+        .summary-number {
 
-}
+            font-family: "Orbitron", sans-serif;
 
+            font-size: 28px;
 
-.summary-number {
+            color: var(--neon);
 
-    font-family:
-        "Orbitron",
-        sans-serif;
+            margin-bottom: 5px;
 
-    font-size: 28px;
+        }
 
-    color: var(--neon);
 
-    margin-bottom: 5px;
+        .summary-label {
 
-}
+            color: #555;
 
+            font-size: 10px;
 
-.summary-label {
+            text-transform: uppercase;
 
-    color: #555;
+            letter-spacing: 1px;
 
-    font-size: 10px;
+        }
 
-    text-transform: uppercase;
 
-    letter-spacing: 1px;
+        /* =========================================
+           TOOLBAR
+        ========================================= */
 
-}
+        .toolbar {
 
+            display: flex;
 
-/* =========================================
-   FILTROS
-========================================= */
+            align-items: center;
 
-.toolbar {
+            justify-content: space-between;
 
-    display: flex;
+            gap: 15px;
 
-    align-items: center;
+            margin-bottom: 20px;
 
-    justify-content: space-between;
+        }
 
-    gap: 15px;
 
-    margin-bottom: 20px;
+        .filters {
 
-}
+            display: flex;
 
+            gap: 8px;
 
-.filters {
+        }
 
-    display: flex;
 
-    gap: 8px;
+        .filter-button {
 
-}
+            padding: 9px 14px;
 
+            border-radius: 9px;
 
-.filter-button {
+            border: 1px solid rgba(255,255,255,0.07);
 
-    padding:
-        9px 14px;
+            background: #090909;
 
-    border-radius: 9px;
+            color: #666;
 
-    border:
-        1px solid
-        rgba(255,255,255,0.07);
+            cursor: pointer;
 
-    background:
-        #090909;
+            font-size: 10px;
 
-    color: #666;
+            font-weight: 700;
 
-    cursor: pointer;
+            transition: 0.25s;
 
-    font-size: 10px;
+        }
 
-    font-weight: 700;
 
-    transition:
-        0.25s;
+        .filter-button:hover,
+        .filter-button.active {
 
-}
+            color: white;
 
+            border-color: rgba(0,245,255,0.20);
 
-.filter-button:hover,
-.filter-button.active {
+            background: rgba(0,245,255,0.05);
 
-    color: white;
+        }
 
-    border-color:
-        rgba(0,245,255,0.20);
 
-    background:
-        rgba(0,245,255,0.05);
+        .refresh-button {
 
-}
+            padding: 9px 14px;
 
+            border-radius: 9px;
 
-.refresh-button {
+            border: 1px solid rgba(255,255,255,0.07);
 
-    padding:
-        9px 14px;
+            background: #090909;
 
-    border-radius: 9px;
+            color: #888;
 
-    border:
-        1px solid
-        rgba(255,255,255,0.07);
+            cursor: pointer;
 
-    background:
-        #090909;
+            font-size: 10px;
 
-    color: #888;
+            transition: 0.25s;
 
-    cursor: pointer;
+        }
 
-    font-size: 10px;
 
-    transition:
-        0.25s;
+        .refresh-button:hover {
 
-}
+            color: var(--neon);
 
+            border-color: rgba(0,245,255,0.20);
 
-.refresh-button:hover {
+        }
 
-    color: var(--neon);
 
-    border-color:
-        rgba(0,245,255,0.20);
+        /* =========================================
+           GRID
+        ========================================= */
 
-}
+        .activities-grid {
 
+            display: grid;
 
-/* =========================================
-   GRID ACTIVIDADES
-========================================= */
+            grid-template-columns: repeat(3, 1fr);
 
-.activities-grid {
+            gap: 18px;
 
-    display: grid;
+        }
 
-    grid-template-columns:
-        repeat(3, 1fr);
 
-    gap: 18px;
+        /* =========================================
+           CARD
+        ========================================= */
 
-}
+        .activity-card {
 
+            position: relative;
 
-/* =========================================
-   CARD ACTIVIDAD
-========================================= */
+            display: flex;
 
-.activity-card {
+            flex-direction: column;
 
-    position: relative;
+            min-height: 330px;
 
-    display: flex;
+            background:
+                linear-gradient(
+                    145deg,
+                    #0c0c0c,
+                    #050505
+                );
 
-    flex-direction: column;
+            border: 1px solid rgba(255,255,255,0.07);
 
-    min-height: 330px;
+            border-radius: 20px;
 
-    background:
-        linear-gradient(
-            145deg,
-            #0c0c0c,
-            #050505
-        );
+            overflow: hidden;
 
-    border:
-        1px solid
-        rgba(255,255,255,0.07);
+            transition:
+                transform 0.25s ease,
+                border-color 0.25s ease,
+                box-shadow 0.25s ease;
 
-    border-radius: 20px;
+        }
 
-    overflow: hidden;
 
-    transition:
-        transform 0.25s ease,
-        border-color 0.25s ease,
-        box-shadow 0.25s ease;
+        .activity-card:hover {
 
-}
+            transform: translateY(-5px);
 
+            border-color: rgba(0,245,255,0.18);
 
-.activity-card:hover {
+            box-shadow:
+                0 20px 50px
+                rgba(0,0,0,0.65);
 
-    transform:
-        translateY(-5px);
+        }
 
-    border-color:
-        rgba(0,245,255,0.18);
 
-    box-shadow:
-        0 20px 50px
-        rgba(0,0,0,0.65);
+        .activity-card::before {
 
-}
+            content: "";
 
+            position: absolute;
 
-/* LINEA SUPERIOR */
+            top: 0;
 
-.activity-card::before {
+            left: 10%;
 
-    content: "";
+            right: 10%;
 
-    position: absolute;
+            height: 1px;
 
-    top: 0;
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(0,245,255,0.35),
+                    transparent
+                );
 
-    left: 10%;
+        }
 
-    right: 10%;
 
-    height: 1px;
+        /* =========================================
+           IMAGEN
+        ========================================= */
 
-    background:
-        linear-gradient(
-            90deg,
-            transparent,
-            rgba(0,245,255,0.35),
-            transparent
-        );
+        .activity-image {
 
-}
+            width: 100%;
 
+            height: 150px;
 
-/* =========================================
-   IMAGEN
-========================================= */
+            object-fit: cover;
 
-.activity-image {
+            display: block;
 
-    width: 100%;
+            background: #000;
 
-    height: 150px;
+        }
 
-    object-fit: cover;
 
-    display: none;
+        /* =========================================
+           CONTENIDO
+        ========================================= */
 
-    background: #000;
+        .activity-content {
 
-}
+            padding: 20px;
 
+            display: flex;
 
-.activity-image.visible {
+            flex-direction: column;
 
-    display: block;
+            flex: 1;
 
-}
+        }
 
 
-/* =========================================
-   CONTENIDO
-========================================= */
+        .activity-top {
 
-.activity-content {
+            display: flex;
 
-    padding: 20px;
+            align-items: center;
 
-    display: flex;
+            justify-content: space-between;
 
-    flex-direction: column;
+            gap: 10px;
 
-    flex: 1;
+            margin-bottom: 15px;
 
-}
+        }
 
 
-.activity-top {
+        .activity-type {
 
-    display: flex;
+            color: var(--neon);
 
-    align-items: center;
+            font-family: "Orbitron", sans-serif;
 
-    justify-content: space-between;
+            font-size: 8px;
 
-    gap: 10px;
+            letter-spacing: 1.5px;
 
-    margin-bottom: 15px;
+        }
 
-}
 
+        .status {
 
-.activity-type {
+            padding: 5px 9px;
 
-    color: var(--neon);
+            border-radius: 20px;
 
-    font-family:
-        "Orbitron",
-        sans-serif;
+            font-size: 8px;
 
-    font-size: 8px;
+            font-weight: 800;
 
-    letter-spacing: 1.5px;
+        }
 
-}
 
+        .status.pending {
 
-.status {
+            color: var(--yellow);
 
-    padding:
-        5px 9px;
+            background: rgba(255,230,0,0.06);
 
-    border-radius: 20px;
+            border: 1px solid rgba(255,230,0,0.14);
 
-    font-size: 8px;
+        }
 
-    font-weight: 800;
 
-}
+        .status.completed {
 
+            color: var(--green);
 
-.status.pending {
+            background: rgba(0,255,157,0.06);
 
-    color: var(--yellow);
+            border: 1px solid rgba(0,255,157,0.14);
 
-    background:
-        rgba(255,230,0,0.06);
+        }
 
-    border:
-        1px solid
-        rgba(255,230,0,0.14);
 
-}
+        .status.progress {
 
+            color: var(--neon);
 
-.status.completed {
+            background: rgba(0,245,255,0.06);
 
-    color: var(--green);
+            border: 1px solid rgba(0,245,255,0.14);
 
-    background:
-        rgba(0,255,157,0.06);
+        }
 
-    border:
-        1px solid
-        rgba(0,255,157,0.14);
 
-}
+        .activity-card h2 {
 
+            font-size: 17px;
 
-.status.progress {
+            line-height: 1.35;
 
-    color: var(--neon);
+            margin-bottom: 9px;
 
-    background:
-        rgba(0,245,255,0.06);
+        }
 
-    border:
-        1px solid
-        rgba(0,245,255,0.14);
 
-}
+        .activity-description {
 
+            color: #666;
 
-/* =========================================
-   TITULO
-========================================= */
+            font-size: 11px;
 
-.activity-card h2 {
+            line-height: 1.65;
 
-    font-size: 17px;
+            flex: 1;
 
-    line-height: 1.35;
+        }
 
-    margin-bottom: 9px;
 
-}
+        /* =========================================
+           INFO
+        ========================================= */
 
+        .activity-info {
 
-.activity-description {
+            display: grid;
 
-    color: #666;
+            grid-template-columns: 1fr 1fr;
 
-    font-size: 11px;
+            gap: 8px;
 
-    line-height: 1.65;
+            margin-top: 20px;
 
-    flex: 1;
+        }
 
-}
 
+        .info-box {
 
-/* =========================================
-   INFO
-========================================= */
+            padding: 10px;
 
-.activity-info {
+            background: rgba(255,255,255,0.025);
 
-    display: grid;
+            border: 1px solid rgba(255,255,255,0.05);
 
-    grid-template-columns:
-        1fr 1fr;
+            border-radius: 9px;
 
-    gap: 8px;
+        }
 
-    margin-top: 20px;
 
-}
+        .info-label {
 
+            display: block;
 
-.info-box {
+            color: #444;
 
-    padding: 10px;
+            font-size: 8px;
 
-    background:
-        rgba(255,255,255,0.025);
+            text-transform: uppercase;
 
-    border:
-        1px solid
-        rgba(255,255,255,0.05);
+            letter-spacing: 1px;
 
-    border-radius: 9px;
+            margin-bottom: 4px;
 
-}
+        }
 
 
-.info-label {
+        .info-value {
 
-    display: block;
+            color: #aaa;
 
-    color: #444;
+            font-size: 10px;
 
-    font-size: 8px;
+            font-weight: 600;
 
-    text-transform: uppercase;
+        }
 
-    letter-spacing: 1px;
 
-    margin-bottom: 4px;
+        .info-value.points {
 
-}
+            color: var(--neon-2);
 
+            font-family: "Orbitron", sans-serif;
 
-.info-value {
+        }
 
-    color: #aaa;
 
-    font-size: 10px;
+        /* =========================================
+           BOTÓN
+        ========================================= */
 
-    font-weight: 600;
+        .activity-button {
 
-}
+            width: 100%;
 
+            margin-top: 15px;
 
-.info-value.points {
+            padding: 12px;
 
-    color: var(--neon-2);
+            display: block;
 
-    font-family:
-        "Orbitron",
-        sans-serif;
+            text-align: center;
 
-}
+            text-decoration: none;
 
+            color: white;
 
-/* =========================================
-   BOTÓN
-========================================= */
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(0,245,255,0.08),
+                    rgba(124,60,255,0.08)
+                );
 
-.activity-button {
+            border: 1px solid rgba(0,245,255,0.14);
 
-    width: 100%;
+            border-radius: 10px;
 
-    margin-top: 15px;
+            font-size: 10px;
 
-    padding: 12px;
+            font-weight: 800;
 
-    display: block;
+            transition: 0.25s;
 
-    text-align: center;
+        }
 
-    text-decoration: none;
 
-    color: white;
+        .activity-button:hover {
 
-    background:
-        linear-gradient(
-            90deg,
-            rgba(0,245,255,0.08),
-            rgba(124,60,255,0.08)
-        );
+            color: var(--neon);
 
-    border:
-        1px solid
-        rgba(0,245,255,0.14);
+            border-color: rgba(0,245,255,0.35);
 
-    border-radius: 10px;
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(0,245,255,0.13),
+                    rgba(124,60,255,0.13)
+                );
 
-    font-size: 10px;
+        }
 
-    font-weight: 800;
 
-    transition:
-        0.25s;
+        .activity-button.disabled {
 
-}
+            opacity: 0.45;
 
+            cursor: not-allowed;
 
-.activity-button:hover {
+            pointer-events: none;
 
-    color: var(--neon);
+        }
 
-    border-color:
-        rgba(0,245,255,0.35);
 
-    background:
-        linear-gradient(
-            90deg,
-            rgba(0,245,255,0.13),
-            rgba(124,60,255,0.13)
-        );
+        /* =========================================
+           VACÍO
+        ========================================= */
 
-}
+        .empty {
 
+            grid-column: 1 / -1;
 
-/* =========================================
-   SIN ACTIVIDADES
-========================================= */
+            padding: 70px 20px;
 
-.empty {
+            text-align: center;
 
-    padding:
-        70px 20px;
+            background:
+                linear-gradient(
+                    145deg,
+                    #0b0b0b,
+                    #050505
+                );
 
-    text-align: center;
+            border: 1px dashed rgba(255,255,255,0.08);
 
-    background:
-        linear-gradient(
-            145deg,
-            #0b0b0b,
-            #050505
-        );
+            border-radius: 20px;
 
-    border:
-        1px dashed
-        rgba(255,255,255,0.08);
+        }
 
-    border-radius: 20px;
 
-}
+        .empty-icon {
 
+            font-size: 50px;
 
-.empty-icon {
+            margin-bottom: 15px;
 
-    font-size: 50px;
+        }
 
-    margin-bottom: 15px;
 
-}
+        .empty h2 {
 
+            font-family: "Orbitron", sans-serif;
 
-.empty h2 {
+            font-size: 17px;
 
-    font-family:
-        "Orbitron",
-        sans-serif;
+            margin-bottom: 8px;
 
-    font-size: 17px;
+        }
 
-    margin-bottom: 8px;
 
-}
+        .empty p {
 
+            color: #555;
 
-.empty p {
+            font-size: 11px;
 
-    color: #555;
+        }
 
-    font-size: 11px;
 
-}
+        /* =========================================
+           LOADING
+        ========================================= */
 
+        .loading {
 
-/* =========================================
-   LOADING
-========================================= */
+            grid-column: 1 / -1;
 
-.loading {
+            padding: 70px 20px;
 
-    grid-column:
-        1 / -1;
+            text-align: center;
 
-    padding:
-        70px 20px;
+            color: #555;
 
-    text-align: center;
+        }
 
-    color: #555;
 
-}
+        .loading-icon {
 
+            font-size: 35px;
 
-.loading-icon {
+            margin-bottom: 12px;
 
-    font-size: 35px;
+            animation: loadingPulse 1.2s infinite;
 
-    margin-bottom: 12px;
+        }
 
-    animation:
-        loadingPulse 1.2s infinite;
 
-}
+        @keyframes loadingPulse {
 
+            0%,100% {
 
-@keyframes loadingPulse {
+                opacity: 0.4;
 
-    0%,100% {
-        opacity: 0.4;
-        transform: scale(0.95);
-    }
+                transform: scale(0.95);
 
-    50% {
-        opacity: 1;
-        transform: scale(1);
-    }
+            }
 
-}
+            50% {
 
+                opacity: 1;
 
-/* =========================================
-   ERROR
-========================================= */
+                transform: scale(1);
 
-.error-box {
+            }
 
-    grid-column:
-        1 / -1;
+        }
 
-    padding:
-        40px 20px;
 
-    text-align: center;
+        /* =========================================
+           ERROR
+        ========================================= */
 
-    border:
-        1px solid
-        rgba(255,59,92,0.15);
+        .error-box {
 
-    background:
-        rgba(255,59,92,0.025);
+            grid-column: 1 / -1;
 
-    border-radius: 18px;
+            padding: 40px 20px;
 
-}
+            text-align: center;
 
+            border: 1px solid rgba(255,59,92,0.15);
 
-.error-box strong {
+            background: rgba(255,59,92,0.025);
 
-    display: block;
+            border-radius: 18px;
 
-    color: #ff6075;
+        }
 
-    margin-bottom: 8px;
 
-}
+        .error-box strong {
 
+            display: block;
 
-.error-box p {
+            color: #ff6075;
 
-    color: #666;
+            margin-bottom: 8px;
 
-    font-size: 11px;
+        }
 
-}
 
+        .error-box p {
 
-/* =========================================
-   RESPONSIVE
-========================================= */
+            color: #666;
 
-@media (max-width: 1050px) {
+            font-size: 11px;
 
-    .activities-grid {
+            line-height: 1.6;
 
-        grid-template-columns:
-            repeat(2, 1fr);
+        }
 
-    }
 
-}
+        .error-detail {
 
+            margin-top: 15px;
 
-@media (max-width: 700px) {
+            color: #444;
 
-    header {
+            font-size: 10px;
 
-        padding:
-            0 18px;
+            word-break: break-word;
 
-    }
+        }
 
-    nav a {
 
-        display: none;
+        /* =========================================
+           RESPONSIVE
+        ========================================= */
 
-    }
+        @media (max-width: 1050px) {
 
-    main {
+            .activities-grid {
 
-        padding:
-            30px 15px 50px;
+                grid-template-columns: repeat(2, 1fr);
 
-    }
+            }
 
-    .summary {
+        }
 
-        grid-template-columns:
-            1fr;
 
-    }
+        @media (max-width: 700px) {
 
-    .toolbar {
+            header {
 
-        flex-direction: column;
+                padding: 0 18px;
 
-        align-items: stretch;
+            }
 
-    }
 
-    .filters {
+            nav a {
 
-        overflow-x: auto;
+                display: none;
 
-    }
+            }
 
-    .activities-grid {
 
-        grid-template-columns:
-            1fr;
+            main {
 
-    }
+                padding: 30px 15px 50px;
 
-}
+            }
 
-</style>
+
+            .summary {
+
+                grid-template-columns: 1fr;
+
+            }
+
+
+            .toolbar {
+
+                flex-direction: column;
+
+                align-items: stretch;
+
+            }
+
+
+            .filters {
+
+                overflow-x: auto;
+
+            }
+
+
+            .activities-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+    </style>
 
 </head>
 
@@ -1173,1470 +1103,1401 @@ main {
 <body>
 
 
-<!-- =========================================
-     HEADER
-========================================= -->
+    <!-- =========================================
+         HEADER
+    ========================================== -->
 
-<header>
+    <header>
 
-    <div class="logo">
+        <div class="logo">
 
-        <div class="logo-icon">
-            🤖
-        </div>
-
-        <div>
-
-            <div class="logo-title">
-                ROBOT LAB
+            <div class="logo-icon">
+                🤖
             </div>
 
-            <div class="logo-subtitle">
-                CAMPUS VIRTUAL
+            <div>
+
+                <div class="logo-title">
+                    ROBOT LAB
+                </div>
+
+                <div class="logo-subtitle">
+                    CAMPUS VIRTUAL
+                </div>
+
             </div>
 
         </div>
 
-    </div>
+
+        <nav>
+
+            <a href="index.html">
+                Inicio
+            </a>
+
+            <a
+                href="actividades.html"
+                class="active"
+            >
+                Actividades
+            </a>
+
+            <a href="https://TU-ENLACE-TAREAS.com">
+                Tareas
+            </a>
+
+            <button
+                class="logout-button"
+                onclick="cerrarSesion()"
+            >
+                Cerrar sesión
+            </button>
+
+        </nav>
+
+    </header>
 
 
-    <nav>
+    <!-- =========================================
+         MAIN
+    ========================================== -->
 
-        <a href="index.html">
-            Inicio
-        </a>
-
-        <a
-            href="actividades.html"
-            class="active"
-        >
-            Actividades
-        </a>
-
-        <a href="https://TU-ENLACE-TAREAS.com">
-            Tareas
-        </a>
-
-        <button
-            class="logout-button"
-            onclick="cerrarSesion()"
-        >
-            Cerrar sesión
-        </button>
-
-    </nav>
-
-</header>
+    <main>
 
 
-<!-- =========================================
-     MAIN
-========================================= -->
+        <section class="page-header">
 
-<main>
+            <div class="page-label">
+                ROBOT LAB / ACTIVIDADES
+            </div>
 
+            <h1>
+                Mis actividades 🧩
+            </h1>
 
-<!-- ENCABEZADO -->
+            <p id="mensajeBienvenida">
+                Cargando tus actividades...
+            </p>
 
-<section class="page-header">
-
-    <div class="page-label">
-        ROBOT LAB / ACTIVIDADES
-    </div>
-
-    <h1>
-        Mis actividades 🧩
-    </h1>
-
-    <p id="mensajeBienvenida">
-        Cargando tus actividades...
-    </p>
-
-</section>
+        </section>
 
 
-<!-- RESUMEN -->
+        <!-- =====================================
+             RESUMEN
+        ====================================== -->
 
-<section class="summary">
+        <section class="summary">
 
 
-    <div class="summary-card">
+            <div class="summary-card">
 
-        <div
-            id="totalActividades"
-            class="summary-number"
-        >
-            0
+                <div
+                    id="totalActividades"
+                    class="summary-number"
+                >
+                    0
+                </div>
+
+                <div class="summary-label">
+                    Actividades asignadas
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div
+                    id="pendientesActividades"
+                    class="summary-number"
+                >
+                    0
+                </div>
+
+                <div class="summary-label">
+                    Pendientes
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div
+                    id="completadasActividades"
+                    class="summary-number"
+                >
+                    0
+                </div>
+
+                <div class="summary-label">
+                    Completadas
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- =====================================
+             TOOLBAR
+        ====================================== -->
+
+        <div class="toolbar">
+
+
+            <div class="filters">
+
+                <button
+                    class="filter-button active"
+                    onclick="filtrarActividades('todas', this)"
+                >
+                    Todas
+                </button>
+
+                <button
+                    class="filter-button"
+                    onclick="filtrarActividades('pendiente', this)"
+                >
+                    Pendientes
+                </button>
+
+                <button
+                    class="filter-button"
+                    onclick="filtrarActividades('completada', this)"
+                >
+                    Completadas
+                </button>
+
+            </div>
+
+
+            <button
+                class="refresh-button"
+                onclick="cargarActividades()"
+            >
+                ↻ Actualizar
+            </button>
+
+
         </div>
 
-        <div class="summary-label">
-            Actividades asignadas
-        </div>
 
-    </div>
+        <!-- =====================================
+             ACTIVIDADES
+        ====================================== -->
 
-
-    <div class="summary-card">
-
-        <div
-            id="pendientesActividades"
-            class="summary-number"
+        <section
+            id="activitiesGrid"
+            class="activities-grid"
         >
-            0
-        </div>
 
-        <div class="summary-label">
-            Pendientes
-        </div>
+            <div class="loading">
 
-    </div>
+                <div class="loading-icon">
+                    🧩
+                </div>
 
+                Cargando actividades...
 
-    <div class="summary-card">
+            </div>
 
-        <div
-            id="completadasActividades"
-            class="summary-number"
-        >
-            0
-        </div>
+        </section>
 
-        <div class="summary-label">
-            Completadas
-        </div>
 
-    </div>
+    </main>
 
 
-</section>
+    <script>
 
+        /* =========================================
+           SUPABASE
+        ========================================= */
 
-<!-- FILTROS -->
+        const SUPABASE_URL =
+            "https://bcfknbpkduiwgqymxkns.supabase.co";
 
-<div class="toolbar">
 
-    <div class="filters">
+        const SUPABASE_KEY =
+            "sb_publishable_END5KZ8gA4e9YDpicG-aLw_aRaIzo7E";
 
-        <button
-            class="filter-button active"
-            data-filter="todas"
-            onclick="filtrarActividades('todas', this)"
-        >
-            Todas
-        </button>
 
-        <button
-            class="filter-button"
-            data-filter="pendiente"
-            onclick="filtrarActividades('pendiente', this)"
-        >
-            Pendientes
-        </button>
-
-        <button
-            class="filter-button"
-            data-filter="completada"
-            onclick="filtrarActividades('completada', this)"
-        >
-            Completadas
-        </button>
-
-    </div>
-
-
-    <button
-        class="refresh-button"
-        onclick="cargarActividades()"
-    >
-        ↻ Actualizar
-    </button>
-
-</div>
-
-
-<!-- ACTIVIDADES -->
-
-<section
-    id="activitiesGrid"
-    class="activities-grid"
->
-
-    <div class="loading">
-
-        <div class="loading-icon">
-            🧩
-        </div>
-
-        Cargando actividades...
-
-    </div>
-
-</section>
-
-
-</main>
-
-
-<script>
-
-/* =========================================
-   SUPABASE
-========================================= */
-
-const SUPABASE_URL =
-    "https://bcfknbpkduiwgqymxkns.supabase.co";
-
-const SUPABASE_KEY =
-    "sb_publishable_END5KZ8gA4e9YDpicG-aLw_aRaIzo7E";
-
-
-const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
-
-
-/* =========================================
-   VARIABLES
-========================================= */
-
-let alumnoActual = null;
-
-let actividadesAlumno = [];
-
-let filtroActual = "todas";
-
-
-/* =========================================
-   ESCAPAR HTML
-========================================= */
-
-function escaparHTML(texto) {
-
-    if (
-        texto === null ||
-        texto === undefined
-    ) {
-
-        return "";
-
-    }
-
-
-    return String(texto)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-
-}
-
-
-/* =========================================
-   FORMATEAR FECHA
-========================================= */
-
-function formatearFecha(fecha) {
-
-    if (!fecha) {
-
-        return "Sin fecha";
-
-    }
-
-
-    const fechaObj =
-        new Date(fecha);
-
-
-    if (
-        isNaN(
-            fechaObj.getTime()
-        )
-    ) {
-
-        return "Sin fecha";
-
-    }
-
-
-    return fechaObj.toLocaleDateString(
-        "es-MX",
-        {
-            day: "2-digit",
-            month: "short",
-            year: "numeric"
-        }
-    );
-
-}
-
-
-/* =========================================
-   FORMATEAR TIPO
-========================================= */
-
-function formatearTipo(tipo) {
-
-    if (!tipo) {
-
-        return "ACTIVIDAD";
-
-    }
-
-
-    const tipos = {
-
-        enlace: "ENLACE",
-
-        practica: "PRÁCTICA",
-
-        proyecto: "PROYECTO",
-
-        quiz: "QUIZ",
-
-        video: "VIDEO",
-
-        lectura: "LECTURA",
-
-        otro: "ACTIVIDAD"
-
-    };
-
-
-    return (
-        tipos[tipo]
-        ||
-        tipo.toUpperCase()
-    );
-
-}
-
-
-/* =========================================
-   INICIAR PÁGINA
-========================================= */
-
-async function iniciar() {
-
-    try {
-
-        const {
-            data: sessionData,
-            error: sessionError
-        } =
-            await supabaseClient
-                .auth
-                .getSession();
-
-
-        if (sessionError) {
-
-            console.error(
-                "Error de sesión:",
-                sessionError
+        const supabaseClient =
+            window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
             );
-
-            window.location.href =
-                "login.html";
-
-            return;
-
-        }
-
-
-        if (
-            !sessionData.session
-        ) {
-
-            window.location.href =
-                "login.html";
-
-            return;
-
-        }
-
-
-        const usuarioAuth =
-            sessionData.session.user;
 
 
         /* =========================================
-           BUSCAR ALUMNO
+           VARIABLES
         ========================================= */
 
-        const {
-            data: alumno,
-            error: alumnoError
-        } =
-            await supabaseClient
-                .from("alumnos")
-                .select(`
-                    id,
-                    nombre,
-                    usuario
-                `)
-                .eq(
-                    "auth_id",
-                    usuarioAuth.id
+        let alumnoActual = null;
+
+        let actividadesAlumno = [];
+
+        let filtroActual = "todas";
+
+
+        /* =========================================
+           ESCAPAR HTML
+        ========================================= */
+
+        function escaparHTML(texto) {
+
+            if (
+                texto === null ||
+                texto === undefined
+            ) {
+
+                return "";
+
+            }
+
+
+            return String(texto)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+
+        }
+
+
+        /* =========================================
+           FORMATEAR FECHA
+        ========================================= */
+
+        function formatearFecha(fecha) {
+
+            if (!fecha) {
+
+                return "Sin fecha";
+
+            }
+
+
+            const fechaObj =
+                new Date(fecha);
+
+
+            if (
+                Number.isNaN(
+                    fechaObj.getTime()
                 )
-                .maybeSingle();
+            ) {
 
+                return "Sin fecha";
 
-        if (alumnoError) {
+            }
 
-            console.error(
-                "Error alumno:",
-                alumnoError
-            );
 
-            mostrarError(
-                "No se pudieron cargar tus datos."
-            );
-
-            return;
-
-        }
-
-
-        if (!alumno) {
-
-            await supabaseClient
-                .auth
-                .signOut();
-
-            window.location.href =
-                "login.html";
-
-            return;
-
-        }
-
-
-        alumnoActual =
-            alumno;
-
-
-        document.getElementById(
-            "mensajeBienvenida"
-        ).textContent =
-            `Hola ${alumno.nombre}. Aquí encontrarás todas las actividades que tu profesor te ha asignado.`;
-
-
-        await cargarActividades();
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Error iniciando página:",
-            error
-        );
-
-        mostrarError(
-            "Ocurrió un error inesperado."
-        );
-
-    }
-
-}
-
-
-/* =========================================
-   CARGAR ACTIVIDADES
-========================================= */
-
-async function cargarActividades() {
-
-    if (!alumnoActual) {
-        return;
-    }
-
-    const contenedor =
-        document.getElementById("activitiesGrid");
-
-    contenedor.innerHTML = `
-        <div class="loading">
-            <div class="loading-icon">🧩</div>
-            Cargando actividades...
-        </div>
-    `;
-
-    try {
-
-        /* =========================================
-           1. BUSCAR ASIGNACIONES DEL ALUMNO
-        ========================================= */
-
-        const {
-            data: asignaciones,
-            error: asignacionesError
-        } = await supabaseClient
-            .from("actividad_alumnos")
-            .select(`
-                id,
-                actividad_id,
-                estado,
-                calificacion,
-                completada_at,
-                created_at
-            `)
-            .eq("alumno_id", alumnoActual.id)
-            .order("created_at", {
-                ascending: false
-            });
-
-
-        if (asignacionesError) {
-
-            console.error(
-                "ERROR actividad_alumnos:",
-                asignacionesError
-            );
-
-            mostrarError(
-                "No se pudieron cargar tus asignaciones: " +
-                asignacionesError.message
-            );
-
-            return;
-        }
-
-
-        const listaAsignaciones =
-            asignaciones || [];
-
-
-        console.log(
-            "Asignaciones encontradas:",
-            listaAsignaciones
-        );
-
-
-        /* =========================================
-           SIN ACTIVIDADES
-        ========================================= */
-
-        if (listaAsignaciones.length === 0) {
-
-            actividadesAlumno = [];
-
-            actualizarResumen();
-
-            mostrarVacio(
-                "Tu profesor todavía no te ha asignado actividades."
-            );
-
-            return;
-        }
-
-
-        /* =========================================
-           2. OBTENER IDS DE ACTIVIDADES
-        ========================================= */
-
-        const ids =
-            listaAsignaciones
-                .map(
-                    asignacion =>
-                        asignacion.actividad_id
-                )
-                .filter(Boolean);
-
-
-        console.log(
-            "IDs de actividades:",
-            ids
-        );
-
-
-        if (ids.length === 0) {
-
-            actividadesAlumno = [];
-
-            actualizarResumen();
-
-            mostrarVacio();
-
-            return;
-        }
-
-
-        /* =========================================
-           3. BUSCAR LAS ACTIVIDADES
-        ========================================= */
-
-        const {
-            data: actividades,
-            error: actividadesError
-        } = await supabaseClient
-            .from("actividades")
-            .select(`
-                id,
-                profesor_id,
-                titulo,
-                descripcion,
-                tipo,
-                enlace,
-                imagen_url,
-                puntos,
-                fecha_limite,
-                activa,
-                created_at
-            `)
-            .in("id", ids);
-
-
-        if (actividadesError) {
-
-            console.error(
-                "ERROR actividades:",
-                actividadesError
-            );
-
-            mostrarError(
-                "No se pudieron cargar las actividades: " +
-                actividadesError.message
-            );
-
-            return;
-        }
-
-
-        const listaActividades =
-            actividades || [];
-
-
-        console.log(
-            "Actividades encontradas:",
-            listaActividades
-        );
-
-
-        /* =========================================
-           4. UNIR ACTIVIDAD + ASIGNACIÓN
-        ========================================= */
-
-        actividadesAlumno =
-            listaActividades.map(
-                actividad => {
-
-                    const asignacion =
-                        listaAsignaciones.find(
-                            item =>
-                                Number(
-                                    item.actividad_id
-                                ) ===
-                                Number(
-                                    actividad.id
-                                )
-                        );
-
-
-                    return {
-
-                        ...actividad,
-
-                        asignacion_id:
-                            asignacion?.id,
-
-                        estado:
-                            asignacion?.estado ||
-                            "pendiente",
-
-                        calificacion:
-                            asignacion?.calificacion,
-
-                        completada_at:
-                            asignacion?.completada_at
-
-                    };
-
+            return fechaObj.toLocaleDateString(
+                "es-MX",
+                {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric"
                 }
             );
 
-
-        console.log(
-            "Actividades del alumno:",
-            actividadesAlumno
-        );
+        }
 
 
         /* =========================================
-           5. ACTUALIZAR PANTALLA
+           FORMATEAR TIPO
         ========================================= */
 
-        actualizarResumen();
+        function formatearTipo(tipo) {
 
-        mostrarActividades();
+            if (!tipo) {
+
+                return "ACTIVIDAD";
+
+            }
 
 
-    } catch (error) {
+            const tipos = {
 
-        console.error(
-            "ERROR GENERAL CARGANDO ACTIVIDADES:",
-            error
-        );
+                enlace: "ENLACE",
 
-        mostrarError(
-            "Ocurrió un error al consultar las actividades: " +
-            (error.message || error)
-        );
+                practica: "PRÁCTICA",
 
-    }
+                proyecto: "PROYECTO",
 
-}
+                quiz: "QUIZ",
+
+                video: "VIDEO",
+
+                lectura: "LECTURA",
+
+                otro: "ACTIVIDAD"
+
+            };
+
+
+            return (
+                tipos[tipo] ||
+                String(tipo).toUpperCase()
+            );
+
+        }
+
 
         /* =========================================
-           1. ASIGNACIONES
+           INICIAR
         ========================================= */
 
-        const {
-            data: asignaciones,
-            error: asignacionesError
-        } =
-            await supabaseClient
-                .from("actividad_alumnos")
-                .select(`
-                    id,
-                    actividad_id,
-                    estado,
-                    calificacion,
-                    completada_at,
-                    created_at
-                `)
-                .eq(
-                    "alumno_id",
-                    alumnoActual.id
-                )
-                .order(
-                    "created_at",
-                    {
-                        ascending: false
-                    }
+        async function iniciar() {
+
+            try {
+
+                const {
+                    data: sessionData,
+                    error: sessionError
+                } =
+                    await supabaseClient
+                        .auth
+                        .getSession();
+
+
+                if (sessionError) {
+
+                    console.error(
+                        "Error de sesión:",
+                        sessionError
+                    );
+
+                    window.location.href =
+                        "login.html";
+
+                    return;
+
+                }
+
+
+                if (
+                    !sessionData ||
+                    !sessionData.session
+                ) {
+
+                    window.location.href =
+                        "login.html";
+
+                    return;
+
+                }
+
+
+                const usuarioAuth =
+                    sessionData.session.user;
+
+
+                /* =====================================
+                   BUSCAR ALUMNO
+                ====================================== */
+
+                const {
+                    data: alumno,
+                    error: alumnoError
+                } =
+                    await supabaseClient
+                        .from("alumnos")
+                        .select(`
+                            id,
+                            nombre,
+                            usuario
+                        `)
+                        .eq(
+                            "auth_id",
+                            usuarioAuth.id
+                        )
+                        .maybeSingle();
+
+
+                if (alumnoError) {
+
+                    console.error(
+                        "Error buscando alumno:",
+                        alumnoError
+                    );
+
+                    mostrarError(
+                        "No se pudieron cargar tus datos.",
+                        alumnoError
+                    );
+
+                    return;
+
+                }
+
+
+                if (!alumno) {
+
+                    console.error(
+                        "No existe un alumno asociado al usuario:",
+                        usuarioAuth.id
+                    );
+
+                    await supabaseClient
+                        .auth
+                        .signOut();
+
+                    window.location.href =
+                        "login.html";
+
+                    return;
+
+                }
+
+
+                alumnoActual =
+                    alumno;
+
+
+                document.getElementById(
+                    "mensajeBienvenida"
+                ).textContent =
+                    `Hola ${alumno.nombre}. Aquí encontrarás las actividades que tu profesor te ha asignado.`;
+
+
+                await cargarActividades();
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Error iniciando página:",
+                    error
+                );
+
+                mostrarError(
+                    "Ocurrió un error inesperado.",
+                    error
+                );
+
+            }
+
+        }
+
+
+        /* =========================================
+           CARGAR ACTIVIDADES
+        ========================================= */
+
+        async function cargarActividades() {
+
+            if (!alumnoActual) {
+
+                return;
+
+            }
+
+
+            const contenedor =
+                document.getElementById(
+                    "activitiesGrid"
                 );
 
 
-      if (asignacionesError) {
-    console.error("ERROR ACTIVIDAD_ALUMNOS:", asignacionesError);
+            contenedor.innerHTML = `
 
-    mostrarError(
-        "Error: " +
-        (asignacionesError.message || "No se pudieron cargar las actividades")
-    );
+                <div class="loading">
 
-    return;
-}
+                    <div class="loading-icon">
+                        🧩
+                    </div>
 
-        const listaAsignaciones =
-            asignaciones || [];
+                    Cargando actividades...
 
+                </div>
 
-        /* =========================================
-           SIN ACTIVIDADES
-        ========================================= */
-
-        if (
-            listaAsignaciones.length === 0
-        ) {
-
-            actividadesAlumno = [];
-
-            actualizarResumen();
-
-            mostrarVacio();
-
-            return;
-
-        }
+            `;
 
 
-        /* =========================================
-           2. IDS
-        ========================================= */
+            try {
 
-        const ids =
-            listaAsignaciones
-                .map(
-                    asignacion =>
-                        asignacion.actividad_id
-                )
-                .filter(Boolean);
+                /* =====================================
+                   1. BUSCAR ASIGNACIONES
+                ====================================== */
+
+                const {
+                    data: asignaciones,
+                    error: asignacionesError
+                } =
+                    await supabaseClient
+                        .from("actividad_alumnos")
+                        .select(`
+                            id,
+                            actividad_id,
+                            alumno_id,
+                            estado,
+                            calificacion,
+                            completada_at,
+                            created_at
+                        `)
+                        .eq(
+                            "alumno_id",
+                            alumnoActual.id
+                        )
+                        .order(
+                            "created_at",
+                            {
+                                ascending: false
+                            }
+                        );
 
 
-        if (ids.length === 0) {
+                if (asignacionesError) {
 
-            actividadesAlumno = [];
+                    console.error(
+                        "ERROR actividad_alumnos:",
+                        asignacionesError
+                    );
 
-            actualizarResumen();
+                    mostrarError(
+                        "No se pudieron consultar tus actividades.",
+                        asignacionesError
+                    );
 
-            mostrarVacio();
+                    return;
 
-            return;
-
-        }
+                }
 
 
-        /* =========================================
-           3. ACTIVIDADES
-        ========================================= */
+                const listaAsignaciones =
+                    asignaciones || [];
 
-        const {
-            data: actividades,
-            error: actividadesError
-        } =
-            await supabaseClient
-                .from("actividades")
-                .select(`
-                id,
-            profesorid,
-            titulo,
-            descripción,
-            tipo,
-            enlace,
-            "imagen url",
-            puntos,
-            fecha,
-            activa,
-            created
-                `)
-                .in(
-                    "id",
+
+                console.log(
+                    "Asignaciones encontradas:",
+                    listaAsignaciones
+                );
+
+
+                /* =====================================
+                   SIN ASIGNACIONES
+                ====================================== */
+
+                if (
+                    listaAsignaciones.length === 0
+                ) {
+
+                    actividadesAlumno = [];
+
+                    actualizarResumen();
+
+                    mostrarVacio(
+                        "Tu profesor todavía no te ha asignado actividades."
+                    );
+
+                    return;
+
+                }
+
+
+                /* =====================================
+                   2. OBTENER IDS
+                ====================================== */
+
+                const ids =
+                    [
+                        ...new Set(
+                            listaAsignaciones
+                                .map(
+                                    asignacion =>
+                                        Number(
+                                            asignacion.actividad_id
+                                        )
+                                )
+                                .filter(
+                                    id =>
+                                        Number.isFinite(id)
+                                )
+                        )
+                    ];
+
+
+                console.log(
+                    "IDs de actividades:",
                     ids
                 );
 
 
-      if (actividadesError) {
-    console.error("ERROR COMPLETO DE ACTIVIDADES:", actividadesError);
-    
-    alert(
-        "ERROR DE ACTIVIDADES\n\n" +
-        "Mensaje: " + (actividadesError.message || "") +
-        "\nCódigo: " + (actividadesError.code || "") +
-        "\nDetalles: " + (actividadesError.details || "") +
-        "\nHint: " + (actividadesError.hint || "")
-    );
+                if (ids.length === 0) {
 
-    mostrarError(
-        "Error: " +
-        (actividadesError.message || "No se pudieron cargar las actividades.")
-    );
+                    actividadesAlumno = [];
 
-    return;
-}
+                    actualizarResumen();
 
-            mostrarError(
-                "No se pudo cargar la información de las actividades."
-            );
+                    mostrarVacio(
+                        "No se encontraron actividades vinculadas."
+                    );
 
-            return;
+                    return;
+
+                }
+
+
+                /* =====================================
+                   3. BUSCAR ACTIVIDADES
+                ====================================== */
+
+                const {
+                    data: actividades,
+                    error: actividadesError
+                } =
+                    await supabaseClient
+                        .from("actividades")
+                        .select(`
+                            id,
+                            profesor_id,
+                            titulo,
+                            descripcion,
+                            tipo,
+                            enlace,
+                            imagen_url,
+                            puntos,
+                            fecha_limite,
+                            activa,
+                            created_at
+                        `)
+                        .in(
+                            "id",
+                            ids
+                        )
+                        .eq(
+                            "activa",
+                            true
+                        );
+
+
+                if (actividadesError) {
+
+                    console.error(
+                        "ERROR actividades:",
+                        actividadesError
+                    );
+
+                    mostrarError(
+                        "No se pudieron cargar las actividades.",
+                        actividadesError
+                    );
+
+                    return;
+
+                }
+
+
+                const listaActividades =
+                    actividades || [];
+
+
+                console.log(
+                    "Actividades encontradas:",
+                    listaActividades
+                );
+
+
+                /* =====================================
+                   4. UNIR ACTIVIDAD + ASIGNACIÓN
+                ====================================== */
+
+                actividadesAlumno =
+                    listaActividades
+                        .map(
+                            actividad => {
+
+                                const asignacion =
+                                    listaAsignaciones.find(
+                                        item =>
+                                            Number(
+                                                item.actividad_id
+                                            ) ===
+                                            Number(
+                                                actividad.id
+                                            )
+                                    );
+
+
+                                return {
+
+                                    ...actividad,
+
+                                    asignacion_id:
+                                        asignacion
+                                            ? asignacion.id
+                                            : null,
+
+                                    estado:
+                                        asignacion &&
+                                        asignacion.estado
+                                            ? asignacion.estado
+                                            : "pendiente",
+
+                                    calificacion:
+                                        asignacion
+                                            ? asignacion.calificacion
+                                            : null,
+
+                                    completada_at:
+                                        asignacion
+                                            ? asignacion.completada_at
+                                            : null
+
+                                };
+
+                            }
+                        );
+
+
+                console.log(
+                    "ACTIVIDADES DEL ALUMNO:",
+                    actividadesAlumno
+                );
+
+
+                /* =====================================
+                   5. ACTUALIZAR INTERFAZ
+                ====================================== */
+
+                actualizarResumen();
+
+                mostrarActividades();
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "ERROR GENERAL CARGANDO ACTIVIDADES:",
+                    error
+                );
+
+                mostrarError(
+                    "Ocurrió un error al consultar las actividades.",
+                    error
+                );
+
+            }
 
         }
 
 
-        const listaActividades =
-            actividades || [];
+        /* =========================================
+           RESUMEN
+        ========================================= */
+
+        function actualizarResumen() {
+
+            const total =
+                actividadesAlumno.length;
+
+
+            const pendientes =
+                actividadesAlumno.filter(
+                    actividad =>
+                        actividad.estado !==
+                        "completada"
+                ).length;
+
+
+            const completadas =
+                actividadesAlumno.filter(
+                    actividad =>
+                        actividad.estado ===
+                        "completada"
+                ).length;
+
+
+            document.getElementById(
+                "totalActividades"
+            ).textContent =
+                total;
+
+
+            document.getElementById(
+                "pendientesActividades"
+            ).textContent =
+                pendientes;
+
+
+            document.getElementById(
+                "completadasActividades"
+            ).textContent =
+                completadas;
+
+        }
 
 
         /* =========================================
-           4. UNIR DATOS
+           MOSTRAR ACTIVIDADES
         ========================================= */
 
-        actividadesAlumno =
-            listaActividades.map(
-                actividad => {
+        function mostrarActividades() {
 
-                    const asignacion =
-                        listaAsignaciones.find(
-                            item =>
-                                Number(
-                                    item.actividad_id
-                                ) ===
-                                Number(
-                                    actividad.id
-                                )
-                        );
+            const contenedor =
+                document.getElementById(
+                    "activitiesGrid"
+                );
 
 
-                    return {
+            let lista =
+                [...actividadesAlumno];
 
-                        ...actividad,
 
-                        asignacion_id:
-                            asignacion?.id,
+            if (
+                filtroActual ===
+                "pendiente"
+            ) {
 
-                        estado:
-                            asignacion?.estado
-                            ||
-                            "pendiente",
+                lista =
+                    lista.filter(
+                        actividad =>
+                            actividad.estado !==
+                            "completada"
+                    );
 
-                        calificacion:
-                            asignacion?.calificacion,
+            }
 
-                        completada_at:
-                            asignacion?.completada_at
 
-                    };
+            if (
+                filtroActual ===
+                "completada"
+            ) {
+
+                lista =
+                    lista.filter(
+                        actividad =>
+                            actividad.estado ===
+                            "completada"
+                    );
+
+            }
+
+
+            if (lista.length === 0) {
+
+                let mensaje =
+                    "No tienes actividades asignadas.";
+
+
+                if (
+                    filtroActual ===
+                    "pendiente"
+                ) {
+
+                    mensaje =
+                        "No tienes actividades pendientes.";
 
                 }
-            );
 
 
-        actualizarResumen();
-
-        mostrarActividades();
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Error cargando actividades:",
-            error
-        );
-
-        mostrarError(
-            "Ocurrió un error al consultar las actividades."
-        );
-
-    }
-
-}
-
-
-/* =========================================
-   RESUMEN
-========================================= */
-
-function actualizarResumen() {
-
-    const total =
-        actividadesAlumno.length;
-
-
-    const pendientes =
-        actividadesAlumno.filter(
-            actividad =>
-                actividad.estado !==
-                "completada"
-        ).length;
-
-
-    const completadas =
-        actividadesAlumno.filter(
-            actividad =>
-                actividad.estado ===
-                "completada"
-        ).length;
-
-
-    document.getElementById(
-        "totalActividades"
-    ).textContent =
-        total;
-
-
-    document.getElementById(
-        "pendientesActividades"
-    ).textContent =
-        pendientes;
-
-
-    document.getElementById(
-        "completadasActividades"
-    ).textContent =
-        completadas;
-
-}
-
-
-/* =========================================
-   MOSTRAR ACTIVIDADES
-========================================= */
-
-function mostrarActividades() {
-
-    const contenedor =
-        document.getElementById(
-            "activitiesGrid"
-        );
-
-
-    let lista =
-        actividadesAlumno;
-
-
-    if (
-        filtroActual ===
-        "pendiente"
-    ) {
-
-        lista =
-            actividadesAlumno.filter(
-                actividad =>
-                    actividad.estado !==
+                if (
+                    filtroActual ===
                     "completada"
-            );
+                ) {
 
-    }
+                    mensaje =
+                        "Todavía no has completado actividades.";
 
-
-    if (
-        filtroActual ===
-        "completada"
-    ) {
-
-        lista =
-            actividadesAlumno.filter(
-                actividad =>
-                    actividad.estado ===
-                    "completada"
-            );
-
-    }
+                }
 
 
-    if (lista.length === 0) {
+                mostrarVacio(mensaje);
 
-        mostrarVacio(
-            filtroActual === "pendiente"
-                ? "No tienes actividades pendientes."
-                : filtroActual === "completada"
-                    ? "Todavía no has completado actividades."
-                    : "No tienes actividades asignadas."
-        );
+                return;
 
-        return;
-
-    }
+            }
 
 
-    contenedor.innerHTML =
-        lista
-            .map(
-                actividad =>
-                    crearTarjeta(
-                        actividad
+            contenedor.innerHTML =
+                lista
+                    .map(
+                        actividad =>
+                            crearTarjeta(
+                                actividad
+                            )
                     )
-            )
-            .join("");
+                    .join("");
 
-}
+        }
 
 
-/* =========================================
-   CREAR TARJETA
-========================================= */
+        /* =========================================
+           CREAR TARJETA
+        ========================================= */
 
-function crearTarjeta(
-    actividad
-) {
+        function crearTarjeta(
+            actividad
+        ) {
 
-    const completada =
-        actividad.estado ===
-        "completada";
+            const completada =
+                actividad.estado ===
+                "completada";
 
 
-    let estadoClase =
-        "pending";
+            let estadoClase =
+                "pending";
 
 
-    let estadoTexto =
-        "PENDIENTE";
+            let estadoTexto =
+                "PENDIENTE";
 
 
-    if (completada) {
+            if (completada) {
 
-        estadoClase =
-            "completed";
+                estadoClase =
+                    "completed";
 
-        estadoTexto =
-            "✓ COMPLETADA";
+                estadoTexto =
+                    "✓ COMPLETADA";
 
-    }
+            }
 
 
-    if (
-        actividad.estado ===
-        "en_progreso"
-    ) {
+            if (
+                actividad.estado ===
+                "en_progreso"
+            ) {
 
-        estadoClase =
-            "progress";
+                estadoClase =
+                    "progress";
 
-        estadoTexto =
-            "EN PROGRESO";
+                estadoTexto =
+                    "EN PROGRESO";
 
-    }
+            }
 
 
-    const titulo =
-        escaparHTML(
-            actividad.titulo
-            ||
-            "Actividad"
-        );
+            const titulo =
+                escaparHTML(
+                    actividad.titulo ||
+                    "Actividad"
+                );
 
 
-    const descripcion =
-        escaparHTML(
-            actividad.descripcion
-            ||
-            "Sin descripción."
-        );
+            const descripcion =
+                escaparHTML(
+                    actividad.descripcion ||
+                    "Sin descripción."
+                );
 
 
-    const tipo =
-        escaparHTML(
-            formatearTipo(
-                actividad.tipo
-            )
-        );
+            const tipo =
+                escaparHTML(
+                    formatearTipo(
+                        actividad.tipo
+                    )
+                );
 
 
-    const puntos =
-        Number(
-            actividad.puntos
-        ) || 0;
+            const puntos =
+                Number(
+                    actividad.puntos
+                ) || 0;
 
 
-    const fecha =
-        formatearFecha(
-            actividad.fecha_limite
-        );
+            const fecha =
+                formatearFecha(
+                    actividad.fecha_limite
+                );
 
 
-    let enlace =
-        actividad.enlace
-        ||
-        "#";
+            let enlace =
+                actividad.enlace ||
+                "";
 
 
-    /*
-        Solamente permitimos http/https
-        para evitar enlaces javascript:
-    */
+            /*
+                Seguridad:
+                solamente permitimos
+                enlaces HTTP y HTTPS.
+            */
 
-    if (
-        !/^https?:\/\//i.test(
-            enlace
-        )
-    ) {
+            const enlaceValido =
+                /^https?:\/\//i.test(
+                    enlace
+                );
 
-        enlace = "#";
 
-    }
+            if (!enlaceValido) {
 
+                enlace = "";
 
-    const imagen =
-        actividad.imagen_url;
+            }
 
 
-    const imagenHTML =
-        imagen
-        ? `
+            const imagen =
+                actividad.imagen_url ||
+                "";
 
-            <img
-                class="activity-image visible"
-                src="${escaparHTML(imagen)}"
-                alt="Imagen de actividad"
-                onerror="this.style.display='none';"
-            >
 
-        `
-        : "";
+            const imagenValida =
+                /^https?:\/\//i.test(
+                    imagen
+                );
 
 
-    let botonTexto =
-        "COMENZAR ACTIVIDAD →";
+            const imagenHTML =
+                imagenValida
+                    ? `
 
-
-    if (completada) {
-
-        botonTexto =
-            "VER ACTIVIDAD →";
-
-    }
-
-
-    return `
-
-        <article
-            class="activity-card"
-        >
-
-            ${imagenHTML}
-
-
-            <div class="activity-content">
-
-
-                <div class="activity-top">
-
-                    <span class="activity-type">
-
-                        🧩 ${tipo}
-
-                    </span>
-
-
-                    <span
-                        class="status ${estadoClase}"
-                    >
-
-                        ${estadoTexto}
-
-                    </span>
-
-                </div>
-
-
-                <h2>
-                    ${titulo}
-                </h2>
-
-
-                <p
-                    class="activity-description"
-                >
-                    ${descripcion}
-                </p>
-
-
-                <div class="activity-info">
-
-
-                    <div class="info-box">
-
-                        <span class="info-label">
-                            Fecha límite
-                        </span>
-
-                        <span class="info-value">
-                            📅 ${fecha}
-                        </span>
-
-                    </div>
-
-
-                    <div class="info-box">
-
-                        <span class="info-label">
-                            Recompensa
-                        </span>
-
-                        <span
-                            class="info-value points"
+                        <img
+                            class="activity-image"
+                            src="${escaparHTML(imagen)}"
+                            alt="Imagen de actividad"
+                            onerror="this.style.display='none';"
                         >
-                            +${puntos} XP
-                        </span>
+
+                    `
+                    : "";
+
+
+            let botonHTML;
+
+
+            if (enlaceValido) {
+
+                const botonTexto =
+                    completada
+                        ? "VER ACTIVIDAD →"
+                        : "COMENZAR ACTIVIDAD →";
+
+
+                botonHTML = `
+
+                    <a
+                        href="${escaparHTML(enlace)}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="activity-button"
+                        onclick="marcarVista(${actividad.asignacion_id})"
+                    >
+                        ${botonTexto}
+                    </a>
+
+                `;
+
+            }
+
+            else {
+
+                botonHTML = `
+
+                    <div
+                        class="activity-button disabled"
+                    >
+                        ACTIVIDAD SIN ENLACE
+                    </div>
+
+                `;
+
+            }
+
+
+            return `
+
+                <article class="activity-card">
+
+                    ${imagenHTML}
+
+
+                    <div class="activity-content">
+
+
+                        <div class="activity-top">
+
+                            <span class="activity-type">
+
+                                🧩 ${tipo}
+
+                            </span>
+
+
+                            <span
+                                class="status ${estadoClase}"
+                            >
+
+                                ${estadoTexto}
+
+                            </span>
+
+                        </div>
+
+
+                        <h2>
+                            ${titulo}
+                        </h2>
+
+
+                        <p
+                            class="activity-description"
+                        >
+                            ${descripcion}
+                        </p>
+
+
+                        <div class="activity-info">
+
+
+                            <div class="info-box">
+
+                                <span class="info-label">
+                                    Fecha límite
+                                </span>
+
+                                <span class="info-value">
+                                    📅 ${fecha}
+                                </span>
+
+                            </div>
+
+
+                            <div class="info-box">
+
+                                <span class="info-label">
+                                    Recompensa
+                                </span>
+
+                                <span
+                                    class="info-value points"
+                                >
+                                    +${puntos} XP
+                                </span>
+
+                            </div>
+
+
+                        </div>
+
+
+                        ${botonHTML}
+
 
                     </div>
 
+                </article>
+
+            `;
+
+        }
+
+
+        /* =========================================
+           MARCAR VISTA
+        ========================================= */
+
+        async function marcarVista(
+            asignacionId
+        ) {
+
+            if (!asignacionId) {
+
+                return;
+
+            }
+
+
+            console.log(
+                "Actividad abierta:",
+                asignacionId
+            );
+
+            /*
+                IMPORTANTE:
+
+                Por ahora NO cambiamos el estado.
+
+                La actividad seguirá como
+                pendiente hasta que implementemos
+                el sistema para marcarla como
+                completada.
+            */
+
+        }
+
+
+        /* =========================================
+           FILTROS
+        ========================================= */
+
+        function filtrarActividades(
+            filtro,
+            boton
+        ) {
+
+            filtroActual =
+                filtro;
+
+
+            document
+                .querySelectorAll(
+                    ".filter-button"
+                )
+                .forEach(
+                    elemento =>
+                        elemento.classList.remove(
+                            "active"
+                        )
+                );
+
+
+            boton.classList.add(
+                "active"
+            );
+
+
+            mostrarActividades();
+
+        }
+
+
+        /* =========================================
+           ESTADO VACÍO
+        ========================================= */
+
+        function mostrarVacio(
+            mensaje =
+                "No tienes actividades asignadas."
+        ) {
+
+            const contenedor =
+                document.getElementById(
+                    "activitiesGrid"
+                );
+
+
+            contenedor.innerHTML = `
+
+                <div class="empty">
+
+                    <div class="empty-icon">
+                        🤖
+                    </div>
+
+                    <h2>
+                        ¡Todo al día!
+                    </h2>
+
+                    <p>
+                        ${escaparHTML(mensaje)}
+                    </p>
 
                 </div>
 
+            `;
 
-                <a
-                    href="${escaparHTML(enlace)}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="activity-button"
-                    onclick="marcarVista(${actividad.asignacion_id})"
-                >
+        }
 
-                    ${botonTexto}
 
-                </a>
+        /* =========================================
+           ERROR
+        ========================================= */
 
+        function mostrarError(
+            mensaje,
+            error = null
+        ) {
 
-            </div>
+            const contenedor =
+                document.getElementById(
+                    "activitiesGrid"
+                );
 
-        </article>
 
-    `;
+            let detalle = "";
 
-}
 
+            if (error) {
 
-/* =========================================
-   MARCAR COMO VISTA
-========================================= */
+                detalle =
+                    [
+                        error.message,
+                        error.code,
+                        error.details,
+                        error.hint
+                    ]
+                    .filter(Boolean)
+                    .join(" | ");
 
-async function marcarVista(
-    asignacionId
-) {
+            }
 
-    if (!asignacionId) {
 
-        return;
+            contenedor.innerHTML = `
 
-    }
+                <div class="error-box">
 
+                    <strong>
+                        ⚠️ No se pudieron cargar las actividades
+                    </strong>
 
-    /*
-        Por ahora NO cambiamos el estado.
+                    <p>
+                        ${escaparHTML(mensaje)}
+                    </p>
 
-        La actividad seguirá apareciendo
-        como pendiente hasta que el profesor
-        o el sistema la marque como completada.
+                    ${
+                        detalle
+                            ? `
+                                <div class="error-detail">
+                                    ${escaparHTML(detalle)}
+                                </div>
+                              `
+                            : ""
+                    }
 
-        Esta función queda preparada para
-        posteriormente implementar:
+                </div>
 
-        pendiente
-        ↓
-        vista
-        ↓
-        en_progreso
-        ↓
-        completada
-    */
+            `;
 
-    console.log(
-        "Actividad abierta:",
-        asignacionId
-    );
+        }
 
-}
 
+        /* =========================================
+           CERRAR SESIÓN
+        ========================================= */
 
-/* =========================================
-   FILTROS
-========================================= */
+        async function cerrarSesion() {
 
-function filtrarActividades(
-    filtro,
-    boton
-) {
+            try {
 
-    filtroActual =
-        filtro;
+                await supabaseClient
+                    .auth
+                    .signOut();
 
+            }
 
-    document
-        .querySelectorAll(
-            ".filter-button"
-        )
-        .forEach(
-            elemento =>
-                elemento.classList.remove(
-                    "active"
-                )
-        );
+            catch (error) {
 
+                console.error(
+                    "Error cerrando sesión:",
+                    error
+                );
 
-    boton.classList.add(
-        "active"
-    );
+            }
 
 
-    mostrarActividades();
+            sessionStorage.clear();
 
-}
+            window.location.href =
+                "login.html";
 
+        }
 
-/* =========================================
-   ESTADO VACÍO
-========================================= */
 
-function mostrarVacio(
-    mensaje =
-        "No tienes actividades asignadas."
-) {
+        /* =========================================
+           INICIAR PÁGINA
+        ========================================= */
 
-    const contenedor =
-        document.getElementById(
-            "activitiesGrid"
-        );
+        iniciar();
 
-
-    contenedor.innerHTML = `
-
-        <div class="empty">
-
-            <div class="empty-icon">
-                🤖
-            </div>
-
-            <h2>
-                ¡Todo al día!
-            </h2>
-
-            <p>
-                ${escaparHTML(mensaje)}
-            </p>
-
-        </div>
-
-    `;
-
-}
-
-
-/* =========================================
-   ERROR
-========================================= */
-
-function mostrarError(
-    mensaje
-) {
-
-    const contenedor =
-        document.getElementById(
-            "activitiesGrid"
-        );
-
-
-    contenedor.innerHTML = `
-
-        <div class="error-box">
-
-            <strong>
-                ⚠️ No se pudieron cargar las actividades
-            </strong>
-
-            <p>
-                ${escaparHTML(mensaje)}
-            </p>
-
-        </div>
-
-    `;
-
-}
-
-
-/* =========================================
-   CERRAR SESIÓN
-========================================= */
-
-async function cerrarSesion() {
-
-    await supabaseClient
-        .auth
-        .signOut();
-
-
-    sessionStorage.clear();
-
-
-    window.location.href =
-        "login.html";
-
-}
-
-
-/* =========================================
-   INICIAR
-========================================= */
-
-iniciar();
-
-</script>
+    </script>
 
 </body>
+
 </html>
