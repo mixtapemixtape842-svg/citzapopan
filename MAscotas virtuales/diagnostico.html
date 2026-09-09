@@ -2642,7 +2642,13 @@ No representa una calificación definitiva.
 </div>
 
 
-<button class="green" onclick="guardarResultadoPDF()">📄 Guardar resultado</button>
+<button class="green" onclick="enviarResultadoWhatsApp()">
+    📱 Enviar resultado por WhatsApp
+</button>
+
+<button onclick="location.reload()">
+    🔄 Realizar nuevamente
+</button>
 
 <button
     onclick="location.reload()">
@@ -4361,6 +4367,58 @@ updateProgress();
         (nombreArchivo || "Alumno") +
         ".pdf"
     );
+}
+
+   function enviarResultadoWhatsApp() {
+
+    // Número de WhatsApp al que quieres enviar el resultado
+    // Formato internacional, SIN +, espacios ni guiones
+    const telefono = "523111895129";
+
+    // Obtener nombre del alumno
+    const nombre = document.getElementById("studentName")?.value ||
+                   document.getElementById("nombre")?.value ||
+                   "Alumno";
+
+    // Calificación de conocimientos
+    const aciertos = typeof resultados !== "undefined"
+        ? resultados.total
+        : 0;
+
+    const totalPreguntas = 28;
+
+    const porcentaje = Math.round(
+        (aciertos / totalPreguntas) * 100
+    );
+
+    // Retos prácticos
+    const retos = typeof gamePoints !== "undefined"
+        ? gamePoints
+        : 0;
+
+    const totalRetos = 9;
+
+    // Crear mensaje
+    const mensaje =
+`🤖 *DIAGNÓSTICO CITZ · ROBOT LAB*
+
+👤 Alumno: ${nombre}
+
+📊 *Resultado*
+🧠 Conocimientos: ${aciertos}/${totalPreguntas} (${porcentaje}%)
+🎯 Retos prácticos: ${retos}/${totalRetos}
+
+📋 Diagnóstico completado.
+
+🔗 CITZ · Centro de Innovación Tecnológica de Zapopan
+https://citzapopan.com/`;
+
+    // Codificar el mensaje para WhatsApp
+    const url = "https://wa.me/" + telefono +
+                "?text=" + encodeURIComponent(mensaje);
+
+    // Abrir WhatsApp
+    window.open(url, "_blank");
 }
 
 </script>
