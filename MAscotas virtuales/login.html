@@ -661,7 +661,7 @@
 
 
                 // =====================================
-                // VALIDACIÓN BÁSICA
+                // VALIDACIÓN
                 // =====================================
 
                 if (!usuario || !password) {
@@ -689,7 +689,7 @@
 
 
                     // =================================
-                    // CREAR EMAIL INTERNO
+                    // EMAIL INTERNO
                     // =================================
 
                     const email =
@@ -765,19 +765,22 @@
 
 
                     // =================================
-                    // BUSCAR ALUMNO
+                    // BUSCAR PERFIL
+                    //
+                    // IMPORTANTE:
+                    // AHORA TAMBIÉN CONSULTAMOS ROL
                     // =================================
 
                     const {
-                        data: alumno,
-                        error: alumnoError
+                        data: perfil,
+                        error: perfilError
                     } =
                         await supabaseClient
 
                             .from("alumnos")
 
                             .select(
-                                "id, usuario, nombre, mascota, puntos, nivel, energia"
+                                "id, usuario, nombre, mascota, puntos, nivel, energia, rol"
                             )
 
                             .eq(
@@ -792,11 +795,11 @@
                     // ERROR BASE DE DATOS
                     // =================================
 
-                    if (alumnoError) {
+                    if (perfilError) {
 
                         console.error(
                             "Error alumnos:",
-                            alumnoError
+                            perfilError
                         );
 
 
@@ -813,17 +816,17 @@
 
 
                     // =================================
-                    // ALUMNO NO ENCONTRADO
+                    // PERFIL NO ENCONTRADO
                     // =================================
 
-                    if (!alumno) {
+                    if (!perfil) {
 
                         await supabaseClient.auth
                             .signOut();
 
 
                         mostrarError(
-                            "Tu cuenta existe, pero no está vinculada a un alumno."
+                            "Tu cuenta existe, pero no está vinculada a un perfil."
                         );
 
                         return;
@@ -831,24 +834,36 @@
 
 
                     console.log(
-                        "Alumno:",
-                        alumno
+                        "Perfil:",
+                        perfil
                     );
 
 
                     // =================================
-                    // GUARDAR INFORMACIÓN DE SESIÓN
+                    // GUARDAR SESIÓN
                     // =================================
 
                     sessionStorage.setItem(
                         "usuarioActivo",
-                        alumno.usuario
+                        perfil.usuario
                     );
 
 
                     sessionStorage.setItem(
                         "alumnoId",
-                        alumno.id
+                        perfil.id
+                    );
+
+
+                    sessionStorage.setItem(
+                        "rol",
+                        perfil.rol || "alumno"
+                    );
+
+
+                    sessionStorage.setItem(
+                        "nombreUsuario",
+                        perfil.nombre
                     );
 
 
@@ -872,33 +887,77 @@
                         function() {
 
 
+                            // =================================
+                            // PROFESOR
+                            // =================================
+
                             if (
-                                alumno.mascota !== null &&
-                                alumno.mascota !== ""
+                                perfil.rol === "profesor"
                             ) {
 
                                 console.log(
-                                    "Mascota encontrada:",
-                                    alumno.mascota
+                                    "Acceso de profesor detectado."
                                 );
 
 
                                 window.location.href =
-                                    "index.html";
+                                    "profeDanielGomez.html";
+
+
+                                return;
+                            }
+
+
+                            // =================================
+                            // ALUMNO
+                            // =================================
+
+                            if (
+                                perfil.rol === "alumno"
+                                ||
+                                !perfil.rol
+                            ) {
+
+
+                                // =========================
+                                // TIENE MASCOTA
+                                // =========================
+
+                                if (
+                                    perfil.mascota !== null &&
+                                    perfil.mascota !== ""
+                                ) {
+
+                                    console.log(
+                                        "Mascota encontrada:",
+                                        perfil.mascota
+                                    );
+
+
+                                    window.location.href =
+                                        "index.html";
+
+                                }
+
+
+                                // =========================
+                                // NO TIENE MASCOTA
+                                // =========================
+
+                                else {
+
+                                    console.log(
+                                        "Alumno sin mascota."
+                                    );
+
+
+                                    window.location.href =
+                                        "elegir-mascota.html";
+
+                                }
 
                             }
 
-                            else {
-
-                                console.log(
-                                    "Alumno sin mascota."
-                                );
-
-
-                                window.location.href =
-                                    "elegir-mascota.html";
-
-                            }
 
                         },
                         700
