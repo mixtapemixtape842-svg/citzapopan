@@ -1,7 +1,7 @@
-```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -10,6 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -18,43 +19,64 @@
 
         body {
             font-family: Arial, Helvetica, sans-serif;
+
             background:
-                radial-gradient(circle at top left, #172554 0%, transparent 35%),
-                radial-gradient(circle at bottom right, #312e81 0%, transparent 35%),
+                radial-gradient(
+                    circle at top left,
+                    #172554 0%,
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at bottom right,
+                    #312e81 0%,
+                    transparent 35%
+                ),
                 #080b16;
+
             color: white;
             min-height: 100vh;
         }
 
-        /* ==============================
+
+        /* =====================================================
            SIDEBAR
-        ============================== */
+        ===================================================== */
 
         .sidebar {
             position: fixed;
             left: 0;
             top: 0;
+
             width: 250px;
             height: 100vh;
+
             background: rgba(10, 15, 30, .96);
-            border-right: 1px solid rgba(255,255,255,.08);
+
+            border-right:
+                1px solid rgba(255,255,255,.08);
+
             padding: 25px 15px;
+
             z-index: 100;
         }
+
 
         .logo {
             text-align: center;
             margin-bottom: 35px;
         }
 
+
         .logo-icon {
             font-size: 42px;
         }
+
 
         .logo h2 {
             margin-top: 5px;
             font-size: 20px;
         }
+
 
         .logo p {
             color: #8d99ae;
@@ -62,407 +84,967 @@
             margin-top: 4px;
         }
 
+
         .menu {
             display: flex;
             flex-direction: column;
             gap: 8px;
         }
 
+
         .menu button {
             border: none;
             background: transparent;
+
             color: #aab4c8;
+
             padding: 14px;
+
             border-radius: 12px;
+
             text-align: left;
+
             font-size: 15px;
+
             cursor: pointer;
+
             transition: .2s;
         }
+
 
         .menu button:hover {
             background: rgba(255,255,255,.06);
             color: white;
         }
 
+
         .menu button.active {
-            background: linear-gradient(135deg,#2563eb,#7c3aed);
+            background:
+                linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #7c3aed
+                );
+
             color: white;
         }
 
+
         .logout {
             position: absolute;
+
             bottom: 25px;
             left: 15px;
             right: 15px;
         }
 
+
         .logout button {
             width: 100%;
-            border: 1px solid rgba(255,255,255,.1);
-            background: rgba(255,255,255,.04);
+
+            border:
+                1px solid rgba(255,255,255,.1);
+
+            background:
+                rgba(255,255,255,.04);
+
             color: #ff8a8a;
+
             padding: 12px;
+
             border-radius: 10px;
+
             cursor: pointer;
         }
 
-        /* ==============================
+
+        /* =====================================================
            MAIN
-        ============================== */
+        ===================================================== */
 
         .main {
             margin-left: 250px;
             padding: 35px;
         }
 
+
         .header {
             display: flex;
+
             justify-content: space-between;
+
             align-items: center;
+
             margin-bottom: 30px;
         }
+
 
         .header h1 {
             font-size: 30px;
         }
+
 
         .header p {
             color: #8993a7;
             margin-top: 5px;
         }
 
+
         .teacher {
-            background: rgba(255,255,255,.05);
-            border: 1px solid rgba(255,255,255,.08);
+            background:
+                rgba(255,255,255,.05);
+
+            border:
+                1px solid rgba(255,255,255,.08);
+
             padding: 10px 15px;
+
             border-radius: 12px;
         }
 
-        /* ==============================
+
+        /* =====================================================
            SECTIONS
-        ============================== */
+        ===================================================== */
 
         .section {
             display: none;
         }
 
+
         .section.active {
             display: block;
         }
 
-        /* ==============================
+
+        /* =====================================================
            STATS
-        ============================== */
+        ===================================================== */
 
         .stats {
             display: grid;
-            grid-template-columns: repeat(4,1fr);
+
+            grid-template-columns:
+                repeat(4,1fr);
+
             gap: 18px;
+
             margin-bottom: 25px;
         }
 
+
         .stat {
-            background: rgba(255,255,255,.055);
-            border: 1px solid rgba(255,255,255,.08);
+            background:
+                rgba(255,255,255,.055);
+
+            border:
+                1px solid rgba(255,255,255,.08);
+
             padding: 22px;
+
             border-radius: 18px;
+
             backdrop-filter: blur(10px);
         }
+
 
         .stat-icon {
             font-size: 28px;
             margin-bottom: 10px;
         }
 
+
         .stat h3 {
             font-size: 28px;
         }
 
+
         .stat p {
             color: #8993a7;
+
             font-size: 13px;
+
             margin-top: 4px;
         }
 
-        /* ==============================
-           PROGRESS
-        ============================== */
+
+        /* =====================================================
+           PANELS
+        ===================================================== */
 
         .panel {
-            background: rgba(255,255,255,.05);
-            border: 1px solid rgba(255,255,255,.08);
+            background:
+                rgba(255,255,255,.05);
+
+            border:
+                1px solid rgba(255,255,255,.08);
+
             border-radius: 18px;
+
             padding: 25px;
+
             margin-bottom: 25px;
         }
 
+
         .panel-title {
             display: flex;
+
             justify-content: space-between;
+
             align-items: center;
+
             margin-bottom: 20px;
+
+            gap: 15px;
         }
+
 
         .panel-title h2 {
             font-size: 20px;
         }
 
+
+        /* =====================================================
+           PROGRESS
+        ===================================================== */
+
         .progress {
             height: 14px;
+
             background: #1b2235;
+
             border-radius: 20px;
+
             overflow: hidden;
         }
 
+
         .progress-bar {
             height: 100%;
+
             width: 0%;
-            background: linear-gradient(90deg,#2563eb,#8b5cf6);
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #2563eb,
+                    #8b5cf6
+                );
+
             border-radius: 20px;
+
             transition: .5s;
         }
 
-        /* ==============================
-           STUDENTS
-        ============================== */
 
-        .students-header {
-            display: flex;
-            justify-content: space-between;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .search {
-            flex: 1;
-            max-width: 350px;
-            padding: 13px 15px;
-            border-radius: 10px;
-            border: 1px solid rgba(255,255,255,.1);
-            background: rgba(255,255,255,.05);
-            color: white;
-            outline: none;
-        }
+        /* =====================================================
+           BUTTONS
+        ===================================================== */
 
         .btn {
             border: none;
+
             padding: 12px 18px;
+
             border-radius: 10px;
-            background: linear-gradient(135deg,#2563eb,#7c3aed);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #7c3aed
+                );
+
             color: white;
+
             font-weight: bold;
+
             cursor: pointer;
+
             transition: .2s;
         }
+
 
         .btn:hover {
             transform: translateY(-1px);
             opacity: .9;
         }
 
+
+        .btn-secondary {
+            border: none;
+
+            padding: 10px 15px;
+
+            border-radius: 9px;
+
+            background:
+                rgba(255,255,255,.08);
+
+            color: white;
+
+            cursor: pointer;
+        }
+
+
+        .btn-danger {
+            border: none;
+
+            padding: 10px 15px;
+
+            border-radius: 9px;
+
+            background:
+                rgba(239,68,68,.15);
+
+            color: #ff9b9b;
+
+            cursor: pointer;
+        }
+
+
+        /* =====================================================
+           STUDENTS
+        ===================================================== */
+
+        .students-header {
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            margin-bottom: 20px;
+        }
+
+
+        .search {
+            flex: 1;
+
+            max-width: 350px;
+
+            padding: 13px 15px;
+
+            border-radius: 10px;
+
+            border:
+                1px solid rgba(255,255,255,.1);
+
+            background:
+                rgba(255,255,255,.05);
+
+            color: white;
+
+            outline: none;
+        }
+
+
         .students {
             display: grid;
-            grid-template-columns: repeat(auto-fill,minmax(260px,1fr));
+
+            grid-template-columns:
+                repeat(
+                    auto-fill,
+                    minmax(260px,1fr)
+                );
+
             gap: 18px;
         }
 
+
         .student {
-            background: rgba(255,255,255,.05);
-            border: 1px solid rgba(255,255,255,.08);
+            background:
+                rgba(255,255,255,.05);
+
+            border:
+                1px solid rgba(255,255,255,.08);
+
             border-radius: 18px;
+
             padding: 20px;
+
             position: relative;
+
             transition: .2s;
         }
 
+
         .student:hover {
             transform: translateY(-3px);
-            border-color: rgba(99,102,241,.5);
+
+            border-color:
+                rgba(99,102,241,.5);
         }
+
 
         .student-top {
             display: flex;
+
             align-items: center;
+
             gap: 15px;
+
             margin-bottom: 18px;
         }
+
 
         .avatar {
             width: 60px;
             height: 60px;
+
             border-radius: 15px;
-            background: rgba(255,255,255,.06);
+
+            background:
+                rgba(255,255,255,.06);
+
             display: flex;
+
             justify-content: center;
+
             align-items: center;
+
             font-size: 34px;
         }
+
 
         .student-name {
             font-weight: bold;
             font-size: 17px;
         }
 
+
         .student-user {
             color: #7f8ba3;
+
             font-size: 12px;
+
             margin-top: 4px;
         }
 
+
         .student-info {
             display: grid;
-            grid-template-columns: repeat(3,1fr);
+
+            grid-template-columns:
+                repeat(3,1fr);
+
             gap: 8px;
+
             margin-bottom: 15px;
         }
 
+
         .info {
-            background: rgba(0,0,0,.18);
+            background:
+                rgba(0,0,0,.18);
+
             padding: 10px;
+
             border-radius: 10px;
+
             text-align: center;
         }
+
 
         .info strong {
             display: block;
             font-size: 17px;
         }
 
+
         .info span {
             font-size: 10px;
             color: #7f8ba3;
         }
 
+
         .edit-btn {
             width: 100%;
+
             padding: 10px;
+
             border: none;
+
             border-radius: 9px;
-            background: rgba(37,99,235,.18);
+
+            background:
+                rgba(37,99,235,.18);
+
             color: #8db4ff;
+
             cursor: pointer;
         }
 
-        /* ==============================
+
+        /* =====================================================
+           ACTIVIDADES
+        ===================================================== */
+
+        .activities-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fill,
+                    minmax(290px, 1fr)
+                );
+
+            gap: 18px;
+        }
+
+
+        .activity-card {
+            background:
+                rgba(255,255,255,.045);
+
+            border:
+                1px solid rgba(255,255,255,.08);
+
+            border-radius: 18px;
+
+            overflow: hidden;
+
+            transition: .2s;
+        }
+
+
+        .activity-card:hover {
+            transform: translateY(-3px);
+
+            border-color:
+                rgba(99,102,241,.45);
+        }
+
+
+        .activity-image {
+            width: 100%;
+            height: 150px;
+
+            object-fit: cover;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #172554,
+                    #312e81
+                );
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 55px;
+        }
+
+
+        .activity-content {
+            padding: 20px;
+        }
+
+
+        .activity-title {
+            font-size: 18px;
+
+            font-weight: bold;
+
+            margin-bottom: 8px;
+        }
+
+
+        .activity-description {
+            color: #8993a7;
+
+            font-size: 13px;
+
+            line-height: 1.5;
+
+            min-height: 40px;
+
+            margin-bottom: 15px;
+        }
+
+
+        .activity-meta {
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 7px;
+
+            margin-bottom: 15px;
+        }
+
+
+        .badge {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 4px;
+
+            padding: 5px 9px;
+
+            border-radius: 20px;
+
+            background:
+                rgba(255,255,255,.07);
+
+            color: #aab4c8;
+
+            font-size: 11px;
+        }
+
+
+        .badge.active {
+            color: #86efac;
+
+            background:
+                rgba(34,197,94,.1);
+        }
+
+
+        .badge.inactive {
+            color: #fca5a5;
+
+            background:
+                rgba(239,68,68,.1);
+        }
+
+
+        .activity-actions {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2,1fr);
+
+            gap: 8px;
+        }
+
+
+        .activity-actions button {
+            padding: 9px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+        }
+
+
+        .edit-activity {
+            background:
+                rgba(37,99,235,.18);
+
+            color: #8db4ff;
+        }
+
+
+        .toggle-activity {
+            background:
+                rgba(255,255,255,.07);
+
+            color: #cbd5e1;
+        }
+
+
+        .delete-activity {
+            background:
+                rgba(239,68,68,.12);
+
+            color: #ff9b9b;
+        }
+
+
+        .activity-actions .delete-activity {
+            grid-column: span 2;
+        }
+
+
+        /* =====================================================
+           EMPTY
+        ===================================================== */
+
+        .empty {
+            text-align: center;
+
+            padding: 70px 20px;
+
+            color: #8993a7;
+        }
+
+
+        .empty-icon {
+            font-size: 60px;
+
+            margin-bottom: 15px;
+        }
+
+
+        /* =====================================================
            MODAL
-        ============================== */
+        ===================================================== */
 
         .modal {
             display: none;
+
             position: fixed;
+
             inset: 0;
-            background: rgba(0,0,0,.75);
-            backdrop-filter: blur(6px);
+
+            background:
+                rgba(0,0,0,.78);
+
+            backdrop-filter:
+                blur(6px);
+
             justify-content: center;
+
             align-items: center;
+
             z-index: 1000;
+
             padding: 20px;
+
+            overflow-y: auto;
         }
+
 
         .modal.show {
             display: flex;
         }
 
+
         .modal-box {
             width: 100%;
-            max-width: 500px;
+
+            max-width: 620px;
+
+            max-height: 92vh;
+
+            overflow-y: auto;
+
             background: #111827;
-            border: 1px solid rgba(255,255,255,.1);
+
+            border:
+                1px solid rgba(255,255,255,.1);
+
             border-radius: 20px;
+
             padding: 28px;
-            box-shadow: 0 30px 80px rgba(0,0,0,.5);
+
+            box-shadow:
+                0 30px 80px rgba(0,0,0,.5);
         }
+
 
         .modal-header {
             display: flex;
+
             justify-content: space-between;
+
             align-items: center;
+
             margin-bottom: 25px;
         }
 
+
         .close {
             border: none;
+
             background: transparent;
+
             color: #8993a7;
+
             font-size: 25px;
+
             cursor: pointer;
         }
+
 
         .form-group {
             margin-bottom: 16px;
         }
 
+
         .form-group label {
             display: block;
+
             font-size: 13px;
+
             color: #aab4c8;
+
             margin-bottom: 7px;
         }
 
+
         .form-group input,
-        .form-group select {
+        .form-group select,
+        .form-group textarea {
             width: 100%;
+
             padding: 12px;
+
             border-radius: 9px;
-            border: 1px solid rgba(255,255,255,.1);
+
+            border:
+                1px solid rgba(255,255,255,.1);
+
             background: #0b1020;
+
             color: white;
+
             outline: none;
+
+            font-family: inherit;
         }
+
+
+        .form-group textarea {
+            min-height: 100px;
+
+            resize: vertical;
+        }
+
+
+        .form-help {
+            color: #6f7b91;
+
+            font-size: 11px;
+
+            margin-top: 5px;
+        }
+
+
+        .students-selection {
+            border:
+                1px solid rgba(255,255,255,.08);
+
+            border-radius: 12px;
+
+            background:
+                rgba(0,0,0,.15);
+
+            padding: 12px;
+
+            max-height: 210px;
+
+            overflow-y: auto;
+        }
+
+
+        .select-all {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            padding: 10px;
+
+            border-bottom:
+                1px solid rgba(255,255,255,.07);
+
+            margin-bottom: 5px;
+        }
+
+
+        .student-check {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            padding: 9px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+        }
+
+
+        .student-check:hover {
+            background:
+                rgba(255,255,255,.05);
+        }
+
+
+        .student-check input,
+        .select-all input {
+            width: 17px;
+            height: 17px;
+
+            accent-color: #6366f1;
+        }
+
 
         .modal-actions {
             display: flex;
+
             gap: 10px;
+
             margin-top: 20px;
         }
 
+
         .cancel-btn {
             flex: 1;
+
             border: none;
+
             border-radius: 9px;
-            background: rgba(255,255,255,.08);
+
+            background:
+                rgba(255,255,255,.08);
+
             color: white;
+
             padding: 12px;
+
             cursor: pointer;
         }
+
 
         .save-btn {
             flex: 1;
+
             border: none;
+
             border-radius: 9px;
-            background: linear-gradient(135deg,#2563eb,#7c3aed);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #7c3aed
+                );
+
             color: white;
+
             padding: 12px;
+
             cursor: pointer;
+
             font-weight: bold;
         }
 
-        /* ==============================
-           PLACEHOLDER SECTIONS
-        ============================== */
 
-        .empty {
-            text-align: center;
-            padding: 70px 20px;
-            color: #8993a7;
-        }
-
-        .empty-icon {
-            font-size: 60px;
-            margin-bottom: 15px;
-        }
-
-        /* ==============================
+        /* =====================================================
            RESPONSIVE
-        ============================== */
+        ===================================================== */
 
         @media(max-width:900px) {
 
             .sidebar {
                 width: 75px;
+
                 padding: 15px 8px;
             }
+
 
             .logo h2,
             .logo p,
@@ -471,24 +1053,31 @@
                 display: none;
             }
 
+
             .logo-icon {
                 font-size: 30px;
             }
+
 
             .menu button {
                 text-align: center;
                 font-size: 20px;
             }
 
+
             .main {
                 margin-left: 75px;
                 padding: 20px;
             }
 
+
             .stats {
-                grid-template-columns: repeat(2,1fr);
+                grid-template-columns:
+                    repeat(2,1fr);
             }
+
         }
+
 
         @media(max-width:600px) {
 
@@ -496,159 +1085,308 @@
                 grid-template-columns: 1fr;
             }
 
+
             .header {
                 flex-direction: column;
+
                 align-items: flex-start;
+
                 gap: 15px;
             }
+
 
             .students-header {
                 flex-direction: column;
             }
 
+
             .search {
                 max-width: none;
             }
+
+
+            .panel-title {
+                align-items: flex-start;
+
+                flex-direction: column;
+            }
+
+
+            .modal-box {
+                padding: 20px;
+            }
+
         }
+
     </style>
+
 </head>
+
 
 <body>
 
-<!-- ==========================================
+
+<!-- =========================================================
      SIDEBAR
-========================================== -->
+========================================================= -->
 
 <aside class="sidebar">
 
     <div class="logo">
-        <div class="logo-icon">🤖</div>
+
+        <div class="logo-icon">
+            🤖
+        </div>
+
         <h2>CITZ</h2>
-        <p>Campus Virtual</p>
+
+        <p>
+            Campus Virtual
+        </p>
+
     </div>
+
 
     <div class="menu">
 
-        <button class="active" onclick="mostrarSeccion('resumen', this)">
-            📊 <span>Resumen</span>
+        <button
+            class="active"
+            onclick="mostrarSeccion('resumen', this)"
+        >
+            📊
+            <span>Resumen</span>
         </button>
 
-        <button onclick="mostrarSeccion('alumnos', this)">
-            👨‍🎓 <span>Alumnos</span>
+
+        <button
+            onclick="mostrarSeccion('alumnos', this)"
+        >
+            👨‍🎓
+            <span>Alumnos</span>
         </button>
 
-        <button onclick="mostrarSeccion('actividades', this)">
-            🧩 <span>Actividades</span>
+
+        <button
+            onclick="mostrarSeccion('actividades', this)"
+        >
+            🧩
+            <span>Actividades</span>
         </button>
 
-        <button onclick="mostrarSeccion('tareas', this)">
-            📝 <span>Tareas</span>
+
+        <button
+            onclick="mostrarSeccion('tareas', this)"
+        >
+            📝
+            <span>Tareas</span>
         </button>
 
-        <button onclick="mostrarSeccion('logros', this)">
-            🏆 <span>Logros</span>
+
+        <button
+            onclick="mostrarSeccion('logros', this)"
+        >
+            🏆
+            <span>Logros</span>
         </button>
 
     </div>
 
+
     <div class="logout">
+
         <button onclick="cerrarSesion()">
-            🚪 <span>Cerrar sesión</span>
+
+            🚪
+            <span>Cerrar sesión</span>
+
         </button>
+
     </div>
 
 </aside>
 
 
-<!-- ==========================================
+
+<!-- =========================================================
      MAIN
-========================================== -->
+========================================================= -->
 
 <main class="main">
+
 
     <header class="header">
 
         <div>
-            <h1>Panel del profesor</h1>
-            <p>Administra el progreso de tus alumnos</p>
+
+            <h1>
+                Panel del profesor
+            </h1>
+
+            <p>
+                Administra el progreso de tus alumnos
+            </p>
+
         </div>
 
+
         <div class="teacher">
-            👨‍🏫 <span id="nombreProfesor">Profesor</span>
+
+            👨‍🏫
+
+            <span id="nombreProfesor">
+                Profesor
+            </span>
+
         </div>
 
     </header>
 
 
-    <!-- ======================================
-         RESUMEN
-    ======================================= -->
 
-    <section id="resumen" class="section active">
+    <!-- =====================================================
+         RESUMEN
+    ====================================================== -->
+
+    <section
+        id="resumen"
+        class="section active"
+    >
 
         <div class="stats">
 
-            <div class="stat">
-                <div class="stat-icon">👨‍🎓</div>
-                <h3 id="totalAlumnos">Calculando...</h3>
-                <p>Alumnos registrados</p>
-            </div>
 
             <div class="stat">
-                <div class="stat-icon">⭐</div>
-                <h3 id="totalPuntos">Calculando...</h3>
-                <p>Puntos acumulados</p>
+
+                <div class="stat-icon">
+                    👨‍🎓
+                </div>
+
+                <h3 id="totalAlumnos">
+                    Calculando...
+                </h3>
+
+                <p>
+                    Alumnos registrados
+                </p>
+
             </div>
 
-            <div class="stat">
-                <div class="stat-icon">🤖</div>
-                <h3 id="mascotasElegidas">Calculando...</h3>
-                <p>Mascotas elegidas</p>
-            </div>
 
             <div class="stat">
-                <div class="stat-icon">🆙</div>
-                <h3 id="nivelPromedio">Calculando...</h3>
-                <p>Nivel promedio</p>
+
+                <div class="stat-icon">
+                    ⭐
+                </div>
+
+                <h3 id="totalPuntos">
+                    Calculando...
+                </h3>
+
+                <p>
+                    Puntos acumulados
+                </p>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-icon">
+                    🤖
+                </div>
+
+                <h3 id="mascotasElegidas">
+                    Calculando...
+                </h3>
+
+                <p>
+                    Mascotas elegidas
+                </p>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-icon">
+                    🆙
+                </div>
+
+                <h3 id="nivelPromedio">
+                    Calculando...
+                </h3>
+
+                <p>
+                    Nivel promedio
+                </p>
+
             </div>
 
         </div>
 
 
+
         <div class="panel">
 
             <div class="panel-title">
-                <h2>🚀 Progreso del grupo</h2>
-                <strong id="porcentajeProgreso">0%</strong>
+
+                <h2>
+                    🚀 Progreso del grupo
+                </h2>
+
+                <strong id="porcentajeProgreso">
+                    0%
+                </strong>
+
             </div>
+
 
             <div class="progress">
+
                 <div
                     class="progress-bar"
-                    id="barraProgreso">
-                </div>
+                    id="barraProgreso"
+                ></div>
+
             </div>
 
         </div>
+
 
 
         <div class="panel">
 
             <div class="panel-title">
 
-                <h2>👨‍🎓 Alumnos</h2>
+                <h2>
+                    👨‍🎓 Alumnos
+                </h2>
 
-                <button class="btn" onclick="abrirAgregarAlumno()">
+                <button
+                    class="btn"
+                    onclick="abrirAgregarAlumno()"
+                >
                     ➕ Agregar alumno
                 </button>
 
             </div>
 
-            <div id="alumnosResumen" class="students">
+
+            <div
+                id="alumnosResumen"
+                class="students"
+            >
+
                 <div class="empty">
-                    <div class="empty-icon">⏳</div>
+
+                    <div class="empty-icon">
+                        ⏳
+                    </div>
+
                     Cargando alumnos...
+
                 </div>
+
             </div>
 
         </div>
@@ -656,23 +1394,33 @@
     </section>
 
 
-    <!-- ======================================
-         ALUMNOS
-    ======================================= -->
 
-    <section id="alumnos" class="section">
+    <!-- =====================================================
+         ALUMNOS
+    ====================================================== -->
+
+    <section
+        id="alumnos"
+        class="section"
+    >
 
         <div class="panel">
 
             <div class="panel-title">
 
-                <h2>👨‍🎓 Gestión de alumnos</h2>
+                <h2>
+                    👨‍🎓 Gestión de alumnos
+                </h2>
 
-                <button class="btn" onclick="abrirAgregarAlumno()">
+                <button
+                    class="btn"
+                    onclick="abrirAgregarAlumno()"
+                >
                     ➕ Agregar alumno
                 </button>
 
             </div>
+
 
             <div class="students-header">
 
@@ -686,11 +1434,20 @@
 
             </div>
 
-            <div id="listaAlumnos" class="students">
+
+            <div
+                id="listaAlumnos"
+                class="students"
+            >
 
                 <div class="empty">
-                    <div class="empty-icon">⏳</div>
+
+                    <div class="empty-icon">
+                        ⏳
+                    </div>
+
                     Cargando alumnos...
+
                 </div>
 
             </div>
@@ -700,33 +1457,63 @@
     </section>
 
 
-    <!-- ======================================
-         ACTIVIDADES
-    ======================================= -->
 
-    <section id="actividades" class="section">
+    <!-- =====================================================
+         ACTIVIDADES
+    ====================================================== -->
+
+    <section
+        id="actividades"
+        class="section"
+    >
 
         <div class="panel">
 
             <div class="panel-title">
 
-                <h2>🧩 Actividades</h2>
+                <div>
 
-                <button class="btn" onclick="alert('Módulo de actividades próximamente')">
+                    <h2>
+                        🧩 Actividades
+                    </h2>
+
+                    <p
+                        style="
+                            color:#8993a7;
+                            font-size:13px;
+                            margin-top:5px;
+                        "
+                    >
+                        Crea y asigna actividades a tus alumnos.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="btn"
+                    onclick="abrirNuevaActividad()"
+                >
                     ➕ Nueva actividad
                 </button>
 
             </div>
 
-            <div class="empty">
 
-                <div class="empty-icon">🧩</div>
+            <div
+                id="listaActividades"
+                class="activities-grid"
+            >
 
-                <h2>Gestión de actividades</h2>
+                <div class="empty">
 
-                <p style="margin-top:10px;">
-                    Aquí podrás crear, editar y calificar actividades.
-                </p>
+                    <div class="empty-icon">
+                        🧩
+                    </div>
+
+                    Cargando actividades...
+
+                </div>
 
             </div>
 
@@ -735,29 +1522,43 @@
     </section>
 
 
-    <!-- ======================================
-         TAREAS
-    ======================================= -->
 
-    <section id="tareas" class="section">
+    <!-- =====================================================
+         TAREAS
+    ====================================================== -->
+
+    <section
+        id="tareas"
+        class="section"
+    >
 
         <div class="panel">
 
             <div class="panel-title">
 
-                <h2>📝 Tareas</h2>
+                <h2>
+                    📝 Tareas
+                </h2>
 
-                <button class="btn" onclick="alert('Módulo de tareas próximamente')">
+                <button
+                    class="btn"
+                    onclick="alert('Módulo de tareas próximamente')"
+                >
                     ➕ Nueva tarea
                 </button>
 
             </div>
 
+
             <div class="empty">
 
-                <div class="empty-icon">📝</div>
+                <div class="empty-icon">
+                    📝
+                </div>
 
-                <h2>Gestión de tareas</h2>
+                <h2>
+                    Gestión de tareas
+                </h2>
 
                 <p style="margin-top:10px;">
                     Aquí podrás crear, editar y calificar tareas.
@@ -770,23 +1571,36 @@
     </section>
 
 
-    <!-- ======================================
-         LOGROS
-    ======================================= -->
 
-    <section id="logros" class="section">
+    <!-- =====================================================
+         LOGROS
+    ====================================================== -->
+
+    <section
+        id="logros"
+        class="section"
+    >
 
         <div class="panel">
 
             <div class="panel-title">
-                <h2>🏆 Logros</h2>
+
+                <h2>
+                    🏆 Logros
+                </h2>
+
             </div>
+
 
             <div class="empty">
 
-                <div class="empty-icon">🏆</div>
+                <div class="empty-icon">
+                    🏆
+                </div>
 
-                <h2>Sistema de logros</h2>
+                <h2>
+                    Sistema de logros
+                </h2>
 
                 <p style="margin-top:10px;">
                     Próximamente podrás administrar los logros de tus alumnos.
@@ -801,21 +1615,28 @@
 </main>
 
 
-<!-- ==========================================
-     MODAL AGREGAR ALUMNO
-========================================== -->
 
-<div class="modal" id="modalAgregar">
+<!-- =========================================================
+     MODAL AGREGAR ALUMNO
+========================================================= -->
+
+<div
+    class="modal"
+    id="modalAgregar"
+>
 
     <div class="modal-box">
 
         <div class="modal-header">
 
-            <h2>➕ Agregar alumno</h2>
+            <h2>
+                ➕ Agregar alumno
+            </h2>
 
             <button
                 class="close"
-                onclick="cerrarAgregarAlumno()">
+                onclick="cerrarAgregarAlumno()"
+            >
                 ×
             </button>
 
@@ -824,36 +1645,45 @@
 
         <div class="form-group">
 
-            <label>Nombre completo</label>
+            <label>
+                Nombre completo
+            </label>
 
             <input
                 id="nuevoNombre"
                 type="text"
-                placeholder="Ej. Juan Pérez">
+                placeholder="Ej. Juan Pérez"
+            >
 
         </div>
 
 
         <div class="form-group">
 
-            <label>Usuario</label>
+            <label>
+                Usuario
+            </label>
 
             <input
                 id="nuevoUsuario"
                 type="text"
-                placeholder="Ej. jperez">
+                placeholder="Ej. jperez"
+            >
 
         </div>
 
 
         <div class="form-group">
 
-            <label>Contraseña</label>
+            <label>
+                Contraseña
+            </label>
 
             <input
                 id="nuevaPassword"
                 type="text"
-                placeholder="Ej. Juan2026">
+                placeholder="Ej. Juan2026"
+            >
 
         </div>
 
@@ -862,13 +1692,16 @@
 
             <button
                 class="cancel-btn"
-                onclick="cerrarAgregarAlumno()">
+                onclick="cerrarAgregarAlumno()"
+            >
                 Cancelar
             </button>
 
+
             <button
                 class="save-btn"
-                onclick="crearAlumno()">
+                onclick="crearAlumno()"
+            >
                 Crear alumno
             </button>
 
@@ -879,91 +1712,132 @@
 </div>
 
 
-<!-- ==========================================
-     MODAL EDITAR ALUMNO
-========================================== -->
 
-<div class="modal" id="modalEditar">
+<!-- =========================================================
+     MODAL EDITAR ALUMNO
+========================================================= -->
+
+<div
+    class="modal"
+    id="modalEditar"
+>
 
     <div class="modal-box">
 
         <div class="modal-header">
 
-            <h2>✏️ Editar alumno</h2>
+            <h2>
+                ✏️ Editar alumno
+            </h2>
 
             <button
                 class="close"
-                onclick="cerrarEditarAlumno()">
+                onclick="cerrarEditarAlumno()"
+            >
                 ×
             </button>
 
         </div>
 
 
-        <input type="hidden" id="editarId">
+        <input
+            type="hidden"
+            id="editarId"
+        >
 
 
         <div class="form-group">
 
-            <label>Nombre</label>
+            <label>
+                Nombre
+            </label>
 
             <input
                 id="editarNombre"
-                type="text">
+                type="text"
+            >
 
         </div>
 
 
         <div class="form-group">
 
-            <label>Puntos</label>
+            <label>
+                Puntos
+            </label>
 
             <input
                 id="editarPuntos"
                 type="number"
-                min="0">
+                min="0"
+            >
 
         </div>
 
 
         <div class="form-group">
 
-            <label>Nivel</label>
+            <label>
+                Nivel
+            </label>
 
             <input
                 id="editarNivel"
                 type="number"
                 min="1"
-                max="5">
+                max="5"
+            >
 
         </div>
 
 
         <div class="form-group">
 
-            <label>Energía</label>
+            <label>
+                Energía
+            </label>
 
             <input
                 id="editarEnergia"
                 type="number"
                 min="0"
-                max="100">
+                max="100"
+            >
 
         </div>
 
 
         <div class="form-group">
 
-            <label>Mascota</label>
+            <label>
+                Mascota
+            </label>
 
             <select id="editarMascota">
 
-                <option value="">Sin mascota</option>
-                <option value="robot">🤖 Robot</option>
-                <option value="dinosaurio">🦖 Dinosaurio</option>
-                <option value="gato">🐱 Gato</option>
-                <option value="alien">👽 Alien</option>
-                <option value="zorro">🦊 Zorro</option>
+                <option value="">
+                    Sin mascota
+                </option>
+
+                <option value="robot">
+                    🤖 Robot
+                </option>
+
+                <option value="dinosaurio">
+                    🦖 Dinosaurio
+                </option>
+
+                <option value="gato">
+                    🐱 Gato
+                </option>
+
+                <option value="alien">
+                    👽 Alien
+                </option>
+
+                <option value="zorro">
+                    🦊 Zorro
+                </option>
 
             </select>
 
@@ -974,13 +1848,16 @@
 
             <button
                 class="cancel-btn"
-                onclick="cerrarEditarAlumno()">
+                onclick="cerrarEditarAlumno()"
+            >
                 Cancelar
             </button>
 
+
             <button
                 class="save-btn"
-                onclick="guardarAlumno()">
+                onclick="guardarAlumno()"
+            >
                 Guardar cambios
             </button>
 
@@ -991,97 +1868,355 @@
 </div>
 
 
-<!-- ==========================================
-     JAVASCRIPT
-========================================== -->
+
+<!-- =========================================================
+     MODAL NUEVA ACTIVIDAD
+========================================================= -->
+
+<div
+    class="modal"
+    id="modalActividad"
+>
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h2 id="tituloModalActividad">
+                🧩 Nueva actividad
+            </h2>
+
+            <button
+                class="close"
+                onclick="cerrarActividad()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <input
+            type="hidden"
+            id="actividadId"
+        >
+
+
+        <!-- TÍTULO -->
+
+        <div class="form-group">
+
+            <label>
+                Título de la actividad *
+            </label>
+
+            <input
+                id="actividadTitulo"
+                type="text"
+                placeholder="Ej. Circuito con sensor ultrasónico"
+            >
+
+        </div>
+
+
+        <!-- DESCRIPCIÓN -->
+
+        <div class="form-group">
+
+            <label>
+                Descripción
+            </label>
+
+            <textarea
+                id="actividadDescripcion"
+                placeholder="Explica brevemente qué debe hacer el alumno..."
+            ></textarea>
+
+        </div>
+
+
+        <!-- TIPO -->
+
+        <div class="form-group">
+
+            <label>
+                Tipo de actividad
+            </label>
+
+            <select id="actividadTipo">
+
+                <option value="enlace">
+                    🔗 Enlace externo
+                </option>
+
+                <option value="interna">
+                    🧩 Actividad del campus
+                </option>
+
+                <option value="archivo">
+                    📁 Archivo
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- ENLACE -->
+
+        <div class="form-group">
+
+            <label>
+                Enlace de la actividad
+            </label>
+
+            <input
+                id="actividadEnlace"
+                type="url"
+                placeholder="https://..."
+            >
+
+            <div class="form-help">
+                Puedes colocar un enlace de Scratch, Tinkercad,
+                Roblox, Code.org, Gimkit o una actividad HTML.
+            </div>
+
+        </div>
+
+
+        <!-- IMAGEN -->
+
+        <div class="form-group">
+
+            <label>
+                URL de imagen (opcional)
+            </label>
+
+            <input
+                id="actividadImagen"
+                type="url"
+                placeholder="https://..."
+            >
+
+        </div>
+
+
+        <!-- PUNTOS -->
+
+        <div class="form-group">
+
+            <label>
+                Puntos máximos
+            </label>
+
+            <input
+                id="actividadPuntos"
+                type="number"
+                min="0"
+                value="100"
+            >
+
+        </div>
+
+
+        <!-- FECHA -->
+
+        <div class="form-group">
+
+            <label>
+                Fecha límite (opcional)
+            </label>
+
+            <input
+                id="actividadFecha"
+                type="datetime-local"
+            >
+
+        </div>
+
+
+        <!-- ALUMNOS -->
+
+        <div class="form-group">
+
+            <label>
+                Asignar actividad a
+            </label>
+
+
+            <div class="students-selection">
+
+
+                <label class="select-all">
+
+                    <input
+                        type="checkbox"
+                        id="seleccionarTodos"
+                        onchange="seleccionarTodosAlumnos()"
+                    >
+
+                    <strong>
+                        👥 Todos los alumnos
+                    </strong>
+
+                </label>
+
+
+                <div id="seleccionAlumnos">
+
+                    Cargando alumnos...
+
+                </div>
+
+            </div>
+
+
+            <div class="form-help">
+                Selecciona "Todos los alumnos" o marca alumnos específicos.
+            </div>
+
+        </div>
+
+
+        <!-- BOTONES -->
+
+        <div class="modal-actions">
+
+            <button
+                class="cancel-btn"
+                onclick="cerrarActividad()"
+            >
+                Cancelar
+            </button>
+
+
+            <button
+                class="save-btn"
+                onclick="guardarActividad()"
+            >
+                💾 Guardar actividad
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
 
 <script>
 
-    /* ==========================================
-       SUPABASE
-    ========================================== */
 
-    const SUPABASE_URL =
-        "https://bcfknbpkduiwgqymxkns.supabase.co";
+/* =========================================================
+   SUPABASE
+========================================================= */
 
-    const SUPABASE_KEY =
-        "sb_publishable_END5KZ8gA4e9YDpicG-aLw_aRaIzo7E";
-
-    const supabaseClient =
-        supabase.createClient(
-            SUPABASE_URL,
-            SUPABASE_KEY
-        );
+const SUPABASE_URL =
+    "https://bcfknbpkduiwgqymxkns.supabase.co";
 
 
-    /* ==========================================
-       VARIABLES
-    ========================================== */
-
-    let alumnos = [];
+const SUPABASE_KEY =
+    "sb_publishable_END5KZ8gA4e9YDpicG-aLw_aRaIzo7E";
 
 
-    /* ==========================================
-       MASCOTAS
-    ========================================== */
-
-    const mascotasEmoji = {
-        robot: "🤖",
-        dinosaurio: "🦖",
-        gato: "🐱",
-        alien: "👽",
-        zorro: "🦊"
-    };
-
-
-    /* ==========================================
-       INICIO
-    ========================================== */
-
-    document.addEventListener(
-        "DOMContentLoaded",
-        iniciarPanel
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
     );
 
 
-    async function iniciarPanel() {
 
-        try {
+/* =========================================================
+   VARIABLES
+========================================================= */
 
-            const {
-                data: sessionData,
-                error: sessionError
-            } = await supabaseClient.auth.getSession();
+let alumnos = [];
 
+let actividades = [];
 
-            if (sessionError) {
-                console.error(sessionError);
-                window.location.href = "login.html";
-                return;
-            }
+let profesorActual = null;
 
 
-            const session =
-                sessionData.session;
+
+/* =========================================================
+   MASCOTAS
+========================================================= */
+
+const mascotasEmoji = {
+
+    robot: "🤖",
+
+    dinosaurio: "🦖",
+
+    gato: "🐱",
+
+    alien: "👽",
+
+    zorro: "🦊"
+
+};
 
 
-            if (!session) {
 
-                window.location.href =
-                    "login.html";
+/* =========================================================
+   INICIO
+========================================================= */
 
-                return;
-            }
+document.addEventListener(
+    "DOMContentLoaded",
+    iniciarPanel
+);
 
 
-            /* ==============================
-               OBTENER PROFESOR
-            ============================== */
 
-            const {
-                data: profesor,
-                error: profesorError
-            } = await supabaseClient
+async function iniciarPanel() {
+
+    try {
+
+        const {
+            data: sessionData,
+            error: sessionError
+        } =
+            await supabaseClient
+                .auth
+                .getSession();
+
+
+        if (sessionError) {
+
+            console.error(sessionError);
+
+            window.location.href =
+                "login.html";
+
+            return;
+        }
+
+
+        const session =
+            sessionData.session;
+
+
+        if (!session) {
+
+            window.location.href =
+                "login.html";
+
+            return;
+        }
+
+
+        /* ==========================================
+           OBTENER PROFESOR
+        ========================================== */
+
+        const {
+            data: profesor,
+            error: profesorError
+        } =
+            await supabaseClient
                 .from("alumnos")
                 .select(
                     "id, usuario, nombre, rol"
@@ -1093,611 +2228,2094 @@
                 .maybeSingle();
 
 
-            if (profesorError) {
+        if (profesorError) {
 
-                console.error(
-                    profesorError
-                );
-
-                alert(
-                    "No fue posible verificar el usuario."
-                );
-
-                return;
-            }
-
-
-            if (
-                !profesor ||
-                profesor.rol !== "profesor"
-            ) {
-
-                alert(
-                    "No tienes permisos para acceder a este panel."
-                );
-
-                await supabaseClient.auth.signOut();
-
-                window.location.href =
-                    "login.html";
-
-                return;
-            }
-
-
-            document.getElementById(
-                "nombreProfesor"
-            ).textContent =
-                profesor.nombre;
-
-
-            await cargarAlumnos();
-
-        } catch (error) {
-
-            console.error(error);
+            console.error(
+                profesorError
+            );
 
             alert(
-                "Ocurrió un error al iniciar el panel."
+                "No fue posible verificar el usuario."
             );
+
+            return;
         }
+
+
+        if (
+            !profesor ||
+            profesor.rol !== "profesor"
+        ) {
+
+            alert(
+                "No tienes permisos para acceder a este panel."
+            );
+
+
+            await supabaseClient
+                .auth
+                .signOut();
+
+
+            window.location.href =
+                "login.html";
+
+            return;
+        }
+
+
+        profesorActual =
+            profesor;
+
+
+        document.getElementById(
+            "nombreProfesor"
+        ).textContent =
+            profesor.nombre;
+
+
+        await cargarAlumnos();
+
+        await cargarActividades();
+
     }
 
+    catch (error) {
 
-    /* ==========================================
-       CARGAR ALUMNOS
-    ========================================== */
+        console.error(error);
 
-    async function cargarAlumnos() {
+        alert(
+            "Ocurrió un error al iniciar el panel."
+        );
 
-        const {
-            data,
-            error
-        } = await supabaseClient
+    }
+
+}
+
+
+
+/* =========================================================
+   CARGAR ALUMNOS
+========================================================= */
+
+async function cargarAlumnos() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
             .from("alumnos")
             .select(
                 "id, usuario, nombre, mascota, puntos, nivel, energia, rol"
             )
-            .eq("rol", "alumno")
-            .order("nombre");
-
-
-        if (error) {
-
-            console.error(error);
-
-            alert(
-                "No se pudieron cargar los alumnos."
-            );
-
-            return;
-        }
-
-
-        alumnos = data || [];
-
-
-        actualizarEstadisticas();
-
-        mostrarAlumnos();
-
-        mostrarAlumnosResumen();
-    }
-
-
-    /* ==========================================
-       ESTADÍSTICAS
-    ========================================== */
-
-    function actualizarEstadisticas() {
-
-        const total =
-            alumnos.length;
-
-
-        const puntos =
-            alumnos.reduce(
-                (sum, alumno) =>
-                    sum + (Number(alumno.puntos) || 0),
-                0
+            .eq(
+                "rol",
+                "alumno"
+            )
+            .order(
+                "nombre"
             );
 
 
-        const mascotas =
-            alumnos.filter(
-                alumno =>
-                    alumno.mascota
-            ).length;
+    if (error) {
 
+        console.error(error);
 
-        const promedio =
-            total > 0
-                ? alumnos.reduce(
-                    (sum, alumno) =>
-                        sum +
-                        (Number(alumno.nivel) || 1),
-                    0
-                ) / total
-                : 0;
+        alert(
+            "No se pudieron cargar los alumnos."
+        );
 
-
-        document.getElementById(
-            "totalAlumnos"
-        ).textContent =
-            total;
-
-
-        document.getElementById(
-            "totalPuntos"
-        ).textContent =
-            puntos;
-
-
-        document.getElementById(
-            "mascotasElegidas"
-        ).textContent =
-            mascotas;
-
-
-        document.getElementById(
-            "nivelPromedio"
-        ).textContent =
-            total
-                ? promedio.toFixed(1)
-                : "0.0";
-
-
-        /*
-            Nivel máximo considerado: 5
-
-            Ejemplo:
-            nivel promedio 1 = 20%
-            nivel promedio 2.5 = 50%
-            nivel promedio 5 = 100%
-        */
-
-        const porcentaje =
-            total
-                ? Math.min(
-                    100,
-                    (promedio / 5) * 100
-                )
-                : 0;
-
-
-        document.getElementById(
-            "barraProgreso"
-        ).style.width =
-            porcentaje + "%";
-
-
-        document.getElementById(
-            "porcentajeProgreso"
-        ).textContent =
-            Math.round(porcentaje) + "%";
+        return;
     }
 
 
-    /* ==========================================
-       MOSTRAR ALUMNOS
-    ========================================== */
+    alumnos =
+        data || [];
 
-    function mostrarAlumnos(
-        lista = alumnos
-    ) {
 
-        const contenedor =
-            document.getElementById(
-                "listaAlumnos"
+    actualizarEstadisticas();
+
+    mostrarAlumnos();
+
+    mostrarAlumnosResumen();
+
+    mostrarSeleccionAlumnos();
+
+}
+
+
+
+/* =========================================================
+   CARGAR ACTIVIDADES
+========================================================= */
+
+async function cargarActividades() {
+
+    if (!profesorActual) {
+        return;
+    }
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("actividades")
+            .select("*")
+            .eq(
+                "profesor_id",
+                profesorActual.id
+            )
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
             );
 
 
-        if (!lista.length) {
+    if (error) {
 
-            contenedor.innerHTML = `
-                <div class="empty">
-                    <div class="empty-icon">👨‍🎓</div>
-                    No hay alumnos registrados.
-                </div>
-            `;
+        console.error(
+            "Error cargando actividades:",
+            error
+        );
 
-            return;
-        }
+        document.getElementById(
+            "listaActividades"
+        ).innerHTML = `
 
+            <div class="empty">
 
-        contenedor.innerHTML =
-            lista.map(
-                alumno =>
-                    crearTarjetaAlumno(alumno)
-            ).join("");
-    }
-
-
-    /* ==========================================
-       RESUMEN DE ALUMNOS
-    ========================================== */
-
-    function mostrarAlumnosResumen() {
-
-        const contenedor =
-            document.getElementById(
-                "alumnosResumen"
-            );
-
-
-        if (!alumnos.length) {
-
-            contenedor.innerHTML = `
-                <div class="empty">
-                    <div class="empty-icon">👨‍🎓</div>
-                    No hay alumnos registrados.
-                </div>
-            `;
-
-            return;
-        }
-
-
-        contenedor.innerHTML =
-            alumnos
-                .map(
-                    alumno =>
-                        crearTarjetaAlumno(alumno)
-                )
-                .join("");
-    }
-
-
-    /* ==========================================
-       CREAR TARJETA
-    ========================================== */
-
-    function crearTarjetaAlumno(
-        alumno
-    ) {
-
-        const emoji =
-            mascotasEmoji[
-                alumno.mascota
-            ] || "👤";
-
-
-        return `
-
-            <div class="student">
-
-                <div class="student-top">
-
-                    <div class="avatar">
-                        ${emoji}
-                    </div>
-
-                    <div>
-
-                        <div class="student-name">
-                            ${escapeHTML(
-                                alumno.nombre
-                            )}
-                        </div>
-
-                        <div class="student-user">
-                            @${escapeHTML(
-                                alumno.usuario
-                            )}
-                        </div>
-
-                    </div>
-
+                <div class="empty-icon">
+                    ⚠️
                 </div>
 
-
-                <div class="student-info">
-
-                    <div class="info">
-
-                        <strong>
-                            ${alumno.puntos || 0}
-                        </strong>
-
-                        <span>
-                            PUNTOS
-                        </span>
-
-                    </div>
-
-
-                    <div class="info">
-
-                        <strong>
-                            ${alumno.nivel || 1}
-                        </strong>
-
-                        <span>
-                            NIVEL
-                        </span>
-
-                    </div>
-
-
-                    <div class="info">
-
-                        <strong>
-                            ${alumno.energia ?? 100}
-                        </strong>
-
-                        <span>
-                            ENERGÍA
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-                <button
-                    class="edit-btn"
-                    onclick="abrirEditarAlumno(${alumno.id})">
-
-                    ✏️ Editar alumno
-
-                </button>
+                No se pudieron cargar las actividades.
 
             </div>
+
         `;
+
+        return;
     }
 
 
-    /* ==========================================
-       BUSCAR ALUMNO
-    ========================================== */
-
-    function buscarAlumno() {
-
-        const texto =
-            document.getElementById(
-                "buscador"
-            ).value
-            .toLowerCase()
-            .trim();
+    actividades =
+        data || [];
 
 
-        if (!texto) {
+    await obtenerCantidadAsignados();
 
-            mostrarAlumnos();
-
-            return;
-        }
+}
 
 
-        const filtrados =
-            alumnos.filter(
-                alumno =>
-                    alumno.nombre
-                        .toLowerCase()
-                        .includes(texto)
-                    ||
-                    alumno.usuario
-                        .toLowerCase()
-                        .includes(texto)
+
+/* =========================================================
+   CANTIDAD DE ALUMNOS ASIGNADOS
+========================================================= */
+
+async function obtenerCantidadAsignados() {
+
+    const contenedor =
+        document.getElementById(
+            "listaActividades"
+        );
+
+
+    if (!actividades.length) {
+
+        contenedor.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    🧩
+                </div>
+
+                <h2>
+                    No hay actividades todavía
+                </h2>
+
+                <p style="margin-top:10px;">
+                    Pulsa "Nueva actividad" para comenzar.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    const ids =
+        actividades.map(
+            actividad =>
+                actividad.id
+        );
+
+
+    const {
+        data: asignaciones,
+        error
+    } =
+        await supabaseClient
+            .from("actividad_alumnos")
+            .select(
+                "actividad_id, alumno_id"
+            )
+            .in(
+                "actividad_id",
+                ids
             );
 
 
-        mostrarAlumnos(
-            filtrados
+    if (error) {
+
+        console.error(error);
+
+        mostrarActividades(
+            {}
         );
+
+        return;
     }
 
 
-    /* ==========================================
-       NAVEGACIÓN
-    ========================================== */
+    const cantidades = {};
 
-    function mostrarSeccion(
-        id,
-        boton
+
+    ids.forEach(
+        id => {
+            cantidades[id] = 0;
+        }
+    );
+
+
+    (asignaciones || [])
+        .forEach(
+            asignacion => {
+
+                cantidades[
+                    asignacion.actividad_id
+                ]++;
+
+            }
+        );
+
+
+    mostrarActividades(
+        cantidades
+    );
+
+}
+
+
+
+/* =========================================================
+   MOSTRAR ACTIVIDADES
+========================================================= */
+
+function mostrarActividades(
+    cantidades = {}
+) {
+
+    const contenedor =
+        document.getElementById(
+            "listaActividades"
+        );
+
+
+    if (!actividades.length) {
+
+        contenedor.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    🧩
+                </div>
+
+                No hay actividades.
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    contenedor.innerHTML =
+        actividades
+            .map(
+                actividad =>
+                    crearTarjetaActividad(
+                        actividad,
+                        cantidades[
+                            actividad.id
+                        ] || 0
+                    )
+            )
+            .join("");
+
+}
+
+
+
+/* =========================================================
+   TARJETA ACTIVIDAD
+========================================================= */
+
+function crearTarjetaActividad(
+    actividad,
+    cantidad
+) {
+
+    const imagen =
+        actividad.imagen_url
+            ? `
+                <img
+                    class="activity-image"
+                    src="${escapeHTML(
+                        actividad.imagen_url
+                    )}"
+                    alt=""
+                    onerror="
+                        this.outerHTML =
+                        '<div class=&quot;activity-image&quot;>🧩</div>'
+                    "
+                >
+              `
+            : `
+                <div class="activity-image">
+                    🧩
+                </div>
+              `;
+
+
+    const estado =
+        actividad.activa
+            ? `
+                <span class="badge active">
+                    ● Activa
+                </span>
+              `
+            : `
+                <span class="badge inactive">
+                    ● Inactiva
+                </span>
+              `;
+
+
+    const fecha =
+        actividad.fecha_limite
+            ? `
+                <span class="badge">
+                    📅 ${formatearFecha(
+                        actividad.fecha_limite
+                    )}
+                </span>
+              `
+            : `
+                <span class="badge">
+                    📅 Sin fecha límite
+                </span>
+              `;
+
+
+    return `
+
+        <div class="activity-card">
+
+            ${imagen}
+
+
+            <div class="activity-content">
+
+                <div class="activity-title">
+
+                    ${escapeHTML(
+                        actividad.titulo
+                    )}
+
+                </div>
+
+
+                <div class="activity-description">
+
+                    ${escapeHTML(
+                        actividad.descripcion ||
+                        "Sin descripción."
+                    )}
+
+                </div>
+
+
+                <div class="activity-meta">
+
+                    ${estado}
+
+                    <span class="badge">
+                        ⭐ ${actividad.puntos} puntos
+                    </span>
+
+                    <span class="badge">
+                        👥 ${cantidad} alumnos
+                    </span>
+
+                    ${fecha}
+
+                </div>
+
+
+                <div class="activity-actions">
+
+                    <button
+                        class="edit-activity"
+                        onclick="
+                            abrirEditarActividad(
+                                ${actividad.id}
+                            )
+                        "
+                    >
+                        ✏️ Editar
+                    </button>
+
+
+                    <button
+                        class="toggle-activity"
+                        onclick="
+                            cambiarEstadoActividad(
+                                ${actividad.id},
+                                ${actividad.activa}
+                            )
+                        "
+                    >
+                        ${
+                            actividad.activa
+                                ? "🔕 Desactivar"
+                                : "🔔 Activar"
+                        }
+                    </button>
+
+
+                    <button
+                        class="delete-activity"
+                        onclick="
+                            eliminarActividad(
+                                ${actividad.id}
+                            )
+                        "
+                    >
+                        🗑️ Eliminar actividad
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+
+/* =========================================================
+   ABRIR NUEVA ACTIVIDAD
+========================================================= */
+
+function abrirNuevaActividad() {
+
+    document.getElementById(
+        "tituloModalActividad"
+    ).textContent =
+        "🧩 Nueva actividad";
+
+
+    document.getElementById(
+        "actividadId"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "actividadTitulo"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "actividadDescripcion"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "actividadTipo"
+    ).value =
+        "enlace";
+
+
+    document.getElementById(
+        "actividadEnlace"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "actividadImagen"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "actividadPuntos"
+    ).value =
+        100;
+
+
+    document.getElementById(
+        "actividadFecha"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "seleccionarTodos"
+    ).checked =
+        false;
+
+
+    mostrarSeleccionAlumnos();
+
+
+    document.getElementById(
+        "modalActividad"
+    ).classList.add(
+        "show"
+    );
+
+
+    document.getElementById(
+        "actividadTitulo"
+    ).focus();
+
+}
+
+
+
+/* =========================================================
+   EDITAR ACTIVIDAD
+========================================================= */
+
+async function abrirEditarActividad(
+    id
+) {
+
+    const actividad =
+        actividades.find(
+            a =>
+                Number(a.id) ===
+                Number(id)
+        );
+
+
+    if (!actividad) {
+
+        alert(
+            "No se encontró la actividad."
+        );
+
+        return;
+    }
+
+
+    document.getElementById(
+        "tituloModalActividad"
+    ).textContent =
+        "✏️ Editar actividad";
+
+
+    document.getElementById(
+        "actividadId"
+    ).value =
+        actividad.id;
+
+
+    document.getElementById(
+        "actividadTitulo"
+    ).value =
+        actividad.titulo || "";
+
+
+    document.getElementById(
+        "actividadDescripcion"
+    ).value =
+        actividad.descripcion || "";
+
+
+    document.getElementById(
+        "actividadTipo"
+    ).value =
+        actividad.tipo || "enlace";
+
+
+    document.getElementById(
+        "actividadEnlace"
+    ).value =
+        actividad.enlace || "";
+
+
+    document.getElementById(
+        "actividadImagen"
+    ).value =
+        actividad.imagen_url || "";
+
+
+    document.getElementById(
+        "actividadPuntos"
+    ).value =
+        actividad.puntos ?? 100;
+
+
+    document.getElementById(
+        "actividadFecha"
+    ).value =
+        convertirFechaParaInput(
+            actividad.fecha_limite
+        );
+
+
+    await cargarAsignacionesActividad(
+        actividad.id
+    );
+
+
+    document.getElementById(
+        "modalActividad"
+    ).classList.add(
+        "show"
+    );
+
+}
+
+
+
+/* =========================================================
+   CARGAR ASIGNACIONES PARA EDITAR
+========================================================= */
+
+async function cargarAsignacionesActividad(
+    actividadId
+) {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("actividad_alumnos")
+            .select("alumno_id")
+            .eq(
+                "actividad_id",
+                actividadId
+            );
+
+
+    if (error) {
+
+        console.error(error);
+
+        mostrarSeleccionAlumnos();
+
+        return;
+    }
+
+
+    const ids =
+        (data || [])
+            .map(
+                item =>
+                    Number(
+                        item.alumno_id
+                    )
+            );
+
+
+    const todos =
+        alumnos.length > 0 &&
+        ids.length === alumnos.length;
+
+
+    document.getElementById(
+        "seleccionarTodos"
+    ).checked =
+        todos;
+
+
+    mostrarSeleccionAlumnos(
+        ids
+    );
+
+}
+
+
+
+/* =========================================================
+   MOSTRAR CHECKBOX ALUMNOS
+========================================================= */
+
+function mostrarSeleccionAlumnos(
+    seleccionados = []
+) {
+
+    const contenedor =
+        document.getElementById(
+            "seleccionAlumnos"
+        );
+
+
+    if (!alumnos.length) {
+
+        contenedor.innerHTML = `
+
+            <div style="
+                color:#8993a7;
+                padding:10px;
+                text-align:center;
+            ">
+                No hay alumnos registrados.
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    contenedor.innerHTML =
+        alumnos
+            .map(
+                alumno => {
+
+                    const checked =
+                        seleccionados
+                            .includes(
+                                Number(
+                                    alumno.id
+                                )
+                            );
+
+
+                    const emoji =
+                        mascotasEmoji[
+                            alumno.mascota
+                        ] || "👤";
+
+
+                    return `
+
+                        <label
+                            class="student-check"
+                        >
+
+                            <input
+                                type="checkbox"
+                                class="alumno-checkbox"
+                                value="${alumno.id}"
+                                ${
+                                    checked
+                                        ? "checked"
+                                        : ""
+                                }
+                            >
+
+                            <span>
+                                ${emoji}
+                            </span>
+
+                            <span>
+                                ${escapeHTML(
+                                    alumno.nombre
+                                )}
+                            </span>
+
+                        </label>
+
+                    `;
+
+                }
+            )
+            .join("");
+
+}
+
+
+
+/* =========================================================
+   SELECCIONAR TODOS
+========================================================= */
+
+function seleccionarTodosAlumnos() {
+
+    const todos =
+        document.getElementById(
+            "seleccionarTodos"
+        ).checked;
+
+
+    document
+        .querySelectorAll(
+            ".alumno-checkbox"
+        )
+        .forEach(
+            checkbox => {
+
+                checkbox.checked =
+                    todos;
+
+            }
+        );
+
+}
+
+
+
+/* =========================================================
+   GUARDAR ACTIVIDAD
+========================================================= */
+
+async function guardarActividad() {
+
+    const id =
+        document.getElementById(
+            "actividadId"
+        ).value;
+
+
+    const titulo =
+        document.getElementById(
+            "actividadTitulo"
+        ).value.trim();
+
+
+    const descripcion =
+        document.getElementById(
+            "actividadDescripcion"
+        ).value.trim();
+
+
+    const tipo =
+        document.getElementById(
+            "actividadTipo"
+        ).value;
+
+
+    const enlace =
+        document.getElementById(
+            "actividadEnlace"
+        ).value.trim();
+
+
+    const imagen =
+        document.getElementById(
+            "actividadImagen"
+        ).value.trim();
+
+
+    const puntos =
+        Number(
+            document.getElementById(
+                "actividadPuntos"
+            ).value
+        );
+
+
+    const fechaInput =
+        document.getElementById(
+            "actividadFecha"
+        ).value;
+
+
+    const todos =
+        document.getElementById(
+            "seleccionarTodos"
+        ).checked;
+
+
+    let alumnosSeleccionados =
+        Array.from(
+            document.querySelectorAll(
+                ".alumno-checkbox:checked"
+            )
+        )
+        .map(
+            checkbox =>
+                Number(
+                    checkbox.value
+                )
+        );
+
+
+    if (!titulo) {
+
+        alert(
+            "Escribe el título de la actividad."
+        );
+
+        return;
+    }
+
+
+    if (
+        Number.isNaN(puntos) ||
+        puntos < 0
     ) {
 
-        document
-            .querySelectorAll(".section")
-            .forEach(
-                section =>
-                    section.classList.remove(
-                        "active"
-                    )
-            );
-
-
-        document
-            .getElementById(id)
-            .classList.add(
-                "active"
-            );
-
-
-        document
-            .querySelectorAll(".menu button")
-            .forEach(
-                button =>
-                    button.classList.remove(
-                        "active"
-                    )
-            );
-
-
-        boton.classList.add(
-            "active"
+        alert(
+            "Los puntos no son válidos."
         );
 
+        return;
+    }
 
-        if (id === "alumnos") {
 
-            mostrarAlumnos();
+    if (
+        tipo === "enlace" &&
+        !enlace
+    ) {
 
-        }
+        alert(
+            "Agrega el enlace de la actividad."
+        );
+
+        return;
+    }
+
+
+    if (!todos &&
+        !alumnosSeleccionados.length
+    ) {
+
+        alert(
+            "Selecciona al menos un alumno o marca 'Todos los alumnos'."
+        );
+
+        return;
+    }
+
+
+    if (todos) {
+
+        alumnosSeleccionados =
+            alumnos.map(
+                alumno =>
+                    Number(
+                        alumno.id
+                    )
+            );
 
     }
 
 
-    /* ==========================================
-       MODAL AGREGAR
-    ========================================== */
-
-    function abrirAgregarAlumno() {
-
-        document
-            .getElementById(
-                "modalAgregar"
-            )
-            .classList.add(
-                "show"
-            );
+    const fecha =
+        fechaInput
+            ? new Date(
+                fechaInput
+              ).toISOString()
+            : null;
 
 
-        document.getElementById(
-            "nuevoNombre"
-        ).focus();
-    }
+    try {
 
+        /* ==========================================
+           CREAR
+        ========================================== */
 
-    function cerrarAgregarAlumno() {
-
-        document
-            .getElementById(
-                "modalAgregar"
-            )
-            .classList.remove(
-                "show"
-            );
-
-
-        document.getElementById(
-            "nuevoNombre"
-        ).value = "";
-
-
-        document.getElementById(
-            "nuevoUsuario"
-        ).value = "";
-
-
-        document.getElementById(
-            "nuevaPassword"
-        ).value = "";
-    }
-
-
-    /* ==========================================
-       CREAR ALUMNO
-    ========================================== */
-
-    async function crearAlumno() {
-
-        const nombre =
-            document.getElementById(
-                "nuevoNombre"
-            ).value.trim();
-
-
-        const usuario =
-            document.getElementById(
-                "nuevoUsuario"
-            ).value
-            .trim()
-            .toLowerCase();
-
-
-        const password =
-            document.getElementById(
-                "nuevaPassword"
-            ).value;
-
-
-        if (!nombre) {
-
-            alert(
-                "Escribe el nombre del alumno."
-            );
-
-            return;
-        }
-
-
-        if (!usuario) {
-
-            alert(
-                "Escribe el usuario."
-            );
-
-            return;
-        }
-
-
-        if (!password) {
-
-            alert(
-                "Escribe una contraseña."
-            );
-
-            return;
-        }
-
-
-        if (password.length < 4) {
-
-            alert(
-                "La contraseña debe tener al menos 4 caracteres."
-            );
-
-            return;
-        }
-
-
-        try {
+        if (!id) {
 
             const {
-                data: sessionData
+                data: nuevaActividad,
+                error
             } =
                 await supabaseClient
-                    .auth
-                    .getSession();
+                    .from("actividades")
+                    .insert({
+
+                        profesor_id:
+                            profesorActual.id,
+
+                        titulo:
+                            titulo,
+
+                        descripcion:
+                            descripcion ||
+                            null,
+
+                        tipo:
+                            tipo,
+
+                        enlace:
+                            enlace ||
+                            null,
+
+                        imagen_url:
+                            imagen ||
+                            null,
+
+                        puntos:
+                            puntos,
+
+                        fecha_limite:
+                            fecha,
+
+                        activa:
+                            true
+
+                    })
+                    .select()
+                    .single();
 
 
-            const session =
-                sessionData.session;
+            if (error) {
 
-
-            if (!session) {
+                console.error(error);
 
                 alert(
-                    "Tu sesión ha expirado."
+                    "No se pudo crear la actividad:\n" +
+                    error.message
                 );
-
-                window.location.href =
-                    "login.html";
 
                 return;
             }
 
 
-            const response =
-                await fetch(
-                    SUPABASE_URL +
-                    "/functions/v1/crear-alumno",
-                    {
-                        method: "POST",
+            const asignaciones =
+                alumnosSeleccionados
+                    .map(
+                        alumnoId => ({
 
-                        headers: {
+                            actividad_id:
+                                nuevaActividad.id,
 
-                            "Content-Type":
-                                "application/json",
+                            alumno_id:
+                                alumnoId,
 
-                            "Authorization":
-                                "Bearer " +
-                                session.access_token
+                            estado:
+                                "pendiente"
 
-                        },
+                        })
+                    );
 
-                        body: JSON.stringify({
+
+            const {
+                error:
+                    errorAsignaciones
+            } =
+                await supabaseClient
+                    .from(
+                        "actividad_alumnos"
+                    )
+                    .insert(
+                        asignaciones
+                    );
+
+
+            if (errorAsignaciones) {
+
+                console.error(
+                    errorAsignaciones
+                );
+
+
+                /*
+                   Si falla la asignación,
+                   eliminamos la actividad
+                   para no dejar datos incompletos.
+                */
+
+                await supabaseClient
+                    .from(
+                        "actividades"
+                    )
+                    .delete()
+                    .eq(
+                        "id",
+                        nuevaActividad.id
+                    );
+
+
+                alert(
+                    "La actividad se creó pero no pudieron asignarse los alumnos.\n\n" +
+                    errorAsignaciones.message
+                );
+
+                return;
+            }
+
+
+            alert(
+                "✅ Actividad creada y asignada correctamente."
+            );
+
+        }
+
+
+        /* ==========================================
+           EDITAR
+        ========================================== */
+
+        else {
+
+            const {
+                error
+            } =
+                await supabaseClient
+                    .from("actividades")
+                    .update({
+
+                        titulo:
+                            titulo,
+
+                        descripcion:
+                            descripcion ||
+                            null,
+
+                        tipo:
+                            tipo,
+
+                        enlace:
+                            enlace ||
+                            null,
+
+                        imagen_url:
+                            imagen ||
+                            null,
+
+                        puntos:
+                            puntos,
+
+                        fecha_limite:
+                            fecha
+
+                    })
+                    .eq(
+                        "id",
+                        id
+                    );
+
+
+            if (error) {
+
+                console.error(error);
+
+                alert(
+                    "No se pudo actualizar la actividad:\n" +
+                    error.message
+                );
+
+                return;
+            }
+
+
+            /*
+               Obtenemos asignaciones actuales
+            */
+
+            const {
+                data:
+                    actuales
+            } =
+                await supabaseClient
+                    .from(
+                        "actividad_alumnos"
+                    )
+                    .select(
+                        "alumno_id"
+                    )
+                    .eq(
+                        "actividad_id",
+                        id
+                    );
+
+
+            const actualesIds =
+                (actuales || [])
+                    .map(
+                        item =>
+                            Number(
+                                item.alumno_id
+                            )
+                    );
+
+
+            /*
+               Determinar cuáles eliminar
+            */
+
+            const eliminar =
+                actualesIds.filter(
+                    alumnoId =>
+                        !alumnosSeleccionados
+                            .includes(
+                                alumnoId
+                            )
+                );
+
+
+            if (eliminar.length) {
+
+                await supabaseClient
+                    .from(
+                        "actividad_alumnos"
+                    )
+                    .delete()
+                    .eq(
+                        "actividad_id",
+                        id
+                    )
+                    .in(
+                        "alumno_id",
+                        eliminar
+                    );
+
+            }
+
+
+            /*
+               Determinar cuáles agregar
+            */
+
+            const agregar =
+                alumnosSeleccionados
+                    .filter(
+                        alumnoId =>
+                            !actualesIds
+                                .includes(
+                                    alumnoId
+                                )
+                    );
+
+
+            if (agregar.length) {
+
+                const nuevasAsignaciones =
+                    agregar.map(
+                        alumnoId => ({
+
+                            actividad_id:
+                                Number(id),
+
+                            alumno_id:
+                                alumnoId,
+
+                            estado:
+                                "pendiente"
+
+                        })
+                    );
+
+
+                const {
+                    error:
+                        errorAgregar
+                } =
+                    await supabaseClient
+                        .from(
+                            "actividad_alumnos"
+                        )
+                        .insert(
+                            nuevasAsignaciones
+                        );
+
+
+                if (errorAgregar) {
+
+                    console.error(
+                        errorAgregar
+                    );
+
+                    alert(
+                        "La actividad se actualizó, pero algunas asignaciones no pudieron agregarse."
+                    );
+
+                }
+
+            }
+
+
+            alert(
+                "✅ Actividad actualizada correctamente."
+            );
+
+        }
+
+
+        cerrarActividad();
+
+        await cargarActividades();
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Ocurrió un error al guardar la actividad."
+        );
+
+    }
+
+}
+
+
+
+/* =========================================================
+   CAMBIAR ESTADO
+========================================================= */
+
+async function cambiarEstadoActividad(
+    id,
+    estadoActual
+) {
+
+    const nuevoEstado =
+        !estadoActual;
+
+
+    const confirmar =
+        confirm(
+            nuevoEstado
+                ? "¿Quieres activar esta actividad?"
+                : "¿Quieres desactivar esta actividad?"
+        );
+
+
+    if (!confirmar) {
+        return;
+    }
+
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("actividades")
+            .update({
+
+                activa:
+                    nuevoEstado
+
+            })
+            .eq(
+                "id",
+                id
+            );
+
+
+    if (error) {
+
+        console.error(error);
+
+        alert(
+            "No se pudo cambiar el estado."
+        );
+
+        return;
+    }
+
+
+    await cargarActividades();
+
+}
+
+
+
+/* =========================================================
+   ELIMINAR ACTIVIDAD
+========================================================= */
+
+async function eliminarActividad(
+    id
+) {
+
+    const actividad =
+        actividades.find(
+            a =>
+                Number(a.id) ===
+                Number(id)
+        );
+
+
+    if (!actividad) {
+        return;
+    }
+
+
+    const confirmar =
+        confirm(
+            `¿Seguro que quieres eliminar "${actividad.titulo}"?\n\n` +
+            "También se eliminarán las asignaciones de los alumnos."
+        );
+
+
+    if (!confirmar) {
+        return;
+    }
+
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("actividades")
+            .delete()
+            .eq(
+                "id",
+                id
+            );
+
+
+    if (error) {
+
+        console.error(error);
+
+        alert(
+            "No se pudo eliminar la actividad:\n" +
+            error.message
+        );
+
+        return;
+    }
+
+
+    alert(
+        "🗑️ Actividad eliminada."
+    );
+
+
+    await cargarActividades();
+
+}
+
+
+
+/* =========================================================
+   CERRAR MODAL ACTIVIDAD
+========================================================= */
+
+function cerrarActividad() {
+
+    document.getElementById(
+        "modalActividad"
+    ).classList.remove(
+        "show"
+    );
+
+}
+
+
+
+/* =========================================================
+   ESTADÍSTICAS
+========================================================= */
+
+function actualizarEstadisticas() {
+
+    const total =
+        alumnos.length;
+
+
+    const puntos =
+        alumnos.reduce(
+            (
+                sum,
+                alumno
+            ) =>
+                sum +
+                (
+                    Number(
+                        alumno.puntos
+                    ) || 0
+                ),
+            0
+        );
+
+
+    const mascotas =
+        alumnos.filter(
+            alumno =>
+                alumno.mascota
+        ).length;
+
+
+    const promedio =
+        total > 0
+            ? alumnos.reduce(
+                (
+                    sum,
+                    alumno
+                ) =>
+                    sum +
+                    (
+                        Number(
+                            alumno.nivel
+                        ) || 1
+                    ),
+                0
+            ) / total
+            : 0;
+
+
+    document.getElementById(
+        "totalAlumnos"
+    ).textContent =
+        total;
+
+
+    document.getElementById(
+        "totalPuntos"
+    ).textContent =
+        puntos;
+
+
+    document.getElementById(
+        "mascotasElegidas"
+    ).textContent =
+        mascotas;
+
+
+    document.getElementById(
+        "nivelPromedio"
+    ).textContent =
+        total
+            ? promedio.toFixed(1)
+            : "0.0";
+
+
+    const porcentaje =
+        total
+            ? Math.min(
+                100,
+                (
+                    promedio / 5
+                ) * 100
+            )
+            : 0;
+
+
+    document.getElementById(
+        "barraProgreso"
+    ).style.width =
+        porcentaje + "%";
+
+
+    document.getElementById(
+        "porcentajeProgreso"
+    ).textContent =
+        Math.round(
+            porcentaje
+        ) + "%";
+
+}
+
+
+
+/* =========================================================
+   MOSTRAR ALUMNOS
+========================================================= */
+
+function mostrarAlumnos(
+    lista = alumnos
+) {
+
+    const contenedor =
+        document.getElementById(
+            "listaAlumnos"
+        );
+
+
+    if (!lista.length) {
+
+        contenedor.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    👨‍🎓
+                </div>
+
+                No hay alumnos registrados.
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    contenedor.innerHTML =
+        lista
+            .map(
+                alumno =>
+                    crearTarjetaAlumno(
+                        alumno
+                    )
+            )
+            .join("");
+
+}
+
+
+
+/* =========================================================
+   RESUMEN ALUMNOS
+========================================================= */
+
+function mostrarAlumnosResumen() {
+
+    const contenedor =
+        document.getElementById(
+            "alumnosResumen"
+        );
+
+
+    if (!alumnos.length) {
+
+        contenedor.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    👨‍🎓
+                </div>
+
+                No hay alumnos registrados.
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    contenedor.innerHTML =
+        alumnos
+            .map(
+                alumno =>
+                    crearTarjetaAlumno(
+                        alumno
+                    )
+            )
+            .join("");
+
+}
+
+
+
+/* =========================================================
+   TARJETA ALUMNO
+========================================================= */
+
+function crearTarjetaAlumno(
+    alumno
+) {
+
+    const emoji =
+        mascotasEmoji[
+            alumno.mascota
+        ] || "👤";
+
+
+    return `
+
+        <div class="student">
+
+            <div class="student-top">
+
+                <div class="avatar">
+                    ${emoji}
+                </div>
+
+
+                <div>
+
+                    <div class="student-name">
+
+                        ${escapeHTML(
+                            alumno.nombre
+                        )}
+
+                    </div>
+
+
+                    <div class="student-user">
+
+                        @${escapeHTML(
+                            alumno.usuario
+                        )}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="student-info">
+
+                <div class="info">
+
+                    <strong>
+                        ${alumno.puntos || 0}
+                    </strong>
+
+                    <span>
+                        PUNTOS
+                    </span>
+
+                </div>
+
+
+                <div class="info">
+
+                    <strong>
+                        ${alumno.nivel || 1}
+                    </strong>
+
+                    <span>
+                        NIVEL
+                    </span>
+
+                </div>
+
+
+                <div class="info">
+
+                    <strong>
+                        ${alumno.energia ?? 100}
+                    </strong>
+
+                    <span>
+                        ENERGÍA
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <button
+                class="edit-btn"
+                onclick="
+                    abrirEditarAlumno(
+                        ${alumno.id}
+                    )
+                "
+            >
+
+                ✏️ Editar alumno
+
+            </button>
+
+        </div>
+
+    `;
+
+}
+
+
+
+/* =========================================================
+   BUSCAR ALUMNO
+========================================================= */
+
+function buscarAlumno() {
+
+    const texto =
+        document.getElementById(
+            "buscador"
+        ).value
+        .toLowerCase()
+        .trim();
+
+
+    if (!texto) {
+
+        mostrarAlumnos();
+
+        return;
+    }
+
+
+    const filtrados =
+        alumnos.filter(
+            alumno =>
+
+                alumno.nombre
+                    .toLowerCase()
+                    .includes(
+                        texto
+                    )
+
+                ||
+
+                alumno.usuario
+                    .toLowerCase()
+                    .includes(
+                        texto
+                    )
+        );
+
+
+    mostrarAlumnos(
+        filtrados
+    );
+
+}
+
+
+
+/* =========================================================
+   NAVEGACIÓN
+========================================================= */
+
+function mostrarSeccion(
+    id,
+    boton
+) {
+
+    document
+        .querySelectorAll(
+            ".section"
+        )
+        .forEach(
+            section =>
+                section.classList.remove(
+                    "active"
+                )
+        );
+
+
+    document
+        .getElementById(
+            id
+        )
+        .classList.add(
+            "active"
+        );
+
+
+    document
+        .querySelectorAll(
+            ".menu button"
+        )
+        .forEach(
+            button =>
+                button.classList.remove(
+                    "active"
+                )
+        );
+
+
+    boton.classList.add(
+        "active"
+    );
+
+
+    if (id === "alumnos") {
+
+        mostrarAlumnos();
+
+    }
+
+
+    if (id === "actividades") {
+
+        cargarActividades();
+
+    }
+
+}
+
+
+
+/* =========================================================
+   MODAL AGREGAR ALUMNO
+========================================================= */
+
+function abrirAgregarAlumno() {
+
+    document
+        .getElementById(
+            "modalAgregar"
+        )
+        .classList.add(
+            "show"
+        );
+
+
+    document.getElementById(
+        "nuevoNombre"
+    ).focus();
+
+}
+
+
+
+function cerrarAgregarAlumno() {
+
+    document
+        .getElementById(
+            "modalAgregar"
+        )
+        .classList.remove(
+            "show"
+        );
+
+
+    document.getElementById(
+        "nuevoNombre"
+    ).value = "";
+
+
+    document.getElementById(
+        "nuevoUsuario"
+    ).value = "";
+
+
+    document.getElementById(
+        "nuevaPassword"
+    ).value = "";
+
+}
+
+
+
+/* =========================================================
+   CREAR ALUMNO
+========================================================= */
+
+async function crearAlumno() {
+
+    const nombre =
+        document.getElementById(
+            "nuevoNombre"
+        ).value.trim();
+
+
+    const usuario =
+        document.getElementById(
+            "nuevoUsuario"
+        ).value
+        .trim()
+        .toLowerCase();
+
+
+    const password =
+        document.getElementById(
+            "nuevaPassword"
+        ).value;
+
+
+    if (!nombre) {
+
+        alert(
+            "Escribe el nombre del alumno."
+        );
+
+        return;
+    }
+
+
+    if (!usuario) {
+
+        alert(
+            "Escribe el usuario."
+        );
+
+        return;
+    }
+
+
+    if (!password) {
+
+        alert(
+            "Escribe una contraseña."
+        );
+
+        return;
+    }
+
+
+    if (password.length < 4) {
+
+        alert(
+            "La contraseña debe tener al menos 4 caracteres."
+        );
+
+        return;
+    }
+
+
+    try {
+
+        const {
+            data: sessionData
+        } =
+            await supabaseClient
+                .auth
+                .getSession();
+
+
+        const session =
+            sessionData.session;
+
+
+        if (!session) {
+
+            alert(
+                "Tu sesión ha expirado."
+            );
+
+            window.location.href =
+                "login.html";
+
+            return;
+        }
+
+
+        const response =
+            await fetch(
+                SUPABASE_URL +
+                "/functions/v1/crear-alumno",
+                {
+
+                    method:
+                        "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json",
+
+                        "Authorization":
+                            "Bearer " +
+                            session.access_token
+
+                    },
+
+                    body:
+                        JSON.stringify({
 
                             nombre:
                                 nombre,
@@ -1709,236 +4327,248 @@
                                 password
 
                         })
-                    }
-                );
 
-
-            const resultado =
-                await response.json();
-
-
-            if (!response.ok) {
-
-                console.error(
-                    resultado
-                );
-
-                alert(
-                    resultado.error ||
-                    "No fue posible crear el alumno."
-                );
-
-                return;
-            }
-
-
-            alert(
-                "✅ Alumno creado correctamente."
+                }
             );
 
 
-            cerrarAgregarAlumno();
+        const resultado =
+            await response.json();
 
 
-            await cargarAlumnos();
+        if (!response.ok) {
 
-        } catch (error) {
-
-            console.error(error);
-
-            alert(
-                "Error de conexión con el servidor."
-            );
-        }
-    }
-
-
-    /* ==========================================
-       EDITAR ALUMNO
-    ========================================== */
-
-    function abrirEditarAlumno(
-        id
-    ) {
-
-        const alumno =
-            alumnos.find(
-                a =>
-                    Number(a.id) ===
-                    Number(id)
+            console.error(
+                resultado
             );
 
-
-        if (!alumno) {
-
             alert(
-                "No se encontró el alumno."
+                resultado.error ||
+                "No fue posible crear el alumno."
             );
 
             return;
         }
 
 
+        alert(
+            "✅ Alumno creado correctamente."
+        );
+
+
+        cerrarAgregarAlumno();
+
+
+        await cargarAlumnos();
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Error de conexión con el servidor."
+        );
+
+    }
+
+}
+
+
+
+/* =========================================================
+   EDITAR ALUMNO
+========================================================= */
+
+function abrirEditarAlumno(
+    id
+) {
+
+    const alumno =
+        alumnos.find(
+            a =>
+                Number(a.id) ===
+                Number(id)
+        );
+
+
+    if (!alumno) {
+
+        alert(
+            "No se encontró el alumno."
+        );
+
+        return;
+    }
+
+
+    document.getElementById(
+        "editarId"
+    ).value =
+        alumno.id;
+
+
+    document.getElementById(
+        "editarNombre"
+    ).value =
+        alumno.nombre || "";
+
+
+    document.getElementById(
+        "editarPuntos"
+    ).value =
+        alumno.puntos ?? 0;
+
+
+    document.getElementById(
+        "editarNivel"
+    ).value =
+        alumno.nivel ?? 1;
+
+
+    document.getElementById(
+        "editarEnergia"
+    ).value =
+        alumno.energia ?? 100;
+
+
+    document.getElementById(
+        "editarMascota"
+    ).value =
+        alumno.mascota || "";
+
+
+    document
+        .getElementById(
+            "modalEditar"
+        )
+        .classList.add(
+            "show"
+        );
+
+}
+
+
+
+function cerrarEditarAlumno() {
+
+    document
+        .getElementById(
+            "modalEditar"
+        )
+        .classList.remove(
+            "show"
+        );
+
+}
+
+
+
+/* =========================================================
+   GUARDAR ALUMNO
+========================================================= */
+
+async function guardarAlumno() {
+
+    const id =
         document.getElementById(
             "editarId"
-        ).value =
-            alumno.id;
+        ).value;
 
 
+    const nombre =
         document.getElementById(
             "editarNombre"
-        ).value =
-            alumno.nombre || "";
+        ).value.trim();
 
 
-        document.getElementById(
-            "editarPuntos"
-        ).value =
-            alumno.puntos ?? 0;
+    const puntos =
+        Number(
+            document.getElementById(
+                "editarPuntos"
+            ).value
+        );
 
 
-        document.getElementById(
-            "editarNivel"
-        ).value =
-            alumno.nivel ?? 1;
+    const nivel =
+        Number(
+            document.getElementById(
+                "editarNivel"
+            ).value
+        );
 
 
-        document.getElementById(
-            "editarEnergia"
-        ).value =
-            alumno.energia ?? 100;
+    const energia =
+        Number(
+            document.getElementById(
+                "editarEnergia"
+            ).value
+        );
 
 
+    const mascota =
         document.getElementById(
             "editarMascota"
-        ).value =
-            alumno.mascota || "";
+        ).value ||
+        null;
 
 
-        document
-            .getElementById(
-                "modalEditar"
-            )
-            .classList.add(
-                "show"
-            );
+    if (!nombre) {
+
+        alert(
+            "El nombre no puede estar vacío."
+        );
+
+        return;
     }
 
 
-    function cerrarEditarAlumno() {
+    if (
+        Number.isNaN(puntos) ||
+        puntos < 0
+    ) {
 
-        document
-            .getElementById(
-                "modalEditar"
-            )
-            .classList.remove(
-                "show"
-            );
+        alert(
+            "Los puntos no son válidos."
+        );
+
+        return;
     }
 
 
-    /* ==========================================
-       GUARDAR ALUMNO
-    ========================================== */
+    if (
+        Number.isNaN(nivel) ||
+        nivel < 1 ||
+        nivel > 5
+    ) {
 
-    async function guardarAlumno() {
+        alert(
+            "El nivel debe estar entre 1 y 5."
+        );
 
-        const id =
-            document.getElementById(
-                "editarId"
-            ).value;
-
-
-        const nombre =
-            document.getElementById(
-                "editarNombre"
-            ).value.trim();
+        return;
+    }
 
 
-        const puntos =
-            Number(
-                document.getElementById(
-                    "editarPuntos"
-                ).value
-            );
+    if (
+        Number.isNaN(energia) ||
+        energia < 0 ||
+        energia > 100
+    ) {
+
+        alert(
+            "La energía debe estar entre 0 y 100."
+        );
+
+        return;
+    }
 
 
-        const nivel =
-            Number(
-                document.getElementById(
-                    "editarNivel"
-                ).value
-            );
-
-
-        const energia =
-            Number(
-                document.getElementById(
-                    "editarEnergia"
-                ).value
-            );
-
-
-        const mascota =
-            document.getElementById(
-                "editarMascota"
-            ).value || null;
-
-
-        if (!nombre) {
-
-            alert(
-                "El nombre no puede estar vacío."
-            );
-
-            return;
-        }
-
-
-        if (
-            Number.isNaN(puntos) ||
-            puntos < 0
-        ) {
-
-            alert(
-                "Los puntos no son válidos."
-            );
-
-            return;
-        }
-
-
-        if (
-            Number.isNaN(nivel) ||
-            nivel < 1 ||
-            nivel > 5
-        ) {
-
-            alert(
-                "El nivel debe estar entre 1 y 5."
-            );
-
-            return;
-        }
-
-
-        if (
-            Number.isNaN(energia) ||
-            energia < 0 ||
-            energia > 100
-        ) {
-
-            alert(
-                "La energía debe estar entre 0 y 100."
-            );
-
-            return;
-        }
-
-
-        const {
-            error
-        } = await supabaseClient
+    const {
+        error
+    } =
+        await supabaseClient
             .from("alumnos")
             .update({
 
@@ -1964,139 +4594,272 @@
             );
 
 
-        if (error) {
+    if (error) {
 
-            console.error(error);
-
-            alert(
-                "No se pudieron guardar los cambios."
-            );
-
-            return;
-        }
-
+        console.error(error);
 
         alert(
-            "✅ Cambios guardados."
+            "No se pudieron guardar los cambios."
         );
 
-
-        cerrarEditarAlumno();
-
-
-        await cargarAlumnos();
+        return;
     }
 
 
-    /* ==========================================
-       CERRAR SESIÓN
-    ========================================== */
+    alert(
+        "✅ Cambios guardados."
+    );
 
-    async function cerrarSesion() {
 
-        const confirmar =
-            confirm(
-                "¿Seguro que quieres cerrar sesión?"
+    cerrarEditarAlumno();
+
+
+    await cargarAlumnos();
+
+}
+
+
+
+/* =========================================================
+   CERRAR SESIÓN
+========================================================= */
+
+async function cerrarSesion() {
+
+    const confirmar =
+        confirm(
+            "¿Seguro que quieres cerrar sesión?"
+        );
+
+
+    if (!confirmar) {
+        return;
+    }
+
+
+    await supabaseClient
+        .auth
+        .signOut();
+
+
+    sessionStorage.clear();
+
+
+    window.location.href =
+        "login.html";
+
+}
+
+
+
+/* =========================================================
+   FORMATEAR FECHA
+========================================================= */
+
+function formatearFecha(
+    fecha
+) {
+
+    if (!fecha) {
+        return "";
+    }
+
+
+    const date =
+        new Date(
+            fecha
+        );
+
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+        return "";
+    }
+
+
+    return date.toLocaleString(
+        "es-MX",
+        {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
+        }
+    );
+
+}
+
+
+
+/* =========================================================
+   FECHA PARA INPUT
+========================================================= */
+
+function convertirFechaParaInput(
+    fecha
+) {
+
+    if (!fecha) {
+        return "";
+    }
+
+
+    const date =
+        new Date(
+            fecha
+        );
+
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+        return "";
+    }
+
+
+    const pad =
+        numero =>
+            String(
+                numero
+            ).padStart(
+                2,
+                "0"
             );
 
 
-        if (!confirmar) {
-            return;
+    return (
+
+        date.getFullYear() +
+        "-" +
+        pad(
+            date.getMonth() + 1
+        ) +
+        "-" +
+        pad(
+            date.getDate()
+        ) +
+        "T" +
+        pad(
+            date.getHours()
+        ) +
+        ":" +
+        pad(
+            date.getMinutes()
+        )
+
+    );
+
+}
+
+
+
+/* =========================================================
+   SEGURIDAD HTML
+========================================================= */
+
+function escapeHTML(
+    texto
+) {
+
+    return String(
+        texto ?? ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+
+/* =========================================================
+   CERRAR MODALES AL HACER CLICK FUERA
+========================================================= */
+
+document
+    .getElementById(
+        "modalAgregar"
+    )
+    .addEventListener(
+        "click",
+        function(event) {
+
+            if (
+                event.target === this
+            ) {
+
+                cerrarAgregarAlumno();
+
+            }
+
         }
+    );
 
 
-        await supabaseClient
-            .auth
-            .signOut();
+document
+    .getElementById(
+        "modalEditar"
+    )
+    .addEventListener(
+        "click",
+        function(event) {
 
+            if (
+                event.target === this
+            ) {
 
-        sessionStorage.clear();
-
-
-        window.location.href =
-            "login.html";
-    }
-
-
-    /* ==========================================
-       SEGURIDAD HTML
-    ========================================== */
-
-    function escapeHTML(
-        texto
-    ) {
-
-        return String(
-            texto ?? ""
-        )
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-    }
-
-
-    /* ==========================================
-       CERRAR MODALES AL HACER CLICK FUERA
-    ========================================== */
-
-    document
-        .getElementById(
-            "modalAgregar"
-        )
-        .addEventListener(
-            "click",
-            function(event) {
-
-                if (
-                    event.target === this
-                ) {
-
-                    cerrarAgregarAlumno();
-
-                }
+                cerrarEditarAlumno();
 
             }
-        );
+
+        }
+    );
 
 
-    document
-        .getElementById(
-            "modalEditar"
-        )
-        .addEventListener(
-            "click",
-            function(event) {
+document
+    .getElementById(
+        "modalActividad"
+    )
+    .addEventListener(
+        "click",
+        function(event) {
 
-                if (
-                    event.target === this
-                ) {
+            if (
+                event.target === this
+            ) {
 
-                    cerrarEditarAlumno();
-
-                }
+                cerrarActividad();
 
             }
-        );
+
+        }
+    );
+
 
 </script>
 
 </body>
 </html>
-```
