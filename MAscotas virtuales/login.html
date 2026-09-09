@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ROBOT LAB | Iniciar sesión</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at 20% 20%, rgba(0, 255, 255, 0.10), transparent 30%),
+                radial-gradient(circle at 80% 80%, rgba(170, 0, 255, 0.10), transparent 30%),
+                #050509;
+
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            overflow: hidden;
+        }
+
+        /* Fondo decorativo */
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+
+            background-image:
+                linear-gradient(rgba(0,255,255,0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,255,255,0.025) 1px, transparent 1px);
+
+            background-size: 40px 40px;
+
+            pointer-events: none;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 450px;
+
+            padding: 25px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .login-box {
+
+            background: rgba(10, 10, 18, 0.92);
+
+            border: 1px solid rgba(0, 255, 255, 0.35);
+
+            border-radius: 24px;
+
+            padding: 45px 40px;
+
+            box-shadow:
+                0 0 30px rgba(0, 255, 255, 0.10),
+                0 0 80px rgba(140, 0, 255, 0.08);
+
+            backdrop-filter: blur(15px);
+        }
+
+        /* Logo */
+
+        .logo {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .robot-icon {
+            font-size: 65px;
+            margin-bottom: 10px;
+
+            filter:
+                drop-shadow(0 0 10px rgba(0,255,255,0.8));
+        }
+
+        .logo h1 {
+
+            font-size: 28px;
+            letter-spacing: 5px;
+
+            color: #00ffff;
+
+            text-shadow:
+                0 0 10px rgba(0,255,255,0.8);
+        }
+
+        .logo p {
+
+            margin-top: 8px;
+
+            font-size: 12px;
+            letter-spacing: 3px;
+
+            color: #888;
+        }
+
+        /* Títulos */
+
+        .welcome {
+
+            text-align: center;
+
+            margin-bottom: 30px;
+        }
+
+        .welcome h2 {
+
+            font-size: 22px;
+            margin-bottom: 8px;
+        }
+
+        .welcome p {
+
+            color: #888;
+            font-size: 14px;
+        }
+
+        /* Formularios */
+
+        .input-group {
+
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+
+            display: block;
+
+            margin-bottom: 8px;
+
+            font-size: 12px;
+            font-weight: bold;
+
+            color: #aaa;
+
+            letter-spacing: 1px;
+        }
+
+        .input-group input {
+
+            width: 100%;
+
+            padding: 15px 16px;
+
+            border-radius: 12px;
+
+            border: 1px solid rgba(0,255,255,0.25);
+
+            background: #08080d;
+
+            color: white;
+
+            font-size: 15px;
+
+            outline: none;
+
+            transition: 0.25s;
+        }
+
+        .input-group input:focus {
+
+            border-color: #00ffff;
+
+            box-shadow:
+                0 0 15px rgba(0,255,255,0.15);
+        }
+
+        .input-group input::placeholder {
+            color: #555;
+        }
+
+        /* Botón */
+
+        .login-button {
+
+            width: 100%;
+
+            padding: 16px;
+
+            margin-top: 5px;
+
+            border: none;
+            border-radius: 12px;
+
+            background: linear-gradient(
+                90deg,
+                #00ffff,
+                #7b2cff
+            );
+
+            color: white;
+
+            font-size: 14px;
+            font-weight: bold;
+
+            letter-spacing: 2px;
+
+            cursor: pointer;
+
+            transition: 0.25s;
+
+            box-shadow:
+                0 0 20px rgba(0,255,255,0.15);
+        }
+
+        .login-button:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 0 30px rgba(0,255,255,0.30);
+        }
+
+        .login-button:active {
+            transform: translateY(0);
+        }
+
+        /* Error */
+
+        .error {
+
+            display: none;
+
+            margin-top: 20px;
+
+            padding: 12px;
+
+            border-radius: 10px;
+
+            background: rgba(255, 40, 70, 0.10);
+
+            border: 1px solid rgba(255, 40, 70, 0.40);
+
+            color: #ff6075;
+
+            text-align: center;
+
+            font-size: 13px;
+        }
+
+        /* Footer */
+
+        .footer {
+
+            text-align: center;
+
+            margin-top: 30px;
+
+            color: #555;
+
+            font-size: 11px;
+
+            letter-spacing: 1px;
+        }
+
+        /* Responsive */
+
+        @media (max-width: 500px) {
+
+            .login-container {
+                padding: 18px;
+            }
+
+            .login-box {
+                padding: 35px 25px;
+            }
+
+            .logo h1 {
+                font-size: 24px;
+            }
+
+            .robot-icon {
+                font-size: 55px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="login-container">
+
+        <div class="login-box">
+
+            <!-- LOGO -->
+
+            <div class="logo">
+
+                <div class="robot-icon">
+                    🤖
+                </div>
+
+                <h1>ROBOT LAB</h1>
+
+                <p>CAMPUS VIRTUAL</p>
+
+            </div>
+
+
+            <!-- BIENVENIDA -->
+
+            <div class="welcome">
+
+                <h2>¡Bienvenido!</h2>
+
+                <p>
+                    Ingresa para continuar tu aventura tecnológica.
+                </p>
+
+            </div>
+
+
+            <!-- FORMULARIO -->
+
+            <form id="loginForm">
+
+                <div class="input-group">
+
+                    <label for="usuario">
+                        USUARIO
+                    </label>
+
+                    <input
+                        type="text"
+                        id="usuario"
+                        placeholder="Escribe tu usuario"
+                        autocomplete="username"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <label for="password">
+                        CONTRASEÑA
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Escribe tu contraseña"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="login-button"
+                >
+                    🚀 ENTRAR AL CAMPUS
+                </button>
+
+            </form>
+
+
+            <!-- ERROR -->
+
+            <div
+                id="error"
+                class="error"
+            >
+                ❌ Usuario o contraseña incorrectos.
+            </div>
+
+
+            <!-- FOOTER -->
+
+            <div class="footer">
+
+                ROBOT LAB © 2026
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- BASE DE DATOS DE ALUMNOS                  -->
+    <!-- ========================================= -->
+
+    <script src="alumnos.js"></script>
+
+
+    <!-- ========================================= -->
+    <!-- SISTEMA DE LOGIN                          -->
+    <!-- ========================================= -->
+
+    <script>
+
+        const loginForm = document.getElementById("loginForm");
+
+        const usuarioInput =
+            document.getElementById("usuario");
+
+        const passwordInput =
+            document.getElementById("password");
+
+        const error =
+            document.getElementById("error");
+
+
+        loginForm.addEventListener(
+            "submit",
+            function(event) {
+
+                event.preventDefault();
+
+
+                // Obtener datos escritos
+
+                const usuario =
+                    usuarioInput.value
+                        .trim()
+                        .toLowerCase();
+
+                const password =
+                    passwordInput.value;
+
+
+                // Buscar alumno
+
+                const alumno =
+                    alumnos[usuario];
+
+
+                // Ocultar error anterior
+
+                error.style.display = "none";
+
+
+                // =====================================
+                // VALIDAR USUARIO Y CONTRASEÑA
+                // =====================================
+
+                if (
+                    alumno &&
+                    alumno.password === password
+                ) {
+
+                    // Guardar usuario activo
+
+                    sessionStorage.setItem(
+                        "usuarioActivo",
+                        usuario
+                    );
+
+
+                    // =================================
+                    // REVISAR SI YA TIENE MASCOTA
+                    // =================================
+
+                    const mascotaGuardada =
+                        localStorage.getItem(
+                            "mascota_" + usuario
+                        );
+
+
+                    // =================================
+                    // SI YA TIENE MASCOTA
+                    // =================================
+
+                    if (mascotaGuardada) {
+
+                        window.location.href =
+                            "index.html";
+
+                    }
+
+
+                    // =================================
+                    // SI ES SU PRIMER ACCESO
+                    // =================================
+
+                    else {
+
+                        window.location.href =
+                            "elegir-mascota.html";
+
+                    }
+
+                }
+
+
+                // =====================================
+                // DATOS INCORRECTOS
+                // =====================================
+
+                else {
+
+                    error.style.display =
+                        "block";
+
+                    passwordInput.value = "";
+
+                    passwordInput.focus();
+
+                }
+
+            }
+        );
+
+    </script>
+
+</body>
+</html>

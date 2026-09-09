@@ -1,0 +1,2242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Robot Lab | Campus Virtual</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        :root {
+
+            --black: #000000;
+            --panel: #090909;
+            --panel-2: #0d0d0d;
+
+            --border: rgba(255,255,255,0.08);
+
+            --text: #ffffff;
+            --muted: #888888;
+
+            --neon: #00f5ff;
+            --neon-2: #7c3cff;
+
+            --green: #00ff9d;
+            --yellow: #ffe600;
+            --red: #ff3b5c;
+
+        }
+
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            font-family: "Inter", sans-serif;
+
+            color: var(--text);
+
+            background:
+                radial-gradient(
+                    circle at 50% 20%,
+                    rgba(0,245,255,0.035),
+                    transparent 35%
+                ),
+                #000000;
+
+            overflow-x: hidden;
+        }
+
+
+        body::before {
+
+            content: "";
+
+            position: fixed;
+
+            inset: 0;
+
+            pointer-events: none;
+
+            opacity: 0.20;
+
+            background-image:
+                linear-gradient(
+                    rgba(255,255,255,0.025) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,0.025) 1px,
+                    transparent 1px
+                );
+
+            background-size: 45px 45px;
+
+            mask-image:
+                linear-gradient(
+                    to bottom,
+                    black,
+                    transparent 80%
+                );
+        }
+
+
+        /* =====================================================
+           HEADER
+           ===================================================== */
+
+        header {
+
+            position: relative;
+
+            z-index: 20;
+
+            height: 76px;
+
+            padding: 0 40px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            background:
+                rgba(0,0,0,0.90);
+
+            border-bottom:
+                1px solid var(--border);
+
+            backdrop-filter: blur(20px);
+        }
+
+
+        .logo {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+        }
+
+
+        .logo-icon {
+
+            width: 44px;
+            height: 44px;
+
+            display: flex;
+
+            justify-content: center;
+            align-items: center;
+
+            border-radius: 12px;
+
+            background: #050505;
+
+            border:
+                1px solid rgba(0,245,255,0.35);
+
+            box-shadow:
+                0 0 20px rgba(0,245,255,0.10);
+
+            font-size: 23px;
+        }
+
+
+        .logo-title {
+
+            font-family: "Orbitron", sans-serif;
+
+            font-size: 15px;
+
+            letter-spacing: 2px;
+        }
+
+
+        .logo-subtitle {
+
+            margin-top: 3px;
+
+            font-size: 9px;
+
+            letter-spacing: 2px;
+
+            color: #666;
+        }
+
+
+        /* =====================================================
+           NAV
+           ===================================================== */
+
+        nav {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+        }
+
+
+        nav a {
+
+            color: #777;
+
+            text-decoration: none;
+
+            padding: 10px 16px;
+
+            border-radius: 9px;
+
+            font-size: 12px;
+
+            font-weight: 600;
+
+            transition: 0.25s;
+        }
+
+
+        nav a:hover,
+        nav a.active {
+
+            color: white;
+
+            background:
+                rgba(255,255,255,0.045);
+
+            box-shadow:
+                inset 0 0 0 1px
+                rgba(255,255,255,0.07);
+        }
+
+
+        /* =====================================================
+           BOTÓN CERRAR SESIÓN
+           ===================================================== */
+
+        .logout-button {
+
+            border: 1px solid rgba(255,59,92,0.20);
+
+            background:
+                rgba(255,59,92,0.04);
+
+            color: #ff6075;
+
+            padding: 10px 14px;
+
+            border-radius: 9px;
+
+            cursor: pointer;
+
+            font-size: 11px;
+
+            font-weight: 600;
+
+            transition: 0.25s;
+        }
+
+
+        .logout-button:hover {
+
+            background:
+                rgba(255,59,92,0.10);
+
+            border-color:
+                rgba(255,59,92,0.40);
+        }
+
+
+        /* =====================================================
+           CONTENEDOR
+           ===================================================== */
+
+        main {
+
+            position: relative;
+
+            z-index: 2;
+
+            max-width: 1500px;
+
+            margin: auto;
+
+            padding: 42px;
+        }
+
+
+        /* =====================================================
+           BIENVENIDA
+           ===================================================== */
+
+        .welcome {
+
+            margin-bottom: 30px;
+        }
+
+
+        .welcome-label {
+
+            color: var(--neon);
+
+            font-family: "Orbitron", sans-serif;
+
+            font-size: 9px;
+
+            letter-spacing: 3px;
+        }
+
+
+        .welcome h1 {
+
+            margin-top: 8px;
+
+            font-size: clamp(30px, 4vw, 44px);
+
+            font-weight: 800;
+
+            letter-spacing: -1px;
+        }
+
+
+        .welcome p {
+
+            margin-top: 8px;
+
+            color: #777;
+
+            font-size: 13px;
+        }
+
+
+        /* =====================================================
+           DASHBOARD
+           ===================================================== */
+
+        .dashboard {
+
+            display: grid;
+
+            grid-template-columns:
+                minmax(500px, 1.5fr)
+                minmax(320px, 0.8fr);
+
+            gap: 24px;
+        }
+
+
+        /* =====================================================
+           TARJETAS
+           ===================================================== */
+
+        .card {
+
+            position: relative;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #0b0b0b,
+                    #050505
+                );
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 22px;
+
+            box-shadow:
+                0 20px 60px rgba(0,0,0,0.65);
+
+            overflow: hidden;
+        }
+
+
+        .card::before {
+
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+
+            left: 10%;
+
+            right: 10%;
+
+            height: 1px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(0,245,255,0.25),
+                    transparent
+                );
+        }
+
+
+        /* =====================================================
+           MASCOTA
+           ===================================================== */
+
+        .mascot-card {
+
+            min-height: 700px;
+
+            padding: 28px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            text-align: center;
+        }
+
+
+        .mascot-header {
+
+            width: 100%;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+        }
+
+
+        .mascot-label {
+
+            text-align: left;
+        }
+
+
+        .mascot-label small {
+
+            display: block;
+
+            color: var(--neon);
+
+            font-family: "Orbitron", sans-serif;
+
+            font-size: 9px;
+
+            letter-spacing: 3px;
+
+            margin-bottom: 5px;
+        }
+
+
+        .mascot-label strong {
+
+            font-family: "Orbitron", sans-serif;
+
+            font-size: 22px;
+
+            letter-spacing: 2px;
+        }
+
+
+        .status {
+
+            padding: 8px 13px;
+
+            border-radius: 50px;
+
+            color: var(--green);
+
+            background:
+                rgba(0,255,157,0.04);
+
+            border:
+                1px solid rgba(0,255,157,0.18);
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+            letter-spacing: 0.5px;
+        }
+
+
+        /* =====================================================
+           ESCENARIO
+           ===================================================== */
+
+        .robot-stage {
+
+            position: relative;
+
+            width: min(100%, 570px);
+
+            aspect-ratio: 1 / 1;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            margin: 5px auto;
+        }
+
+
+        .robot-stage::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 82%;
+
+            height: 82%;
+
+            border-radius: 50%;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(0,245,255,0.08),
+                    rgba(0,0,0,0) 68%
+                );
+
+            filter: blur(15px);
+
+            animation:
+                glowPulse 3.5s ease-in-out infinite;
+        }
+
+
+        .robot-stage::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 84%;
+
+            height: 84%;
+
+            border-radius: 50%;
+
+            border:
+                1px solid rgba(0,245,255,0.10);
+
+            box-shadow:
+                0 0 45px rgba(0,245,255,0.04);
+
+            animation:
+                stagePulse 4s ease-in-out infinite;
+        }
+
+
+        /* =====================================================
+           GIF DE LA MASCOTA
+           ===================================================== */
+
+        #robotMascota {
+
+            position: relative;
+
+            z-index: 5;
+
+            width: min(88%, 500px);
+
+            height: auto;
+
+            aspect-ratio: 1 / 1;
+
+            object-fit: contain;
+
+            display: block;
+
+            background: #000;
+
+            border-radius: 50%;
+
+            filter:
+                drop-shadow(
+                    0 0 18px rgba(0,245,255,0.16)
+                );
+
+            animation:
+                roboFloat 4s ease-in-out infinite;
+        }
+
+
+        /* =====================================================
+           MENSAJE
+           ===================================================== */
+
+        .robot-message {
+
+            width: 100%;
+
+            max-width: 610px;
+
+            padding: 17px 20px;
+
+            background:
+                rgba(255,255,255,0.025);
+
+            border:
+                1px solid rgba(255,255,255,0.06);
+
+            border-radius: 15px;
+        }
+
+
+        .robot-message h2 {
+
+            font-family: "Orbitron", sans-serif;
+
+            font-size: 17px;
+
+            margin-bottom: 5px;
+        }
+
+
+        .robot-message p {
+
+            color: #777;
+
+            font-size: 12px;
+
+            line-height: 1.6;
+        }
+
+
+        /* =====================================================
+           ENERGÍA
+           ===================================================== */
+
+        .energy {
+
+            width: 100%;
+
+            max-width: 610px;
+        }
+
+
+        .energy-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            margin-bottom: 7px;
+
+            font-size: 10px;
+        }
+
+
+        .energy-header span:first-child {
+            color: #666;
+        }
+
+
+        .energy-header span:last-child {
+
+            color: var(--neon);
+
+            font-family: "Orbitron", sans-serif;
+        }
+
+
+        .energy-bar {
+
+            height: 7px;
+
+            border-radius: 20px;
+
+            background: #151515;
+
+            overflow: hidden;
+        }
+
+
+        .energy-fill {
+
+            height: 100%;
+
+            border-radius: inherit;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    var(--neon),
+                    var(--neon-2)
+                );
+
+            box-shadow:
+                0 0 12px
+                rgba(0,245,255,0.30);
+
+            transition:
+                width 0.8s ease;
+        }
+
+
+        /* =====================================================
+           PANEL DERECHO
+           ===================================================== */
+
+        .side {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 20px;
+        }
+
+
+        .stats-card {
+
+            padding: 24px;
+        }
+
+
+        .section-title {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 20px;
+        }
+
+
+        .section-title h3 {
+            font-size: 15px;
+        }
+
+
+        .section-title span {
+
+            color: #555;
+
+            font-size: 9px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+        }
+
+
+        /* =====================================================
+           CALIFICACIÓN
+           ===================================================== */
+
+        .grade {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 18px;
+        }
+
+
+        .grade-number {
+
+            font-family: "Orbitron", sans-serif;
+
+            font-size: 58px;
+
+            line-height: 1;
+
+            color: white;
+
+            text-shadow:
+                0 0 25px rgba(0,245,255,0.15);
+        }
+
+
+        .grade-info strong {
+
+            display: block;
+
+            font-family: "Orbitron", sans-serif;
+
+            font-size: 15px;
+
+            color: var(--neon);
+
+            margin-bottom: 4px;
+        }
+
+
+        .grade-info span {
+
+            color: #666;
+
+            font-size: 10px;
+        }
+
+
+        /* =====================================================
+           XP
+           ===================================================== */
+
+        .xp {
+            margin-top: 25px;
+        }
+
+
+        .xp-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            margin-bottom: 7px;
+
+            font-size: 10px;
+        }
+
+
+        .xp-header span:first-child {
+            color: #666;
+        }
+
+
+        .xp-header span:last-child {
+
+            color: var(--neon-2);
+
+            font-family: "Orbitron", sans-serif;
+        }
+
+
+        .xp-bar {
+
+            height: 7px;
+
+            background: #151515;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+        }
+
+
+        .xp-fill {
+
+            height: 100%;
+
+            border-radius: inherit;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    var(--neon-2),
+                    var(--neon)
+                );
+
+            transition:
+                width 0.8s ease;
+        }
+
+
+        /* =====================================================
+           NIVEL
+           ===================================================== */
+
+        .level {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-top: 20px;
+
+            padding-top: 20px;
+
+            border-top:
+                1px solid rgba(255,255,255,0.05);
+        }
+
+
+        .level-number {
+
+            font-family: "Orbitron", sans-serif;
+
+            color: var(--yellow);
+
+            font-size: 28px;
+        }
+
+
+        .level-label {
+
+            color: #555;
+
+            font-size: 9px;
+
+            line-height: 1.6;
+
+            text-align: right;
+
+            letter-spacing: 1px;
+        }
+
+
+        /* =====================================================
+           ACCESOS
+           ===================================================== */
+
+        .quick-grid {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 10px;
+        }
+
+
+        .quick-button {
+
+            display: block;
+
+            padding: 18px;
+
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 14px;
+
+            background: #0b0b0b;
+
+            border:
+                1px solid rgba(255,255,255,0.06);
+
+            transition:
+                0.25s ease;
+        }
+
+
+        .quick-button:hover {
+
+            transform:
+                translateY(-3px);
+
+            background: #101010;
+
+            border-color:
+                rgba(0,245,255,0.20);
+
+            box-shadow:
+                0 10px 35px rgba(0,0,0,0.5);
+        }
+
+
+        .quick-icon {
+
+            font-size: 24px;
+
+            margin-bottom: 11px;
+        }
+
+
+        .quick-button strong {
+
+            display: block;
+
+            font-size: 13px;
+
+            margin-bottom: 4px;
+        }
+
+
+        .quick-button span {
+
+            color: #555;
+
+            font-size: 10px;
+        }
+
+
+        /* =====================================================
+           PROGRESO
+           ===================================================== */
+
+        .progress-item {
+
+            margin-bottom: 17px;
+        }
+
+
+        .progress-item:last-child {
+            margin-bottom: 0;
+        }
+
+
+        .progress-info {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            margin-bottom: 6px;
+
+            font-size: 10px;
+        }
+
+
+        .progress-info span:first-child {
+            color: #666;
+        }
+
+
+        .progress-info span:last-child {
+
+            color: white;
+
+            font-weight: 700;
+        }
+
+
+        .mini-bar {
+
+            height: 6px;
+
+            background: #151515;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+        }
+
+
+        .mini-fill {
+
+            height: 100%;
+
+            border-radius: inherit;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    var(--neon),
+                    var(--neon-2)
+                );
+
+            transition:
+                width 0.8s ease;
+        }
+
+
+        /* =====================================================
+           ANIMACIONES
+           ===================================================== */
+
+        @keyframes roboFloat {
+
+            0%,
+            100% {
+
+                transform:
+                    translateY(0)
+                    scale(1);
+            }
+
+            50% {
+
+                transform:
+                    translateY(-10px)
+                    scale(1.01);
+            }
+        }
+
+
+        @keyframes glowPulse {
+
+            0%,
+            100% {
+
+                transform: scale(0.95);
+
+                opacity: 0.5;
+            }
+
+            50% {
+
+                transform: scale(1.04);
+
+                opacity: 1;
+            }
+        }
+
+
+        @keyframes stagePulse {
+
+            0%,
+            100% {
+
+                transform: scale(0.97);
+
+                opacity: 0.5;
+            }
+
+            50% {
+
+                transform: scale(1.02);
+
+                opacity: 1;
+            }
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+           ===================================================== */
+
+        @media (max-width: 1000px) {
+
+            .dashboard {
+
+                grid-template-columns: 1fr;
+            }
+
+            .mascot-card {
+
+                min-height: 700px;
+            }
+
+        }
+
+
+        @media (max-width: 650px) {
+
+            header {
+
+                padding: 0 18px;
+            }
+
+            nav {
+
+                display: none;
+            }
+
+            main {
+
+                padding: 25px 15px;
+            }
+
+            .dashboard {
+
+                gap: 15px;
+            }
+
+            .mascot-card {
+
+                min-height: auto;
+
+                padding: 20px 14px 25px;
+            }
+
+            .robot-stage {
+
+                width: 100%;
+
+                margin: 15px auto;
+            }
+
+            #robotMascota {
+
+                width: 88%;
+            }
+
+            .quick-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+            .grade-number {
+
+                font-size: 48px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header>
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                🤖
+            </div>
+
+            <div>
+
+                <div class="logo-title">
+                    ROBOT LAB
+                </div>
+
+                <div class="logo-subtitle">
+                    CAMPUS VIRTUAL
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <nav>
+
+            <a
+                href="#"
+                class="active"
+            >
+                Inicio
+            </a>
+
+            <a
+                href="https://TU-ENLACE-ACTIVIDADES.com"
+            >
+                Actividades
+            </a>
+
+            <a
+                href="https://TU-ENLACE-TAREAS.com"
+            >
+                Tareas
+            </a>
+
+            <button
+                class="logout-button"
+                onclick="cerrarSesion()"
+            >
+                Cerrar sesión
+            </button>
+
+        </nav>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         CONTENIDO
+         ===================================================== -->
+
+    <main>
+
+
+        <!-- BIENVENIDA -->
+
+        <section class="welcome">
+
+            <div class="welcome-label">
+                SISTEMA EDUCATIVO
+            </div>
+
+            <h1 id="saludo">
+                ¡Hola! 👋
+            </h1>
+
+            <p>
+                Bienvenido a tu espacio de aprendizaje.
+                Haz que tu mascota evolucione contigo.
+            </p>
+
+        </section>
+
+
+
+        <!-- =================================================
+             DASHBOARD
+             ================================================= -->
+
+        <section class="dashboard">
+
+
+            <!-- =================================================
+                 MASCOTA
+                 ================================================= -->
+
+            <div class="card mascot-card">
+
+
+                <div class="mascot-header">
+
+                    <div class="mascot-label">
+
+                        <small>
+                            MASCOTA VIRTUAL
+                        </small>
+
+                        <strong id="nombreMascota">
+                            ROBO
+                        </strong>
+
+                    </div>
+
+
+                    <div
+                        id="estadoMascota"
+                        class="status"
+                    >
+                        ● CARGANDO...
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     GIF
+                     ================================================= -->
+
+                <div class="robot-stage">
+
+                    <img
+                        id="robotMascota"
+                        src="Mascotas/robot1.gif"
+                        alt="Mascota virtual"
+                    >
+
+                </div>
+
+
+
+                <!-- MENSAJE -->
+
+                <div class="robot-message">
+
+                    <h2 id="mensajeMascota">
+                        Cargando mascota...
+                    </h2>
+
+                    <p id="detalleMascota">
+                        Estamos preparando tu aventura.
+                    </p>
+
+                </div>
+
+
+
+                <!-- ENERGÍA -->
+
+                <div class="energy">
+
+                    <div class="energy-header">
+
+                        <span>
+                            ENERGÍA DE TU MASCOTA
+                        </span>
+
+                        <span id="energiaTexto">
+                            100%
+                        </span>
+
+                    </div>
+
+
+                    <div class="energy-bar">
+
+                        <div
+                            id="energiaBarra"
+                            class="energy-fill"
+                            style="width: 100%;"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- =================================================
+                 PANEL DERECHO
+                 ================================================= -->
+
+            <div class="side">
+
+
+                <!-- RENDIMIENTO -->
+
+                <div class="card stats-card">
+
+                    <div class="section-title">
+
+                        <h3>
+                            Mi rendimiento
+                        </h3>
+
+                        <span>
+                            Calificación final
+                        </span>
+
+                    </div>
+
+
+                    <div class="grade">
+
+                        <div
+                            id="calificacion"
+                            class="grade-number"
+                        >
+                            0
+                        </div>
+
+
+                        <div class="grade-info">
+
+                            <strong>
+                                / 10
+                            </strong>
+
+                            <span>
+                                Calificación actual
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- XP -->
+
+                    <div class="xp">
+
+                        <div class="xp-header">
+
+                            <span>
+                                EXPERIENCIA
+                            </span>
+
+                            <span>
+
+                                <span id="xpActual">
+                                    0
+                                </span>
+
+                                / 1000 XP
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="xp-bar">
+
+                            <div
+                                id="xpBarra"
+                                class="xp-fill"
+                                style="width: 0%;"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- NIVEL -->
+
+                    <div class="level">
+
+                        <div>
+
+                            <div
+                                id="nivel"
+                                class="level-number"
+                            >
+                                0
+                            </div>
+
+                        </div>
+
+
+                        <div class="level-label">
+
+                            NIVEL DE MASCOTA
+
+                            <br>
+
+                            APRENDIZAJE ACTIVO
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     ACCESOS
+                     ================================================= -->
+
+                <div class="card stats-card">
+
+                    <div class="section-title">
+
+                        <h3>
+                            Accesos rápidos
+                        </h3>
+
+                        <span>
+                            Campus
+                        </span>
+
+                    </div>
+
+
+                    <div class="quick-grid">
+
+
+                        <a
+                            class="quick-button"
+                            href="https://TU-ENLACE-ACTIVIDADES.com"
+                        >
+
+                            <div class="quick-icon">
+                                🚀
+                            </div>
+
+                            <strong>
+                                Actividades
+                            </strong>
+
+                            <span>
+                                Ver actividades
+                            </span>
+
+                        </a>
+
+
+
+                        <a
+                            class="quick-button"
+                            href="https://TU-ENLACE-TAREAS.com"
+                        >
+
+                            <div class="quick-icon">
+                                📚
+                            </div>
+
+                            <strong>
+                                Tareas
+                            </strong>
+
+                            <span>
+                                Ver tareas
+                            </span>
+
+                        </a>
+
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     PROGRESO
+                     ================================================= -->
+
+                <div class="card stats-card">
+
+                    <div class="section-title">
+
+                        <h3>
+                            Mi progreso
+                        </h3>
+
+                        <span>
+                            General
+                        </span>
+
+                    </div>
+
+
+                    <!-- ACTIVIDADES -->
+
+                    <div class="progress-item">
+
+                        <div class="progress-info">
+
+                            <span>
+                                Actividades completadas
+                            </span>
+
+                            <span id="actividadesTexto">
+                                0 / 0
+                            </span>
+
+                        </div>
+
+
+                        <div class="mini-bar">
+
+                            <div
+                                id="actividadesBarra"
+                                class="mini-fill"
+                                style="width: 0%;"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- TAREAS -->
+
+                    <div class="progress-item">
+
+                        <div class="progress-info">
+
+                            <span>
+                                Tareas entregadas
+                            </span>
+
+                            <span id="tareasTexto">
+                                0 / 0
+                            </span>
+
+                        </div>
+
+
+                        <div class="mini-bar">
+
+                            <div
+                                id="tareasBarra"
+                                class="mini-fill"
+                                style="width: 0%;"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- RENDIMIENTO -->
+
+                    <div class="progress-item">
+
+                        <div class="progress-info">
+
+                            <span>
+                                Rendimiento académico
+                            </span>
+
+                            <span id="rendimientoTexto">
+                                0%
+                            </span>
+
+                        </div>
+
+
+                        <div class="mini-bar">
+
+                            <div
+                                id="rendimientoBarra"
+                                class="mini-fill"
+                                style="width: 0%;"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- =====================================================
+         ALUMNOS
+         ===================================================== -->
+
+    <script src="alumnos.js"></script>
+
+
+    <!-- =====================================================
+         SISTEMA
+         ===================================================== -->
+
+    <script>
+
+
+        /* =====================================================
+           1. COMPROBAR SESIÓN
+           ===================================================== */
+
+        const usuarioActivo =
+            sessionStorage.getItem(
+                "usuarioActivo"
+            );
+
+
+        /*
+            Si alguien intenta entrar directamente
+            a index.html sin iniciar sesión,
+            lo mandamos al login.
+        */
+
+        if (!usuarioActivo) {
+
+            window.location.href =
+                "login.html";
+
+        }
+
+
+        /* =====================================================
+           2. BUSCAR ALUMNO
+           ===================================================== */
+
+        const alumno =
+            alumnos[usuarioActivo];
+
+
+        /*
+            Si el usuario guardado no existe,
+            regresar al login.
+        */
+
+        if (!alumno) {
+
+            sessionStorage.removeItem(
+                "usuarioActivo"
+            );
+
+            window.location.href =
+                "login.html";
+
+        }
+
+
+        /* =====================================================
+           3. OBTENER MASCOTA
+           ===================================================== */
+
+        const mascota =
+            localStorage.getItem(
+                "mascota_" + usuarioActivo
+            );
+
+
+        /*
+            Si todavía no tiene mascota,
+            enviarlo a elegir mascota.
+        */
+
+        if (!mascota) {
+
+            window.location.href =
+                "elegir-mascota.html";
+
+        }
+
+
+        /* =====================================================
+           4. NOMBRE BONITO DE LA MASCOTA
+           ===================================================== */
+
+        const nombresMascotas = {
+
+            robot: "ROBO",
+
+            dinosaurio: "DINO",
+
+            gato: "MICHIBOT",
+
+            alien: "ALIEN",
+
+            zorro: "FOX"
+
+        };
+
+
+        /* =====================================================
+           5. DETERMINAR ESTADO
+           ===================================================== */
+
+        function obtenerEstado(calificacion) {
+
+            if (calificacion >= 9) {
+
+                return 1;
+
+            }
+
+            else if (calificacion >= 7) {
+
+                return 2;
+
+            }
+
+            else {
+
+                return 3;
+
+            }
+
+        }
+
+
+        /* =====================================================
+           6. INFORMACIÓN SEGÚN CALIFICACIÓN
+           ===================================================== */
+
+        function obtenerMensaje(calificacion) {
+
+            if (calificacion >= 9) {
+
+                return {
+
+                    estado: "● ¡EXCELENTE!",
+
+                    mensaje: "¡Excelente trabajo!",
+
+                    detalle:
+                        "Tu esfuerzo está dando grandes resultados."
+
+                };
+
+            }
+
+
+            else if (calificacion >= 7) {
+
+                return {
+
+                    estado: "● ¡BUEN TRABAJO!",
+
+                    mensaje: "¡Vas muy bien!",
+
+                    detalle:
+                        "Sigue trabajando para llevar a tu mascota al siguiente nivel."
+
+                };
+
+            }
+
+
+            else {
+
+                return {
+
+                    estado:
+                        "● A SEGUIR PRACTICANDO",
+
+                    mensaje:
+                        "¡Tú puedes!",
+
+                    detalle:
+                        "Cada actividad es una oportunidad para mejorar."
+
+                };
+
+            }
+
+        }
+
+
+        /* =====================================================
+           7. ACTUALIZAR DASHBOARD
+           ===================================================== */
+
+        function actualizarDashboard() {
+
+
+            const calificacion =
+                Number(
+                    alumno.calificacion
+                );
+
+
+            const estado =
+                obtenerEstado(
+                    calificacion
+                );
+
+
+            const mensaje =
+                obtenerMensaje(
+                    calificacion
+                );
+
+
+            /* =================================================
+               PORCENTAJES
+               ================================================= */
+
+            const porcentaje =
+                Math.max(
+                    0,
+                    Math.min(
+                        100,
+                        calificacion * 10
+                    )
+                );
+
+
+            const xp =
+                Math.round(
+                    calificacion * 100
+                );
+
+
+            const nivel =
+                Math.floor(
+                    calificacion
+                );
+
+
+            const energia =
+                Math.round(
+                    porcentaje
+                );
+
+
+            /* =================================================
+               NOMBRE
+               ================================================= */
+
+            document.getElementById(
+                "saludo"
+            ).textContent =
+                `¡Hola, ${alumno.nombre}! 👋`;
+
+
+            /* =================================================
+               NOMBRE DE MASCOTA
+               ================================================= */
+
+            document.getElementById(
+                "nombreMascota"
+            ).textContent =
+                nombresMascotas[mascota]
+                || mascota.toUpperCase();
+
+
+            /* =================================================
+               GIF
+               ================================================= */
+
+            /*
+                Ejemplos:
+
+                robot + estado 1
+                → Mascotas/robot1.gif
+
+                robot + estado 2
+                → Mascotas/robot2.gif
+
+                dinosaurio + estado 1
+                → Mascotas/dinosaurio1.gif
+
+                gato + estado 3
+                → Mascotas/gato3.gif
+            */
+
+            const rutaGif =
+                `Mascotas/${mascota}${estado}.gif`;
+
+
+            document.getElementById(
+                "robotMascota"
+            ).src =
+                rutaGif;
+
+
+            /* =================================================
+               ESTADO
+               ================================================= */
+
+            document.getElementById(
+                "estadoMascota"
+            ).textContent =
+                mensaje.estado;
+
+
+            /* =================================================
+               MENSAJE
+               ================================================= */
+
+            document.getElementById(
+                "mensajeMascota"
+            ).textContent =
+                mensaje.mensaje;
+
+
+            document.getElementById(
+                "detalleMascota"
+            ).textContent =
+                mensaje.detalle;
+
+
+            /* =================================================
+               CALIFICACIÓN
+               ================================================= */
+
+            document.getElementById(
+                "calificacion"
+            ).textContent =
+                calificacion;
+
+
+            /* =================================================
+               XP
+               ================================================= */
+
+            document.getElementById(
+                "xpActual"
+            ).textContent =
+                xp;
+
+
+            document.getElementById(
+                "xpBarra"
+            ).style.width =
+                `${porcentaje}%`;
+
+
+            /* =================================================
+               NIVEL
+               ================================================= */
+
+            document.getElementById(
+                "nivel"
+            ).textContent =
+                nivel;
+
+
+            /* =================================================
+               ENERGÍA
+               ================================================= */
+
+            document.getElementById(
+                "energiaTexto"
+            ).textContent =
+                `${energia}%`;
+
+
+            document.getElementById(
+                "energiaBarra"
+            ).style.width =
+                `${energia}%`;
+
+
+            /* =================================================
+               ACTIVIDADES
+               ================================================= */
+
+            const actividades =
+                Number(
+                    alumno.actividades
+                );
+
+
+            const actividadesTotales =
+                Number(
+                    alumno.actividadesTotales
+                );
+
+
+            let actividadesPorcentaje = 0;
+
+
+            if (
+                actividadesTotales > 0
+            ) {
+
+                actividadesPorcentaje =
+                    (
+                        actividades /
+                        actividadesTotales
+                    ) * 100;
+
+            }
+
+
+            actividadesPorcentaje =
+                Math.max(
+                    0,
+                    Math.min(
+                        100,
+                        actividadesPorcentaje
+                    )
+                );
+
+
+            document.getElementById(
+                "actividadesTexto"
+            ).textContent =
+                `${actividades} / ${actividadesTotales}`;
+
+
+            document.getElementById(
+                "actividadesBarra"
+            ).style.width =
+                `${actividadesPorcentaje}%`;
+
+
+            /* =================================================
+               TAREAS
+               ================================================= */
+
+            const tareas =
+                Number(
+                    alumno.tareas
+                );
+
+
+            const tareasTotales =
+                Number(
+                    alumno.tareasTotales
+                );
+
+
+            let tareasPorcentaje = 0;
+
+
+            if (
+                tareasTotales > 0
+            ) {
+
+                tareasPorcentaje =
+                    (
+                        tareas /
+                        tareasTotales
+                    ) * 100;
+
+            }
+
+
+            tareasPorcentaje =
+                Math.max(
+                    0,
+                    Math.min(
+                        100,
+                        tareasPorcentaje
+                    )
+                );
+
+
+            document.getElementById(
+                "tareasTexto"
+            ).textContent =
+                `${tareas} / ${tareasTotales}`;
+
+
+            document.getElementById(
+                "tareasBarra"
+            ).style.width =
+                `${tareasPorcentaje}%`;
+
+
+            /* =================================================
+               RENDIMIENTO
+               ================================================= */
+
+            document.getElementById(
+                "rendimientoTexto"
+            ).textContent =
+                `${porcentaje}%`;
+
+
+            document.getElementById(
+                "rendimientoBarra"
+            ).style.width =
+                `${porcentaje}%`;
+
+        }
+
+
+        /* =====================================================
+           8. CERRAR SESIÓN
+           ===================================================== */
+
+        function cerrarSesion() {
+
+            sessionStorage.removeItem(
+                "usuarioActivo"
+            );
+
+            window.location.href =
+                "login.html";
+
+        }
+
+
+        /* =====================================================
+           9. INICIAR DASHBOARD
+           ===================================================== */
+
+        actualizarDashboard();
+
+
+    </script>
+
+
+</body>
+</html>
