@@ -1652,34 +1652,243 @@ async function iniciar() {
 async function cargarActividades() {
 
     if (!alumnoActual) {
-
         return;
-
     }
 
-
     const contenedor =
-        document.getElementById(
-            "activitiesGrid"
+        document.getElementById("activitiesGrid");
+
+    contenedor.innerHTML = `
+        <div class="loading">
+            <div class="loading-icon">🧩</div>
+            Cargando actividades...
+        </div>
+    `;
+
+    try {
+
+        /* =========================================
+           1. BUSCAR ASIGNACIONES DEL ALUMNO
+        ========================================= */
+
+        const {
+            data: asignaciones,
+            error: asignacionesError
+        } = await supabaseClient
+            .from("actividad_alumnos")
+            .select(`
+                id,
+                actividad_id,
+                estado,
+                calificacion,
+                completada_at,
+                created_at
+            `)
+            .eq("alumno_id", alumnoActual.id)
+            .order("created_at", {
+                ascending: false
+            });
+
+
+        if (asignacionesError) {
+
+            console.error(
+                "ERROR actividad_alumnos:",
+                asignacionesError
+            );
+
+            mostrarError(
+                "No se pudieron cargar tus asignaciones: " +
+                asignacionesError.message
+            );
+
+            return;
+        }
+
+
+        const listaAsignaciones =
+            asignaciones || [];
+
+
+        console.log(
+            "Asignaciones encontradas:",
+            listaAsignaciones
         );
 
 
-    contenedor.innerHTML = `
+        /* =========================================
+           SIN ACTIVIDADES
+        ========================================= */
 
-        <div class="loading">
+        if (listaAsignaciones.length === 0) {
 
-            <div class="loading-icon">
-                🧩
-            </div>
+            actividadesAlumno = [];
 
-            Cargando actividades...
+            actualizarResumen();
 
-        </div>
+            mostrarVacio(
+                "Tu profesor todavía no te ha asignado actividades."
+            );
 
-    `;
+            return;
+        }
 
 
-    try {
+        /* =========================================
+           2. OBTENER IDS DE ACTIVIDADES
+        ========================================= */
+
+        const ids =
+            listaAsignaciones
+                .map(
+                    asignacion =>
+                        asignacion.actividad_id
+                )
+                .filter(Boolean);
+
+
+        console.log(
+            "IDs de actividades:",
+            ids
+        );
+
+
+        if (ids.length === 0) {
+
+            actividadesAlumno = [];
+
+            actualizarResumen();
+
+            mostrarVacio();
+
+            return;
+        }
+
+
+        /* =========================================
+           3. BUSCAR LAS ACTIVIDADES
+        ========================================= */
+
+        const {
+            data: actividades,
+            error: actividadesError
+        } = await supabaseClient
+            .from("actividades")
+            .select(`
+                id,
+                profesor_id,
+                titulo,
+                descripcion,
+                tipo,
+                enlace,
+                imagen_url,
+                puntos,
+                fecha_limite,
+                activa,
+                created_at
+            `)
+            .in("id", ids);
+
+
+        if (actividadesError) {
+
+            console.error(
+                "ERROR actividades:",
+                actividadesError
+            );
+
+            mostrarError(
+                "No se pudieron cargar las actividades: " +
+                actividadesError.message
+            );
+
+            return;
+        }
+
+
+        const listaActividades =
+            actividades || [];
+
+
+        console.log(
+            "Actividades encontradas:",
+            listaActividades
+        );
+
+
+        /* =========================================
+           4. UNIR ACTIVIDAD + ASIGNACIÓN
+        ========================================= */
+
+        actividadesAlumno =
+            listaActividades.map(
+                actividad => {
+
+                    const asignacion =
+                        listaAsignaciones.find(
+                            item =>
+                                Number(
+                                    item.actividad_id
+                                ) ===
+                                Number(
+                                    actividad.id
+                                )
+                        );
+
+
+                    return {
+
+                        ...actividad,
+
+                        asignacion_id:
+                            asignacion?.id,
+
+                        estado:
+                            asignacion?.estado ||
+                            "pendiente",
+
+                        calificacion:
+                            asignacion?.calificacion,
+
+                        completada_at:
+                            asignacion?.completada_at
+
+                    };
+
+                }
+            );
+
+
+        console.log(
+            "Actividades del alumno:",
+            actividadesAlumno
+        );
+
+
+        /* =========================================
+           5. ACTUALIZAR PANTALLA
+        ========================================= */
+
+        actualizarResumen();
+
+        mostrarActividades();
+
+
+    } catch (error) {
+
+        console.error(
+            "ERROR GENERAL CARGANDO ACTIVIDADES:",
+            error
+        );
+
+        mostrarError(
+            "Ocurrió un error al consultar las actividades: " +
+            (error.message || error)
+        );
+
+    }
+
+}
 
         /* =========================================
            1. ASIGNACIONES
