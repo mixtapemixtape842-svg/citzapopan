@@ -2,27 +2,11 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <title>CITZ · Robot Lab | Diagnóstico</title>
 
-    <title>Diagnóstico de Robótica | CITZ</title>
-
-    <!-- =========================================================
-         SUPABASE
-    ========================================================== -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-
-    <!-- =========================================================
-         CSS
-         Pega aquí el CSS que te di anteriormente
-    ========================================================== -->
-   
     <style>
-
         * {
             box-sizing: border-box;
             margin: 0;
@@ -31,124 +15,113 @@
 
         body {
             font-family: Arial, Helvetica, sans-serif;
-            min-height: 100vh;
-            background:
-                radial-gradient(circle at top left, #243b75, transparent 40%),
-                linear-gradient(135deg, #07111f, #101c33);
+            background: linear-gradient(135deg, #071426, #102a43, #164e63);
             color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
         }
 
         .container {
-            width: min(1100px, 94%);
+            max-width: 1000px;
             margin: auto;
-            padding: 30px 0 50px;
         }
 
+        /* HEADER */
+
         .header {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 20px;
+            padding: 20px;
             margin-bottom: 25px;
+            backdrop-filter: blur(10px);
         }
 
         .header-top {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            gap: 20px;
+            align-items: center;
+            gap: 15px;
         }
 
         .logo {
-            font-size: 28px;
-            font-weight: 800;
-            letter-spacing: 1px;
+            font-size: 24px;
+            font-weight: bold;
         }
 
         .logo span {
-            color: #5ee7ff;
+            color: #38bdf8;
         }
 
         .student-badge {
-            background: rgba(255,255,255,.1);
-            border: 1px solid rgba(255,255,255,.15);
-            padding: 10px 15px;
-            border-radius: 50px;
+            background: rgba(56,189,248,0.15);
+            border: 1px solid rgba(56,189,248,0.35);
+            border-radius: 30px;
+            padding: 10px 16px;
             font-size: 14px;
         }
 
+        /* CARDS */
+
         .card {
-            background: rgba(255,255,255,.08);
-            border: 1px solid rgba(255,255,255,.12);
-            border-radius: 22px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 20px;
             padding: 30px;
             margin-bottom: 25px;
             backdrop-filter: blur(10px);
-            box-shadow: 0 15px 40px rgba(0,0,0,.2);
         }
 
         .card h1,
-        .card h2,
-        .card h3 {
+        .card h2 {
             margin-bottom: 15px;
         }
 
         .card p {
-            line-height: 1.7;
-            color: #d9e3f5;
+            line-height: 1.6;
+            color: #dbeafe;
         }
 
-        .loading-screen,
-        .error-screen {
+        /* LOADING */
+
+        #loading {
             text-align: center;
-            padding: 70px 25px;
+            padding: 60px 20px;
         }
 
-        .loading-icon {
-            font-size: 55px;
-            margin-bottom: 20px;
-            animation: pulse 1.5s infinite;
+        .spinner {
+            width: 45px;
+            height: 45px;
+            border: 4px solid rgba(255,255,255,0.2);
+            border-top-color: #38bdf8;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
         }
 
-        @keyframes pulse {
-            0%,100% {
-                transform: scale(1);
-                opacity: .6;
-            }
-
-            50% {
-                transform: scale(1.15);
-                opacity: 1;
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
             }
         }
 
-        .error-icon {
-            font-size: 60px;
-            margin-bottom: 20px;
-        }
-
-        .error-detail {
-            margin-top: 20px;
-            padding: 15px;
-            background: rgba(255,70,70,.12);
-            border: 1px solid rgba(255,70,70,.3);
-            border-radius: 12px;
-            color: #ffb4b4;
-            text-align: left;
-            white-space: pre-wrap;
-            word-break: break-word;
-            display: none;
-        }
+        /* HIDDEN */
 
         .hidden {
             display: none !important;
         }
 
+        /* INTRO */
+
         .exam-info {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 15px;
-            margin-top: 25px;
+            margin: 25px 0;
         }
 
         .info-box {
-            background: rgba(255,255,255,.06);
+            background: rgba(0,0,0,0.18);
             border-radius: 15px;
             padding: 18px;
             text-align: center;
@@ -156,29 +129,23 @@
 
         .info-box strong {
             display: block;
-            font-size: 24px;
+            font-size: 25px;
+            color: #38bdf8;
             margin-bottom: 5px;
-            color: #5ee7ff;
         }
 
-        button {
-            border: none;
-            cursor: pointer;
-            font-family: inherit;
-        }
+        /* BUTTONS */
 
         .btn {
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-            padding: 14px 24px;
+            border: none;
             border-radius: 12px;
-            background: #287cff;
-            color: white;
+            padding: 14px 22px;
             font-size: 16px;
-            font-weight: 700;
-            transition: .2s;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            background: #0ea5e9;
+            color: white;
         }
 
         .btn:hover {
@@ -187,74 +154,72 @@
         }
 
         .btn-secondary {
-            background: rgba(255,255,255,.1);
+            background: #475569;
         }
 
         .btn-success {
-            background: #16a085;
+            background: #16a34a;
         }
 
         .btn-danger {
-            background: #e74c3c;
+            background: #dc2626;
         }
 
-        .center {
-            text-align: center;
-        }
+        /* EXAM */
 
         .exam-header {
             position: sticky;
-            top: 0;
+            top: 10px;
             z-index: 10;
-            background: rgba(7,17,31,.94);
-            backdrop-filter: blur(12px);
-            padding: 15px 0;
+            background: rgba(7,20,38,0.95);
+            border-radius: 15px;
+            padding: 15px;
             margin-bottom: 25px;
+            backdrop-filter: blur(10px);
         }
 
         .progress-info {
             display: flex;
             justify-content: space-between;
-            gap: 15px;
             margin-bottom: 8px;
             font-size: 14px;
-            color: #cbd8ed;
         }
 
         .progress-container {
-            width: 100%;
             height: 10px;
-            background: rgba(255,255,255,.1);
+            background: #1e293b;
             border-radius: 20px;
             overflow: hidden;
         }
 
         #progressBar {
-            width: 0%;
             height: 100%;
-            background: linear-gradient(90deg,#287cff,#5ee7ff);
-            transition: width .3s;
+            width: 0%;
+            background: #38bdf8;
+            transition: width 0.3s;
         }
 
+        /* QUESTIONS */
+
         .question {
-            margin-bottom: 25px;
-            padding: 25px;
-            background: rgba(255,255,255,.05);
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
             border-radius: 18px;
-            border: 1px solid rgba(255,255,255,.08);
+            padding: 25px;
+            margin-bottom: 20px;
         }
 
         .question-number {
-            color: #5ee7ff;
-            font-weight: 700;
-            font-size: 14px;
+            color: #38bdf8;
+            font-weight: bold;
             margin-bottom: 10px;
         }
 
         .question-text {
             font-size: 19px;
+            font-weight: bold;
             line-height: 1.5;
-            margin-bottom: 18px;
+            margin-bottom: 20px;
         }
 
         .options {
@@ -263,50 +228,48 @@
         }
 
         .option {
-            position: relative;
+            display: block;
         }
 
         .option input {
-            position: absolute;
-            opacity: 0;
-            pointer-events: none;
+            display: none;
         }
 
         .option label {
             display: block;
-            padding: 15px 18px;
-            background: rgba(255,255,255,.06);
-            border: 1px solid rgba(255,255,255,.1);
+            padding: 15px;
             border-radius: 12px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.1);
             cursor: pointer;
-            transition: .2s;
-            color: #dce7f7;
+            transition: 0.2s;
         }
 
         .option label:hover {
-            background: rgba(255,255,255,.1);
-            border-color: rgba(94,231,255,.4);
+            background: rgba(56,189,248,0.12);
         }
 
         .option input:checked + label {
-            background: rgba(40,124,255,.25);
-            border-color: #5ee7ff;
-            color: white;
+            background: rgba(56,189,248,0.2);
+            border-color: #38bdf8;
         }
+
+        /* AREAS */
 
         .area-title {
-            margin: 35px 0 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid rgba(255,255,255,.1);
-            color: #5ee7ff;
+            margin: 35px 0 15px;
+            font-size: 22px;
+            color: #7dd3fc;
         }
 
+        /* MINIGAMES */
+
         .minigame {
+            background: rgba(255,255,255,0.06);
+            border-radius: 18px;
             padding: 25px;
             margin-bottom: 25px;
-            border-radius: 18px;
-            background: rgba(255,255,255,.05);
-            border: 1px solid rgba(255,255,255,.1);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .minigame h3 {
@@ -314,54 +277,60 @@
         }
 
         .minigame-description {
+            color: #cbd5e1;
             margin-bottom: 20px;
+            line-height: 1.5;
         }
 
         .game-options {
             display: grid;
-            gap: 10px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
         }
 
         .game-option {
-            padding: 15px;
-            border-radius: 12px;
-            background: rgba(255,255,255,.07);
-            border: 1px solid rgba(255,255,255,.1);
+            border: 1px solid rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.07);
             color: white;
-            text-align: left;
-            transition: .2s;
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.2s;
         }
 
         .game-option:hover {
-            background: rgba(255,255,255,.13);
-            transform: translateX(3px);
+            background: rgba(56,189,248,0.15);
         }
 
         .game-option.selected {
-            background: rgba(40,124,255,.25);
-            border-color: #5ee7ff;
+            border-color: #38bdf8;
+            background: rgba(56,189,248,0.2);
         }
 
         .game-option.correct {
-            background: rgba(22,160,133,.25);
-            border-color: #2ecc71;
+            background: rgba(22,163,74,0.3);
+            border-color: #22c55e;
         }
 
         .game-option.incorrect {
-            background: rgba(231,76,60,.25);
-            border-color: #e74c3c;
+            background: rgba(220,38,38,0.3);
+            border-color: #ef4444;
         }
 
         .game-result {
-            margin-top: 15px;
-            padding: 12px;
-            border-radius: 10px;
             display: none;
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 12px;
+            background: rgba(0,0,0,0.2);
         }
 
         .game-result.show {
             display: block;
         }
+
+        /* RESULTS */
 
         .result-card {
             text-align: center;
@@ -371,33 +340,32 @@
             width: 180px;
             height: 180px;
             border-radius: 50%;
-            margin: 25px auto;
+            border: 8px solid #38bdf8;
             display: flex;
-            align-items: center;
-            justify-content: center;
             flex-direction: column;
-            background: rgba(40,124,255,.15);
-            border: 5px solid #287cff;
+            justify-content: center;
+            align-items: center;
+            margin: 25px auto;
         }
 
         .score-number {
             font-size: 48px;
-            font-weight: 800;
+            font-weight: bold;
         }
 
         .score-label {
-            color: #b8c6db;
+            color: #cbd5e1;
         }
 
         .areas {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
             gap: 15px;
-            margin-top: 25px;
+            margin-top: 30px;
+            text-align: left;
         }
 
         .area-result {
-            background: rgba(255,255,255,.06);
+            background: rgba(255,255,255,0.07);
             padding: 18px;
             border-radius: 15px;
         }
@@ -407,79 +375,106 @@
             margin-bottom: 8px;
         }
 
+        .area-bar {
+            height: 8px;
+            background: #1e293b;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .area-bar-fill {
+            height: 100%;
+            background: #38bdf8;
+        }
+
         .save-status {
-            margin: 20px 0;
+            margin-top: 20px;
             padding: 15px;
             border-radius: 12px;
-            background: rgba(255,255,255,.07);
+            background: rgba(22,163,74,0.15);
+            color: #bbf7d0;
         }
 
         .actions {
             display: flex;
             justify-content: center;
-            gap: 12px;
-            flex-wrap: wrap;
+            gap: 15px;
             margin-top: 25px;
+            flex-wrap: wrap;
         }
 
-        @media(max-width:700px) {
+        /* ERROR */
+
+        #errorScreen {
+            text-align: center;
+        }
+
+        #errorScreen h2 {
+            color: #fca5a5;
+        }
+
+        #errorMessage {
+            margin: 20px 0;
+        }
+
+        #errorDetail {
+            color: #94a3b8;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 700px) {
+
+            body {
+                padding: 10px;
+            }
 
             .header-top {
                 flex-direction: column;
                 align-items: flex-start;
             }
 
-            .exam-info {
-                grid-template-columns: 1fr;
-            }
-
-            .areas {
-                grid-template-columns: 1fr;
-            }
-
             .card {
                 padding: 20px;
             }
 
-            .question {
-                padding: 18px;
+            .exam-info {
+                grid-template-columns: 1fr;
+            }
+
+            .game-options {
+                grid-template-columns: 1fr;
             }
 
             .question-text {
                 font-size: 17px;
             }
-        }
 
+            .score-circle {
+                width: 150px;
+                height: 150px;
+            }
+        }
     </style>
 </head>
-
 
 <body>
 
 <div class="container">
 
-
-    <!-- =========================================================
-         ENCABEZADO
-    ========================================================== -->
-
+    <!-- HEADER -->
     <header class="header">
 
         <div class="header-top">
 
             <div class="logo">
-                CITZ <span>ROBÓTICA</span>
+                <span>⚙</span> CITZ · Robot Lab
             </div>
 
-            <!--
-                Este dato NO es editable.
-                JavaScript lo llenará automáticamente.
-            -->
-            <div
-                id="studentBadge"
-                class="student-badge"
-            >
-                Cargando alumno...
+            <div class="student-badge">
+                Diagnóstico de Robótica y Tecnología
             </div>
 
         </div>
@@ -487,277 +482,60 @@
     </header>
 
 
+    <!-- INTRO -->
+    <section id="intro" class="card">
 
-    <!-- =========================================================
-         PANTALLA DE CARGA
-    ========================================================== -->
-
-    <section
-        id="loading"
-        class="card loading-screen"
-    >
-
-        <div class="loading-icon">
-            🤖
-        </div>
-
-        <h2>
-            Preparando tu diagnóstico
-        </h2>
+        <h1>🤖 Diagnóstico de Robótica y Tecnología</h1>
 
         <p>
-            Estamos verificando tu sesión y cargando tu actividad...
-        </p>
-
-    </section>
-
-
-
-    <!-- =========================================================
-         PANTALLA DE ERROR
-    ========================================================== -->
-
-    <section
-        id="errorScreen"
-        class="card error-screen hidden"
-    >
-
-        <div class="error-icon">
-            ⚠️
-        </div>
-
-        <h2>
-            No fue posible iniciar el diagnóstico
-        </h2>
-
-        <p id="errorMessage">
-            Ocurrió un problema.
-        </p>
-
-        <!--
-            Aquí JavaScript podrá mostrar el error real de Supabase.
-            Esto será muy importante para detectar cualquier problema
-            de permisos, sesión o base de datos.
-        -->
-        <div
-            id="errorDetail"
-            class="error-detail"
-        ></div>
-
-        <div class="actions">
-
-            <button
-                id="retryButton"
-                class="btn"
-                type="button"
-            >
-                🔄 Intentar nuevamente
-            </button>
-
-            <button
-                id="errorBackButton"
-                class="btn btn-secondary"
-                type="button"
-            >
-                ← Volver al campus
-            </button>
-
-        </div>
-
-    </section>
-
-
-
-    <!-- =========================================================
-         INTRODUCCIÓN
-    ========================================================== -->
-
-    <section
-        id="intro"
-        class="card hidden"
-    >
-
-        <h1 id="activityTitle">
-            Diagnóstico de Robótica
-        </h1>
-
-        <p id="activityDescription">
             Este diagnóstico nos ayudará a conocer tus conocimientos
-            y habilidades actuales en robótica, programación y tecnología.
+            actuales sobre tecnología, programación, robótica y herramientas digitales.
         </p>
-
-
-        <!-- ==============================================
-             INFORMACIÓN DEL ALUMNO
-        =============================================== -->
-
-        <div
-            class="student-info"
-            style="
-                margin-top:25px;
-                padding:20px;
-                border-radius:15px;
-                background:rgba(255,255,255,.06);
-            "
-        >
-
-            <h3>
-                👤 Alumno
-            </h3>
-
-            <p
-                id="studentNameDisplay"
-                style="
-                    margin-top:8px;
-                    font-size:20px;
-                    font-weight:bold;
-                    color:white;
-                "
-            >
-                Cargando...
-            </p>
-
-            <p
-                id="studentGradeDisplay"
-                style="
-                    margin-top:5px;
-                "
-            >
-                Grado: --
-            </p>
-
-        </div>
-
-
-
-        <!-- ==============================================
-             INFORMACIÓN DEL EXAMEN
-        =============================================== -->
 
         <div class="exam-info">
 
             <div class="info-box">
-
-                <strong id="questionCount">
-                    28
-                </strong>
-
-                <span>
-                    Preguntas
-                </span>
-
+                <strong id="questionCount">28</strong>
+                preguntas
             </div>
 
-
             <div class="info-box">
-
-                <strong id="minigameCount">
-                    8
-                </strong>
-
-                <span>
-                    Minijuegos
-                </span>
-
+                <strong id="minigameCount">8</strong>
+                retos
             </div>
 
-
             <div class="info-box">
-
-                <strong>
-                    🤖
-                </strong>
-
-                <span>
-                    Diagnóstico
-                </span>
-
+                <strong>∞</strong>
+                sin límite de tiempo
             </div>
 
         </div>
 
+        <p style="margin-bottom:20px;">
+            <strong>Importante:</strong>
+            responde de acuerdo con lo que realmente sabes.
+            No importa si algunas preguntas no las conoces.
+        </p>
 
-
-        <!-- ==============================================
-             INSTRUCCIONES
-        =============================================== -->
-
-        <div
-            style="
-                margin-top:25px;
-                padding:20px;
-                background:rgba(94,231,255,.06);
-                border-radius:15px;
-            "
+        <button
+            id="startExam"
+            class="btn btn-success"
         >
-
-            <h3>
-                📋 Antes de comenzar
-            </h3>
-
-            <p style="margin-top:10px;">
-                Lee cuidadosamente cada pregunta y selecciona
-                la respuesta que consideres correcta.
-            </p>
-
-            <p style="margin-top:10px;">
-                También encontrarás algunos minijuegos en los que
-                tendrás que resolver pequeños retos de lógica,
-                programación y robótica.
-            </p>
-
-            <p style="margin-top:10px;">
-                <strong>
-                    No te preocupes si no sabes alguna respuesta.
-                </strong>
-                Este diagnóstico sirve para conocer qué temas
-                necesitas reforzar.
-            </p>
-
-        </div>
-
-
-
-        <!-- ==============================================
-             BOTÓN COMENZAR
-        =============================================== -->
-
-        <div class="actions">
-
-            <button
-                id="startExam"
-                class="btn"
-                type="button"
-            >
-                🚀 Comenzar diagnóstico
-            </button>
-
-        </div>
+            🚀 COMENZAR DIAGNÓSTICO
+        </button>
 
     </section>
 
 
-
-    <!-- =========================================================
-         EXAMEN
-    ========================================================== -->
-
-    <section
-        id="exam"
-        class="hidden"
-    >
-
-
-        <!-- ==============================================
-             BARRA DE PROGRESO
-        =============================================== -->
+    <!-- EXAMEN -->
+    <section id="exam" class="hidden">
 
         <div class="exam-header">
 
             <div class="progress-info">
 
                 <span id="progressText">
-                    Pregunta 1 de 28
+                    0 / 28
                 </span>
 
                 <span>
@@ -766,255 +544,154 @@
 
             </div>
 
-
             <div class="progress-container">
 
-                <div
-                    id="progressBar"
-                ></div>
+                <div id="progressBar"></div>
 
             </div>
 
         </div>
 
 
+        <!-- QUESTIONS -->
+        <div class="card">
 
-        <!-- ==============================================
-             PREGUNTAS
-        =============================================== -->
+            <h2>🧠 Preguntas</h2>
 
-        <div
-            id="questions"
-        >
-
-            <!--
-
-                JavaScript generará aquí las preguntas.
-
-                Ejemplo de estructura que generará:
-
-                <div class="question">
-
-                    <div class="question-number">
-                        Pregunta 1
-                    </div>
-
-                    <div class="question-text">
-                        ¿Qué sucede primero...?
-                    </div>
-
-                    <div class="options">
-
-                        <div class="option">
-                            <input ...>
-                            <label>...</label>
-                        </div>
-
-                    </div>
-
-                </div>
-
-            -->
+            <div id="questions"></div>
 
         </div>
 
 
+        <!-- MINIGAMES -->
+        <div class="card">
 
-        <!-- =====================================================
-             MINIJUEGOS
-        ====================================================== -->
+            <h2>🎮 Retos interactivos</h2>
 
-        <div
-            id="minigames"
-            class="hidden"
-        >
-
-            <div class="card">
-
-                <h2>
-                    🎮 Retos interactivos
-                </h2>
-
-                <p>
-                    Ahora resolverás algunos pequeños retos.
-                    Selecciona las opciones en el orden que consideres correcto.
-                </p>
-
-            </div>
+            <p style="margin-bottom:25px;">
+                En cada reto selecciona los elementos en el orden
+                que consideres correcto.
+            </p>
 
 
-            <!-- ==============================================
-                 MINIJUEGO 1
-            =============================================== -->
+            <!-- GAME 1 -->
+            <div id="game1" class="minigame">
 
-            <div
-                class="minigame"
-                id="game1"
-            >
-
-                <h3>
-                    🤖 Reto 1: Movimiento del robot
-                </h3>
+                <h3>🤖 Reto 1 · Movimiento de un robot</h3>
 
                 <p class="minigame-description">
-                    Ordena las acciones para que el robot
-                    pueda avanzar correctamente hasta su objetivo.
+                    Ordena los pasos para hacer que un robot avance,
+                    detecte un obstáculo y cambie de dirección.
                 </p>
 
                 <div
-                    class="game-options"
                     id="gameOptions1"
+                    class="game-options"
                 ></div>
 
                 <div
-                    class="game-result"
                     id="gameResult1"
+                    class="game-result"
                 ></div>
 
             </div>
 
 
+            <!-- GAME 2 -->
+            <div id="game2" class="minigame">
 
-            <!-- ==============================================
-                 MINIJUEGO 2
-            =============================================== -->
-
-            <div
-                class="minigame"
-                id="game2"
-            >
-
-                <h3>
-                    💻 Reto 2: Programación
-                </h3>
+                <h3>💻 Reto 2 · Programación</h3>
 
                 <p class="minigame-description">
-                    Selecciona las instrucciones en el orden
-                    correcto para ejecutar el programa.
+                    Ordena correctamente los pasos de un programa.
                 </p>
 
                 <div
-                    class="game-options"
                     id="gameOptions2"
+                    class="game-options"
                 ></div>
 
                 <div
-                    class="game-result"
                     id="gameResult2"
+                    class="game-result"
                 ></div>
 
             </div>
 
 
+            <!-- GAME 3 -->
+            <div id="game3" class="minigame">
 
-            <!-- ==============================================
-                 MINIJUEGO 3
-            =============================================== -->
-
-            <div
-                class="minigame"
-                id="game3"
-            >
-
-                <h3>
-                    🐱 Reto 3: Scratch
-                </h3>
+                <h3>🐱 Reto 3 · Scratch</h3>
 
                 <p class="minigame-description">
-                    Selecciona los bloques de Scratch
-                    en el orden correcto.
+                    Ordena las acciones necesarias para crear
+                    un programa sencillo en Scratch.
                 </p>
 
                 <div
-                    class="game-options"
                     id="gameOptions3"
+                    class="game-options"
                 ></div>
 
                 <div
-                    class="game-result"
                     id="gameResult3"
+                    class="game-result"
                 ></div>
 
             </div>
 
 
+            <!-- GAME 4 -->
+            <div id="game4" class="minigame">
 
-            <!-- ==============================================
-                 MINIJUEGO 4
-            =============================================== -->
-
-            <div
-                class="minigame"
-                id="game4"
-            >
-
-                <h3>
-                    🚁 Reto 4: Drones
-                </h3>
+                <h3>🚁 Reto 4 · Drones</h3>
 
                 <p class="minigame-description">
-                    Ordena las acciones para realizar
-                    correctamente el movimiento del dron.
+                    Ordena una secuencia básica para realizar
+                    un vuelo seguro.
                 </p>
 
                 <div
-                    class="game-options"
                     id="gameOptions4"
+                    class="game-options"
                 ></div>
 
                 <div
-                    class="game-result"
                     id="gameResult4"
+                    class="game-result"
                 ></div>
 
             </div>
 
 
+            <!-- GAME 5 -->
+            <div id="game5" class="minigame">
 
-            <!-- ==============================================
-                 MINIJUEGO 5
-            =============================================== -->
-
-            <div
-                class="minigame"
-                id="game5"
-            >
-
-                <h3>
-                    🖊️ Reto 5: Pluma 3D
-                </h3>
+                <h3>🖊️ Reto 5 · Pluma 3D</h3>
 
                 <p class="minigame-description">
-                    Selecciona el procedimiento adecuado
-                    para utilizar una pluma 3D.
+                    Ordena los pasos para crear una pieza
+                    utilizando una pluma 3D.
                 </p>
 
                 <div
-                    class="game-options"
                     id="gameOptions5"
+                    class="game-options"
                 ></div>
 
                 <div
-                    class="game-result"
                     id="gameResult5"
+                    class="game-result"
                 ></div>
 
             </div>
 
 
+            <!-- GAME 6 -->
+            <div id="game6" class="minigame">
 
-            <!-- ==============================================
-                 MINIJUEGO 6
-            =============================================== -->
-
-            <div
-                class="minigame"
-                id="game6"
-            >
-
-                <h3>
-                    🧱 Reto 6: LEGO
-                </h3>
+                <h3>🧱 Reto 6 · LEGO Robotics</h3>
 
                 <p class="minigame-description">
                     Ordena los pasos para construir y programar
@@ -1022,143 +699,94 @@
                 </p>
 
                 <div
-                    class="game-options"
                     id="gameOptions6"
+                    class="game-options"
                 ></div>
 
                 <div
-                    class="game-result"
                     id="gameResult6"
+                    class="game-result"
                 ></div>
 
             </div>
 
 
+            <!-- GAME 7 -->
+            <div id="game7" class="minigame">
 
-            <!-- ==============================================
-                 MINIJUEGO 7
-            =============================================== -->
-
-            <div
-                class="minigame"
-                id="game7"
-            >
-
-                <h3>
-                    🎮 Reto 7: Roblox
-                </h3>
+                <h3>🎮 Reto 7 · Roblox Studio</h3>
 
                 <p class="minigame-description">
-                    Ordena las acciones necesarias para
-                    programar un comportamiento sencillo.
+                    Ordena los pasos básicos para crear
+                    una experiencia sencilla en Roblox Studio.
                 </p>
 
                 <div
-                    class="game-options"
                     id="gameOptions7"
+                    class="game-options"
                 ></div>
 
                 <div
-                    class="game-result"
                     id="gameResult7"
+                    class="game-result"
                 ></div>
 
             </div>
 
 
+            <!-- GAME 8 -->
+            <div id="game8" class="minigame">
 
-            <!-- ==============================================
-                 MINIJUEGO 8
-            =============================================== -->
-
-            <div
-                class="minigame"
-                id="game8"
-            >
-
-                <h3>
-                    ⚡ Reto 8: Electrónica
-                </h3>
+                <h3>⚡ Reto 8 · Electrónica</h3>
 
                 <p class="minigame-description">
-                    Selecciona los elementos necesarios para
-                    completar correctamente un circuito.
+                    Ordena los pasos para conectar y probar
+                    un circuito electrónico.
                 </p>
 
                 <div
-                    class="game-options"
                     id="gameOptions8"
+                    class="game-options"
                 ></div>
 
                 <div
-                    class="game-result"
                     id="gameResult8"
+                    class="game-result"
                 ></div>
 
             </div>
 
-        </div>
 
-
-
-        <!-- =====================================================
-             BOTÓN FINALIZAR
-        ====================================================== -->
-
-        <div
-            class="card center"
-            id="finishContainer"
-        >
-
-            <h2>
-                ¿Terminaste?
-            </h2>
-
-            <p style="margin-top:10px;">
-                Revisa tus respuestas antes de finalizar.
-            </p>
-
-            <div class="actions">
+            <div
+                id="finishContainer"
+                style="text-align:center;margin-top:30px;"
+            >
 
                 <button
                     id="finishExam"
                     class="btn btn-success"
-                    type="button"
                 >
-                    ✅ Finalizar diagnóstico
+                    🏆 TERMINAR DIAGNÓSTICO
                 </button>
 
             </div>
 
         </div>
 
-
     </section>
 
 
-
-    <!-- =========================================================
-         RESULTADOS
-    ========================================================== -->
-
+    <!-- RESULTADOS -->
     <section
         id="results"
         class="card result-card hidden"
     >
 
-        <h1>
-            🎉 Diagnóstico terminado
-        </h1>
+        <h1>🎉 Diagnóstico terminado</h1>
 
         <p>
             Estos son tus resultados.
         </p>
-
-
-
-        <!-- ==============================================
-             CALIFICACIÓN
-        =============================================== -->
 
         <div class="score-circle">
 
@@ -1166,608 +794,415 @@
                 id="scoreNumber"
                 class="score-number"
             >
-                0
+                0%
             </div>
 
             <div class="score-label">
-                puntos
+                resultado
             </div>
 
         </div>
 
 
+        <h2 id="resultMessage">
+            ¡Buen trabajo!
+        </h2>
 
-        <!-- ==============================================
-             MENSAJE
-        =============================================== -->
-
-        <div
-            id="resultMessage"
-            style="
-                max-width:700px;
-                margin:auto;
-                font-size:18px;
-                line-height:1.7;
-            "
-        >
-            Analizando tus resultados...
-        </div>
-
-
-
-        <!-- ==============================================
-             RESULTADOS POR ÁREA
-        =============================================== -->
 
         <div
             id="areas"
             class="areas"
-        >
+        ></div>
 
-            <!-- JavaScript generará aquí las áreas -->
-
-        </div>
-
-
-
-        <!-- ==============================================
-             ESTADO DE GUARDADO
-        =============================================== -->
 
         <div
             id="saveStatus"
             class="save-status"
         >
-
-            💾 Guardando tu resultado...
-
+            ✅ Tu diagnóstico terminó correctamente.
         </div>
 
-
-
-        <!-- ==============================================
-             ACCIONES
-        =============================================== -->
 
         <div class="actions">
 
             <button
                 id="retrySave"
-                class="btn btn-secondary hidden"
-                type="button"
+                class="btn btn-secondary"
             >
-                🔄 Intentar guardar nuevamente
+                🔄 REPETIR DIAGNÓSTICO
             </button>
-
 
             <button
                 id="backCampus"
                 class="btn"
-                type="button"
             >
-                🏠 Volver al campus
+                🏠 VOLVER
             </button>
 
         </div>
 
     </section>
 
-
 </div>
 
 
-
-<!-- =========================================================
-     JAVASCRIPT
-     
-     POR AHORA NO LO PEGUES AQUÍ.
-     
-     En el siguiente paso vamos a colocar el JavaScript
-     completo que hará:
-     
-     - Login automático mediante Supabase
-     - Identificación del alumno
-     - Carga de la actividad
-     - Carga de preguntas
-     - Minijuegos
-     - Calificación
-     - Resultados
-     - Guardado en actividad_alumnos
-     - Manejo de errores
-========================================================== -->
-
 <script>
 
-   <script>
-/* ============================================================
-   DIAGNÓSTICO CITZ - JAVASCRIPT COMPLETO
-   ============================================================ */
+/* =========================================================
+   CITZ · ROBOT LAB
+   DIAGNÓSTICO INDEPENDIENTE
+   SIN SUPABASE
+   SIN ACTIVIDADES
+   SIN PERFILES
+   ========================================================= */
 
 
-/* ============================================================
-   1. CONFIGURACIÓN SUPABASE
-   ============================================================ */
-
-const SUPABASE_URL =
-    "https://bcfknbpkduiwgqymxkns.supabase.co";
-
-const SUPABASE_KEY =
-    "sb_publishable_END5KZ8gA4e9YDpicG-aLw_aRaIzo7E";
-
-const supabaseClient =
-    supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
-
-
-/* ============================================================
-   2. VARIABLES PRINCIPALES
-   ============================================================ */
-
-const parametros =
-    new URLSearchParams(
-        window.location.search
-    );
-
-const actividadId =
-    parametros.get("actividad");
-
-let alumnoActual = null;
-let actividadActual = null;
-let actividadAlumnoActual = null;
-
-let respuestas = {};
-
-let preguntasRespondidas = 0;
-
-let examenIniciado = false;
-
-let examenFinalizado = false;
-
-let resultadoGuardado = false;
-
-let puntuacionPreguntas = 0;
-
-let puntuacionMinijuegos = 0;
-
-let resultadoFinal = null;
-
-
-/* ============================================================
-   3. PREGUNTAS DEL DIAGNÓSTICO
-   ============================================================ */
+/* =========================================================
+   PREGUNTAS
+   ========================================================= */
 
 const preguntas = [
 
     {
-        id: 1,
         area: "Secuencias y lógica",
-        pregunta:
-            "Si un robot debe avanzar y después detenerse, ¿qué acción debe realizar primero?",
+        pregunta: "¿Qué debe hacer primero un robot antes de ejecutar una tarea?",
         opciones: [
-            "Detenerse",
-            "Avanzar",
-            "Apagarse",
-            "Girar"
+            "Recibir o tener definido el programa",
+            "Apagar sus motores",
+            "Desconectar la batería",
+            "Eliminar sus sensores"
         ],
-        correcta: 1
+        correcta: 0
     },
 
     {
-        id: 2,
         area: "Secuencias y lógica",
-        pregunta:
-            "¿Qué es una secuencia?",
+        pregunta: "Si un robot debe avanzar 3 segundos y después girar, ¿qué concepto estás utilizando?",
         opciones: [
-            "Una serie de acciones ordenadas",
-            "Un sensor",
-            "Una pieza del robot",
+            "Una secuencia",
+            "Una fotografía",
+            "Un archivo de texto",
+            "Un componente electrónico"
+        ],
+        correcta: 0
+    },
+
+    {
+        area: "Secuencias y lógica",
+        pregunta: "¿Qué permite tomar decisiones diferentes dependiendo de una condición?",
+        opciones: [
+            "Una estructura condicional",
+            "Un cable USB",
+            "Un motor",
             "Una batería"
         ],
         correcta: 0
     },
 
     {
-        id: 3,
         area: "Secuencias y lógica",
-        pregunta:
-            "Un robot tiene que repetir la misma acción varias veces. ¿Qué concepto puede utilizar?",
+        pregunta: "Si algo debe repetirse varias veces en un programa, ¿qué puedes utilizar?",
         opciones: [
-            "Bucle o repetición",
-            "Pantalla",
-            "Cable USB",
-            "Altavoz"
-        ],
-        correcta: 0
-    },
-
-    {
-        id: 4,
-        area: "Secuencias y lógica",
-        pregunta:
-            "Si una instrucción depende de que ocurra algo, ¿qué concepto se está utilizando?",
-        opciones: [
-            "Condición",
-            "Batería",
-            "Motor",
-            "Carcasa"
+            "Un ciclo",
+            "Una imagen",
+            "Un teclado",
+            "Una pantalla"
         ],
         correcta: 0
     },
 
 
-    /* --------------------------------------------------------
-       PROGRAMACIÓN
-    -------------------------------------------------------- */
-
     {
-        id: 5,
         area: "Programación",
-        pregunta:
-            "¿Qué es un algoritmo?",
+        pregunta: "¿Qué es una variable?",
         opciones: [
-            "Una serie ordenada de pasos para resolver un problema",
+            "Un espacio donde se almacena información",
             "Un tipo de motor",
             "Una batería",
-            "Una pieza electrónica"
+            "Un sensor"
         ],
         correcta: 0
     },
 
     {
-        id: 6,
         area: "Programación",
-        pregunta:
-            "¿Qué sucede cuando una instrucción se encuentra dentro de un ciclo?",
+        pregunta: "¿Qué hace una condición IF?",
         opciones: [
-            "Puede ejecutarse varias veces",
-            "Se elimina",
-            "Apaga la computadora",
-            "Se convierte en un sensor"
+            "Permite tomar una decisión",
+            "Apaga siempre el programa",
+            "Construye una pieza",
+            "Conecta un motor"
         ],
         correcta: 0
     },
 
     {
-        id: 7,
         area: "Programación",
-        pregunta:
-            "¿Cuál de estos es un lenguaje de programación?",
+        pregunta: "¿Qué es un algoritmo?",
         opciones: [
-            "Python",
-            "HDMI",
-            "USB",
-            "Bluetooth"
+            "Una serie ordenada de pasos para resolver un problema",
+            "Una pieza mecánica",
+            "Una batería",
+            "Una pantalla"
         ],
         correcta: 0
     },
 
 
-    /* --------------------------------------------------------
-       MECANOGRAFÍA
-    -------------------------------------------------------- */
-
     {
-        id: 8,
         area: "Mecanografía",
-        pregunta:
-            "¿Qué ayuda principalmente a escribir más rápido en una computadora?",
+        pregunta: "¿Qué tecla se utiliza normalmente para iniciar un nuevo renglón?",
         opciones: [
-            "Practicar la posición correcta de los dedos",
-            "Presionar todas las teclas al mismo tiempo",
-            "Utilizar solamente el mouse",
-            "Apagar el teclado"
+            "Enter",
+            "Shift",
+            "Ctrl",
+            "Alt"
         ],
         correcta: 0
     },
 
 
-    /* --------------------------------------------------------
-       SCRATCH
-    -------------------------------------------------------- */
-
     {
-        id: 9,
         area: "Scratch",
-        pregunta:
-            "¿Para qué sirve Scratch?",
+        pregunta: "¿Qué es Scratch?",
         opciones: [
-            "Para programar mediante bloques",
-            "Para soldar componentes",
-            "Para imprimir objetos 3D",
-            "Para medir temperatura"
+            "Un lenguaje y entorno de programación visual",
+            "Un sistema operativo",
+            "Un robot físico",
+            "Un editor de fotografías"
         ],
         correcta: 0
     },
 
     {
-        id: 10,
         area: "Scratch",
-        pregunta:
-            "¿Qué bloque permite que un personaje se mueva?",
+        pregunta: "¿Qué ocurre cuando utilizas un bloque de repetición?",
         opciones: [
-            "Mover 10 pasos",
-            "Esperar 1 segundo",
-            "Decir Hola",
-            "Detener todos"
+            "Las instrucciones se ejecutan varias veces",
+            "El personaje desaparece",
+            "Se apaga la computadora",
+            "Se elimina el proyecto"
         ],
         correcta: 0
     },
 
     {
-        id: 11,
         area: "Scratch",
-        pregunta:
-            "¿Qué bloque puede hacer que un personaje hable?",
+        pregunta: "¿Qué es un sprite?",
         opciones: [
-            "Decir",
-            "Mover",
-            "Girar",
-            "Repetir"
+            "Un personaje u objeto dentro del proyecto",
+            "Una batería",
+            "Un cable",
+            "Una impresora"
         ],
         correcta: 0
     },
 
 
-    /* --------------------------------------------------------
-       DRONES
-    -------------------------------------------------------- */
-
     {
-        id: 12,
         area: "Drones",
-        pregunta:
-            "¿Qué permite controlar principalmente el movimiento de un dron?",
+        pregunta: "¿Qué permite controlar la altura de un dron?",
         opciones: [
-            "Sus motores y sistema de control",
-            "El color de sus hélices",
-            "La carcasa",
-            "La pantalla"
+            "La potencia de sus motores",
+            "El color del dron",
+            "El tamaño de la pantalla",
+            "El teclado"
         ],
         correcta: 0
     },
 
     {
-        id: 13,
         area: "Drones",
-        pregunta:
-            "¿Qué sucede cuando los motores de un dron generan suficiente fuerza hacia arriba?",
+        pregunta: "¿Qué es importante revisar antes de volar un dron?",
         opciones: [
-            "El dron puede elevarse",
-            "El dron se convierte en robot terrestre",
-            "El dron apaga sus motores",
-            "El dron deja de recibir energía"
+            "Batería, hélices y zona de vuelo",
+            "El fondo de pantalla",
+            "El teclado",
+            "El volumen de la computadora"
         ],
         correcta: 0
     },
 
     {
-        id: 14,
         area: "Drones",
-        pregunta:
-            "¿Qué es importante hacer antes de volar un dron?",
+        pregunta: "¿Para qué sirven las hélices?",
         opciones: [
-            "Revisar el equipo y el área de vuelo",
-            "Quitar todas las hélices",
-            "Desconectar la batería",
-            "Cerrar los motores"
-        ],
-        correcta: 0
-    },
-
-
-    /* --------------------------------------------------------
-       PLUMA 3D
-    -------------------------------------------------------- */
-
-    {
-        id: 15,
-        area: "Pluma 3D",
-        pregunta:
-            "¿Para qué sirve una pluma 3D?",
-        opciones: [
-            "Para crear formas utilizando filamento plástico",
-            "Para controlar drones",
-            "Para programar robots",
-            "Para medir distancia"
-        ],
-        correcta: 0
-    },
-
-    {
-        id: 16,
-        area: "Pluma 3D",
-        pregunta:
-            "¿Qué material utiliza normalmente una pluma 3D?",
-        opciones: [
-            "Filamento plástico",
-            "Agua",
-            "Papel",
-            "Cable de cobre"
-        ],
-        correcta: 0
-    },
-
-    {
-        id: 17,
-        area: "Pluma 3D",
-        pregunta:
-            "¿Qué ocurre con el filamento dentro de una pluma 3D?",
-        opciones: [
-            "Se calienta y sale por la boquilla",
-            "Se convierte en electricidad",
-            "Se vuelve líquido frío",
-            "Se transforma en sonido"
-        ],
-        correcta: 0
-    },
-
-    {
-        id: 18,
-        area: "Pluma 3D",
-        pregunta:
-            "¿Qué precaución es importante al utilizar una pluma 3D?",
-        opciones: [
-            "Evitar tocar directamente la boquilla caliente",
-            "Sumergirla en agua",
-            "Tocar la boquilla constantemente",
-            "Usarla sin supervisión"
-        ],
-        correcta: 0
-    },
-
-
-    /* --------------------------------------------------------
-       LEGO
-    -------------------------------------------------------- */
-
-    {
-        id: 19,
-        area: "LEGO",
-        pregunta:
-            "¿Qué permite hacer un kit LEGO de robótica?",
-        opciones: [
-            "Construir y programar robots",
-            "Solamente construir casas",
-            "Crear documentos",
-            "Editar fotografías"
-        ],
-        correcta: 0
-    },
-
-    {
-        id: 20,
-        area: "LEGO",
-        pregunta:
-            "¿Para qué sirven los sensores de un robot?",
-        opciones: [
-            "Para obtener información del entorno",
-            "Para decorar el robot",
-            "Para aumentar su peso",
-            "Para almacenar piezas"
-        ],
-        correcta: 0
-    },
-
-    {
-        id: 21,
-        area: "LEGO",
-        pregunta:
-            "¿Qué componente puede hacer que un robot se mueva?",
-        opciones: [
-            "Motor",
-            "Sensor de color",
-            "Cable",
-            "Estructura"
-        ],
-        correcta: 0
-    },
-
-
-    /* --------------------------------------------------------
-       ROBLOX
-    -------------------------------------------------------- */
-
-    {
-        id: 22,
-        area: "Roblox",
-        pregunta:
-            "¿Para qué sirve Roblox Studio?",
-        opciones: [
-            "Para crear experiencias y juegos en Roblox",
-            "Para reparar motores",
-            "Para imprimir piezas",
-            "Para medir voltaje"
-        ],
-        correcta: 0
-    },
-
-    {
-        id: 23,
-        area: "Roblox",
-        pregunta:
-            "¿Qué lenguaje se utiliza principalmente para programar en Roblox Studio?",
-        opciones: [
-            "Luau",
-            "HTML",
-            "SQL",
-            "Arduino C++"
-        ],
-        correcta: 0
-    },
-
-    {
-        id: 24,
-        area: "Roblox",
-        pregunta:
-            "¿Qué puede hacer un script dentro de un juego?",
-        opciones: [
-            "Controlar comportamientos y acciones",
-            "Aumentar físicamente la memoria RAM",
-            "Cambiar el teclado",
+            "Generar la fuerza necesaria para volar",
+            "Guardar fotografías",
+            "Programar aplicaciones",
             "Cargar la batería"
         ],
         correcta: 0
     },
 
 
-    /* --------------------------------------------------------
-       ELECTRÓNICA
-    -------------------------------------------------------- */
-
     {
-        id: 25,
-        area: "Electrónica",
-        pregunta:
-            "¿Qué componente proporciona energía a un circuito?",
+        area: "Pluma 3D",
+        pregunta: "¿Qué material utiliza normalmente una pluma 3D?",
         opciones: [
-            "Batería",
-            "LED",
-            "Sensor",
-            "Resistencia"
+            "Filamento plástico",
+            "Agua",
+            "Papel",
+            "Arena"
         ],
         correcta: 0
     },
 
     {
-        id: 26,
-        area: "Electrónica",
-        pregunta:
-            "¿Para qué sirve una resistencia?",
+        area: "Pluma 3D",
+        pregunta: "¿Qué ocurre con el filamento dentro de la pluma 3D?",
         opciones: [
-            "Para limitar la corriente eléctrica",
-            "Para producir sonido",
-            "Para medir distancia",
-            "Para mover un motor"
+            "Se calienta y sale por la boquilla",
+            "Se convierte en agua",
+            "Se congela",
+            "Se vuelve electricidad"
         ],
         correcta: 0
     },
 
     {
-        id: 27,
+        area: "Pluma 3D",
+        pregunta: "¿Para qué sirve una plantilla al trabajar con una pluma 3D?",
+        opciones: [
+            "Ayuda a mantener la forma del diseño",
+            "Aumenta la batería",
+            "Programa el robot",
+            "Conecta el USB"
+        ],
+        correcta: 0
+    },
+
+    {
+        area: "Pluma 3D",
+        pregunta: "¿Qué precaución es importante al utilizar una pluma 3D?",
+        opciones: [
+            "Evitar tocar la boquilla caliente",
+            "Mojar el filamento",
+            "Desconectar el motor",
+            "Cubrir la computadora"
+        ],
+        correcta: 0
+    },
+
+
+    {
+        area: "LEGO",
+        pregunta: "¿Qué puede hacer un sensor en un robot LEGO?",
+        opciones: [
+            "Detectar información del entorno",
+            "Servir como batería",
+            "Reemplazar todas las piezas",
+            "Crear electricidad por sí solo"
+        ],
+        correcta: 0
+    },
+
+    {
+        area: "LEGO",
+        pregunta: "¿Para qué sirven los motores?",
+        opciones: [
+            "Generar movimiento",
+            "Guardar programas",
+            "Mostrar imágenes",
+            "Medir temperatura solamente"
+        ],
+        correcta: 0
+    },
+
+    {
+        area: "LEGO",
+        pregunta: "¿Qué combina normalmente la robótica educativa?",
+        opciones: [
+            "Construcción, programación y resolución de problemas",
+            "Únicamente dibujo",
+            "Únicamente música",
+            "Únicamente escritura"
+        ],
+        correcta: 0
+    },
+
+
+    {
+        area: "Roblox",
+        pregunta: "¿Para qué sirve Roblox Studio?",
+        opciones: [
+            "Para crear experiencias y juegos en Roblox",
+            "Para reparar computadoras",
+            "Para imprimir documentos",
+            "Para editar fotografías únicamente"
+        ],
+        correcta: 0
+    },
+
+    {
+        area: "Roblox",
+        pregunta: "¿Qué lenguaje se utiliza principalmente para programar en Roblox Studio?",
+        opciones: [
+            "Luau",
+            "HTML",
+            "SQL",
+            "CSS"
+        ],
+        correcta: 0
+    },
+
+    {
+        area: "Roblox",
+        pregunta: "¿Qué es un objeto dentro de Roblox Studio?",
+        opciones: [
+            "Un elemento que puede formar parte del juego",
+            "Una batería física",
+            "Un sensor Arduino",
+            "Una impresora"
+        ],
+        correcta: 0
+    },
+
+
+    {
         area: "Electrónica",
-        pregunta:
-            "¿Qué componente puede detectar la distancia hasta un objeto?",
+        pregunta: "¿Qué componente puede detectar distancia utilizando ondas de sonido?",
         opciones: [
             "Sensor ultrasónico",
-            "LED",
             "Motor",
+            "LED",
             "Batería"
         ],
         correcta: 0
     },
 
     {
-        id: 28,
         area: "Electrónica",
-        pregunta:
-            "¿Qué placa se utiliza frecuentemente para realizar proyectos de robótica educativa?",
+        pregunta: "¿Para qué sirve una resistencia?",
+        opciones: [
+            "Limitar la corriente eléctrica",
+            "Crear una imagen",
+            "Mover un robot por sí sola",
+            "Guardar programas"
+        ],
+        correcta: 0
+    },
+
+    {
+        area: "Electrónica",
+        pregunta: "¿Qué componente puede emitir luz?",
+        opciones: [
+            "LED",
+            "Sensor ultrasónico",
+            "Motor",
+            "Interruptor"
+        ],
+        correcta: 0
+    },
+
+    {
+        area: "Electrónica",
+        pregunta: "¿Qué plataforma es muy utilizada para aprender electrónica y programación mediante microcontroladores?",
         opciones: [
             "Arduino",
-            "HDMI",
-            "Router",
-            "Monitor"
+            "Photoshop",
+            "Word",
+            "PowerPoint"
         ],
         correcta: 0
     }
@@ -1775,1110 +1210,638 @@ const preguntas = [
 ];
 
 
-/* ============================================================
-   4. MINIJUEGOS
-   ============================================================
-
-   IMPORTANTE:
-
-   Los minijuegos ahora son MUY claros.
-
-   El alumno ve directamente las opciones.
-   Primero selecciona una opción, después otra, etc.
-
-   No hay objetos invisibles ni elementos que tengan que
-   descubrirse en la pantalla.
-   ============================================================ */
+/* =========================================================
+   MINIJUEGOS
+   ========================================================= */
 
 const minijuegos = [
 
     {
-        id: 1,
-        titulo: "Movimiento del robot",
+        titulo: "Movimiento de un robot",
 
         opciones: [
+            "Detectar el obstáculo",
             "Avanzar",
-            "Llegar a la estrella",
-            "Detenerse"
+            "Detener los motores",
+            "Cambiar de dirección"
         ],
 
         correcta: [
             "Avanzar",
-            "Llegar a la estrella",
-            "Detenerse"
+            "Detectar el obstáculo",
+            "Detener los motores",
+            "Cambiar de dirección"
         ]
     },
 
     {
-        id: 2,
-        titulo: "Orden de programación",
+        titulo: "Programación",
 
         opciones: [
-            "Iniciar programa",
-            "Ejecutar instrucciones",
-            "Finalizar programa"
+            "Ejecutar el programa",
+            "Diseñar el algoritmo",
+            "Probar el programa",
+            "Detectar y corregir errores"
         ],
 
         correcta: [
-            "Iniciar programa",
-            "Ejecutar instrucciones",
-            "Finalizar programa"
+            "Diseñar el algoritmo",
+            "Ejecutar el programa",
+            "Probar el programa",
+            "Detectar y corregir errores"
         ]
     },
 
     {
-        id: 3,
         titulo: "Scratch",
 
         opciones: [
-            "Al presionar bandera verde",
-            "Mover 10 pasos",
-            "Decir Hola"
+            "Programar las acciones",
+            "Elegir un personaje",
+            "Probar el proyecto",
+            "Agregar un escenario"
         ],
 
         correcta: [
-            "Al presionar bandera verde",
-            "Mover 10 pasos",
-            "Decir Hola"
+            "Elegir un personaje",
+            "Agregar un escenario",
+            "Programar las acciones",
+            "Probar el proyecto"
         ]
     },
 
     {
-        id: 4,
-        titulo: "Movimiento de un dron",
+        titulo: "Drones",
 
         opciones: [
-            "Encender motores",
-            "Elevarse",
-            "Avanzar"
+            "Despegar",
+            "Revisar batería y hélices",
+            "Aterrizar",
+            "Realizar el vuelo"
         ],
 
         correcta: [
-            "Encender motores",
-            "Elevarse",
-            "Avanzar"
+            "Revisar batería y hélices",
+            "Despegar",
+            "Realizar el vuelo",
+            "Aterrizar"
         ]
     },
 
     {
-        id: 5,
         titulo: "Pluma 3D",
 
         opciones: [
-            "Encender la pluma",
-            "Esperar a que caliente",
-            "Introducir filamento"
+            "Dibujar la pieza",
+            "Seleccionar el diseño",
+            "Calentar la pluma",
+            "Dejar enfriar la pieza"
         ],
 
         correcta: [
-            "Encender la pluma",
-            "Esperar a que caliente",
-            "Introducir filamento"
+            "Seleccionar el diseño",
+            "Calentar la pluma",
+            "Dibujar la pieza",
+            "Dejar enfriar la pieza"
         ]
     },
 
     {
-        id: 6,
-        titulo: "LEGO",
+        titulo: "LEGO Robotics",
 
         opciones: [
+            "Programar",
             "Construir el robot",
-            "Conectar sensores y motores",
-            "Programar"
+            "Probar el robot",
+            "Identificar el problema"
         ],
 
         correcta: [
+            "Identificar el problema",
             "Construir el robot",
-            "Conectar sensores y motores",
-            "Programar"
+            "Programar",
+            "Probar el robot"
         ]
     },
 
     {
-        id: 7,
-        titulo: "Roblox",
+        titulo: "Roblox Studio",
 
         opciones: [
-            "Crear el objeto",
-            "Agregar el script",
-            "Probar el juego"
+            "Probar el juego",
+            "Diseñar el escenario",
+            "Programar las mecánicas",
+            "Publicar el proyecto"
         ],
 
         correcta: [
-            "Crear el objeto",
-            "Agregar el script",
-            "Probar el juego"
+            "Diseñar el escenario",
+            "Programar las mecánicas",
+            "Probar el juego",
+            "Publicar el proyecto"
         ]
     },
 
     {
-        id: 8,
-        titulo: "Circuito electrónico",
+        titulo: "Electrónica",
 
         opciones: [
-            "Conectar la batería",
-            "Conectar la resistencia",
-            "Conectar el LED"
+            "Conectar el circuito",
+            "Identificar los componentes",
+            "Probar el circuito",
+            "Corregir conexiones"
         ],
 
         correcta: [
-            "Conectar la batería",
-            "Conectar la resistencia",
-            "Conectar el LED"
+            "Identificar los componentes",
+            "Conectar el circuito",
+            "Probar el circuito",
+            "Corregir conexiones"
         ]
     }
 
 ];
 
 
-/* ============================================================
-   5. ELEMENTOS HTML
-   ============================================================ */
+/* =========================================================
+   VARIABLES
+   ========================================================= */
 
-const $ = id =>
-    document.getElementById(id);
+let respuestas = [];
 
-const loading =
-    $("loading");
+let resultadosMinijuegos = [];
 
-const errorScreen =
-    $("errorScreen");
+let diagnosticoTerminado = false;
 
-const errorMessage =
-    $("errorMessage");
 
-const errorDetail =
-    $("errorDetail");
+/* =========================================================
+   ELEMENTOS
+   ========================================================= */
 
-const intro =
-    $("intro");
+const intro = document.getElementById("intro");
 
-const exam =
-    $("exam");
+const exam = document.getElementById("exam");
 
-const results =
-    $("results");
+const results = document.getElementById("results");
 
 const questionsContainer =
-    $("questions");
-
-const minigamesContainer =
-    $("minigames");
-
-const activityTitle =
-    $("activityTitle");
-
-const activityDescription =
-    $("activityDescription");
-
-const studentBadge =
-    $("studentBadge");
-
-const studentNameDisplay =
-    $("studentNameDisplay");
-
-const studentGradeDisplay =
-    $("studentGradeDisplay");
+    document.getElementById("questions");
 
 const progressText =
-    $("progressText");
+    document.getElementById("progressText");
 
 const progressBar =
-    $("progressBar");
+    document.getElementById("progressBar");
+
+const startExam =
+    document.getElementById("startExam");
+
+const finishExam =
+    document.getElementById("finishExam");
 
 const scoreNumber =
-    $("scoreNumber");
+    document.getElementById("scoreNumber");
 
 const resultMessage =
-    $("resultMessage");
+    document.getElementById("resultMessage");
 
 const areasContainer =
-    $("areas");
-
-const saveStatus =
-    $("saveStatus");
+    document.getElementById("areas");
 
 const retrySave =
-    $("retrySave");
+    document.getElementById("retrySave");
 
+const backCampus =
+    document.getElementById("backCampus");
 
-/* ============================================================
-   6. MOSTRAR / OCULTAR PANTALLAS
-   ============================================================ */
 
-function mostrarSolo(elemento) {
-
-    [
-        loading,
-        errorScreen,
-        intro,
-        exam,
-        results
-    ].forEach(elementoActual => {
-
-        if (elementoActual) {
-            elementoActual.classList.add("hidden");
-        }
-
-    });
-
-    if (elemento) {
-        elemento.classList.remove("hidden");
-    }
-}
-
-
-/* ============================================================
-   7. MOSTRAR ERROR
-   ============================================================ */
-
-function mostrarError(
-    mensaje,
-    detalle = ""
-) {
-
-    mostrarSolo(errorScreen);
-
-    errorMessage.textContent =
-        mensaje;
-
-    if (detalle) {
-
-        errorDetail.textContent =
-            detalle;
-
-        errorDetail.style.display =
-            "block";
-
-    } else {
-
-        errorDetail.textContent =
-            "";
-
-        errorDetail.style.display =
-            "none";
-    }
-
-    console.error(
-        "DIAGNÓSTICO ERROR:",
-        mensaje,
-        detalle
-    );
-}
-
-
-/* ============================================================
-   8. OBTENER SESIÓN
-   ============================================================ */
-
-async function obtenerSesion() {
-
-    const {
-        data,
-        error
-    } =
-        await supabaseClient.auth.getSession();
-
-    if (error) {
-
-        throw new Error(
-            "Error al obtener la sesión: " +
-            error.message
-        );
-    }
-
-    const session =
-        data?.session;
-
-    if (!session) {
-
-        throw new Error(
-            "No existe una sesión activa."
-        );
-    }
-
-    console.log(
-        "USUARIO AUTENTICADO:",
-        session.user
-    );
-
-    console.log(
-        "AUTH USER ID:",
-        session.user.id
-    );
-
-    return session;
-}
-
-
-/* ============================================================
-   9. BUSCAR ALUMNO
-   ============================================================ */
-
-async function cargarAlumnoActual() {
-
-    const session =
-        await obtenerSesion();
-
-    const authUserId =
-        session.user.id;
-
-    console.log(
-        "Buscando alumno con auth_id:",
-        authUserId
-    );
-
-
-    const {
-        data: alumno,
-        error: alumnoError
-    } =
-        await supabaseClient
-            .from("alumnos")
-            .select(`
-                id,
-                nombre,
-                usuario,
-                grado,
-                rol,
-                auth_id
-            `)
-            .eq(
-                "auth_id",
-                authUserId
-            )
-            .maybeSingle();
-
-
-    console.log(
-        "RESPUESTA ALUMNOS:",
-        alumno
-    );
-
-    console.log(
-        "ERROR ALUMNOS:",
-        alumnoError
-    );
-
-
-    if (alumnoError) {
-
-        throw new Error(
-            "Supabase no pudo consultar la tabla alumnos.\n\n" +
-            "Código: " +
-            (alumnoError.code || "sin código") +
-            "\n\nMensaje: " +
-            (alumnoError.message || "sin mensaje") +
-            "\n\nDetalles: " +
-            (alumnoError.details || "sin detalles") +
-            "\n\nHint: " +
-            (alumnoError.hint || "sin hint")
-        );
-    }
-
-
-    if (!alumno) {
-
-        throw new Error(
-            "La sesión está activa, pero no existe un alumno " +
-            "en la tabla alumnos cuyo auth_id sea:\n\n" +
-            authUserId
-        );
-    }
-
-
-    alumnoActual =
-        alumno;
-
-
-    console.log(
-        "ALUMNO ENCONTRADO:",
-        alumnoActual
-    );
-
-
-    studentNameDisplay.textContent =
-        alumno.nombre ||
-        "Alumno";
-
-
-    studentGradeDisplay.textContent =
-        alumno.grado
-            ? `Grado: ${alumno.grado}`
-            : "Grado no especificado";
-
-
-    studentBadge.textContent =
-        `${alumno.nombre || "Alumno"} · ${
-            alumno.grado || ""
-        }`;
-
-
-    return alumnoActual;
-}
-
-
-/* ============================================================
-   10. CARGAR ACTIVIDAD
-   ============================================================ */
-
-async function cargarActividad() {
-
-    if (!actividadId) {
-
-        throw new Error(
-            "La página no recibió el ID de la actividad.\n\n" +
-            "Ejemplo:\n" +
-            "diagnostico.html?actividad=15"
-        );
-    }
-
-
-    console.log(
-        "ACTIVIDAD SOLICITADA:",
-        actividadId
-    );
-
-
-    const {
-        data: actividad,
-        error
-    } =
-        await supabaseClient
-            .from("actividades")
-            .select(`
-                id,
-                titulo,
-                descripcion,
-                tipo,
-                enlace,
-                imagen_url,
-                puntos,
-                fecha_limite,
-                activa
-            `)
-            .eq(
-                "id",
-                actividadId
-            )
-            .maybeSingle();
-
-
-    console.log(
-        "ACTIVIDAD:",
-        actividad
-    );
-
-    console.log(
-        "ERROR ACTIVIDAD:",
-        error
-    );
-
-
-    if (error) {
-
-        throw new Error(
-            "No se pudo consultar la actividad.\n\n" +
-            "Código: " +
-            (error.code || "sin código") +
-            "\n\nMensaje: " +
-            (error.message || "sin mensaje") +
-            "\n\nDetalles: " +
-            (error.details || "sin detalles")
-        );
-    }
-
-
-    if (!actividad) {
-
-        throw new Error(
-            "No existe una actividad con el ID " +
-            actividadId
-        );
-    }
-
-
-    actividadActual =
-        actividad;
-
-
-    activityTitle.textContent =
-        actividad.titulo ||
-        "Diagnóstico de Robótica";
-
-
-    activityDescription.textContent =
-        actividad.descripcion ||
-        "Diagnóstico de conocimientos de robótica y tecnología.";
-
-}
-
-
-/* ============================================================
-   11. BUSCAR ASIGNACIÓN DEL ALUMNO
-   ============================================================ */
-
-async function cargarActividadAlumno() {
-
-    if (!alumnoActual) {
-
-        throw new Error(
-            "No tenemos identificado al alumno."
-        );
-    }
-
-
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .from("actividad_alumnos")
-            .select(`
-                id,
-                actividad_id,
-                alumno_id,
-                estado,
-                calificacion,
-                completada_at,
-                resultado
-            `)
-            .eq(
-                "actividad_id",
-                actividadActual.id
-            )
-            .eq(
-                "alumno_id",
-                alumnoActual.id
-            )
-            .maybeSingle();
-
-
-    console.log(
-        "ASIGNACIÓN ACTIVIDAD-ALUMNO:",
-        data
-    );
-
-    console.log(
-        "ERROR ASIGNACIÓN:",
-        error
-    );
-
-
-    if (error) {
-
-        throw new Error(
-            "No se pudo consultar la asignación del alumno.\n\n" +
-            "Código: " +
-            (error.code || "sin código") +
-            "\n\nMensaje: " +
-            (error.message || "sin mensaje") +
-            "\n\nDetalles: " +
-            (error.details || "sin detalles") +
-            "\n\nHint: " +
-            (error.hint || "sin hint")
-        );
-    }
-
-
-    if (!data) {
-
-        throw new Error(
-            "Esta actividad existe, pero no está asignada " +
-            "a este alumno.\n\n" +
-            "Alumno ID: " +
-            alumnoActual.id +
-            "\n" +
-            "Actividad ID: " +
-            actividadActual.id
-        );
-    }
-
-
-    actividadAlumnoActual =
-        data;
-
-
-    return data;
-}
-
-
-/* ============================================================
-   12. CREAR PREGUNTAS
-   ============================================================ */
+/* =========================================================
+   CREAR PREGUNTAS
+   ========================================================= */
 
 function crearPreguntas() {
 
-    questionsContainer.innerHTML =
-        "";
+    questionsContainer.innerHTML = "";
+
+    preguntas.forEach((pregunta, index) => {
+
+        const questionDiv =
+            document.createElement("div");
+
+        questionDiv.className = "question";
+
+        let opcionesHTML = "";
+
+        pregunta.opciones.forEach(
+            (opcion, opcionIndex) => {
+
+                opcionesHTML += `
+                    <div class="option">
+
+                        <input
+                            type="radio"
+                            id="pregunta_${index}_${opcionIndex}"
+                            name="pregunta_${index}"
+                            value="${opcionIndex}"
+                        >
+
+                        <label
+                            for="pregunta_${index}_${opcionIndex}"
+                        >
+                            ${opcion}
+                        </label>
+
+                    </div>
+                `;
+
+            }
+        );
 
 
-    preguntas.forEach(
-        (pregunta, indice) => {
+        questionDiv.innerHTML = `
 
-            const question =
-                document.createElement("div");
+            <div class="question-number">
+                Pregunta ${index + 1}
+            </div>
 
-            question.className =
-                "question";
+            <div class="question-text">
+                ${pregunta.pregunta}
+            </div>
 
+            <div class="options">
+                ${opcionesHTML}
+            </div>
 
-            question.dataset.area =
-                pregunta.area;
-
-
-            const number =
-                document.createElement("div");
-
-            number.className =
-                "question-number";
-
-            number.textContent =
-                `Pregunta ${indice + 1}`;
+        `;
 
 
-            const text =
-                document.createElement("div");
+        questionsContainer.appendChild(questionDiv);
 
-            text.className =
-                "question-text";
-
-            text.textContent =
-                pregunta.pregunta;
+    });
 
 
-            const options =
-                document.createElement("div");
-
-            options.className =
-                "options";
-
-
-            pregunta.opciones.forEach(
-                (opcion, opcionIndex) => {
-
-                    const option =
-                        document.createElement("div");
-
-                    option.className =
-                        "option";
-
-
-                    const input =
-                        document.createElement("input");
-
-                    input.type =
-                        "radio";
-
-                    input.name =
-                        `pregunta_${pregunta.id}`;
-
-                    input.id =
-                        `pregunta_${pregunta.id}_${opcionIndex}`;
-
-                    input.value =
-                        opcionIndex;
-
-
-                    const label =
-                        document.createElement("label");
-
-                    label.htmlFor =
-                        input.id;
-
-                    label.textContent =
-                        opcion;
-
-
-                    input.addEventListener(
-                        "change",
-                        () => {
-
-                            respuestas[
-                                pregunta.id
-                            ] =
-                                opcionIndex;
-
-                            actualizarProgreso();
-
-                        }
-                    );
-
-
-                    option.appendChild(input);
-
-                    option.appendChild(label);
-
-                    options.appendChild(option);
-
-                }
-            );
-
-
-            question.appendChild(number);
-
-            question.appendChild(text);
-
-            question.appendChild(options);
-
-            questionsContainer.appendChild(question);
-
-        }
-    );
+    actualizarProgreso();
 
 }
 
 
-/* ============================================================
-   13. PROGRESO
-   ============================================================ */
-
-function actualizarProgreso() {
-
-    preguntasRespondidas =
-        Object.keys(respuestas).length;
-
-
-    progressText.textContent =
-        `Respondidas: ${preguntasRespondidas} de ${preguntas.length}`;
-
-
-    const porcentaje =
-        (
-            preguntasRespondidas /
-            preguntas.length
-        ) * 100;
-
-
-    progressBar.style.width =
-        porcentaje + "%";
-
-}
-
-
-/* ============================================================
-   14. CREAR MINIJUEGOS
-   ============================================================ */
+/* =========================================================
+   CREAR MINIJUEGOS
+   ========================================================= */
 
 function crearMinijuegos() {
 
-    minijuegos.forEach(
-        juego => {
-
-            const container =
-                $(`gameOptions${juego.id}`);
+    resultadosMinijuegos =
+        new Array(minijuegos.length).fill(false);
 
 
-            if (!container) {
-                return;
-            }
+    minijuegos.forEach((juego, index) => {
 
-
-            container.innerHTML =
-                "";
-
-
-            /*
-                Copiamos y mezclamos las opciones
-                para que no aparezcan siempre
-                en el orden correcto.
-            */
-
-            const opcionesMezcladas =
-                [...juego.opciones]
-                    .sort(
-                        () =>
-                            Math.random() - 0.5
-                    );
-
-
-            opcionesMezcladas.forEach(
-                opcion => {
-
-                    const button =
-                        document.createElement("button");
-
-                    button.type =
-                        "button";
-
-                    button.className =
-                        "game-option";
-
-                    button.textContent =
-                        opcion;
-
-
-                    button.dataset.value =
-                        opcion;
-
-
-                    button.addEventListener(
-                        "click",
-                        () => {
-
-                            seleccionarOpcionJuego(
-                                juego,
-                                button,
-                                container
-                            );
-
-                        }
-                    );
-
-
-                    container.appendChild(
-                        button
-                    );
-
-                }
+        const container =
+            document.getElementById(
+                `gameOptions${index + 1}`
             );
 
-        }
-    );
+        const result =
+            document.getElementById(
+                `gameResult${index + 1}`
+            );
+
+
+        container.innerHTML = "";
+
+        result.innerHTML = "";
+
+        result.classList.remove("show");
+
+
+        /*
+         * Copiamos las opciones y las mezclamos.
+         */
+        const opciones =
+            [...juego.opciones]
+                .sort(() => Math.random() - 0.5);
+
+
+        opciones.forEach((opcion) => {
+
+            const button =
+                document.createElement("button");
+
+            button.type = "button";
+
+            button.className = "game-option";
+
+            button.textContent = opcion;
+
+            button.addEventListener(
+                "click",
+                () => seleccionarOpcionJuego(
+                    index,
+                    opcion,
+                    button
+                )
+            );
+
+            container.appendChild(button);
+
+        });
+
+    });
 
 }
 
 
-/* ============================================================
-   15. SELECCIÓN DE MINIJUEGO
-   ============================================================ */
+/* =========================================================
+   ESTADO DE CADA MINIJUEGO
+   ========================================================= */
 
-const progresoMinijuegos = {};
+const seleccionJuegos =
+    minijuegos.map(() => []);
 
+
+/* =========================================================
+   SELECCIONAR OPCIÓN DE MINIJUEGO
+   ========================================================= */
 
 function seleccionarOpcionJuego(
-    juego,
-    button,
-    container
+    juegoIndex,
+    opcion,
+    button
 ) {
 
-    if (!progresoMinijuegos[juego.id]) {
+    /*
+     * Si ya terminó correctamente,
+     * no permitimos modificarlo.
+     */
+    if (resultadosMinijuegos[juegoIndex]) {
+        return;
+    }
 
-        progresoMinijuegos[juego.id] = [];
 
+    const seleccion =
+        seleccionJuegos[juegoIndex];
+
+
+    /*
+     * Evitar seleccionar dos veces
+     */
+    if (seleccion.includes(opcion)) {
+        return;
+    }
+
+
+    seleccion.push(opcion);
+
+    button.classList.add("selected");
+
+
+    const correctoHastaAhora =
+        seleccion.every(
+            (valor, index) =>
+                valor ===
+                minijuegos[juegoIndex].correcta[index]
+        );
+
+
+    const result =
+        document.getElementById(
+            `gameResult${juegoIndex + 1}`
+        );
+
+
+    /*
+     * Si la secuencia ya es incorrecta
+     */
+    if (!correctoHastaAhora) {
+
+        result.className =
+            "game-result show";
+
+        result.innerHTML =
+            "❌ Ese no es el orden correcto. " +
+            "El reto se reiniciará.";
+
+
+        setTimeout(() => {
+
+            seleccionJuegos[juegoIndex] = [];
+
+            resultadosMinijuegos[juegoIndex] = false;
+
+            crearMinijuegoIndividual(juegoIndex);
+
+            result.classList.remove("show");
+
+        }, 1200);
+
+
+        return;
     }
 
 
     /*
-        Evitar seleccionar dos veces
-        el mismo elemento.
-    */
-
+     * Si completó todo correctamente
+     */
     if (
-        progresoMinijuegos[juego.id]
-            .includes(button.dataset.value)
+        seleccion.length ===
+        minijuegos[juegoIndex].correcta.length
     ) {
 
-        return;
+        resultadosMinijuegos[juegoIndex] = true;
+
+        result.className =
+            "game-result show";
+
+        result.innerHTML =
+            "🎉 ¡Excelente! Reto completado correctamente.";
+
     }
 
-
-    const posicion =
-        progresoMinijuegos[juego.id].length;
+}
 
 
-    const respuestaCorrecta =
-        juego.correcta[posicion];
+/* =========================================================
+   RECREAR UN MINIJUEGO
+   ========================================================= */
 
+function crearMinijuegoIndividual(index) {
 
-    if (
-        button.dataset.value ===
-        respuestaCorrecta
-    ) {
+    const juego = minijuegos[index];
 
-        button.classList.add(
-            "correct"
+    const container =
+        document.getElementById(
+            `gameOptions${index + 1}`
         );
 
+    container.innerHTML = "";
 
-        progresoMinijuegos[juego.id]
-            .push(
-                button.dataset.value
+
+    const opciones =
+        [...juego.opciones]
+            .sort(() => Math.random() - 0.5);
+
+
+    opciones.forEach((opcion) => {
+
+        const button =
+            document.createElement("button");
+
+        button.type = "button";
+
+        button.className = "game-option";
+
+        button.textContent = opcion;
+
+        button.addEventListener(
+            "click",
+            () => seleccionarOpcionJuego(
+                index,
+                opcion,
+                button
+            )
+        );
+
+        container.appendChild(button);
+
+    });
+
+}
+
+
+/* =========================================================
+   ACTUALIZAR PROGRESO
+   ========================================================= */
+
+function actualizarProgreso() {
+
+    let contestadas = 0;
+
+
+    preguntas.forEach((_, index) => {
+
+        const seleccionada =
+            document.querySelector(
+                `input[name="pregunta_${index}"]:checked`
             );
 
-
-        const total =
-            juego.correcta.length;
-
-
-        if (
-            progresoMinijuegos[juego.id]
-                .length === total
-        ) {
-
-            terminarMinijuego(
-                juego.id,
-                true
-            );
-
+        if (seleccionada) {
+            contestadas++;
         }
 
-    } else {
-
-        button.classList.add(
-            "incorrect"
-        );
+    });
 
 
-        /*
-            Mostrar el error durante
-            un momento y permitir
-            continuar.
-        */
+    progressText.textContent =
+        `${contestadas} / ${preguntas.length}`;
 
-        setTimeout(
-            () => {
 
-                button.classList.remove(
-                    "incorrect"
-                );
+    const porcentaje =
+        (contestadas / preguntas.length) * 100;
 
-            },
-            700
-        );
 
-    }
+    progressBar.style.width =
+        `${porcentaje}%`;
 
 }
 
 
-/* ============================================================
-   16. TERMINAR MINIJUEGO
-   ============================================================ */
-
-const minijuegosCompletados =
-    {};
-
-
-function terminarMinijuego(
-    juegoId,
-    correcto
-) {
-
-    if (
-        minijuegosCompletados[juegoId]
-    ) {
-
-        return;
-    }
-
-
-    minijuegosCompletados[juegoId] =
-        correcto;
-
-
-    if (correcto) {
-
-        puntuacionMinijuegos +=
-            1;
-
-    }
-
-
-    const resultado =
-        $(`gameResult${juegoId}`);
-
-
-    if (resultado) {
-
-        resultado.classList.add(
-            "show"
-        );
-
-        resultado.textContent =
-            correcto
-                ? "✅ ¡Correcto! Reto completado."
-                : "❌ Reto incorrecto.";
-
-    }
-
-}
-
-
-/* ============================================================
-   17. CALIFICAR PREGUNTAS
-   ============================================================ */
+/* =========================================================
+   CALIFICAR PREGUNTAS
+   ========================================================= */
 
 function calificarPreguntas() {
 
     let correctas = 0;
 
-
-    preguntas.forEach(
-        pregunta => {
-
-            const respuesta =
-                respuestas[pregunta.id];
+    respuestas = [];
 
 
-            if (
-                Number(respuesta) ===
-                pregunta.correcta
-            ) {
+    preguntas.forEach((pregunta, index) => {
 
-                correctas++;
+        const seleccionada =
+            document.querySelector(
+                `input[name="pregunta_${index}"]:checked`
+            );
 
-            }
 
+        const respuesta =
+            seleccionada
+                ? Number(seleccionada.value)
+                : null;
+
+
+        const correcta =
+            respuesta === pregunta.correcta;
+
+
+        if (correcta) {
+            correctas++;
         }
-    );
 
 
-    puntuacionPreguntas =
-        correctas;
+        respuestas.push({
+
+            pregunta: index + 1,
+
+            respuesta,
+
+            respuestaCorrecta:
+                pregunta.correcta,
+
+            correcta
+
+        });
+
+    });
 
 
     return correctas;
+
 }
 
 
-/* ============================================================
-   18. RESULTADOS POR ÁREA
-   ============================================================ */
+/* =========================================================
+   CALCULAR ÁREAS
+   ========================================================= */
 
 function calcularAreas() {
 
     const areas = {};
 
 
-    preguntas.forEach(
-        pregunta => {
+    preguntas.forEach((pregunta, index) => {
 
-            if (!areas[pregunta.area]) {
+        if (!areas[pregunta.area]) {
 
-                areas[pregunta.area] = {
-                    correctas: 0,
-                    total: 0
-                };
-
-            }
-
-
-            areas[pregunta.area].total++;
-
-
-            if (
-                Number(
-                    respuestas[pregunta.id]
-                ) === pregunta.correcta
-            ) {
-
-                areas[pregunta.area]
-                    .correctas++;
-
-            }
+            areas[pregunta.area] = {
+                total: 0,
+                correctas: 0
+            };
 
         }
-    );
+
+
+        areas[pregunta.area].total++;
+
+
+        if (respuestas[index].correcta) {
+
+            areas[pregunta.area].correctas++;
+
+        }
+
+    });
 
 
     return areas;
+
 }
 
 
-/* ============================================================
-   19. MOSTRAR RESULTADOS
-   ============================================================ */
+/* =========================================================
+   MOSTRAR RESULTADOS
+   ========================================================= */
 
 function mostrarResultados() {
 
@@ -2887,357 +1850,175 @@ function mostrarResultados() {
 
 
     const juegosCorrectos =
-        Object.values(
-            minijuegosCompletados
-        ).filter(Boolean).length;
+        resultadosMinijuegos.filter(Boolean).length;
 
 
-    const total =
-        preguntas.length +
+    const totalPreguntas =
+        preguntas.length;
+
+
+    const totalRetos =
         minijuegos.length;
 
 
-    const puntos =
-        correctas +
-        juegosCorrectos;
+    const totalPuntos =
+        totalPreguntas + totalRetos;
+
+
+    const puntosObtenidos =
+        correctas + juegosCorrectos;
 
 
     const porcentaje =
         Math.round(
-            (puntos / total) * 100
+            (puntosObtenidos / totalPuntos) * 100
         );
 
+
+    scoreNumber.textContent =
+        `${porcentaje}%`;
+
+
+    /*
+     * Mensaje general
+     */
+
+    if (porcentaje >= 90) {
+
+        resultMessage.textContent =
+            "🏆 ¡Excelente dominio de la tecnología!";
+
+    } else if (porcentaje >= 75) {
+
+        resultMessage.textContent =
+            "🚀 ¡Muy buen nivel!";
+
+    } else if (porcentaje >= 60) {
+
+        resultMessage.textContent =
+            "👍 ¡Buen comienzo!";
+
+    } else if (porcentaje >= 40) {
+
+        resultMessage.textContent =
+            "💡 Tienes conocimientos que podemos desarrollar.";
+
+    } else {
+
+        resultMessage.textContent =
+            "🌱 ¡No te preocupes! Aquí venimos a aprender.";
+
+    }
+
+
+    /*
+     * Áreas
+     */
 
     const areas =
         calcularAreas();
 
 
-    resultadoFinal = {
-
-        puntos: puntos,
-
-        total: total,
-
-        porcentaje: porcentaje,
-
-        preguntas_correctas:
-            correctas,
-
-        minijuegos_correctos:
-            juegosCorrectos,
-
-        areas: areas,
-
-        respuestas: respuestas,
-
-        minijuegos:
-            minijuegosCompletados,
-
-        fecha:
-            new Date().toISOString()
-
-    };
-
-
-    scoreNumber.textContent =
-        porcentaje + "%";
-
-
-    if (porcentaje >= 90) {
-
-        resultMessage.textContent =
-            "🌟 Excelente trabajo. Tienes una base muy sólida para continuar aprendiendo robótica.";
-
-    } else if (porcentaje >= 75) {
-
-        resultMessage.textContent =
-            "👏 Muy bien. Tienes buenos conocimientos y algunas áreas que podemos seguir fortaleciendo.";
-
-    } else if (porcentaje >= 60) {
-
-        resultMessage.textContent =
-            "👍 Buen comienzo. Este diagnóstico nos ayudará a identificar los temas que conviene reforzar.";
-
-    } else {
-
-        resultMessage.textContent =
-            "🤖 No te preocupes. El diagnóstico sirve precisamente para descubrir qué necesitamos aprender y practicar.";
-
-    }
-
-
     areasContainer.innerHTML =
-        "";
+        "<h2>📊 Tus áreas</h2>";
 
 
-    Object.entries(areas)
-        .forEach(
-            ([nombre, datos]) => {
+    Object.entries(areas).forEach(
+        ([nombre, datos]) => {
 
-                const porcentajeArea =
-                    Math.round(
-                        (
-                            datos.correctas /
-                            datos.total
-                        ) * 100
-                    );
-
-
-                const div =
-                    document.createElement("div");
-
-                div.className =
-                    "area-result";
-
-
-                div.innerHTML = `
-                    <strong>${nombre}</strong>
-                    <span>
-                        ${datos.correctas} de
-                        ${datos.total}
-                        correctas
-                    </span>
-                    <div style="
-                        margin-top:10px;
-                        height:8px;
-                        background:rgba(255,255,255,.1);
-                        border-radius:10px;
-                        overflow:hidden;
-                    ">
-                        <div style="
-                            width:${porcentajeArea}%;
-                            height:100%;
-                            background:#287cff;
-                        "></div>
-                    </div>
-                    <small style="
-                        display:block;
-                        margin-top:7px;
-                        color:#b8c6db;
-                    ">
-                        ${porcentajeArea}%
-                    </small>
-                `;
-
-
-                areasContainer.appendChild(
-                    div
+            const porcentajeArea =
+                Math.round(
+                    (datos.correctas / datos.total) * 100
                 );
 
-            }
-        );
+
+            const div =
+                document.createElement("div");
+
+            div.className =
+                "area-result";
 
 
-    mostrarSolo(results);
+            div.innerHTML = `
+
+                <strong>
+                    ${nombre}
+                </strong>
+
+                <div style="margin-bottom:8px;">
+                    ${datos.correctas}
+                    de
+                    ${datos.total}
+                    correctas
+                    ·
+                    ${porcentajeArea}%
+                </div>
+
+                <div class="area-bar">
+
+                    <div
+                        class="area-bar-fill"
+                        style="width:${porcentajeArea}%"
+                    ></div>
+
+                </div>
+
+            `;
 
 
-    guardarResultado();
+            areasContainer.appendChild(div);
 
-}
-
-
-/* ============================================================
-   20. GUARDAR RESULTADO EN SUPABASE
-   ============================================================ */
-
-async function guardarResultado() {
-
-    if (
-        resultadoGuardado
-    ) {
-
-        return;
-
-    }
-
-
-    if (
-        !actividadAlumnoActual
-    ) {
-
-        saveStatus.textContent =
-            "❌ No encontramos la asignación de esta actividad.";
-
-        retrySave.classList.remove(
-            "hidden"
-        );
-
-        return;
-
-    }
-
-
-    saveStatus.textContent =
-        "💾 Guardando tu resultado...";
-
-
-    retrySave.classList.add(
-        "hidden"
+        }
     );
 
 
-    const resultadoJSON = {
+    /*
+     * Resultado de minijuegos
+     */
 
-        alumno_id:
-            alumnoActual.id,
-
-        nombre:
-            alumnoActual.nombre,
-
-        grado:
-            alumnoActual.grado,
-
-        actividad_id:
-            actividadActual.id,
-
-        actividad:
-            actividadActual.titulo,
-
-        puntos:
-            resultadoFinal.puntos,
-
-        total:
-            resultadoFinal.total,
-
-        porcentaje:
-            resultadoFinal.porcentaje,
-
-        preguntas_correctas:
-            resultadoFinal.preguntas_correctas,
-
-        minijuegos_correctos:
-            resultadoFinal.minijuegos_correctos,
-
-        areas:
-            resultadoFinal.areas,
-
-        respuestas:
-            resultadoFinal.respuestas,
-
-        minijuegos:
-            resultadoFinal.minijuegos,
-
-        fecha:
-            resultadoFinal.fecha
-    };
+    const juegosDiv =
+        document.createElement("div");
 
 
-    console.log(
-        "RESULTADO A GUARDAR:",
-        resultadoJSON
-    );
+    juegosDiv.className =
+        "area-result";
 
 
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .from("actividad_alumnos")
-            .update({
-
-                estado:
-                    "completada",
-
-                calificacion:
-                    resultadoFinal.porcentaje,
-
-                completada_at:
-                    new Date().toISOString(),
-
-                resultado:
-                    resultadoJSON
-
-            })
-            .eq(
-                "id",
-                actividadAlumnoActual.id
-            )
-            .select()
-            .maybeSingle();
+    juegosDiv.style.marginTop =
+        "15px";
 
 
-    console.log(
-        "RESPUESTA GUARDADO:",
-        data
-    );
+    juegosDiv.innerHTML = `
 
-    console.log(
-        "ERROR GUARDADO:",
-        error
-    );
+        <strong>
+            🎮 Retos interactivos
+        </strong>
 
+        <div>
+            ${juegosCorrectos}
+            de
+            ${totalRetos}
+            retos completados correctamente.
+        </div>
 
-    if (error) {
-
-        saveStatus.innerHTML =
-            "❌ No se pudo guardar el resultado.<br><br>" +
-            "<small>" +
-            "Código: " +
-            (error.code || "sin código") +
-            "<br>" +
-            "Mensaje: " +
-            (error.message || "sin mensaje") +
-            "<br>" +
-            "Detalles: " +
-            (error.details || "sin detalles") +
-            "</small>";
+    `;
 
 
-        retrySave.classList.remove(
-            "hidden"
-        );
+    areasContainer.appendChild(juegosDiv);
 
 
-        console.error(
-            "ERROR COMPLETO AL GUARDAR:",
-            error
-        );
+    /*
+     * Mostrar resultados
+     */
+
+    intro.classList.add("hidden");
+
+    exam.classList.add("hidden");
+
+    results.classList.remove("hidden");
 
 
-        return;
-
-    }
-
-
-    resultadoGuardado =
-        true;
-
-
-    saveStatus.innerHTML =
-        "✅ <strong>Resultado guardado correctamente.</strong><br>" +
-        "Tu diagnóstico quedó registrado en el campus.";
-
-
-    retrySave.classList.add(
-        "hidden"
-    );
-
-}
-
-
-/* ============================================================
-   21. COMENZAR EXAMEN
-   ============================================================ */
-
-function comenzarExamen() {
-
-    examenIniciado =
-        true;
-
-
-    examenFinalizado =
-        false;
-
-
-    crearPreguntas();
-
-    crearMinijuegos();
-
-    actualizarProgreso();
-
-
-    mostrarSolo(exam);
+    diagnosticoTerminado = true;
 
 
     window.scrollTo({
@@ -3248,166 +2029,66 @@ function comenzarExamen() {
 }
 
 
-/* ============================================================
-   22. FINALIZAR EXAMEN
-   ============================================================ */
+/* =========================================================
+   INICIAR DIAGNÓSTICO
+   ========================================================= */
 
-function finalizarExamen() {
+function iniciarDiagnostico() {
 
-    if (
-        examenFinalizado
+    respuestas = [];
+
+    seleccionJuegos.fill(null);
+
+    for (
+        let i = 0;
+        i < minijuegos.length;
+        i++
     ) {
 
-        return;
+        seleccionJuegos[i] = [];
 
     }
 
 
-    const sinResponder =
-        preguntas.length -
-        Object.keys(respuestas).length;
+    resultadosMinijuegos =
+        new Array(minijuegos.length).fill(false);
 
 
-    if (
-        sinResponder > 0
-    ) {
+    crearPreguntas();
 
-        const continuar =
-            confirm(
-                `Todavía tienes ${sinResponder} pregunta(s) sin responder.\n\n` +
-                "¿Quieres finalizar de todos modos?"
-            );
+    crearMinijuegos();
 
 
-        if (!continuar) {
+    intro.classList.add("hidden");
 
-            return;
+    results.classList.add("hidden");
 
-        }
-
-    }
+    exam.classList.remove("hidden");
 
 
-    const juegosSinTerminar =
-        minijuegos.length -
-        Object.keys(
-            minijuegosCompletados
-        ).length;
-
-
-    if (
-        juegosSinTerminar > 0
-    ) {
-
-        const continuar =
-            confirm(
-                `Todavía tienes ${juegosSinTerminar} minijuego(s) sin completar.\n\n` +
-                "¿Quieres finalizar de todos modos?"
-            );
-
-
-        if (!continuar) {
-
-            return;
-
-        }
-
-    }
-
-
-    examenFinalizado =
-        true;
-
-
-    examenIniciado =
-        false;
-
-
-    mostrarResultados();
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
 
 }
 
 
-/* ============================================================
-   23. VOLVER AL CAMPUS
-   ============================================================ */
+/* =========================================================
+   EVENTOS DE RESPUESTAS
+   ========================================================= */
 
-function volverAlCampus() {
-
-    /*
-        Cambia esta dirección si tu campus
-        utiliza otro archivo.
-    */
-
-    window.location.href =
-        "index.html";
-
-}
-
-
-/* ============================================================
-   24. BOTONES
-   ============================================================ */
-
-$("startExam")
-    .addEventListener(
-        "click",
-        comenzarExamen
-    );
-
-
-$("finishExam")
-    .addEventListener(
-        "click",
-        finalizarExamen
-    );
-
-
-$("retryButton")
-    .addEventListener(
-        "click",
-        iniciarDiagnostico
-    );
-
-
-$("errorBackButton")
-    .addEventListener(
-        "click",
-        volverAlCampus
-    );
-
-
-$("backCampus")
-    .addEventListener(
-        "click",
-        volverAlCampus
-    );
-
-
-retrySave
-    .addEventListener(
-        "click",
-        guardarResultado
-    );
-
-
-/* ============================================================
-   25. EVITAR CERRAR LA PÁGINA ACCIDENTALMENTE
-   ============================================================ */
-
-window.addEventListener(
-    "beforeunload",
+document.addEventListener(
+    "change",
     function(event) {
 
         if (
-            examenIniciado &&
-            !examenFinalizado
+            event.target.matches(
+                'input[type="radio"]'
+            )
         ) {
 
-            event.preventDefault();
-
-            event.returnValue =
-                "";
+            actualizarProgreso();
 
         }
 
@@ -3415,125 +2096,62 @@ window.addEventListener(
 );
 
 
-/* ============================================================
-   26. INICIAR DIAGNÓSTICO
-   ============================================================ */
+/* =========================================================
+   BOTÓN COMENZAR
+   ========================================================= */
 
-async function iniciarDiagnostico() {
-
-    mostrarSolo(loading);
-
-
-    try {
-
-        console.log(
-            "===================================="
-        );
-
-        console.log(
-            "INICIANDO DIAGNÓSTICO"
-        );
-
-        console.log(
-            "Actividad:",
-            actividadId
-        );
+startExam.addEventListener(
+    "click",
+    iniciarDiagnostico
+);
 
 
-        /*
-            1. Identificar al alumno
-        */
+/* =========================================================
+   BOTÓN TERMINAR
+   ========================================================= */
 
-        await cargarAlumnoActual();
+finishExam.addEventListener(
+    "click",
+    function() {
+
+        const preguntasContestadas =
+            document.querySelectorAll(
+                'input[type="radio"]:checked'
+            ).length;
 
 
         /*
-            2. Cargar actividad
-        */
+         * Permitimos terminar aunque haya
+         * preguntas sin contestar.
+         */
 
-        await cargarActividad();
-
-
-        /*
-            3. Verificar que la actividad
-               esté asignada al alumno
-        */
-
-        await cargarActividadAlumno();
-
-
-        /*
-            4. Mostrar introducción
-        */
-
-        mostrarSolo(intro);
-
-
-        console.log(
-            "DIAGNÓSTICO LISTO"
-        );
-
-
-    } catch(error) {
-
-        console.error(
-            "ERROR AL INICIAR DIAGNÓSTICO:",
-            error
-        );
-
-
-        mostrarError(
-
-            "No fue posible iniciar el diagnóstico.",
-
-            error.message ||
-            String(error)
-
-        );
-
-    }
-
-}
-
-
-/* ============================================================
-   27. ESCUCHAR CAMBIOS DE SESIÓN
-   ============================================================ */
-
-supabaseClient.auth.onAuthStateChange(
-    (
-        event,
-        session
-    ) => {
-
-        console.log(
-            "CAMBIO DE AUTENTICACIÓN:",
-            event
-        );
-
-
-        if (
-            event === "SIGNED_OUT"
-        ) {
-
-            mostrarError(
-                "Tu sesión se cerró.",
-                "Vuelve al campus e inicia sesión nuevamente."
+        const confirmar =
+            confirm(
+                `Has contestado ${preguntasContestadas} de ${preguntas.length} preguntas.\n\n` +
+                `¿Quieres terminar el diagnóstico?`
             );
 
+
+        if (!confirmar) {
+            return;
         }
+
+
+        mostrarResultados();
 
     }
 );
 
 
-/* ============================================================
-   28. ARRANCAR AUTOMÁTICAMENTE
-   ============================================================ */
+/* =========================================================
+   REPETIR
+   ========================================================= */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
+retrySave.addEventListener(
+    "click",
+    function() {
+
+        diagnosticoTerminado = false;
 
         iniciarDiagnostico();
 
@@ -3541,9 +2159,54 @@ document.addEventListener(
 );
 
 
+/* =========================================================
+   VOLVER
+   ========================================================= */
+
+backCampus.addEventListener(
+    "click",
+    function() {
+
+        /*
+         * Cambia "index.html" si tu campus
+         * utiliza otro nombre.
+         */
+
+        window.location.href =
+            "index.html";
+
+    }
+);
+
+
+/* =========================================================
+   INICIALIZACIÓN
+   ========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        console.log(
+            "=== DIAGNÓSTICO CITZ ==="
+        );
+
+        console.log(
+            "Diagnóstico independiente iniciado."
+        );
+
+        console.log(
+            `Preguntas: ${preguntas.length}`
+        );
+
+        console.log(
+            `Retos: ${minijuegos.length}`
+        );
+
+    }
+);
 
 </script>
-
 
 </body>
 </html>
