@@ -2274,7 +2274,7 @@ function cargarModeloEstado(estado, container){
       const center = box2.getCenter(new THREE.Vector3());
       object.position.x -= center.x;
       object.position.z -= center.z;
-      object.position.y -= box2.min.y - 0.4;
+      object.position.y -= box2.min.y - 0.7;
 
       object.traverse((child) => {
         if(child.isMesh){
