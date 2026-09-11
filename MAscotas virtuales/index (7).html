@@ -1,0 +1,3810 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Robot Lab | Campus Virtual</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap"
+    rel="stylesheet"
+>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+:root {
+    --black: #000000;
+    --panel: #090909;
+    --panel-2: #0d0d0d;
+    --border: rgba(255,255,255,0.08);
+    --text: #ffffff;
+    --muted: #888888;
+    --neon: #00f5ff;
+    --neon-2: #7c3cff;
+    --green: #00ff9d;
+    --yellow: #ffe600;
+    --red: #ff3b5c;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    font-family: "Inter", sans-serif;
+    color: var(--text);
+
+    background:
+        radial-gradient(
+            circle at 50% 20%,
+            rgba(0,245,255,0.035),
+            transparent 35%
+        ),
+        #000000;
+
+    overflow-x: hidden;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.20;
+
+    background-image:
+        linear-gradient(
+            rgba(255,255,255,0.025) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,0.025) 1px,
+            transparent 1px
+        );
+
+    background-size: 45px 45px;
+
+    mask-image:
+        linear-gradient(
+            to bottom,
+            black,
+            transparent 80%
+        );
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+header {
+    position: relative;
+    z-index: 20;
+
+    height: 76px;
+    padding: 0 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background: rgba(0,0,0,0.90);
+    border-bottom: 1px solid var(--border);
+
+    backdrop-filter: blur(20px);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.logo-icon {
+    width: 44px;
+    height: 44px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 12px;
+
+    background: #050505;
+    border: 1px solid rgba(0,245,255,0.35);
+
+    box-shadow:
+        0 0 20px rgba(0,245,255,0.10);
+
+    font-size: 23px;
+}
+
+.logo-title {
+    font-family: "Orbitron", sans-serif;
+    font-size: 15px;
+    letter-spacing: 2px;
+}
+
+.logo-subtitle {
+    margin-top: 3px;
+
+    font-size: 9px;
+    letter-spacing: 2px;
+
+    color: #666;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+nav a {
+    position: relative;
+
+    color: #777;
+    text-decoration: none;
+
+    padding: 10px 16px;
+
+    border-radius: 9px;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    transition: 0.25s;
+}
+
+nav a:hover,
+nav a.active {
+    color: white;
+
+    background:
+        rgba(255,255,255,0.045);
+
+    box-shadow:
+        inset 0 0 0 1px
+        rgba(255,255,255,0.07);
+}
+
+
+/* BADGE */
+
+.activity-badge {
+    position: absolute;
+
+    top: -5px;
+    right: -2px;
+
+    min-width: 18px;
+    height: 18px;
+
+    padding: 0 5px;
+
+    display: none;
+
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 50px;
+
+    background: var(--red);
+
+    color: white;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    box-shadow:
+        0 0 15px rgba(255,59,92,0.45);
+
+    animation: badgePulse 1.5s infinite;
+}
+
+.activity-badge.visible {
+    display: flex;
+}
+
+@keyframes badgePulse {
+
+    0%,100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.15);
+    }
+
+}
+
+.logout-button {
+    border:
+        1px solid rgba(255,59,92,0.20);
+
+    background:
+        rgba(255,59,92,0.04);
+
+    color: #ff6075;
+
+    padding: 10px 14px;
+
+    border-radius: 9px;
+
+    cursor: pointer;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    transition: 0.25s;
+}
+
+.logout-button:hover {
+    background:
+        rgba(255,59,92,0.10);
+
+    border-color:
+        rgba(255,59,92,0.40);
+}
+
+
+/* =========================================
+   NOTIFICACIÓN
+========================================= */
+
+.notification {
+    position: fixed;
+
+    top: 95px;
+    right: 30px;
+
+    width: min(380px, calc(100vw - 30px));
+
+    padding: 18px 20px;
+
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #111111,
+            #070707
+        );
+
+    border:
+        1px solid rgba(0,245,255,0.25);
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,0.75),
+        0 0 35px rgba(0,245,255,0.08);
+
+    z-index: 100;
+
+    transform:
+        translateX(450px);
+
+    opacity: 0;
+
+    transition:
+        transform 0.45s ease,
+        opacity 0.45s ease;
+}
+
+.notification.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.notification-icon {
+    width: 42px;
+    height: 42px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background:
+        rgba(0,245,255,0.08);
+
+    border:
+        1px solid rgba(0,245,255,0.20);
+
+    font-size: 21px;
+}
+
+.notification-content {
+    flex: 1;
+}
+
+.notification-content strong {
+    display: block;
+
+    font-family: "Orbitron", sans-serif;
+
+    font-size: 12px;
+
+    margin-bottom: 5px;
+
+    color: var(--neon);
+}
+
+.notification-content p {
+    color: #888;
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+.notification-close {
+    background: none;
+    border: none;
+
+    color: #555;
+
+    cursor: pointer;
+
+    font-size: 17px;
+}
+
+.notification-close:hover {
+    color: white;
+}
+
+
+/* =========================================
+   MAIN
+========================================= */
+
+main {
+    position: relative;
+    z-index: 2;
+
+    max-width: 1500px;
+
+    margin: auto;
+
+    padding: 42px;
+}
+
+.welcome {
+    margin-bottom: 30px;
+}
+
+.welcome-label {
+    color: var(--neon);
+
+    font-family: "Orbitron", sans-serif;
+
+    font-size: 9px;
+    letter-spacing: 3px;
+}
+
+.welcome h1 {
+    margin-top: 8px;
+
+    font-size:
+        clamp(30px, 4vw, 44px);
+
+    font-weight: 800;
+
+    letter-spacing: -1px;
+}
+
+.welcome p {
+    margin-top: 8px;
+
+    color: #777;
+
+    font-size: 13px;
+}
+
+
+/* =========================================
+   DASHBOARD
+========================================= */
+
+.dashboard {
+    display: grid;
+
+    grid-template-columns:
+        minmax(500px, 1.5fr)
+        minmax(320px, 0.8fr);
+
+    gap: 24px;
+}
+
+.card {
+    position: relative;
+
+    background:
+        linear-gradient(
+            145deg,
+            #0b0b0b,
+            #050505
+        );
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 22px;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,0.65);
+
+    overflow: hidden;
+}
+
+.card::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 10%;
+    right: 10%;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(0,245,255,0.25),
+            transparent
+        );
+}
+
+
+/* =========================================
+   MASCOTA
+========================================= */
+
+.mascot-card {
+    min-height: 700px;
+
+    padding: 28px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: space-between;
+
+    text-align: center;
+}
+
+.mascot-header {
+    width: 100%;
+
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mascot-label {
+    text-align: left;
+}
+
+.mascot-label small {
+    display: block;
+
+    color: var(--neon);
+
+    font-family: "Orbitron", sans-serif;
+
+    font-size: 9px;
+    letter-spacing: 3px;
+
+    margin-bottom: 5px;
+}
+
+.mascot-label strong {
+    font-family: "Orbitron", sans-serif;
+
+    font-size: 22px;
+
+    letter-spacing: 2px;
+}
+
+.status {
+    padding: 8px 13px;
+
+    border-radius: 50px;
+
+    color: var(--green);
+
+    background:
+        rgba(0,255,157,0.04);
+
+    border:
+        1px solid rgba(0,255,157,0.18);
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.5px;
+}
+
+.robot-stage {
+    position: relative;
+
+    width: min(100%, 570px);
+
+    aspect-ratio: 1 / 1;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    margin: 5px auto;
+}
+
+.robot-stage::before {
+    content: "";
+
+    position: absolute;
+
+    width: 82%;
+    height: 82%;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(0,245,255,0.08),
+            rgba(0,0,0,0) 68%
+        );
+
+    filter: blur(15px);
+
+    animation:
+        glowPulse 3.5s ease-in-out infinite;
+}
+
+.robot-stage::after {
+    content: "";
+
+    position: absolute;
+
+    width: 84%;
+    height: 84%;
+
+    border-radius: 50%;
+
+    border:
+        1px solid rgba(0,245,255,0.10);
+
+    box-shadow:
+        0 0 45px rgba(0,245,255,0.04);
+
+    animation:
+        stagePulse 4s ease-in-out infinite;
+}
+
+#robotMascota {
+    position: relative;
+
+    z-index: 5;
+
+    width: min(88%, 500px);
+
+    height: auto;
+
+    aspect-ratio: 1 / 1;
+
+    object-fit: contain;
+
+    display: block;
+
+    background: #000;
+
+    border-radius: 50%;
+
+    filter:
+        drop-shadow(
+            0 0 18px rgba(0,245,255,0.16)
+        );
+
+    animation:
+        roboFloat 4s ease-in-out infinite;
+}
+
+.robot-stage-3d {
+    position: relative;
+
+    z-index: 5;
+
+    width: min(88%, 500px);
+
+    aspect-ratio: 1 / 1;
+
+    display: block;
+
+    background: #000;
+
+    border-radius: 50%;
+
+    overflow: hidden;
+
+    filter:
+        drop-shadow(
+            0 0 18px rgba(0,245,255,0.16)
+        );
+
+    animation:
+        roboFloat 4s ease-in-out infinite;
+}
+
+.robot-stage-3d canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.robot-stage-3d .loader3d {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    color: rgba(255,255,255,0.4);
+    font-size: 10px;
+    line-height: 1.5;
+    letter-spacing: 0.5px;
+    font-family: "Inter", sans-serif;
+}
+
+.robot-message {
+    width: 100%;
+    max-width: 610px;
+
+    padding: 17px 20px;
+
+    background:
+        rgba(255,255,255,0.025);
+
+    border:
+        1px solid rgba(255,255,255,0.06);
+
+    border-radius: 15px;
+}
+
+.robot-message h2 {
+    font-family: "Orbitron", sans-serif;
+
+    font-size: 17px;
+
+    margin-bottom: 5px;
+}
+
+.robot-message p {
+    color: #777;
+
+    font-size: 12px;
+
+    line-height: 1.6;
+}
+
+.energy {
+    width: 100%;
+    max-width: 610px;
+}
+
+.energy-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-bottom: 7px;
+
+    font-size: 10px;
+}
+
+.energy-header span:first-child {
+    color: #666;
+}
+
+.energy-header span:last-child {
+    color: var(--neon);
+
+    font-family: "Orbitron", sans-serif;
+}
+
+.energy-bar {
+    height: 7px;
+
+    border-radius: 20px;
+
+    background: #151515;
+
+    overflow: hidden;
+}
+
+.energy-fill {
+    height: 100%;
+
+    border-radius: inherit;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--neon),
+            var(--neon-2)
+        );
+
+    box-shadow:
+        0 0 12px
+        rgba(0,245,255,0.30);
+
+    transition:
+        width 0.8s ease;
+}
+
+
+/* =========================================
+   SIDE
+========================================= */
+
+.side {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 20px;
+}
+
+.stats-card {
+    padding: 24px;
+}
+
+.section-title {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 20px;
+}
+
+.section-title h3 {
+    font-size: 15px;
+}
+
+.section-title span {
+    color: #555;
+
+    font-size: 9px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================================
+   GRADE
+========================================= */
+
+.grade {
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+}
+
+.grade-number {
+    font-family: "Orbitron", sans-serif;
+
+    font-size: 58px;
+
+    line-height: 1;
+
+    color: white;
+
+    text-shadow:
+        0 0 25px rgba(0,245,255,0.15);
+}
+
+.grade-info strong {
+    display: block;
+
+    font-family: "Orbitron", sans-serif;
+
+    font-size: 15px;
+
+    color: var(--neon);
+
+    margin-bottom: 4px;
+}
+
+.grade-info span {
+    color: #666;
+
+    font-size: 10px;
+}
+
+
+/* =========================================
+   XP
+========================================= */
+
+.xp {
+    margin-top: 25px;
+}
+
+.xp-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-bottom: 7px;
+
+    font-size: 10px;
+}
+
+.xp-header span:first-child {
+    color: #666;
+}
+
+.xp-header span:last-child {
+    color: var(--neon-2);
+
+    font-family: "Orbitron", sans-serif;
+}
+
+.xp-bar {
+    height: 7px;
+
+    background: #151515;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+}
+
+.xp-fill {
+    height: 100%;
+
+    border-radius: inherit;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--neon-2),
+            var(--neon)
+        );
+
+    transition:
+        width 0.8s ease;
+}
+
+.level {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-top: 20px;
+
+    padding-top: 20px;
+
+    border-top:
+        1px solid rgba(255,255,255,0.05);
+}
+
+.level-number {
+    font-family: "Orbitron", sans-serif;
+
+    color: var(--yellow);
+
+    font-size: 28px;
+}
+
+.level-label {
+    color: #555;
+
+    font-size: 9px;
+
+    line-height: 1.6;
+
+    text-align: right;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================================
+   QUICK BUTTONS
+========================================= */
+
+.quick-grid {
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 10px;
+}
+
+.quick-button {
+    position: relative;
+
+    display: block;
+
+    padding: 18px;
+
+    color: white;
+
+    text-decoration: none;
+
+    border-radius: 14px;
+
+    background: #0b0b0b;
+
+    border:
+        1px solid rgba(255,255,255,0.06);
+
+    transition:
+        0.25s ease;
+}
+
+.quick-button:hover {
+    transform:
+        translateY(-3px);
+
+    background: #101010;
+
+    border-color:
+        rgba(0,245,255,0.20);
+
+    box-shadow:
+        0 10px 35px rgba(0,0,0,0.5);
+}
+
+.quick-icon {
+    font-size: 24px;
+
+    margin-bottom: 11px;
+}
+
+.quick-button strong {
+    display: block;
+
+    font-size: 13px;
+
+    margin-bottom: 4px;
+}
+
+.quick-button span {
+    color: #555;
+
+    font-size: 10px;
+}
+
+
+/* =========================================
+   PROGRESS
+========================================= */
+
+.progress-item {
+    margin-bottom: 17px;
+}
+
+.progress-item:last-child {
+    margin-bottom: 0;
+}
+
+.progress-info {
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-bottom: 6px;
+
+    font-size: 10px;
+}
+
+.progress-info span:first-child {
+    color: #666;
+}
+
+.progress-info span:last-child {
+    color: white;
+
+    font-weight: 700;
+}
+
+.mini-bar {
+    height: 6px;
+
+    background: #151515;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+}
+
+.mini-fill {
+    height: 100%;
+
+    border-radius: inherit;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--neon),
+            var(--neon-2)
+        );
+
+    transition:
+        width 0.8s ease;
+}
+
+
+/* =========================================
+   ACTIVIDADES
+========================================= */
+
+.activities-panel {
+    position: relative;
+
+    margin-top: 24px;
+
+    padding: 26px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #0b0b0b,
+            #050505
+        );
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 22px;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,0.65);
+
+    overflow: hidden;
+}
+
+.activities-panel::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+
+    left: 10%;
+    right: 10%;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(0,245,255,0.35),
+            transparent
+        );
+}
+
+.activities-header {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 20px;
+}
+
+.activities-title {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+}
+
+.activities-title-icon {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 12px;
+
+    background:
+        rgba(0,245,255,0.07);
+
+    border:
+        1px solid rgba(0,245,255,0.15);
+
+    font-size: 20px;
+}
+
+.activities-title h2 {
+    font-family: "Orbitron", sans-serif;
+
+    font-size: 16px;
+}
+
+.activities-title p {
+    color: #555;
+
+    font-size: 10px;
+
+    margin-top: 3px;
+}
+
+.view-all {
+    padding: 10px 15px;
+
+    color: var(--neon);
+
+    text-decoration: none;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    border-radius: 9px;
+
+    border:
+        1px solid rgba(0,245,255,0.15);
+
+    background:
+        rgba(0,245,255,0.035);
+
+    transition: 0.25s;
+}
+
+.view-all:hover {
+    background:
+        rgba(0,245,255,0.08);
+
+    border-color:
+        rgba(0,245,255,0.30);
+}
+
+.activities-list {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 14px;
+}
+
+.activity-card {
+    position: relative;
+
+    padding: 18px;
+
+    background:
+        #090909;
+
+    border:
+        1px solid rgba(255,255,255,0.06);
+
+    border-radius: 15px;
+
+    transition:
+        0.25s ease;
+}
+
+.activity-card:hover {
+    transform:
+        translateY(-3px);
+
+    border-color:
+        rgba(0,245,255,0.18);
+
+    background:
+        #0d0d0d;
+}
+
+.activity-card.pending {
+    border-color:
+        rgba(0,245,255,0.16);
+}
+
+.activity-card.completed {
+    border-color:
+        rgba(0,255,157,0.12);
+}
+
+.activity-card-top {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 10px;
+
+    margin-bottom: 12px;
+}
+
+.activity-type {
+    color: var(--neon);
+
+    font-size: 9px;
+
+    font-family: "Orbitron", sans-serif;
+
+    letter-spacing: 1px;
+}
+
+.activity-status {
+    padding: 5px 8px;
+
+    border-radius: 20px;
+
+    font-size: 8px;
+
+    font-weight: 800;
+}
+
+.activity-status.pending {
+    color: var(--yellow);
+
+    background:
+        rgba(255,230,0,0.06);
+
+    border:
+        1px solid rgba(255,230,0,0.12);
+}
+
+.activity-status.completed {
+    color: var(--green);
+
+    background:
+        rgba(0,255,157,0.06);
+
+    border:
+        1px solid rgba(0,255,157,0.12);
+}
+
+.activity-card h3 {
+    font-size: 13px;
+
+    margin-bottom: 7px;
+
+    line-height: 1.4;
+}
+
+.activity-description {
+    color: #666;
+
+    font-size: 10px;
+
+    line-height: 1.5;
+
+    min-height: 30px;
+
+    margin-bottom: 15px;
+}
+
+.activity-meta {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 13px;
+
+    color: #555;
+
+    font-size: 9px;
+}
+
+.activity-points {
+    color: var(--neon-2);
+
+    font-family: "Orbitron", sans-serif;
+
+    font-size: 9px;
+}
+
+.activity-button {
+    display: block;
+
+    width: 100%;
+
+    padding: 9px;
+
+    text-align: center;
+
+    text-decoration: none;
+
+    color: white;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    border-radius: 8px;
+
+    background:
+        rgba(255,255,255,0.04);
+
+    border:
+        1px solid rgba(255,255,255,0.06);
+
+    transition: 0.25s;
+}
+
+.activity-button:hover {
+    background:
+        rgba(0,245,255,0.08);
+
+    border-color:
+        rgba(0,245,255,0.20);
+
+    color: var(--neon);
+}
+
+.empty-activities {
+    padding: 35px 20px;
+
+    text-align: center;
+
+    border:
+        1px dashed rgba(255,255,255,0.08);
+
+    border-radius: 15px;
+
+    color: #555;
+}
+
+.empty-activities-icon {
+    font-size: 30px;
+
+    margin-bottom: 10px;
+}
+
+.empty-activities strong {
+    display: block;
+
+    color: #888;
+
+    font-size: 12px;
+
+    margin-bottom: 5px;
+}
+
+.empty-activities p {
+    font-size: 10px;
+
+    color: #444;
+}
+
+
+/* =========================================
+   ANIMACIONES
+========================================= */
+
+@keyframes roboFloat {
+
+    0%, 100% {
+        transform:
+            translateY(0)
+            scale(1);
+    }
+
+    50% {
+        transform:
+            translateY(-10px)
+            scale(1.01);
+    }
+}
+
+@keyframes glowPulse {
+
+    0%, 100% {
+        transform: scale(0.95);
+        opacity: 0.5;
+    }
+
+    50% {
+        transform: scale(1.04);
+        opacity: 1;
+    }
+}
+
+@keyframes stagePulse {
+
+    0%, 100% {
+        transform: scale(0.97);
+        opacity: 0.5;
+    }
+
+    50% {
+        transform: scale(1.02);
+        opacity: 1;
+    }
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 1100px) {
+
+    .activities-list {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 1000px) {
+
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+
+    .mascot-card {
+        min-height: 700px;
+    }
+
+}
+
+@media (max-width: 650px) {
+
+    header {
+        padding: 0 18px;
+    }
+
+    nav {
+        display: none;
+    }
+
+    main {
+        padding: 25px 15px;
+    }
+
+    .dashboard {
+        gap: 15px;
+    }
+
+    .mascot-card {
+        min-height: auto;
+        padding: 20px 14px 25px;
+    }
+
+    .robot-stage {
+        width: 100%;
+        margin: 15px auto;
+    }
+
+    #robotMascota {
+        width: 88%;
+    }
+
+    .quick-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .grade-number {
+        font-size: 48px;
+    }
+
+    .activities-panel {
+        padding: 18px 14px;
+    }
+
+    .activities-list {
+        grid-template-columns: 1fr;
+    }
+
+    .activities-header {
+        align-items: flex-start;
+    }
+
+    .view-all {
+        padding: 8px 10px;
+    }
+
+    .notification {
+        top: 85px;
+        right: 15px;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<!-- =========================================
+     NOTIFICACIÓN
+========================================= -->
+
+<div
+    id="notification"
+    class="notification"
+>
+
+    <div class="notification-icon">
+        🧩
+    </div>
+
+    <div class="notification-content">
+
+        <strong>
+            ¡NUEVA ACTIVIDAD!
+        </strong>
+
+        <p id="notificationText">
+            Tienes una nueva actividad pendiente.
+        </p>
+
+    </div>
+
+    <button
+        class="notification-close"
+        onclick="cerrarNotificacion()"
+    >
+        ×
+    </button>
+
+</div>
+
+
+<!-- =========================================
+     HEADER
+========================================= -->
+
+<header>
+
+    <div class="logo">
+
+        <div class="logo-icon">
+            🤖
+        </div>
+
+        <div>
+
+            <div class="logo-title">
+                ROBOT LAB
+            </div>
+
+            <div class="logo-subtitle">
+                CAMPUS VIRTUAL
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <nav>
+
+        <a
+            href="#"
+            class="active"
+        >
+            Inicio
+        </a>
+
+
+        <a
+            href="actividades.html"
+            id="navActividades"
+        >
+
+            Actividades
+
+            <span
+                id="activityBadge"
+                class="activity-badge"
+            >
+                0
+            </span>
+
+        </a>
+
+
+        <a
+            href="https://TU-ENLACE-TAREAS.com"
+        >
+            Tareas
+        </a>
+
+
+        <button
+            class="logout-button"
+            onclick="cerrarSesion()"
+        >
+            Cerrar sesión
+        </button>
+
+    </nav>
+
+</header>
+
+
+<!-- =========================================
+     MAIN
+========================================= -->
+
+<main>
+
+
+<section class="welcome">
+
+    <div class="welcome-label">
+        SISTEMA EDUCATIVO
+    </div>
+
+    <h1 id="saludo">
+        ¡Hola! 👋
+    </h1>
+
+    <p>
+        Bienvenido a tu espacio de aprendizaje.
+        Haz que tu mascota evolucione contigo.
+    </p>
+
+</section>
+
+
+<section class="dashboard">
+
+
+<!-- =========================================
+     MASCOTA
+========================================= -->
+
+<div class="card mascot-card">
+
+    <div class="mascot-header">
+
+        <div class="mascot-label">
+
+            <small>
+                MASCOTA VIRTUAL
+            </small>
+
+            <strong id="nombreMascota">
+                CARGANDO
+            </strong>
+
+        </div>
+
+
+        <div
+            id="estadoMascota"
+            class="status"
+        >
+            ● CARGANDO...
+        </div>
+
+    </div>
+
+
+    <div class="robot-stage">
+
+        <img
+            id="robotMascota"
+            src="Mascotas/robot1.gif"
+            alt="Mascota virtual"
+        >
+
+        <div id="robotMascota3D" class="robot-stage-3d" style="display:none;"></div>
+
+    </div>
+
+
+    <div class="robot-message">
+
+        <h2 id="mensajeMascota">
+            Cargando mascota...
+        </h2>
+
+        <p id="detalleMascota">
+            Estamos preparando tu aventura.
+        </p>
+
+    </div>
+
+
+    <div class="energy">
+
+        <div class="energy-header">
+
+            <span>
+                ENERGÍA DE TU MASCOTA
+            </span>
+
+            <span id="energiaTexto">
+                100%
+            </span>
+
+        </div>
+
+
+        <div class="energy-bar">
+
+            <div
+                id="energiaBarra"
+                class="energy-fill"
+                style="width: 100%;"
+            ></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+     SIDE
+========================================= -->
+
+<div class="side">
+
+
+<!-- RENDIMIENTO -->
+
+<div class="card stats-card">
+
+    <div class="section-title">
+
+        <h3>
+            Mi rendimiento
+        </h3>
+
+        <span>
+            Calificación final
+        </span>
+
+    </div>
+
+
+    <div class="grade">
+
+        <div
+            id="calificacion"
+            class="grade-number"
+        >
+            0
+        </div>
+
+
+        <div class="grade-info">
+
+            <strong>
+                / 10
+            </strong>
+
+            <span>
+                Calificación actual
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="xp">
+
+        <div class="xp-header">
+
+            <span>
+                EXPERIENCIA
+            </span>
+
+            <span>
+
+                <span id="xpActual">
+                    0
+                </span>
+
+                / 1000 XP
+
+            </span>
+
+        </div>
+
+
+        <div class="xp-bar">
+
+            <div
+                id="xpBarra"
+                class="xp-fill"
+                style="width: 0%;"
+            ></div>
+
+        </div>
+
+    </div>
+
+
+    <div class="level">
+
+        <div>
+
+            <div
+                id="nivel"
+                class="level-number"
+            >
+                1
+            </div>
+
+        </div>
+
+
+        <div class="level-label">
+
+            NIVEL DE MASCOTA
+
+            <br>
+
+            APRENDIZAJE ACTIVO
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ACCESOS -->
+
+<div class="card stats-card">
+
+    <div class="section-title">
+
+        <h3>
+            Accesos rápidos
+        </h3>
+
+        <span>
+            Campus
+        </span>
+
+    </div>
+
+
+    <div class="quick-grid">
+
+        <a
+            class="quick-button"
+            href="actividades.html"
+        >
+
+            <div class="quick-icon">
+                🚀
+            </div>
+
+            <strong>
+                Actividades
+            </strong>
+
+            <span>
+                Ver actividades
+            </span>
+
+        </a>
+
+
+        <a
+            class="quick-button"
+            href="https://TU-ENLACE-TAREAS.com"
+        >
+
+            <div class="quick-icon">
+                📚
+            </div>
+
+            <strong>
+                Tareas
+            </strong>
+
+            <span>
+                Ver tareas
+            </span>
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- PROGRESO -->
+
+<div class="card stats-card">
+
+    <div class="section-title">
+
+        <h3>
+            Mi progreso
+        </h3>
+
+        <span>
+            General
+        </span>
+
+    </div>
+
+
+    <div class="progress-item">
+
+        <div class="progress-info">
+
+            <span>
+                Actividades completadas
+            </span>
+
+            <span id="actividadesTexto">
+                0 / 0
+            </span>
+
+        </div>
+
+
+        <div class="mini-bar">
+
+            <div
+                id="actividadesBarra"
+                class="mini-fill"
+                style="width: 0%;"
+            ></div>
+
+        </div>
+
+    </div>
+
+
+    <div class="progress-item">
+
+        <div class="progress-info">
+
+            <span>
+                Tareas entregadas
+            </span>
+
+            <span id="tareasTexto">
+                0 / 0
+            </span>
+
+        </div>
+
+
+        <div class="mini-bar">
+
+            <div
+                id="tareasBarra"
+                class="mini-fill"
+                style="width: 0%;"
+            ></div>
+
+        </div>
+
+    </div>
+
+
+    <div class="progress-item">
+
+        <div class="progress-info">
+
+            <span>
+                Rendimiento académico
+            </span>
+
+            <span id="rendimientoTexto">
+                0%
+            </span>
+
+        </div>
+
+
+        <div class="mini-bar">
+
+            <div
+                id="rendimientoBarra"
+                class="mini-fill"
+                style="width: 0%;"
+            ></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+<!-- =========================================
+     ACTIVIDADES
+========================================= -->
+
+<section class="activities-panel">
+
+    <div class="activities-header">
+
+        <div class="activities-title">
+
+            <div class="activities-title-icon">
+                🧩
+            </div>
+
+            <div>
+
+                <h2>
+                    Mis actividades
+                </h2>
+
+                <p>
+                    Actividades asignadas por tu profesor
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <a
+            href="actividades.html"
+            class="view-all"
+        >
+            VER TODAS →
+        </a>
+
+    </div>
+
+
+    <div
+        id="activitiesList"
+        class="activities-list"
+    >
+
+        <div class="empty-activities">
+
+            <div class="empty-activities-icon">
+                ⏳
+            </div>
+
+            <strong>
+                Cargando actividades...
+            </strong>
+
+            <p>
+                Estamos consultando tu campus.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+</main>
+
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+/* =========================================
+   MASCOTA 3D (alien) — reemplaza
+   alien1.gif / alien2.gif / alien3.gif por
+   Mascotas/alien1.fbx, alien2.fbx, alien3.fbx
+   (misma carpeta que los gifs)
+========================================= */
+
+import * as THREE from "three";
+import { FBXLoader } from "three/addons/loaders/FBXLoader.js";
+import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+
+let scene3D, camera3D, renderer3D, pmrem3D, mixer3D, action3D, clock3D, currentObject3D;
+let currentEstado3D = null;
+let ready3D = false;
+
+function initMascota3D(container){
+  scene3D = new THREE.Scene();
+
+  camera3D = new THREE.PerspectiveCamera(35, 1, 0.1, 100);
+  camera3D.position.set(0, 1.5, 3.6);
+
+  renderer3D = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer3D.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer3D.outputColorSpace = THREE.SRGBColorSpace;
+  renderer3D.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer3D.toneMappingExposure = 1.3;
+  container.appendChild(renderer3D.domElement);
+
+  pmrem3D = new THREE.PMREMGenerator(renderer3D);
+  scene3D.environment = pmrem3D.fromScene(new RoomEnvironment(), 0.04).texture;
+
+  const hemi = new THREE.HemisphereLight(0xdcefc4, 0x201510, 1.2);
+  scene3D.add(hemi);
+
+  const key = new THREE.DirectionalLight(0xfff1d6, 2.4);
+  key.position.set(2.5, 4, 3);
+  scene3D.add(key);
+
+  const fill = new THREE.DirectionalLight(0xbcd6ff, 1.1);
+  fill.position.set(-3, 1.5, -2);
+  scene3D.add(fill);
+
+  clock3D = new THREE.Clock();
+  resizeMascota3D(container);
+  new ResizeObserver(() => resizeMascota3D(container)).observe(container);
+
+  function animate3D(){
+    requestAnimationFrame(animate3D);
+    const delta = clock3D.getDelta();
+    if(mixer3D) mixer3D.update(delta);
+    if(currentObject3D) currentObject3D.rotation.y += delta * 0.35;
+    renderer3D.render(scene3D, camera3D);
+  }
+  animate3D();
+
+  ready3D = true;
+}
+
+function resizeMascota3D(container){
+  const w = container.clientWidth || 1;
+  const h = container.clientHeight || 1;
+  if(!renderer3D) return;
+  renderer3D.setSize(w, h);
+  camera3D.aspect = w / h;
+  camera3D.updateProjectionMatrix();
+}
+
+function limpiarModeloAnterior(){
+  if(currentObject3D){
+    scene3D.remove(currentObject3D);
+    currentObject3D.traverse(child => {
+      if(child.isMesh){
+        child.geometry?.dispose();
+        const mats = Array.isArray(child.material) ? child.material : [child.material];
+        mats.forEach(m => { if(m && m.map) m.map.dispose(); if(m) m.dispose(); });
+      }
+    });
+    currentObject3D = null;
+  }
+}
+
+async function diagnosticarURL(url){
+  // Ayuda a distinguir 404 / CORS / protocolo file:// en el mensaje de error
+  if(location.protocol === 'file:'){
+    return 'Estás abriendo el archivo con doble clic (file://). Los navegadores bloquean la carga de modelos .fbx así; sube estos archivos a tu hosting o pruébalos con un servidor local.';
+  }
+  try {
+    const res = await fetch(url, { method: 'GET', cache: 'no-store' });
+    if(!res.ok){
+      return `El servidor respondió ${res.status} ${res.statusText} para ${url}. Revisa que el archivo exista exactamente en esa ruta (mayúsculas/minúsculas incluidas).`;
+    }
+    return null;
+  } catch (e) {
+    return `No se pudo contactar ${url} (${e.message}). Puede ser un bloqueo CORS o que el archivo no esté publicado todavía.`;
+  }
+}
+
+function cargarModeloEstado(estado, container){
+  const url = `Mascotas/alien${estado}.fbx`;
+
+  const loaderEl = document.createElement('div');
+  loaderEl.className = 'loader3d';
+  loaderEl.textContent = 'Cargando…';
+  container.appendChild(loaderEl);
+
+  const loader = new FBXLoader();
+  loader.load(
+    url,
+    (object) => {
+      limpiarModeloAnterior();
+
+      const box = new THREE.Box3().setFromObject(object);
+      const size = box.getSize(new THREE.Vector3());
+      const maxDim = Math.max(size.x, size.y, size.z) || 1;
+      object.scale.setScalar(2.1 / maxDim);
+
+      const box2 = new THREE.Box3().setFromObject(object);
+      const center = box2.getCenter(new THREE.Vector3());
+      object.position.x -= center.x;
+      object.position.z -= center.z;
+      object.position.y -= box2.min.y - 0.4;
+
+      object.traverse((child) => {
+        if(child.isMesh){
+          const mats = Array.isArray(child.material) ? child.material : [child.material];
+          mats.forEach(m => {
+            if(!m) return;
+            if(m.map){
+              m.map.colorSpace = THREE.SRGBColorSpace;
+              m.map.anisotropy = 8;
+              m.map.needsUpdate = true;
+            }
+            if('shininess' in m) m.shininess = 8;
+            if('metalness' in m) m.metalness = Math.min(m.metalness ?? 0, 0.15);
+            if('roughness' in m) m.roughness = Math.max(m.roughness ?? 0.5, 0.5);
+            m.needsUpdate = true;
+          });
+        }
+      });
+
+      scene3D.add(object);
+      currentObject3D = object;
+
+      if(object.animations && object.animations.length > 0){
+        mixer3D = new THREE.AnimationMixer(object);
+        action3D = mixer3D.clipAction(object.animations[0]);
+        action3D.play();
+      } else {
+        mixer3D = null;
+      }
+
+      loaderEl.remove();
+    },
+    undefined,
+    async (err) => {
+      console.error('No se pudo cargar', url, err);
+      const detalle = await diagnosticarURL(url);
+      loaderEl.textContent = detalle || ('No se pudo cargar el modelo: ' + (err && err.message ? err.message : url));
+    }
+  );
+}
+
+window.cargarMascota3D = function(estado){
+  const container = document.getElementById('robotMascota3D');
+  if(!container) return;
+
+  if(!ready3D){
+    initMascota3D(container);
+  }
+
+  if(currentEstado3D === estado) return;
+  currentEstado3D = estado;
+
+  cargarModeloEstado(estado, container);
+};
+</script>
+
+<script type="module">
+
+/* =========================================
+   SUPABASE
+========================================= */
+
+const SUPABASE_URL =
+    "https://bcfknbpkduiwgqymxkns.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_END5KZ8gA4e9YDpicG-aLw_aRaIzo7E";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =========================================
+   MASCOTAS
+========================================= */
+
+const nombresMascotas = {
+
+    robot: "ROBO",
+
+    dinosaurio: "DINO",
+
+    gato: "MICHIBOT",
+
+    alien: "ALIEN",
+
+    zorro: "FOX"
+
+};
+
+
+/* =========================================
+   ESTADO MASCOTA
+========================================= */
+
+function obtenerEstado(calificacion) {
+
+    if (calificacion >= 9) {
+        return 1;
+    }
+
+    if (calificacion >= 7) {
+        return 2;
+    }
+
+    return 3;
+
+}
+
+
+/* =========================================
+   MENSAJE MASCOTA
+========================================= */
+
+function obtenerMensaje(calificacion) {
+
+    if (calificacion >= 9) {
+
+        return {
+
+            estado: "● ¡EXCELENTE!",
+
+            mensaje: "¡Excelente trabajo!",
+
+            detalle:
+                "Tu esfuerzo está dando grandes resultados."
+
+        };
+
+    }
+
+
+    if (calificacion >= 7) {
+
+        return {
+
+            estado: "● ¡BUEN TRABAJO!",
+
+            mensaje: "¡Vas muy bien!",
+
+            detalle:
+                "Sigue trabajando para llevar a tu mascota al siguiente nivel."
+
+        };
+
+    }
+
+
+    return {
+
+        estado:
+            "● A SEGUIR PRACTICANDO",
+
+        mensaje:
+            "¡Tú puedes!",
+
+        detalle:
+            "Cada actividad es una oportunidad para mejorar."
+
+    };
+
+}
+
+
+/* =========================================
+   NOTIFICACIÓN
+========================================= */
+
+function mostrarNotificacion(cantidad) {
+
+    const notification =
+        document.getElementById(
+            "notification"
+        );
+
+    const texto =
+        document.getElementById(
+            "notificationText"
+        );
+
+
+    if (cantidad === 1) {
+
+        texto.textContent =
+            "Tienes una actividad nueva pendiente. ¡Es hora de comenzar!";
+
+    } else {
+
+        texto.textContent =
+            `Tienes ${cantidad} actividades pendientes. ¡Vamos a trabajar!`;
+
+    }
+
+
+    notification.classList.add("show");
+
+
+    setTimeout(() => {
+
+        notification.classList.remove(
+            "show"
+        );
+
+    }, 7000);
+
+}
+
+
+/* =========================================
+   CERRAR NOTIFICACIÓN
+========================================= */
+
+function cerrarNotificacion() {
+
+    document
+        .getElementById("notification")
+        .classList.remove("show");
+
+}
+
+
+/* =========================================
+   FORMATEAR FECHA
+========================================= */
+
+function formatearFecha(fecha) {
+
+    if (!fecha) {
+
+        return "Sin fecha límite";
+
+    }
+
+
+    const fechaObj =
+        new Date(fecha);
+
+
+    if (
+        isNaN(
+            fechaObj.getTime()
+        )
+    ) {
+
+        return "Sin fecha límite";
+
+    }
+
+
+    return fechaObj.toLocaleDateString(
+        "es-MX",
+        {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        }
+    );
+
+}
+
+
+/* =========================================
+   ESCAPAR HTML
+========================================= */
+
+function escaparHTML(texto) {
+
+    if (
+        texto === null ||
+        texto === undefined
+    ) {
+
+        return "";
+
+    }
+
+
+    return String(texto)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* =========================================
+   CARGAR ACTIVIDADES
+========================================= */
+
+async function cargarActividades(
+    alumnoId
+) {
+
+    try {
+
+        /* =====================================
+           1. OBTENER ASIGNACIONES
+        ===================================== */
+
+        const {
+            data: asignaciones,
+            error: asignacionesError
+        } =
+            await supabaseClient
+                .from("actividad_alumnos")
+                .select(`
+                    id,
+                    actividad_id,
+                    alumno_id,
+                    estado,
+                    calificacion,
+                    completada_at,
+                    created_at
+                `)
+                .eq(
+                    "alumno_id",
+                    alumnoId
+                )
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                );
+
+
+        if (asignacionesError) {
+
+            console.error(
+                "ERROR actividad_alumnos:",
+                asignacionesError
+            );
+
+            mostrarSinActividades(
+                "No pudimos cargar tus actividades."
+            );
+
+            return {
+
+                asignaciones: [],
+
+                actividades: []
+
+            };
+
+        }
+
+
+        const listaAsignaciones =
+            asignaciones || [];
+
+
+        console.log(
+            "Asignaciones del alumno:",
+            listaAsignaciones
+        );
+
+
+        /* =====================================
+           2. SIN ASIGNACIONES
+        ===================================== */
+
+        if (
+            listaAsignaciones.length === 0
+        ) {
+
+            actualizarBadge(0);
+
+            mostrarSinActividades(
+                "Por ahora no tienes actividades asignadas."
+            );
+
+            return {
+
+                asignaciones: [],
+
+                actividades: []
+
+            };
+
+        }
+
+
+        /* =====================================
+           3. IDS DE ACTIVIDADES
+        ===================================== */
+
+        const idsActividades =
+            [
+                ...new Set(
+                    listaAsignaciones
+                        .map(
+                            item =>
+                                Number(
+                                    item.actividad_id
+                                )
+                        )
+                        .filter(
+                            id =>
+                                Number.isFinite(id)
+                        )
+                )
+            ];
+
+
+        console.log(
+            "IDs de actividades:",
+            idsActividades
+        );
+
+
+        if (
+            idsActividades.length === 0
+        ) {
+
+            actualizarBadge(0);
+
+            mostrarSinActividades(
+                "No se encontraron actividades vinculadas."
+            );
+
+            return {
+
+                asignaciones:
+                    listaAsignaciones,
+
+                actividades: []
+
+            };
+
+        }
+
+
+        /* =====================================
+           4. OBTENER ACTIVIDADES
+           
+           IMPORTANTE:
+           La columna correcta es "activa",
+           NO "activo".
+        ===================================== */
+
+        const {
+            data: actividades,
+            error: actividadesError
+        } =
+            await supabaseClient
+                .from("actividades")
+                .select(`
+                    id,
+                    profesor_id,
+                    titulo,
+                    descripcion,
+                    tipo,
+                    enlace,
+                    imagen_url,
+                    puntos,
+                    fecha_limite,
+                    activa,
+                    created_at
+                `)
+                .in(
+                    "id",
+                    idsActividades
+                )
+                .eq(
+                    "activa",
+                    true
+                );
+
+
+        if (actividadesError) {
+
+            console.error(
+                "ERROR obteniendo actividades:",
+                actividadesError
+            );
+
+            mostrarSinActividades(
+                "No pudimos cargar la información de las actividades."
+            );
+
+            return {
+
+                asignaciones:
+                    listaAsignaciones,
+
+                actividades: []
+
+            };
+
+        }
+
+
+        const listaActividades =
+            actividades || [];
+
+
+        console.log(
+            "Actividades encontradas:",
+            listaActividades
+        );
+
+
+        /* =====================================
+           5. UNIR DATOS
+        ===================================== */
+
+        const actividadesAlumno =
+            listaActividades.map(
+                actividad => {
+
+                    const asignacion =
+                        listaAsignaciones.find(
+                            item =>
+                                Number(
+                                    item.actividad_id
+                                ) ===
+                                Number(
+                                    actividad.id
+                                )
+                        );
+
+
+                    return {
+
+                        ...actividad,
+
+                        asignacionId:
+                            asignacion
+                                ? asignacion.id
+                                : null,
+
+                        estado:
+                            asignacion &&
+                            asignacion.estado
+                                ? asignacion.estado
+                                : "pendiente",
+
+                        calificacion:
+                            asignacion
+                                ? asignacion.calificacion
+                                : null,
+
+                        completada_at:
+                            asignacion
+                                ? asignacion.completada_at
+                                : null
+
+                    };
+
+                }
+            );
+
+
+        console.log(
+            "ACTIVIDADES DEL ALUMNO:",
+            actividadesAlumno
+        );
+
+
+        /* =====================================
+           6. PENDIENTES
+        ===================================== */
+
+        const pendientes =
+            actividadesAlumno.filter(
+                actividad =>
+                    actividad.estado !==
+                    "completada"
+            );
+
+
+        actualizarBadge(
+            pendientes.length
+        );
+
+
+        /* =====================================
+           7. NOTIFICACIÓN
+        ===================================== */
+
+        if (
+            pendientes.length > 0
+        ) {
+
+            mostrarNotificacion(
+                pendientes.length
+            );
+
+        }
+
+
+        /* =====================================
+           8. MOSTRAR
+        ===================================== */
+
+        mostrarActividades(
+            actividadesAlumno
+        );
+
+
+        return {
+
+            asignaciones:
+                listaAsignaciones,
+
+            actividades:
+                actividadesAlumno
+
+        };
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "ERROR GENERAL DE ACTIVIDADES:",
+            error
+        );
+
+        mostrarSinActividades(
+            "Ocurrió un error al cargar tus actividades."
+        );
+
+        return {
+
+            asignaciones: [],
+
+            actividades: []
+
+        };
+
+    }
+
+}
+
+
+/* =========================================
+   BADGE
+========================================= */
+
+function actualizarBadge(cantidad) {
+
+    const badge =
+        document.getElementById(
+            "activityBadge"
+        );
+
+
+    if (!badge) {
+        return;
+    }
+
+
+    if (cantidad > 0) {
+
+        badge.textContent =
+            cantidad > 99
+                ? "99+"
+                : cantidad;
+
+        badge.classList.add(
+            "visible"
+        );
+
+    } else {
+
+        badge.classList.remove(
+            "visible"
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   MOSTRAR ACTIVIDADES
+========================================= */
+
+function mostrarActividades(
+    actividades
+) {
+
+    const contenedor =
+        document.getElementById(
+            "activitiesList"
+        );
+
+
+    if (!contenedor) {
+        return;
+    }
+
+
+    if (
+        !actividades ||
+        actividades.length === 0
+    ) {
+
+        mostrarSinActividades();
+
+        return;
+
+    }
+
+
+    /*
+       Solo mostramos 3 en el dashboard.
+       La página actividades.html muestra todas.
+    */
+
+    const actividadesMostrar =
+        actividades.slice(0, 3);
+
+
+    contenedor.innerHTML =
+        actividadesMostrar
+            .map(
+                actividad =>
+                    crearTarjetaActividad(
+                        actividad
+                    )
+            )
+            .join("");
+
+}
+
+
+/* =========================================
+   CREAR TARJETA
+========================================= */
+
+function crearTarjetaActividad(
+    actividad
+) {
+
+    const completada =
+        actividad.estado ===
+        "completada";
+
+
+    const claseEstado =
+        completada
+            ? "completed"
+            : "pending";
+
+
+    const textoEstado =
+        completada
+            ? "✓ COMPLETADA"
+            : "PENDIENTE";
+
+
+    const titulo =
+        escaparHTML(
+            actividad.titulo ||
+            "Actividad"
+        );
+
+
+    const descripcion =
+        escaparHTML(
+            actividad.descripcion ||
+            "Sin descripción disponible."
+        );
+
+
+    const puntos =
+        Number(
+            actividad.puntos
+        ) || 0;
+
+
+    const fecha =
+        formatearFecha(
+            actividad.fecha_limite
+        );
+
+
+    let enlace =
+        actividad.enlace ||
+        "actividades.html";
+
+
+    /*
+       Seguridad básica para evitar
+       enlaces javascript:
+    */
+
+    if (
+        !/^https?:\/\//i.test(
+            enlace
+        ) &&
+        enlace !== "actividades.html"
+    ) {
+
+        enlace =
+            "actividades.html";
+
+    }
+
+
+  const target =
+    /^https?:\/\//i.test(
+        enlace
+    )
+        ? 'target="_blank" rel="noopener noreferrer"'
+        : "";
+
+// Si es el diagnóstico, enviar el ID de la actividad
+const enlaceFinal =
+    actividad.id === 1
+        ? `diagnostico.html?actividad=${actividad.id}`
+        : enlace;
+
+
+return `
+
+        <article
+            class="activity-card ${claseEstado}"
+        >
+
+            <div class="activity-card-top">
+
+                <span class="activity-type">
+
+                    🧩
+
+                    ${escaparHTML(
+                        actividad.tipo ||
+                        "ACTIVIDAD"
+                    ).toUpperCase()}
+
+                </span>
+
+
+                <span
+                    class="activity-status ${claseEstado}"
+                >
+
+                    ${textoEstado}
+
+                </span>
+
+            </div>
+
+
+            <h3>
+                ${titulo}
+            </h3>
+
+
+            <p class="activity-description">
+
+                ${descripcion}
+
+            </p>
+
+
+            <div class="activity-meta">
+
+                <span>
+                    📅 ${fecha}
+                </span>
+
+                <span class="activity-points">
+
+                    +${puntos} XP
+
+                </span>
+
+            </div>
+
+
+              <a
+        href="${escaparHTML(enlaceFinal)}"
+        ${target}
+        class="activity-button"
+    >
+
+        ${
+            completada
+                ? "VER ACTIVIDAD →"
+                : "COMENZAR →"
+        }
+
+    </a>
+
+        </article>
+
+    `;
+
+}
+
+
+/* =========================================
+   SIN ACTIVIDADES
+========================================= */
+
+function mostrarSinActividades(
+    mensaje =
+        "Por ahora no tienes actividades asignadas."
+) {
+
+    const contenedor =
+        document.getElementById(
+            "activitiesList"
+        );
+
+
+    if (!contenedor) {
+        return;
+    }
+
+
+    contenedor.innerHTML = `
+
+        <div
+            class="empty-activities"
+            style="grid-column: 1 / -1;"
+        >
+
+            <div class="empty-activities-icon">
+                🤖
+            </div>
+
+            <strong>
+                ¡Todo al día!
+            </strong>
+
+            <p>
+                ${escaparHTML(mensaje)}
+            </p>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================
+   CARGAR DASHBOARD
+========================================= */
+
+async function cargarDashboard() {
+
+    try {
+
+        /* =====================================
+           1. SESIÓN
+        ===================================== */
+
+        const {
+            data: sessionData,
+            error: sessionError
+        } =
+            await supabaseClient
+                .auth
+                .getSession();
+
+
+        if (sessionError) {
+
+            console.error(
+                "ERROR DE SESIÓN:",
+                sessionError
+            );
+
+            window.location.href =
+                "login.html";
+
+            return;
+
+        }
+
+
+        if (
+            !sessionData ||
+            !sessionData.session
+        ) {
+
+            window.location.href =
+                "login.html";
+
+            return;
+
+        }
+
+
+        const usuarioAuth =
+            sessionData.session.user;
+
+
+        console.log(
+            "Usuario autenticado:",
+            usuarioAuth.id
+        );
+
+
+        /* =====================================
+           2. ALUMNO
+        ===================================== */
+
+        const {
+            data: alumno,
+            error: alumnoError
+        } =
+            await supabaseClient
+                .from("alumnos")
+                .select(`
+                    id,
+                    usuario,
+                    nombre,
+                    mascota,
+                    puntos,
+                    nivel,
+                    energia
+                `)
+                .eq(
+                    "auth_id",
+                    usuarioAuth.id
+                )
+                .maybeSingle();
+
+
+        if (alumnoError) {
+
+            console.error(
+                "ERROR BUSCANDO ALUMNO:",
+                alumnoError
+            );
+
+            alert(
+                "No se pudieron cargar tus datos."
+            );
+
+            return;
+
+        }
+
+
+        if (!alumno) {
+
+            console.error(
+                "No existe alumno vinculado."
+            );
+
+            await supabaseClient
+                .auth
+                .signOut();
+
+            window.location.href =
+                "login.html";
+
+            return;
+
+        }
+
+
+        console.log(
+            "Alumno encontrado:",
+            alumno
+        );
+
+
+        /* =====================================
+           3. MASCOTA
+        ===================================== */
+
+        if (
+            !alumno.mascota ||
+            alumno.mascota === ""
+        ) {
+
+            window.location.href =
+                "elegir-mascota.html";
+
+            return;
+
+        }
+
+
+        /* =====================================
+           4. DATOS
+        ===================================== */
+
+        const puntos =
+            Number(
+                alumno.puntos
+            ) || 0;
+
+
+        const nivel =
+            Number(
+                alumno.nivel
+            ) || 1;
+
+
+        const energia =
+            Math.max(
+                0,
+                Math.min(
+                    100,
+                    Number(
+                        alumno.energia
+                    ) || 0
+                )
+            );
+
+
+        /*
+           CALIFICACIÓN PROVISIONAL
+
+           Actualmente los puntos se utilizan
+           para calcular una calificación.
+
+           Más adelante podemos reemplazar esto
+           por el promedio real de actividades.
+        */
+
+        const calificacion =
+            Math.max(
+                0,
+                Math.min(
+                    10,
+                    puntos / 100
+                )
+            );
+
+
+        const estado =
+            obtenerEstado(
+                calificacion
+            );
+
+
+        const mensaje =
+            obtenerMensaje(
+                calificacion
+            );
+
+
+        /* =====================================
+           5. SALUDO
+        ===================================== */
+
+        document.getElementById(
+            "saludo"
+        ).textContent =
+            `¡Hola, ${alumno.nombre}! 👋`;
+
+
+        /* =====================================
+           6. NOMBRE MASCOTA
+        ===================================== */
+
+        document.getElementById(
+            "nombreMascota"
+        ).textContent =
+            nombresMascotas[
+                alumno.mascota
+            ]
+            ||
+            alumno.mascota.toUpperCase();
+
+
+        /* =====================================
+           7. MASCOTA (GIF o modelo 3D)
+
+           La mascota "alien" ahora usa un modelo
+           3D animado (.fbx) en vez de un gif.
+           El resto de mascotas sigue usando gif.
+        ===================================== */
+
+        const imgMascota =
+            document.getElementById("robotMascota");
+
+        const stage3D =
+            document.getElementById("robotMascota3D");
+
+        if (alumno.mascota === "alien") {
+
+            imgMascota.style.display = "none";
+            stage3D.style.display = "block";
+
+            cargarMascota3D(estado);
+
+        } else {
+
+            stage3D.style.display = "none";
+            imgMascota.style.display = "block";
+
+            const rutaGif =
+                `Mascotas/${alumno.mascota}${estado}.gif`;
+
+            imgMascota.src =
+                rutaGif;
+
+        }
+
+
+        /* =====================================
+           8. ESTADO MASCOTA
+        ===================================== */
+
+        document.getElementById(
+            "estadoMascota"
+        ).textContent =
+            mensaje.estado;
+
+
+        document.getElementById(
+            "mensajeMascota"
+        ).textContent =
+            mensaje.mensaje;
+
+
+        document.getElementById(
+            "detalleMascota"
+        ).textContent =
+            mensaje.detalle;
+
+
+        /* =====================================
+           9. CALIFICACIÓN
+        ===================================== */
+
+        document.getElementById(
+            "calificacion"
+        ).textContent =
+            calificacion.toFixed(1);
+
+
+        const porcentaje =
+            calificacion * 10;
+
+
+        /* =====================================
+           10. XP
+        ===================================== */
+
+        const xp =
+            Math.min(
+                1000,
+                puntos
+            );
+
+
+        document.getElementById(
+            "xpActual"
+        ).textContent =
+            xp;
+
+
+        document.getElementById(
+            "xpBarra"
+        ).style.width =
+            `${(xp / 1000) * 100}%`;
+
+
+        /* =====================================
+           11. NIVEL
+        ===================================== */
+
+        document.getElementById(
+            "nivel"
+        ).textContent =
+            nivel;
+
+
+        /* =====================================
+           12. ENERGÍA
+        ===================================== */
+
+        document.getElementById(
+            "energiaTexto"
+        ).textContent =
+            `${energia}%`;
+
+
+        document.getElementById(
+            "energiaBarra"
+        ).style.width =
+            `${energia}%`;
+
+
+        /* =====================================
+           13. ACTIVIDADES
+        ===================================== */
+
+        const resultadoActividades =
+            await cargarActividades(
+                alumno.id
+            );
+
+
+        const listaActividades =
+            resultadoActividades
+                .actividades ||
+            [];
+
+
+        const actividadesTotales =
+            listaActividades.length;
+
+
+        const actividadesCompletadas =
+            listaActividades.filter(
+                actividad =>
+                    actividad.estado ===
+                    "completada"
+            ).length;
+
+
+        let porcentajeActividades =
+            0;
+
+
+        if (
+            actividadesTotales > 0
+        ) {
+
+            porcentajeActividades =
+                (
+                    actividadesCompletadas /
+                    actividadesTotales
+                ) * 100;
+
+        }
+
+
+        document.getElementById(
+            "actividadesTexto"
+        ).textContent =
+            `${actividadesCompletadas} / ${actividadesTotales}`;
+
+
+        document.getElementById(
+            "actividadesBarra"
+        ).style.width =
+            `${porcentajeActividades}%`;
+
+
+        /* =====================================
+           14. TAREAS
+           
+           Si todavía no tienes la tabla
+           "tareas", no rompemos el dashboard.
+        ===================================== */
+
+        let listaTareas = [];
+
+
+        try {
+
+            const {
+                data: tareas,
+                error: tareasError
+            } =
+                await supabaseClient
+                    .from("tareas")
+                    .select(
+                        "id, calificacion"
+                    )
+                    .eq(
+                        "alumno_id",
+                        alumno.id
+                    );
+
+
+            if (tareasError) {
+
+                console.warn(
+                    "Tabla tareas no disponible o error:",
+                    tareasError
+                );
+
+            } else {
+
+                listaTareas =
+                    tareas || [];
+
+            }
+
+        }
+
+        catch (error) {
+
+            console.warn(
+                "No se pudieron consultar tareas:",
+                error
+            );
+
+        }
+
+
+        const tareasTotales =
+            listaTareas.length;
+
+
+        const tareasEntregadas =
+            listaTareas.filter(
+                tarea =>
+                    tarea.calificacion !== null &&
+                    tarea.calificacion !== undefined
+            ).length;
+
+
+        let porcentajeTareas =
+            0;
+
+
+        if (
+            tareasTotales > 0
+        ) {
+
+            porcentajeTareas =
+                (
+                    tareasEntregadas /
+                    tareasTotales
+                ) * 100;
+
+        }
+
+
+        document.getElementById(
+            "tareasTexto"
+        ).textContent =
+            `${tareasEntregadas} / ${tareasTotales}`;
+
+
+        document.getElementById(
+            "tareasBarra"
+        ).style.width =
+            `${porcentajeTareas}%`;
+
+
+        /* =====================================
+           15. RENDIMIENTO
+        ===================================== */
+
+        document.getElementById(
+            "rendimientoTexto"
+        ).textContent =
+            `${porcentaje.toFixed(0)}%`;
+
+
+        document.getElementById(
+            "rendimientoBarra"
+        ).style.width =
+            `${porcentaje}%`;
+
+
+        console.log(
+            "================================="
+        );
+
+        console.log(
+            "DASHBOARD CARGADO CORRECTAMENTE"
+        );
+
+        console.log(
+            "Alumno:",
+            alumno.nombre
+        );
+
+        console.log(
+            "Actividades:",
+            listaActividades
+        );
+
+        console.log(
+            "================================="
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "ERROR GENERAL DASHBOARD:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   CERRAR SESIÓN
+========================================= */
+
+async function cerrarSesion() {
+
+    try {
+
+        await supabaseClient
+            .auth
+            .signOut();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Error cerrando sesión:",
+            error
+        );
+
+    }
+
+
+    sessionStorage.clear();
+
+
+    window.location.href =
+        "login.html";
+
+}
+
+
+/* =========================================
+   INICIAR
+========================================= */
+
+cargarDashboard();
+
+</script>
+
+</body>
+
+</html>
