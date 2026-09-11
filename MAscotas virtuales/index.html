@@ -2148,10 +2148,11 @@ main {
 
 <script type="module">
 /* =========================================
-   MASCOTA 3D (alien) — reemplaza
-   alien1.gif / alien2.gif / alien3.gif por
-   Mascotas/alien1.fbx, alien2.fbx, alien3.fbx
-   (misma carpeta que los gifs)
+   MASCOTA 3D — reemplaza todos los gifs
+   (robot1.gif, dinosaurio1.gif, gato1.gif,
+   alien1.gif, zorro1.gif, etc.) por modelos
+   .fbx con el mismo nombre, en la misma
+   carpeta Mascotas/ (ej. Mascotas/robot1.fbx)
 ========================================= */
 
 import * as THREE from "three";
@@ -2159,7 +2160,7 @@ import { FBXLoader } from "three/addons/loaders/FBXLoader.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 
 let scene3D, camera3D, renderer3D, pmrem3D, mixer3D, action3D, clock3D, currentObject3D;
-let currentEstado3D = null;
+let currentKey3D = null;
 let ready3D = false;
 
 function initMascota3D(container){
@@ -2172,7 +2173,7 @@ function initMascota3D(container){
   renderer3D.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer3D.outputColorSpace = THREE.SRGBColorSpace;
   renderer3D.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer3D.toneMappingExposure = .5;
+  renderer3D.toneMappingExposure = 2.1;
   container.appendChild(renderer3D.domElement);
 
   pmrem3D = new THREE.PMREMGenerator(renderer3D);
@@ -2204,7 +2205,7 @@ function initMascota3D(container){
     requestAnimationFrame(animate3D);
     const delta = clock3D.getDelta();
     if(mixer3D) mixer3D.update(delta);
-
+    if(currentObject3D) currentObject3D.rotation.y += delta * 0.35;
     renderer3D.render(scene3D, camera3D);
   }
   animate3D();
@@ -2251,8 +2252,8 @@ async function diagnosticarURL(url){
   }
 }
 
-function cargarModeloEstado(estado, container){
-  const url = `Mascotas/alien${estado}.fbx`;
+function cargarModeloEstado(tipo, estado, container){
+  const url = `Mascotas/${tipo}${estado}.fbx`;
 
   const loaderEl = document.createElement('div');
   loaderEl.className = 'loader3d';
@@ -2268,13 +2269,13 @@ function cargarModeloEstado(estado, container){
       const box = new THREE.Box3().setFromObject(object);
       const size = box.getSize(new THREE.Vector3());
       const maxDim = Math.max(size.x, size.y, size.z) || 1;
-      object.scale.setScalar(1.2 / maxDim);
+      object.scale.setScalar(1.55 / maxDim);
 
       const box2 = new THREE.Box3().setFromObject(object);
       const center = box2.getCenter(new THREE.Vector3());
       object.position.x -= center.x;
       object.position.z -= center.z;
-      object.position.y -= box2.min.y - 0.7;
+      object.position.y -= box2.min.y - 0.4;
 
       object.traverse((child) => {
         if(child.isMesh){
@@ -2320,7 +2321,7 @@ function cargarModeloEstado(estado, container){
   );
 }
 
-window.cargarMascota3D = function(estado){
+window.cargarMascota3D = function(tipo, estado){
   const container = document.getElementById('robotMascota3D');
   if(!container) return;
 
@@ -2328,10 +2329,11 @@ window.cargarMascota3D = function(estado){
     initMascota3D(container);
   }
 
-  if(currentEstado3D === estado) return;
-  currentEstado3D = estado;
+  const key = tipo + estado;
+  if(currentKey3D === key) return;
+  currentKey3D = key;
 
-  cargarModeloEstado(estado, container);
+  cargarModeloEstado(tipo, estado, container);
 };
 </script>
 
@@ -3453,11 +3455,11 @@ async function cargarDashboard() {
 
 
         /* =====================================
-           7. MASCOTA (GIF o modelo 3D)
+           7. MASCOTA (modelo 3D)
 
-           La mascota "alien" ahora usa un modelo
-           3D animado (.fbx) en vez de un gif.
-           El resto de mascotas sigue usando gif.
+           Todas las mascotas usan ahora un
+           modelo 3D animado (.fbx) con el mismo
+           nombre que tenía su gif, en vez de gif.
         ===================================== */
 
         const imgMascota =
@@ -3466,25 +3468,10 @@ async function cargarDashboard() {
         const stage3D =
             document.getElementById("robotMascota3D");
 
-        if (alumno.mascota === "alien") {
+        imgMascota.style.display = "none";
+        stage3D.style.display = "block";
 
-            imgMascota.style.display = "none";
-            stage3D.style.display = "block";
-
-            cargarMascota3D(estado);
-
-        } else {
-
-            stage3D.style.display = "none";
-            imgMascota.style.display = "block";
-
-            const rutaGif =
-                `Mascotas/${alumno.mascota}${estado}.gif`;
-
-            imgMascota.src =
-                rutaGif;
-
-        }
+        cargarMascota3D(alumno.mascota, estado);
 
 
         /* =====================================
