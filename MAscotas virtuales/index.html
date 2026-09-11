@@ -2173,7 +2173,7 @@ function initMascota3D(container){
   renderer3D.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer3D.outputColorSpace = THREE.SRGBColorSpace;
   renderer3D.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer3D.toneMappingExposure = 2.1;
+  renderer3D.toneMappingExposure = .5;
   container.appendChild(renderer3D.domElement);
 
   pmrem3D = new THREE.PMREMGenerator(renderer3D);
@@ -2205,7 +2205,7 @@ function initMascota3D(container){
     requestAnimationFrame(animate3D);
     const delta = clock3D.getDelta();
     if(mixer3D) mixer3D.update(delta);
-    if(currentObject3D) currentObject3D.rotation.y += delta * 0.35;
+
     renderer3D.render(scene3D, camera3D);
   }
   animate3D();
@@ -2269,13 +2269,13 @@ function cargarModeloEstado(tipo, estado, container){
       const box = new THREE.Box3().setFromObject(object);
       const size = box.getSize(new THREE.Vector3());
       const maxDim = Math.max(size.x, size.y, size.z) || 1;
-      object.scale.setScalar(1.55 / maxDim);
+      object.scale.setScalar(1.2 / maxDim);
 
       const box2 = new THREE.Box3().setFromObject(object);
       const center = box2.getCenter(new THREE.Vector3());
       object.position.x -= center.x;
       object.position.z -= center.z;
-      object.position.y -= box2.min.y - 0.4;
+      object.position.y -= box2.min.y - 1;
 
       object.traverse((child) => {
         if(child.isMesh){
