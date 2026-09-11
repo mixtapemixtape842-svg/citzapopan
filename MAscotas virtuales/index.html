@@ -2172,7 +2172,7 @@ function initMascota3D(container){
   renderer3D.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer3D.outputColorSpace = THREE.SRGBColorSpace;
   renderer3D.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer3D.toneMappingExposure = 0;
+  renderer3D.toneMappingExposure = 1;
   container.appendChild(renderer3D.domElement);
 
   pmrem3D = new THREE.PMREMGenerator(renderer3D);
