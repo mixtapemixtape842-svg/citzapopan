@@ -2204,7 +2204,7 @@ function initMascota3D(container){
     requestAnimationFrame(animate3D);
     const delta = clock3D.getDelta();
     if(mixer3D) mixer3D.update(delta);
-    if(currentObject3D) currentObject3D.rotation.y += delta * 0.35;
+
     renderer3D.render(scene3D, camera3D);
   }
   animate3D();
@@ -2268,7 +2268,7 @@ function cargarModeloEstado(estado, container){
       const box = new THREE.Box3().setFromObject(object);
       const size = box.getSize(new THREE.Vector3());
       const maxDim = Math.max(size.x, size.y, size.z) || 1;
-      object.scale.setScalar(1.55 / maxDim);
+      object.scale.setScalar(1.2 / maxDim);
 
       const box2 = new THREE.Box3().setFromObject(object);
       const center = box2.getCenter(new THREE.Vector3());
