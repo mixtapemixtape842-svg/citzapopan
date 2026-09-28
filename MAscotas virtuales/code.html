@@ -1,0 +1,1980 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Code.org | CITZ</title>
+
+<style>
+
+/* =========================================================
+   CONFIGURACIÓN GENERAL
+========================================================= */
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:#f5f7fb;
+    color:#172033;
+    line-height:1.6;
+}
+
+button,
+a{
+    font-family:inherit;
+}
+
+a{
+    text-decoration:none;
+}
+
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.navbar{
+    width:100%;
+    background:#0a192f;
+    color:white;
+
+    padding:12px 7%;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    position:sticky;
+    top:0;
+
+    z-index:1000;
+
+    box-shadow:0 4px 20px rgba(0,0,0,.15);
+}
+
+
+/* LOGO */
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    font-size:21px;
+    font-weight:bold;
+}
+
+.logo-img{
+    width:52px;
+    height:52px;
+
+    object-fit:contain;
+
+    border-radius:10px;
+
+    background:white;
+}
+
+.logo-text{
+    color:white;
+}
+
+.logo-text span{
+    color:#ff6b35;
+}
+
+
+/* BOTÓN NAV */
+
+.nav-button{
+    border:1px solid rgba(255,255,255,.25);
+
+    background:transparent;
+
+    color:white;
+
+    padding:9px 17px;
+
+    border-radius:9px;
+
+    cursor:pointer;
+
+    transition:.25s;
+}
+
+.nav-button:hover{
+    background:#ff6b35;
+    border-color:#ff6b35;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+
+    background:
+
+        radial-gradient(
+            circle at 85% 20%,
+            rgba(255,107,53,.18),
+            transparent 30%
+        ),
+
+        radial-gradient(
+            circle at 10% 90%,
+            rgba(0,245,255,.10),
+            transparent 30%
+        ),
+
+        #0a192f;
+
+    color:white;
+
+    padding:90px 7% 100px;
+
+    overflow:hidden;
+}
+
+
+.hero-content{
+
+    max-width:1100px;
+
+    margin:auto;
+
+    display:grid;
+
+    grid-template-columns:1.2fr .8fr;
+
+    gap:60px;
+
+    align-items:center;
+}
+
+
+/* BADGE */
+
+.badge{
+
+    display:inline-block;
+
+    background:rgba(255,107,53,.14);
+
+    color:#ff8b61;
+
+    border:1px solid rgba(255,107,53,.35);
+
+    padding:7px 14px;
+
+    border-radius:30px;
+
+    font-size:13px;
+
+    font-weight:bold;
+
+    margin-bottom:20px;
+}
+
+
+/* TITULO */
+
+.hero h1{
+
+    font-size:clamp(
+        38px,
+        5vw,
+        65px
+    );
+
+    line-height:1.05;
+
+    margin-bottom:22px;
+}
+
+.hero h1 span{
+    color:#ff6b35;
+}
+
+
+.hero p{
+
+    font-size:18px;
+
+    color:#d5dce8;
+
+    max-width:650px;
+
+    margin-bottom:30px;
+}
+
+
+/* BOTONES */
+
+.hero-buttons{
+
+    display:flex;
+
+    gap:15px;
+
+    flex-wrap:wrap;
+}
+
+
+.btn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:13px 22px;
+
+    border-radius:10px;
+
+    font-weight:bold;
+
+    transition:.25s;
+
+    cursor:pointer;
+
+    border:none;
+}
+
+
+.btn-primary{
+
+    background:#ff6b35;
+
+    color:white;
+}
+
+
+.btn-primary:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 10px 25px
+        rgba(255,107,53,.25);
+}
+
+
+.btn-secondary{
+
+    border:
+        1px solid
+        rgba(255,255,255,.3);
+
+    color:white;
+
+    background:
+        rgba(255,255,255,.05);
+}
+
+
+.btn-secondary:hover{
+
+    background:white;
+
+    color:#0a192f;
+}
+
+
+/* =========================================================
+   TARJETA CODE
+========================================================= */
+
+.code-card{
+
+    background:#101f36;
+
+    border:
+        1px solid
+        rgba(255,255,255,.12);
+
+    border-radius:22px;
+
+    padding:25px;
+
+    box-shadow:
+        0 25px 60px
+        rgba(0,0,0,.3);
+
+    animation:
+        float 4s ease-in-out infinite;
+}
+
+
+@keyframes float{
+
+    0%,
+    100%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(-8px);
+    }
+}
+
+
+/* VENTANA */
+
+.window-top{
+
+    display:flex;
+
+    gap:7px;
+
+    margin-bottom:22px;
+}
+
+
+.dot{
+
+    width:10px;
+    height:10px;
+
+    border-radius:50%;
+
+    background:#68768a;
+}
+
+
+/* LINEAS */
+
+.code-line{
+
+    background:#0a1527;
+
+    border-radius:8px;
+
+    padding:12px;
+
+    margin:9px 0;
+
+    font-family:monospace;
+
+    color:#dce7f7;
+}
+
+
+.code-line .orange{
+    color:#ff6b35;
+}
+
+.code-line .cyan{
+    color:#5ee7f5;
+}
+
+.code-line .purple{
+    color:#bd8cff;
+}
+
+
+/* =========================================================
+   SECCIONES
+========================================================= */
+
+.section{
+
+    padding:80px 7%;
+}
+
+
+.section-inner{
+
+    max-width:1100px;
+
+    margin:auto;
+}
+
+
+.section-title{
+
+    text-align:center;
+
+    margin-bottom:50px;
+}
+
+
+.section-title .small{
+
+    color:#ff6b35;
+
+    font-weight:bold;
+
+    font-size:14px;
+
+    text-transform:uppercase;
+
+    letter-spacing:1px;
+}
+
+
+.section-title h2{
+
+    font-size:38px;
+
+    margin:
+        8px 0
+        12px;
+}
+
+
+.section-title p{
+
+    color:#667085;
+
+    max-width:650px;
+
+    margin:auto;
+}
+
+
+/* =========================================================
+   TARJETAS
+========================================================= */
+
+.cards{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:22px;
+}
+
+
+.card{
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:28px;
+
+    border:
+        1px solid
+        #e6eaf0;
+
+    box-shadow:
+        0 8px 30px
+        rgba(16,24,40,.05);
+
+    transition:.25s;
+}
+
+
+.card:hover{
+
+    transform:
+        translateY(-5px);
+
+    box-shadow:
+        0 15px 35px
+        rgba(16,24,40,.1);
+}
+
+
+.card-icon{
+
+    width:55px;
+
+    height:55px;
+
+    border-radius:15px;
+
+    background:#fff0eb;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:27px;
+
+    margin-bottom:18px;
+}
+
+
+.card h3{
+
+    margin-bottom:8px;
+}
+
+
+.card p{
+
+    color:#667085;
+}
+
+
+/* =========================================================
+   SECCIÓN PADRES
+========================================================= */
+
+.parents{
+
+    background:#0a192f;
+
+    color:white;
+}
+
+
+.parents-content{
+
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:50px;
+
+    align-items:center;
+}
+
+
+.parents h2{
+
+    font-size:38px;
+
+    margin-bottom:18px;
+}
+
+
+.parents p{
+
+    color:#ccd5e3;
+}
+
+
+/* LISTA */
+
+.parent-list{
+
+    margin-top:25px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:15px;
+}
+
+
+.parent-item{
+
+    display:flex;
+
+    gap:13px;
+
+    align-items:flex-start;
+}
+
+
+.check{
+
+    width:25px;
+
+    height:25px;
+
+    flex:none;
+
+    background:#ff6b35;
+
+    border-radius:50%;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:13px;
+}
+
+
+/* CAJA */
+
+.parent-box{
+
+    background:#101f36;
+
+    border:
+        1px solid
+        rgba(255,255,255,.1);
+
+    border-radius:20px;
+
+    padding:30px;
+}
+
+
+.parent-box h3{
+
+    margin-bottom:20px;
+}
+
+
+.parent-box p{
+
+    margin-bottom:20px;
+}
+
+
+/* =========================================================
+   ACTIVIDAD INTERACTIVA
+========================================================= */
+
+.interactive{
+
+    background:#eef3f8;
+}
+
+
+.activity{
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:35px;
+
+    max-width:750px;
+
+    margin:auto;
+
+    box-shadow:
+        0 12px 35px
+        rgba(16,24,40,.08);
+}
+
+
+.activity-header{
+
+    text-align:center;
+
+    margin-bottom:25px;
+}
+
+
+.robot{
+
+    font-size:65px;
+
+    margin-bottom:10px;
+}
+
+
+.question{
+
+    font-size:21px;
+
+    font-weight:bold;
+
+    margin-bottom:20px;
+
+    text-align:center;
+}
+
+
+.options{
+
+    display:grid;
+
+    gap:12px;
+}
+
+
+.option{
+
+    width:100%;
+
+    padding:15px;
+
+    background:#f5f7fa;
+
+    border:
+        2px solid
+        transparent;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    text-align:left;
+
+    font-size:16px;
+
+    transition:.2s;
+}
+
+
+.option:hover{
+
+    border-color:#ff6b35;
+}
+
+
+.option.correct{
+
+    background:#e7f8ef;
+
+    border-color:#31b46b;
+}
+
+
+.option.incorrect{
+
+    background:#fff0f0;
+
+    border-color:#e05252;
+}
+
+
+.result{
+
+    text-align:center;
+
+    margin-top:20px;
+
+    font-weight:bold;
+
+    min-height:25px;
+}
+
+
+/* =========================================================
+   FAQ
+========================================================= */
+
+.faq{
+
+    max-width:800px;
+
+    margin:auto;
+}
+
+
+.faq-item{
+
+    background:white;
+
+    border:
+        1px solid
+        #e5e9ef;
+
+    border-radius:13px;
+
+    margin-bottom:12px;
+
+    overflow:hidden;
+}
+
+
+.faq-question{
+
+    width:100%;
+
+    border:none;
+
+    background:white;
+
+    padding:20px;
+
+    text-align:left;
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+}
+
+
+.faq-answer{
+
+    max-height:0;
+
+    overflow:hidden;
+
+    transition:
+        max-height
+        .3s ease;
+}
+
+
+.faq-answer p{
+
+    padding:
+        0 20px
+        20px;
+
+    color:#667085;
+}
+
+
+.faq-item.active
+.faq-answer{
+
+    max-height:200px;
+}
+
+
+.faq-item.active
+.arrow{
+
+    transform:
+        rotate(180deg);
+}
+
+
+/* =========================================================
+   CTA
+========================================================= */
+
+.cta{
+
+    padding:80px 7%;
+
+    text-align:center;
+
+    background:#fff;
+}
+
+
+.cta-box{
+
+    max-width:900px;
+
+    margin:auto;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0a192f,
+            #152d4d
+        );
+
+    border-radius:25px;
+
+    padding:55px 30px;
+
+    color:white;
+}
+
+
+.cta h2{
+
+    font-size:38px;
+
+    margin-bottom:15px;
+}
+
+
+.cta p{
+
+    color:#d0d9e5;
+
+    max-width:600px;
+
+    margin:
+        0 auto
+        25px;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+
+    background:#071221;
+
+    color:#aab5c5;
+
+    text-align:center;
+
+    padding:30px 7%;
+
+    font-size:14px;
+}
+
+
+footer strong{
+
+    color:white;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:850px){
+
+    .hero-content{
+
+        grid-template-columns:1fr;
+    }
+
+
+    .cards{
+
+        grid-template-columns:1fr;
+    }
+
+
+    .parents-content{
+
+        grid-template-columns:1fr;
+    }
+
+
+    .hero{
+
+        padding-top:60px;
+    }
+
+}
+
+
+@media(max-width:550px){
+
+    .navbar{
+
+        padding:
+            10px 5%;
+    }
+
+
+    .logo{
+
+        font-size:17px;
+    }
+
+
+    .logo-img{
+
+        width:42px;
+
+        height:42px;
+    }
+
+
+    .section{
+
+        padding:
+            60px 5%;
+    }
+
+
+    .hero{
+
+        padding-left:5%;
+
+        padding-right:5%;
+    }
+
+
+    .hero h1{
+
+        font-size:40px;
+    }
+
+
+    .section-title h2,
+    .parents h2,
+    .cta h2{
+
+        font-size:30px;
+    }
+
+
+    .hero-buttons{
+
+        flex-direction:column;
+    }
+
+
+    .btn{
+
+        width:100%;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav class="navbar">
+
+    <div class="logo">
+
+        <!-- LOGO CITZ -->
+
+        <img
+            src="images%20(1).jfif"
+            alt="Logo CITZ"
+            class="logo-img"
+        >
+
+        <div class="logo-text">
+
+            CITZ
+            <span>•</span>
+            Tecnología
+
+        </div>
+
+    </div>
+
+
+    <button
+        class="nav-button"
+        onclick="scrollToParents()">
+
+        Para padres
+
+    </button>
+
+</nav>
+
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section class="hero">
+
+<div class="hero-content">
+
+
+    <div>
+
+        <div class="badge">
+
+            💻 HERRAMIENTA EDUCATIVA
+
+        </div>
+
+
+        <h1>
+
+            Aprendemos a
+
+            <span>
+                programar
+            </span>
+
+            con Code.org
+
+        </h1>
+
+
+        <p>
+
+            En CITZ utilizamos herramientas digitales
+            para que los alumnos aprendan programación
+            de una manera práctica, visual e interactiva.
+
+        </p>
+
+
+        <div class="hero-buttons">
+
+
+            <a
+                href="https://studio.code.org/"
+                target="_blank"
+                class="btn btn-primary">
+
+                🚀 Entrar a Code.org
+
+            </a>
+
+
+            <button
+                class="btn btn-secondary"
+                onclick="scrollToParents()">
+
+                👨‍👩‍👧 Información para padres
+
+            </button>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- TARJETA VISUAL -->
+
+    <div class="code-card">
+
+
+        <div class="window-top">
+
+            <div class="dot"></div>
+
+            <div class="dot"></div>
+
+            <div class="dot"></div>
+
+        </div>
+
+
+        <div class="code-line">
+
+            <span class="purple">
+                al iniciar
+            </span>
+
+        </div>
+
+
+        <div class="code-line">
+
+            avanzar
+            <span class="cyan">
+                ()
+            </span>
+
+        </div>
+
+
+        <div class="code-line">
+
+            girar
+            <span class="orange">
+                90°
+            </span>
+
+        </div>
+
+
+        <div class="code-line">
+
+            repetir
+            <span class="orange">
+                4
+            </span>
+            veces
+
+        </div>
+
+
+        <div class="code-line">
+
+            <span class="cyan">
+
+                ¡Mi programa funciona!
+
+            </span>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     ¿QUÉ ES CODE.ORG?
+===================================================== -->
+
+<section class="section">
+
+<div class="section-inner">
+
+
+    <div class="section-title">
+
+        <div class="small">
+
+            CONOCIENDO LA HERRAMIENTA
+
+        </div>
+
+
+        <h2>
+
+            ¿Qué es Code.org?
+
+        </h2>
+
+
+        <p>
+
+            Es una plataforma educativa que permite
+            aprender conceptos de programación y
+            pensamiento computacional mediante
+            actividades interactivas.
+
+        </p>
+
+    </div>
+
+
+
+    <div class="cards">
+
+
+        <div class="card">
+
+            <div class="card-icon">
+                🧩
+            </div>
+
+
+            <h3>
+
+                Resolver retos
+
+            </h3>
+
+
+            <p>
+
+                Los alumnos enfrentan pequeños desafíos
+                que requieren analizar un problema y
+                encontrar una solución.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="card">
+
+            <div class="card-icon">
+                🎮
+            </div>
+
+
+            <h3>
+
+                Crear proyectos
+
+            </h3>
+
+
+            <p>
+
+                Dependiendo de la actividad, pueden
+                crear juegos, animaciones y diferentes
+                proyectos utilizando programación.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="card">
+
+            <div class="card-icon">
+                🧠
+            </div>
+
+
+            <h3>
+
+                Pensamiento computacional
+
+            </h3>
+
+
+            <p>
+
+                Aprenden conceptos como secuencias,
+                patrones, instrucciones, ciclos y
+                resolución de problemas.
+
+            </p>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     INFORMACIÓN PARA PADRES
+===================================================== -->
+
+<section
+    class="section parents"
+    id="padres">
+
+
+<div class="section-inner">
+
+
+<div class="parents-content">
+
+
+    <div>
+
+
+        <div class="badge">
+
+            INFORMACIÓN PARA FAMILIAS
+
+        </div>
+
+
+        <h2>
+
+            ¿Cómo puede apoyar a su hijo?
+
+        </h2>
+
+
+        <p>
+
+            No necesita saber programación para
+            acompañarlo durante su aprendizaje.
+
+        </p>
+
+
+
+        <div class="parent-list">
+
+
+            <div class="parent-item">
+
+                <div class="check">
+                    ✓
+                </div>
+
+                <div>
+
+                    <strong>
+                        Pregúntele qué está creando.
+                    </strong>
+
+                    <br>
+
+                    <span>
+
+                        Permita que le explique cómo
+                        funciona su proyecto.
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="parent-item">
+
+                <div class="check">
+                    ✓
+                </div>
+
+                <div>
+
+                    <strong>
+                        Anime la experimentación.
+                    </strong>
+
+                    <br>
+
+                    <span>
+
+                        Equivocarse y probar diferentes
+                        soluciones forma parte del aprendizaje.
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="parent-item">
+
+                <div class="check">
+                    ✓
+                </div>
+
+                <div>
+
+                    <strong>
+                        Reconozca el proceso.
+                    </strong>
+
+                    <br>
+
+                    <span>
+
+                        No importa solamente que el programa
+                        funcione, sino cómo llegó a la solución.
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+    <div class="parent-box">
+
+
+        <h3>
+
+            📄 Información oficial para padres
+
+        </h3>
+
+
+        <p>
+
+            Code.org cuenta con recursos para que las
+            familias conozcan la plataforma y puedan
+            acompañar a sus hijos durante el aprendizaje.
+
+        </p>
+
+
+        <a
+
+            href="https://support.code.org/hc/en-us/articles/360041550072-Is-there-a-letter-I-can-send-to-parents-about-how-to-get-setup-with-Code-org-at-home"
+
+            target="_blank"
+
+            class="btn btn-primary">
+
+            Ver información para padres
+
+        </a>
+
+
+    </div>
+
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     MINI ACTIVIDAD
+===================================================== -->
+
+<section class="section interactive">
+
+
+<div class="section-inner">
+
+
+    <div class="section-title">
+
+
+        <div class="small">
+
+            PRUEBA RÁPIDA
+
+        </div>
+
+
+        <h2>
+
+            ¿Cómo piensa un programador?
+
+        </h2>
+
+
+        <p>
+
+            Los alumnos aprenden a dar instrucciones
+            claras para conseguir un resultado.
+
+        </p>
+
+
+    </div>
+
+
+
+    <div class="activity">
+
+
+        <div class="activity-header">
+
+
+            <div class="robot">
+
+                🤖
+
+            </div>
+
+
+            <strong>
+
+                Reto de programación
+
+            </strong>
+
+
+        </div>
+
+
+
+        <div class="question">
+
+            ¿Qué debería hacer primero el robot
+            para llegar hasta la estrella?
+
+        </div>
+
+
+
+        <div class="options">
+
+
+            <button
+                class="option"
+                onclick="answer(this,false)">
+
+                A) Dar una instrucción al azar
+
+            </button>
+
+
+            <button
+                class="option"
+                onclick="answer(this,true)">
+
+                B) Analizar dónde está y planear una secuencia
+
+            </button>
+
+
+            <button
+                class="option"
+                onclick="answer(this,false)">
+
+                C) Moverse sin instrucciones
+
+            </button>
+
+
+        </div>
+
+
+
+        <div
+            id="result"
+            class="result">
+
+        </div>
+
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FAQ
+===================================================== -->
+
+<section class="section">
+
+
+<div class="section-inner">
+
+
+    <div class="section-title">
+
+
+        <div class="small">
+
+            PREGUNTAS FRECUENTES
+
+        </div>
+
+
+        <h2>
+
+            Lo que las familias suelen preguntar
+
+        </h2>
+
+
+    </div>
+
+
+
+    <div class="faq">
+
+
+        <div class="faq-item">
+
+
+            <button
+                class="faq-question"
+                onclick="toggleFAQ(this)">
+
+                ¿Mi hijo necesita saber programación?
+
+                <span class="arrow">
+                    ▼
+                </span>
+
+            </button>
+
+
+            <div class="faq-answer">
+
+                <p>
+
+                    No. Las actividades están diseñadas
+                    para introducir progresivamente
+                    conceptos de programación.
+
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+
+        <div class="faq-item">
+
+
+            <button
+                class="faq-question"
+                onclick="toggleFAQ(this)">
+
+                ¿Puede continuar trabajando desde casa?
+
+                <span class="arrow">
+                    ▼
+                </span>
+
+            </button>
+
+
+            <div class="faq-answer">
+
+                <p>
+
+                    Sí. Cuando la actividad y la cuenta
+                    del alumno lo permitan, puede acceder
+                    a Code.org desde otro dispositivo y
+                    continuar su trabajo.
+
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+
+        <div class="faq-item">
+
+
+            <button
+                class="faq-question"
+                onclick="toggleFAQ(this)">
+
+                ¿Los padres necesitan crear una cuenta?
+
+                <span class="arrow">
+                    ▼
+                </span>
+
+            </button>
+
+
+            <div class="faq-answer">
+
+                <p>
+
+                    No necesariamente. El acceso y la
+                    configuración dependen de cómo se
+                    haya organizado la sección de alumnos.
+
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+
+        <div class="faq-item">
+
+
+            <button
+                class="faq-question"
+                onclick="toggleFAQ(this)">
+
+                ¿Qué pasa si mi hijo se equivoca?
+
+                <span class="arrow">
+                    ▼
+                </span>
+
+            </button>
+
+
+            <div class="faq-answer">
+
+                <p>
+
+                    Los errores forman parte natural del
+                    proceso. El alumno puede analizar lo
+                    ocurrido, modificar sus instrucciones
+                    y volver a intentarlo.
+
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     CTA
+===================================================== -->
+
+<section class="cta">
+
+
+<div class="cta-box">
+
+
+    <h2>
+
+        ¡Listos para programar!
+
+    </h2>
+
+
+    <p>
+
+        El aprendizaje de programación comienza con
+        algo tan sencillo como aprender a dar instrucciones.
+
+    </p>
+
+
+    <a
+
+        href="https://studio.code.org/"
+
+        target="_blank"
+
+        class="btn btn-primary">
+
+        🚀 Entrar a Code.org
+
+    </a>
+
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+
+    <strong>
+        CITZ
+    </strong>
+
+    · Tecnología, Robótica y Educación
+
+
+    <br><br>
+
+
+    Esta página presenta información educativa sobre
+    el uso de Code.org dentro de las actividades de CITZ.
+
+
+</footer>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+
+/* =========================================================
+   IR A INFORMACIÓN PARA PADRES
+========================================================= */
+
+function scrollToParents(){
+
+    document
+        .getElementById("padres")
+        .scrollIntoView({
+
+            behavior:"smooth"
+
+        });
+
+}
+
+
+
+/* =========================================================
+   MINI ACTIVIDAD
+========================================================= */
+
+function answer(button, correct){
+
+
+    const options =
+        document.querySelectorAll(".option");
+
+
+    options.forEach(option => {
+
+        option.disabled = true;
+
+    });
+
+
+    const result =
+        document.getElementById("result");
+
+
+    if(correct){
+
+
+        button.classList.add("correct");
+
+
+        result.innerHTML =
+
+            "🎉 ¡Correcto! Primero debemos analizar el problema y planear una secuencia.";
+
+
+    }else{
+
+
+        button.classList.add("incorrect");
+
+
+        result.innerHTML =
+
+            "💡 Piensa como un programador: primero analiza el problema y después crea una secuencia.";
+
+    }
+
+}
+
+
+
+/* =========================================================
+   FAQ
+========================================================= */
+
+function toggleFAQ(button){
+
+
+    const item =
+        button.parentElement;
+
+
+    item.classList.toggle("active");
+
+}
+
+
+</script>
+
+
+</body>
+</html>
+

@@ -1,0 +1,2455 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Tinkercad | CITZ</title>
+
+<style>
+
+/* =========================================================
+   CONFIGURACIÓN GENERAL
+========================================================= */
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:#f5f7fb;
+    color:#172033;
+    line-height:1.6;
+}
+
+button,
+a{
+    font-family:inherit;
+}
+
+a{
+    text-decoration:none;
+}
+
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.navbar{
+
+    width:100%;
+
+    background:#0a192f;
+
+    color:white;
+
+    padding:12px 7%;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    position:sticky;
+
+    top:0;
+
+    z-index:1000;
+
+    box-shadow:
+        0 4px 20px
+        rgba(0,0,0,.15);
+}
+
+
+.logo{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    font-size:21px;
+
+    font-weight:bold;
+}
+
+
+.logo-img{
+
+    width:52px;
+
+    height:52px;
+
+    object-fit:contain;
+
+    border-radius:10px;
+
+    background:white;
+}
+
+
+.logo-text{
+
+    color:white;
+}
+
+
+.logo-text span{
+
+    color:#ff6b35;
+}
+
+
+.nav-button{
+
+    border:
+        1px solid
+        rgba(255,255,255,.25);
+
+    background:transparent;
+
+    color:white;
+
+    padding:9px 17px;
+
+    border-radius:9px;
+
+    cursor:pointer;
+
+    transition:.25s;
+}
+
+
+.nav-button:hover{
+
+    background:#ff6b35;
+
+    border-color:#ff6b35;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+
+    background:
+
+        radial-gradient(
+            circle at 85% 20%,
+            rgba(255,107,53,.20),
+            transparent 30%
+        ),
+
+        radial-gradient(
+            circle at 10% 90%,
+            rgba(0,245,255,.10),
+            transparent 30%
+        ),
+
+        #0a192f;
+
+    color:white;
+
+    padding:
+        80px 7%
+        90px;
+
+    overflow:hidden;
+}
+
+
+.hero-content{
+
+    max-width:1150px;
+
+    margin:auto;
+
+    display:grid;
+
+    grid-template-columns:
+        1.05fr .95fr;
+
+    gap:55px;
+
+    align-items:center;
+}
+
+
+.badge{
+
+    display:inline-block;
+
+    background:
+        rgba(255,107,53,.14);
+
+    color:#ff9a76;
+
+    border:
+        1px solid
+        rgba(255,107,53,.35);
+
+    padding:7px 14px;
+
+    border-radius:30px;
+
+    font-size:13px;
+
+    font-weight:bold;
+
+    margin-bottom:20px;
+}
+
+
+.hero h1{
+
+    font-size:
+        clamp(
+            40px,
+            5vw,
+            65px
+        );
+
+    line-height:1.05;
+
+    margin-bottom:22px;
+}
+
+
+.hero h1 span{
+
+    color:#ff6b35;
+}
+
+
+.hero p{
+
+    font-size:18px;
+
+    color:#d5dce8;
+
+    max-width:650px;
+
+    margin-bottom:30px;
+}
+
+
+.hero-buttons{
+
+    display:flex;
+
+    gap:15px;
+
+    flex-wrap:wrap;
+}
+
+
+.btn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:
+        13px 22px;
+
+    border-radius:10px;
+
+    font-weight:bold;
+
+    transition:.25s;
+
+    cursor:pointer;
+
+    border:none;
+}
+
+
+.btn-primary{
+
+    background:#ff6b35;
+
+    color:white;
+}
+
+
+.btn-primary:hover{
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 10px 25px
+        rgba(255,107,53,.25);
+}
+
+
+.btn-secondary{
+
+    border:
+        1px solid
+        rgba(255,255,255,.3);
+
+    color:white;
+
+    background:
+        rgba(255,255,255,.05);
+}
+
+
+.btn-secondary:hover{
+
+    background:white;
+
+    color:#0a192f;
+}
+
+
+/* =========================================================
+   HERO IMAGEN
+========================================================= */
+
+.hero-image{
+
+    position:relative;
+
+    border-radius:25px;
+
+    overflow:hidden;
+
+    box-shadow:
+        0 25px 60px
+        rgba(0,0,0,.35);
+
+    border:
+        1px solid
+        rgba(255,255,255,.15);
+}
+
+
+.hero-image img{
+
+    width:100%;
+
+    height:390px;
+
+    object-fit:cover;
+
+    display:block;
+}
+
+
+.image-label{
+
+    position:absolute;
+
+    bottom:15px;
+
+    left:15px;
+
+    right:15px;
+
+    background:
+        rgba(10,25,47,.90);
+
+    backdrop-filter:blur(8px);
+
+    padding:14px;
+
+    border-radius:12px;
+
+    font-size:14px;
+
+    color:#e5edf7;
+}
+
+
+/* =========================================================
+   SECCIONES
+========================================================= */
+
+.section{
+
+    padding:80px 7%;
+}
+
+
+.section-inner{
+
+    max-width:1100px;
+
+    margin:auto;
+}
+
+
+.section-title{
+
+    text-align:center;
+
+    margin-bottom:50px;
+}
+
+
+.section-title .small{
+
+    color:#ff6b35;
+
+    font-weight:bold;
+
+    font-size:14px;
+
+    text-transform:uppercase;
+
+    letter-spacing:1px;
+}
+
+
+.section-title h2{
+
+    font-size:38px;
+
+    margin:
+        8px 0
+        12px;
+}
+
+
+.section-title p{
+
+    color:#667085;
+
+    max-width:700px;
+
+    margin:auto;
+}
+
+
+/* =========================================================
+   TARJETAS DE TINKERCAD
+========================================================= */
+
+.cards{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:22px;
+}
+
+
+.card{
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:28px;
+
+    border:
+        1px solid
+        #e6eaf0;
+
+    box-shadow:
+        0 8px 30px
+        rgba(16,24,40,.05);
+
+    transition:.25s;
+}
+
+
+.card:hover{
+
+    transform:
+        translateY(-5px);
+
+    box-shadow:
+        0 15px 35px
+        rgba(16,24,40,.1);
+}
+
+
+.card-icon{
+
+    width:58px;
+
+    height:58px;
+
+    border-radius:15px;
+
+    background:#fff0eb;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:29px;
+
+    margin-bottom:18px;
+}
+
+
+.card h3{
+
+    margin-bottom:9px;
+}
+
+
+.card p{
+
+    color:#667085;
+}
+
+
+/* =========================================================
+   GALERÍA
+========================================================= */
+
+.gallery-section{
+
+    background:#eef3f8;
+}
+
+
+.gallery{
+
+    display:grid;
+
+    grid-template-columns:
+        1.3fr 1fr;
+
+    gap:22px;
+}
+
+
+.gallery-card{
+
+    background:white;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    box-shadow:
+        0 10px 30px
+        rgba(16,24,40,.07);
+
+    border:
+        1px solid
+        #e5eaf0;
+}
+
+
+.gallery-card img{
+
+    width:100%;
+
+    height:270px;
+
+    object-fit:cover;
+
+    display:block;
+}
+
+
+.gallery-card-content{
+
+    padding:22px;
+}
+
+
+.gallery-card-content h3{
+
+    margin-bottom:7px;
+}
+
+
+.gallery-card-content p{
+
+    color:#667085;
+
+    font-size:15px;
+}
+
+
+.gallery-small{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:22px;
+}
+
+
+.gallery-small .gallery-card img{
+
+    height:190px;
+}
+
+
+/* =========================================================
+   PARA PADRES
+========================================================= */
+
+.parents{
+
+    background:#0a192f;
+
+    color:white;
+}
+
+
+.parents-content{
+
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:50px;
+
+    align-items:center;
+}
+
+
+.parents h2{
+
+    font-size:38px;
+
+    margin-bottom:18px;
+}
+
+
+.parents p{
+
+    color:#ccd5e3;
+}
+
+
+.parent-list{
+
+    margin-top:25px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:16px;
+}
+
+
+.parent-item{
+
+    display:flex;
+
+    gap:13px;
+
+    align-items:flex-start;
+}
+
+
+.check{
+
+    width:25px;
+
+    height:25px;
+
+    flex:none;
+
+    background:#ff6b35;
+
+    border-radius:50%;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:13px;
+}
+
+
+.parent-box{
+
+    background:#101f36;
+
+    border:
+        1px solid
+        rgba(255,255,255,.1);
+
+    border-radius:20px;
+
+    padding:30px;
+}
+
+
+.parent-box h3{
+
+    margin-bottom:20px;
+}
+
+
+.parent-box p{
+
+    margin-bottom:20px;
+}
+
+
+/* =========================================================
+   TINKERCAD EN 3 ÁREAS
+========================================================= */
+
+.areas{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:22px;
+}
+
+
+.area{
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:28px;
+
+    border:
+        1px solid
+        #e6eaf0;
+}
+
+
+.area-number{
+
+    font-size:13px;
+
+    color:#ff6b35;
+
+    font-weight:bold;
+
+    margin-bottom:10px;
+}
+
+
+.area h3{
+
+    margin-bottom:10px;
+}
+
+
+.area p{
+
+    color:#667085;
+}
+
+
+/* =========================================================
+   MINI ACTIVIDAD
+========================================================= */
+
+.interactive{
+
+    background:#f5f7fb;
+}
+
+
+.activity{
+
+    background:white;
+
+    border-radius:22px;
+
+    padding:35px;
+
+    max-width:780px;
+
+    margin:auto;
+
+    box-shadow:
+        0 12px 35px
+        rgba(16,24,40,.08);
+}
+
+
+.activity-header{
+
+    text-align:center;
+
+    margin-bottom:25px;
+}
+
+
+.robot{
+
+    font-size:65px;
+
+    margin-bottom:10px;
+}
+
+
+.question{
+
+    font-size:21px;
+
+    font-weight:bold;
+
+    margin-bottom:20px;
+
+    text-align:center;
+}
+
+
+.options{
+
+    display:grid;
+
+    gap:12px;
+}
+
+
+.option{
+
+    width:100%;
+
+    padding:15px;
+
+    background:#f5f7fa;
+
+    border:
+        2px solid
+        transparent;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    text-align:left;
+
+    font-size:16px;
+
+    transition:.2s;
+}
+
+
+.option:hover{
+
+    border-color:#ff6b35;
+}
+
+
+.option.correct{
+
+    background:#e7f8ef;
+
+    border-color:#31b46b;
+}
+
+
+.option.incorrect{
+
+    background:#fff0f0;
+
+    border-color:#e05252;
+}
+
+
+.result{
+
+    text-align:center;
+
+    margin-top:20px;
+
+    font-weight:bold;
+
+    min-height:25px;
+}
+
+
+/* =========================================================
+   FAQ
+========================================================= */
+
+.faq{
+
+    max-width:800px;
+
+    margin:auto;
+}
+
+
+.faq-item{
+
+    background:white;
+
+    border:
+        1px solid
+        #e5e9ef;
+
+    border-radius:13px;
+
+    margin-bottom:12px;
+
+    overflow:hidden;
+}
+
+
+.faq-question{
+
+    width:100%;
+
+    border:none;
+
+    background:white;
+
+    padding:20px;
+
+    text-align:left;
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+}
+
+
+.faq-answer{
+
+    max-height:0;
+
+    overflow:hidden;
+
+    transition:
+        max-height
+        .3s ease;
+}
+
+
+.faq-answer p{
+
+    padding:
+        0 20px
+        20px;
+
+    color:#667085;
+}
+
+
+.faq-item.active
+.faq-answer{
+
+    max-height:220px;
+}
+
+
+.faq-item.active
+.arrow{
+
+    transform:
+        rotate(180deg);
+}
+
+
+/* =========================================================
+   CTA
+========================================================= */
+
+.cta{
+
+    padding:80px 7%;
+
+    text-align:center;
+
+    background:white;
+}
+
+
+.cta-box{
+
+    max-width:950px;
+
+    margin:auto;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0a192f,
+            #152d4d
+        );
+
+    border-radius:25px;
+
+    padding:
+        55px 30px;
+
+    color:white;
+}
+
+
+.cta h2{
+
+    font-size:38px;
+
+    margin-bottom:15px;
+}
+
+
+.cta p{
+
+    color:#d0d9e5;
+
+    max-width:650px;
+
+    margin:
+        0 auto
+        25px;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+
+    background:#071221;
+
+    color:#aab5c5;
+
+    text-align:center;
+
+    padding:30px 7%;
+
+    font-size:14px;
+}
+
+
+footer strong{
+
+    color:white;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:900px){
+
+    .hero-content{
+
+        grid-template-columns:1fr;
+    }
+
+
+    .cards{
+
+        grid-template-columns:1fr;
+    }
+
+
+    .areas{
+
+        grid-template-columns:1fr;
+    }
+
+
+    .parents-content{
+
+        grid-template-columns:1fr;
+    }
+
+
+    .gallery{
+
+        grid-template-columns:1fr;
+    }
+
+
+    .gallery-small{
+
+        grid-template-columns:1fr 1fr;
+    }
+
+}
+
+
+@media(max-width:550px){
+
+    .navbar{
+
+        padding:
+            10px 5%;
+    }
+
+
+    .logo{
+
+        font-size:17px;
+    }
+
+
+    .logo-img{
+
+        width:42px;
+
+        height:42px;
+    }
+
+
+    .section{
+
+        padding:
+            60px 5%;
+    }
+
+
+    .hero{
+
+        padding:
+            60px 5%
+            70px;
+    }
+
+
+    .hero h1{
+
+        font-size:40px;
+    }
+
+
+    .section-title h2,
+    .parents h2,
+    .cta h2{
+
+        font-size:30px;
+    }
+
+
+    .hero-buttons{
+
+        flex-direction:column;
+    }
+
+
+    .btn{
+
+        width:100%;
+    }
+
+
+    .hero-image img{
+
+        height:280px;
+    }
+
+
+    .gallery-small{
+
+        grid-template-columns:1fr;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav class="navbar">
+
+    <div class="logo">
+
+        <img
+            src="images%20(1).jfif"
+            alt="Logo CITZ"
+            class="logo-img"
+        >
+
+        <div class="logo-text">
+
+            CITZ
+            <span>•</span>
+            Tecnología
+
+        </div>
+
+    </div>
+
+
+    <button
+        class="nav-button"
+        onclick="scrollToParents()">
+
+        Para padres
+
+    </button>
+
+</nav>
+
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section class="hero">
+
+<div class="hero-content">
+
+
+    <div>
+
+        <div class="badge">
+
+            🧩 HERRAMIENTA EDUCATIVA
+
+        </div>
+
+
+        <h1>
+
+            Diseñamos,
+
+            <span>
+                construimos
+            </span>
+
+            e imaginamos en 3D
+
+        </h1>
+
+
+        <p>
+
+            En CITZ utilizamos Tinkercad para que los alumnos
+            transformen sus ideas en diseños digitales,
+            circuitos electrónicos y proyectos interactivos.
+
+        </p>
+
+
+        <div class="hero-buttons">
+
+
+            <a
+                href="https://www.tinkercad.com/"
+                target="_blank"
+                class="btn btn-primary">
+
+                🚀 Entrar a Tinkercad
+
+            </a>
+
+
+            <button
+                class="btn btn-secondary"
+                onclick="scrollToParents()">
+
+                👨‍👩‍👧 Información para padres
+
+            </button>
+
+
+        </div>
+
+    </div>
+
+
+
+    <div class="hero-image">
+
+        <img
+            src="https://cdn.prod.website-files.com/65207b7e83b146d0fea11736/66df4a0c5a8421c2b21520e6_3IMG-Stagger-Right-Tall-01.webp"
+            alt="Alumnos trabajando con Tinkercad">
+
+        <div class="image-label">
+
+            💡 Del boceto a un modelo digital:
+            los alumnos pueden explorar ideas,
+            modificar sus diseños y crear prototipos.
+
+        </div>
+
+    </div>
+
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     ¿QUÉ ES TINKERCAD?
+===================================================== -->
+
+<section class="section">
+
+<div class="section-inner">
+
+
+    <div class="section-title">
+
+        <div class="small">
+
+            CONOCIENDO LA HERRAMIENTA
+
+        </div>
+
+
+        <h2>
+
+            ¿Qué es Tinkercad?
+
+        </h2>
+
+
+        <p>
+
+            Tinkercad es una aplicación web de Autodesk
+            que permite trabajar con diseño 3D, electrónica
+            y programación mediante herramientas accesibles
+            para principiantes.
+
+        </p>
+
+    </div>
+
+
+
+    <div class="cards">
+
+
+        <div class="card">
+
+            <div class="card-icon">
+
+                🧱
+
+            </div>
+
+
+            <h3>
+
+                Diseño 3D
+
+            </h3>
+
+
+            <p>
+
+                Los alumnos pueden combinar formas,
+                cambiar dimensiones, organizar piezas
+                y construir modelos tridimensionales.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="card">
+
+            <div class="card-icon">
+
+                ⚡
+
+            </div>
+
+
+            <h3>
+
+                Circuitos
+
+            </h3>
+
+
+            <p>
+
+                Pueden construir y simular circuitos
+                electrónicos utilizando componentes
+                como LEDs, resistencias, botones y Arduino.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="card">
+
+            <div class="card-icon">
+
+                💻
+
+            </div>
+
+
+            <h3>
+
+                Programación
+
+            </h3>
+
+
+            <p>
+
+                Tinkercad también incorpora Codeblocks
+                para crear diseños mediante programación
+                basada en bloques.
+
+            </p>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     GALERÍA
+===================================================== -->
+
+<section class="section gallery-section">
+
+<div class="section-inner">
+
+
+    <div class="section-title">
+
+        <div class="small">
+
+            APRENDER HACIENDO
+
+        </div>
+
+
+        <h2>
+
+            ¿Qué pueden crear los alumnos?
+
+        </h2>
+
+
+        <p>
+
+            Desde modelos sencillos hasta proyectos
+            de electrónica y prototipos para impresión 3D.
+
+        </p>
+
+    </div>
+
+
+
+    <div class="gallery">
+
+
+        <!-- IMAGEN GRANDE -->
+
+        <div class="gallery-card">
+
+
+            <img
+
+                src="https://cdn.prod.website-files.com/65207b7e83b146d0fea11736/66df4a0c5a8421c2b21520e6_3IMG-Stagger-Right-Tall-01.webp"
+
+                alt="Alumnos diseñando modelos 3D en Tinkercad"
+
+            >
+
+
+            <div class="gallery-card-content">
+
+
+                <h3>
+
+                    🧱 Modelado 3D
+
+                </h3>
+
+
+                <p>
+
+                    Los estudiantes pueden crear objetos
+                    utilizando formas geométricas y convertir
+                    sus ideas en modelos digitales.
+
+                </p>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- DOS IMÁGENES -->
+
+        <div class="gallery-small">
+
+
+            <div class="gallery-card">
+
+
+                <img
+
+                    src="https://makeabilitylab.github.io/physcomp/arduino/assets/images/Tinkercad_MainInterface.png"
+
+                    alt="Circuito Arduino en Tinkercad"
+
+                >
+
+
+                <div class="gallery-card-content">
+
+
+                    <h3>
+
+                        ⚡ Electrónica
+
+                    </h3>
+
+
+                    <p>
+
+                        Simulación de circuitos
+                        con Arduino y componentes electrónicos.
+
+                    </p>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="gallery-card">
+
+
+                <img
+
+                    src="https://mediateca.educa.madrid.org/imagen.php?ext=.jpg&id=dndr46oa8cag6xiv&m=0"
+
+                    alt="Arduino y Tinkercad"
+
+                >
+
+
+                <div class="gallery-card-content">
+
+
+                    <h3>
+
+                        🤖 Robótica
+
+                    </h3>
+
+
+                    <p>
+
+                        Los circuitos pueden combinarse
+                        con programación para explorar
+                        proyectos de robótica.
+
+                    </p>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     PROCESO DE APRENDIZAJE
+===================================================== -->
+
+<section class="section">
+
+<div class="section-inner">
+
+
+    <div class="section-title">
+
+        <div class="small">
+
+            METODOLOGÍA CITZ
+
+        </div>
+
+
+        <h2>
+
+            De la idea al proyecto
+
+        </h2>
+
+
+        <p>
+
+            Utilizamos Tinkercad como una herramienta
+            para convertir conceptos abstractos en
+            proyectos que el alumno puede visualizar.
+
+        </p>
+
+    </div>
+
+
+
+    <div class="areas">
+
+
+        <div class="area">
+
+            <div class="area-number">
+
+                PASO 01
+
+            </div>
+
+
+            <h3>
+
+                💭 Imaginar
+
+            </h3>
+
+
+            <p>
+
+                El alumno plantea qué quiere construir
+                y piensa cómo podría funcionar.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="area">
+
+            <div class="area-number">
+
+                PASO 02
+
+            </div>
+
+
+            <h3>
+
+                🧱 Diseñar
+
+            </h3>
+
+
+            <p>
+
+                Construye su idea en el espacio de trabajo
+                utilizando formas, medidas y componentes.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="area">
+
+            <div class="area-number">
+
+                PASO 03
+
+            </div>
+
+
+            <h3>
+
+                🔧 Probar
+
+            </h3>
+
+
+            <p>
+
+                Modifica, corrige y experimenta hasta
+                encontrar una solución que funcione.
+
+            </p>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     INFORMACIÓN PARA PADRES
+===================================================== -->
+
+<section
+    class="section parents"
+    id="padres">
+
+
+<div class="section-inner">
+
+
+<div class="parents-content">
+
+
+    <div>
+
+
+        <div class="badge">
+
+            INFORMACIÓN PARA FAMILIAS
+
+        </div>
+
+
+        <h2>
+
+            ¿Qué aprende mi hijo con Tinkercad?
+
+        </h2>
+
+
+        <p>
+
+            Tinkercad no se utiliza únicamente para
+            "hacer figuras". En las actividades de CITZ
+            buscamos que el alumno utilice el diseño
+            para resolver problemas y comunicar ideas.
+
+        </p>
+
+
+
+        <div class="parent-list">
+
+
+            <div class="parent-item">
+
+                <div class="check">
+
+                    ✓
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+
+                        Pensamiento espacial
+
+                    </strong>
+
+                    <br>
+
+                    <span>
+
+                        Aprende a observar objetos,
+                        dimensiones y posiciones.
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="parent-item">
+
+                <div class="check">
+
+                    ✓
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+
+                        Resolución de problemas
+
+                    </strong>
+
+                    <br>
+
+                    <span>
+
+                        Aprende mediante prueba,
+                        error y modificación.
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="parent-item">
+
+                <div class="check">
+
+                    ✓
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+
+                        Creatividad y diseño
+
+                    </strong>
+
+                    <br>
+
+                    <span>
+
+                        Puede transformar una idea
+                        en un objeto digital.
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="parent-item">
+
+                <div class="check">
+
+                    ✓
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+
+                        Introducción a la ingeniería
+
+                    </strong>
+
+                    <br>
+
+                    <span>
+
+                        El alumno comienza a familiarizarse
+                        con conceptos de diseño y prototipado.
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+    <div class="parent-box">
+
+
+        <h3>
+
+            👨‍👩‍👧 Una herramienta para crear
+
+        </h3>
+
+
+        <p>
+
+            Los proyectos digitales permiten que los
+            alumnos expliquen lo que diseñaron, por qué
+            lo hicieron así y qué podrían modificar
+            para mejorarlo.
+
+        </p>
+
+
+        <a
+
+            href="https://www.tinkercad.com/"
+
+            target="_blank"
+
+            class="btn btn-primary">
+
+            Probar Tinkercad
+
+        </a>
+
+
+    </div>
+
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     MINI ACTIVIDAD
+===================================================== -->
+
+<section class="section interactive">
+
+
+<div class="section-inner">
+
+
+    <div class="section-title">
+
+
+        <div class="small">
+
+            PRUEBA RÁPIDA
+
+        </div>
+
+
+        <h2>
+
+            ¿Cómo diseñarías un objeto?
+
+        </h2>
+
+
+        <p>
+
+            Una pequeña pregunta para mostrar
+            el tipo de pensamiento que buscamos desarrollar.
+
+        </p>
+
+
+    </div>
+
+
+
+    <div class="activity">
+
+
+        <div class="activity-header">
+
+
+            <div class="robot">
+
+                🧱
+
+            </div>
+
+
+            <strong>
+
+                Reto de diseño
+
+            </strong>
+
+
+        </div>
+
+
+
+        <div class="question">
+
+            Quieres diseñar una pequeña casa en 3D.
+            ¿Qué deberías hacer primero?
+
+        </div>
+
+
+
+        <div class="options">
+
+
+            <button
+                class="option"
+                onclick="answer(this,false)">
+
+                A) Poner muchas piezas sin planear
+
+            </button>
+
+
+            <button
+                class="option"
+                onclick="answer(this,true)">
+
+                B) Imaginar el diseño y decidir qué piezas necesitarás
+
+            </button>
+
+
+            <button
+                class="option"
+                onclick="answer(this,false)">
+
+                C) Imprimirla inmediatamente
+
+            </button>
+
+
+        </div>
+
+
+
+        <div
+            id="result"
+            class="result">
+
+        </div>
+
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FAQ
+===================================================== -->
+
+<section class="section">
+
+<div class="section-inner">
+
+
+    <div class="section-title">
+
+
+        <div class="small">
+
+            PREGUNTAS FRECUENTES
+
+        </div>
+
+
+        <h2>
+
+            Lo que las familias suelen preguntar
+
+        </h2>
+
+
+    </div>
+
+
+
+    <div class="faq">
+
+
+        <div class="faq-item">
+
+
+            <button
+                class="faq-question"
+                onclick="toggleFAQ(this)">
+
+                ¿Mi hijo necesita experiencia en diseño 3D?
+
+                <span class="arrow">
+
+                    ▼
+
+                </span>
+
+            </button>
+
+
+            <div class="faq-answer">
+
+                <p>
+
+                    No. Tinkercad está pensado para que
+                    principiantes puedan comenzar a crear
+                    utilizando herramientas sencillas.
+
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+
+        <div class="faq-item">
+
+
+            <button
+                class="faq-question"
+                onclick="toggleFAQ(this)">
+
+                ¿Necesita instalar un programa?
+
+                <span class="arrow">
+
+                    ▼
+
+                </span>
+
+            </button>
+
+
+            <div class="faq-answer">
+
+                <p>
+
+                    Tinkercad funciona desde el navegador
+                    web, por lo que no requiere instalar
+                    un programa de diseño 3D tradicional.
+
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+
+        <div class="faq-item">
+
+
+            <button
+                class="faq-question"
+                onclick="toggleFAQ(this)">
+
+                ¿También puede aprender electrónica?
+
+                <span class="arrow">
+
+                    ▼
+
+                </span>
+
+            </button>
+
+
+            <div class="faq-answer">
+
+                <p>
+
+                    Sí. Tinkercad incluye un entorno para
+                    crear y simular circuitos electrónicos,
+                    incluyendo proyectos con Arduino.
+
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+
+        <div class="faq-item">
+
+
+            <button
+                class="faq-question"
+                onclick="toggleFAQ(this)">
+
+                ¿Puede utilizarse para impresión 3D?
+
+                <span class="arrow">
+
+                    ▼
+
+                </span>
+
+            </button>
+
+
+            <div class="faq-answer">
+
+                <p>
+
+                    Sí. Los diseños 3D pueden utilizarse
+                    como punto de partida para proyectos
+                    de fabricación e impresión 3D.
+
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     CTA
+===================================================== -->
+
+<section class="cta">
+
+
+<div class="cta-box">
+
+
+    <h2>
+
+        De una idea a un objeto real.
+
+    </h2>
+
+
+    <p>
+
+        Con Tinkercad, los alumnos pueden comenzar
+        a explorar diseño 3D, electrónica y programación
+        directamente desde el navegador.
+
+    </p>
+
+
+    <a
+
+        href="https://www.tinkercad.com/"
+
+        target="_blank"
+
+        class="btn btn-primary">
+
+        🚀 Comenzar en Tinkercad
+
+    </a>
+
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+
+    <strong>
+
+        CITZ
+
+    </strong>
+
+    · Tecnología, Robótica y Educación
+
+
+    <br><br>
+
+
+    Esta página presenta información educativa sobre
+    el uso de Tinkercad dentro de las actividades de CITZ.
+
+    <br><br>
+
+
+    <a
+        href="https://www.tinkercad.com/"
+        target="_blank"
+        style="color:#ff6b35;">
+
+        Visitar Tinkercad
+
+    </a>
+
+
+</footer>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+
+/* =========================================================
+   IR A PADRES
+========================================================= */
+
+function scrollToParents(){
+
+    document
+        .getElementById("padres")
+        .scrollIntoView({
+
+            behavior:"smooth"
+
+        });
+
+}
+
+
+
+/* =========================================================
+   MINI ACTIVIDAD
+========================================================= */
+
+function answer(button, correct){
+
+
+    const options =
+        document.querySelectorAll(".option");
+
+
+    options.forEach(option => {
+
+        option.disabled = true;
+
+    });
+
+
+    const result =
+        document.getElementById("result");
+
+
+    if(correct){
+
+
+        button.classList.add("correct");
+
+
+        result.innerHTML =
+
+            "🎉 ¡Correcto! Antes de construir, necesitamos imaginar y planear nuestro diseño.";
+
+
+    }else{
+
+
+        button.classList.add("incorrect");
+
+
+        result.innerHTML =
+
+            "💡 Primero debemos pensar qué queremos construir y qué piezas necesitaremos.";
+
+    }
+
+}
+
+
+
+/* =========================================================
+   FAQ
+========================================================= */
+
+function toggleFAQ(button){
+
+
+    const item =
+        button.parentElement;
+
+
+    item.classList.toggle("active");
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>
