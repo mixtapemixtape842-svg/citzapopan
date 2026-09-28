@@ -1555,6 +1555,147 @@ main {
     }
 
 }
+    /* =========================================
+   MINIJUEGOS
+========================================= */
+
+.games-panel {
+    position: relative;
+    margin-top: 24px;
+    padding: 26px;
+    background: linear-gradient(145deg, #0b0b0b, #050505);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.65);
+    overflow: hidden;
+}
+
+.games-panel::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(124,60,255,0.45), transparent);
+}
+
+.games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 16px;
+}
+
+.game-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    color: white;
+    text-decoration: none;
+    background: #090909;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: 0.25s ease;
+}
+
+a.game-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(0,245,255,0.35);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.6), 0 0 30px rgba(0,245,255,0.08);
+}
+
+.game-thumb {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    background: #0d0d0d;
+    overflow: hidden;
+}
+
+.game-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+a.game-card:hover .game-thumb img {
+    transform: scale(1.05);
+}
+
+.game-play {
+    position: absolute;
+    left: 50%;
+    bottom: 14px;
+    transform: translateX(-50%);
+    padding: 8px 18px;
+    border-radius: 50px;
+    background: linear-gradient(90deg, var(--neon), var(--neon-2));
+    color: #000;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    box-shadow: 0 0 20px rgba(0,245,255,0.35);
+}
+
+.game-info {
+    padding: 14px 16px 16px;
+}
+
+.game-info h3 {
+    font-size: 13px;
+    line-height: 1.4;
+    margin-bottom: 4px;
+}
+
+.game-info span {
+    color: #666;
+    font-size: 10px;
+}
+
+.game-card.soon {
+    cursor: default;
+    border-style: dashed;
+}
+
+.game-card.soon .game-thumb {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    background:
+        repeating-linear-gradient(45deg, #0b0b0b 0 12px, #0e0e0e 12px 24px);
+}
+
+.game-card.soon .soon-icon {
+    font-size: 40px;
+    opacity: 0.35;
+}
+
+.game-card.soon .soon-badge {
+    padding: 6px 12px;
+    border-radius: 50px;
+    color: var(--yellow);
+    background: rgba(255,230,0,0.06);
+    border: 1px solid rgba(255,230,0,0.15);
+    font-family: "Orbitron", sans-serif;
+    font-size: 9px;
+    letter-spacing: 1px;
+}
+
+.game-card.soon .game-info h3 {
+    color: #777;
+}
+
+@media (max-width: 650px) {
+    .games-panel { padding: 18px 14px; }
+    .games-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+}
+
 
 </style>
 
@@ -1639,6 +1780,9 @@ main {
             href="actividades.html"
             id="navActividades"
         >
+            <a href="#minijuegos.html">
+    Minijuegos
+</a>
 
             Actividades
 
@@ -2173,6 +2317,136 @@ main {
             <p>
                 Estamos consultando tu campus.
             </p>
+
+        </div>
+
+    </div>
+
+</section>
+<!-- =========================================
+     MINIJUEGOS
+========================================= -->
+
+<section class="games-panel" id="minijuegos">
+
+    <div class="activities-header">
+
+        <div class="activities-title">
+
+            <div class="activities-title-icon">
+                🎮
+            </div>
+
+            <div>
+
+                <h2>
+                    Minijuegos
+                </h2>
+
+                <p>
+                    Aprende jugando con tu Robot Lab
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="games-grid">
+
+        <!-- 1. ROBOT LAB: AVENTURA GALÁCTICA -->
+        <a
+            class="game-card"
+            href="https://mixtapemixtape842-svg.github.io/citzapopan/Minijuegos/RobotLab1.html"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+
+            <div class="game-thumb">
+
+                <img
+                    src="Minijuegos/RobotLab1-portada.jpg"
+                    alt="Robot Lab: aventura galáctica"
+                    loading="lazy"
+                >
+
+                <span class="game-play">
+                    ▶ JUGAR
+                </span>
+
+            </div>
+
+            <div class="game-info">
+
+                <h3>
+                    Robot Lab: aventura galáctica
+                </h3>
+
+                <span>
+                    Plataformas · Monedas · Preguntas
+                </span>
+
+            </div>
+
+        </a>
+
+
+        <!-- 2 al 5. PRÓXIMAMENTE -->
+        <div class="game-card soon">
+
+            <div class="game-thumb">
+                <div class="soon-icon">🔒</div>
+                <div class="soon-badge">PRÓXIMAMENTE</div>
+            </div>
+
+            <div class="game-info">
+                <h3>Minijuego 2</h3>
+                <span>Muy pronto</span>
+            </div>
+
+        </div>
+
+        <div class="game-card soon">
+
+            <div class="game-thumb">
+                <div class="soon-icon">🔒</div>
+                <div class="soon-badge">PRÓXIMAMENTE</div>
+            </div>
+
+            <div class="game-info">
+                <h3>Minijuego 3</h3>
+                <span>Muy pronto</span>
+            </div>
+
+        </div>
+
+        <div class="game-card soon">
+
+            <div class="game-thumb">
+                <div class="soon-icon">🔒</div>
+                <div class="soon-badge">PRÓXIMAMENTE</div>
+            </div>
+
+            <div class="game-info">
+                <h3>Minijuego 4</h3>
+                <span>Muy pronto</span>
+            </div>
+
+        </div>
+
+        <div class="game-card soon">
+
+            <div class="game-thumb">
+                <div class="soon-icon">🔒</div>
+                <div class="soon-badge">PRÓXIMAMENTE</div>
+            </div>
+
+            <div class="game-info">
+                <h3>Minijuego 5</h3>
+                <span>Muy pronto</span>
+            </div>
 
         </div>
 
