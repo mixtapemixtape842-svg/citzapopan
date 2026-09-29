@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Daniel Alejandro Gómez Peña | CV &amp; Portafolio</title>
+<meta content="CV y portafolio profesional de Daniel Alejandro Gómez Peña. Docente de Tecnología, STEAM, Robótica e Innovación Educativa." name="description"/>
+<style>
+
+/* =========================================================
+   VARIABLES
+========================================================= */
+
+:root {
+    --primary: #17324d;
+    --secondary: #4b6478;
+    --accent: #00a6a6;
+    --light: #f4f7f9;
+    --white: #ffffff;
+    --dark: #17212b;
+    --gray: #687681;
+    --border: #dfe6eb;
+    --shadow: 0 10px 30px rgba(23,50,77,.10);
+    --radius: 18px;
+}
+
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--light);
+    color: var(--dark);
+    line-height: 1.6;
+}
+
+img,
+video {
+    max-width: 100%;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+header {
+    min-height: 100vh;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(23,50,77,.97),
+            rgba(23,50,77,.88)
+        );
+    color: white;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+header::before {
+    content: "";
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,.12);
+    right: -150px;
+    top: -100px;
+}
+
+header::after {
+    content: "";
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,.08);
+    left: -150px;
+    bottom: -100px;
+}
+
+.header-content {
+    width: min(1100px, 90%);
+    margin: auto;
+    position: relative;
+    z-index: 2;
+}
+
+.eyebrow {
+    color: #72d4d4;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.header-content h1 {
+    font-size: clamp(42px, 7vw, 78px);
+    line-height: .95;
+    margin-bottom: 20px;
+}
+
+.header-content h1 span {
+    color: #72d4d4;
+}
+
+.header-subtitle {
+    font-size: clamp(17px, 2vw, 23px);
+    color: #d9e5ed;
+    max-width: 800px;
+    margin-bottom: 30px;
+}
+
+.header-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 13px 22px;
+    border-radius: 50px;
+    font-weight: bold;
+    transition: .25s;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: var(--accent);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0,166,166,.3);
+}
+
+.btn-outline {
+    border: 1px solid rgba(255,255,255,.4);
+    color: white;
+}
+
+.btn-outline:hover {
+    background: rgba(255,255,255,.1);
+}
+
+/* =========================================================
+   NAV
+========================================================= */
+
+nav {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(255,255,255,.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+}
+
+.nav-container {
+    width: min(1100px, 94%);
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 65px;
+}
+
+.logo {
+    font-weight: bold;
+    color: var(--primary);
+    font-size: 18px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 25px;
+    list-style: none;
+}
+
+.nav-links a {
+    color: var(--secondary);
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.nav-links a:hover {
+    color: var(--accent);
+}
+
+.menu-button {
+    display: none;
+    border: none;
+    background: none;
+    font-size: 26px;
+    cursor: pointer;
+}
+
+/* =========================================================
+   GENERAL
+========================================================= */
+
+section {
+    padding: 90px 0;
+}
+
+.container {
+    width: min(1100px, 90%);
+    margin: auto;
+}
+
+.section-title {
+    margin-bottom: 45px;
+}
+
+.section-title span {
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.section-title h2 {
+    color: var(--primary);
+    font-size: clamp(30px, 4vw, 45px);
+    line-height: 1.1;
+    margin-top: 5px;
+}
+
+/* =========================================================
+   PROFILE
+========================================================= */
+
+.profile {
+    background: white;
+}
+
+.profile-grid {
+    display: grid;
+    grid-template-columns: 1.4fr .6fr;
+    gap: 50px;
+    align-items: center;
+}
+
+.profile-text {
+    font-size: 17px;
+    color: var(--gray);
+}
+
+.profile-text strong {
+    color: var(--primary);
+}
+
+.profile-highlight {
+    background: var(--primary);
+    color: white;
+    padding: 35px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.profile-highlight h3 {
+    margin-bottom: 15px;
+    color: #72d4d4;
+}
+
+.profile-highlight ul {
+    list-style: none;
+}
+
+.profile-highlight li {
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,.12);
+}
+
+/* =========================================================
+   EXPERIENCE
+========================================================= */
+
+.experience {
+    background: var(--light);
+}
+
+.experience-item {
+    background: white;
+    border-radius: var(--radius);
+    margin-bottom: 35px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+.experience-content {
+    padding: 35px;
+}
+
+.job-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.job-title {
+    color: var(--primary);
+    font-size: 23px;
+    margin-bottom: 4px;
+}
+
+.company {
+    color: var(--accent);
+    font-weight: bold;
+}
+
+.date {
+    color: var(--gray);
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.job-description {
+    color: var(--gray);
+}
+
+.job-description ul {
+    padding-left: 20px;
+}
+
+.job-description li {
+    margin-bottom: 7px;
+}
+
+/* =========================================================
+   SLIDER
+========================================================= */
+
+.media-slider {
+    position: relative;
+    background: #111b23;
+    min-height: 390px;
+    overflow: hidden;
+}
+
+.slider-track {
+    position: relative;
+    width: 100%;
+    height: 390px;
+}
+
+.slide {
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.slide.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slide img,
+.slide video {
+    width: 100%;
+    height: 390px;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+.slide iframe {
+    width: 100%;
+    height: 390px;
+    border: none;
+}
+
+.slide-caption {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 40px 25px 20px;
+    background: linear-gradient(transparent, rgba(0,0,0,.8));
+    color: white;
+    pointer-events: none;
+}
+
+.slider-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0,0,0,.55);
+    color: white;
+    font-size: 25px;
+    cursor: pointer;
+    z-index: 5;
+    transition: .2s;
+}
+
+.slider-button:hover {
+    background: var(--accent);
+}
+
+.slider-prev {
+    left: 15px;
+}
+
+.slider-next {
+    right: 15px;
+}
+
+.slider-dots {
+    position: absolute;
+    bottom: 15px;
+    right: 20px;
+    display: flex;
+    gap: 6px;
+    z-index: 10;
+}
+
+.slider-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.45);
+    cursor: pointer;
+}
+
+.slider-dot.active {
+    background: white;
+    transform: scale(1.3);
+}
+
+/* =========================================================
+   EDUCATION
+========================================================= */
+
+.education {
+    background: white;
+}
+
+.education-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+}
+
+.education-card {
+    border: 1px solid var(--border);
+    padding: 30px;
+    border-radius: var(--radius);
+}
+
+.education-card h3 {
+    color: var(--primary);
+    margin-bottom: 8px;
+}
+
+.education-card p {
+    color: var(--gray);
+}
+
+/* =========================================================
+   SKILLS
+========================================================= */
+
+.skills {
+    background: var(--primary);
+    color: white;
+}
+
+.skills .section-title h2 {
+    color: white;
+}
+
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 12px;
+}
+
+.skill {
+    border: 1px solid rgba(255,255,255,.15);
+    padding: 15px;
+    border-radius: 10px;
+    color: #dce8ef;
+    transition: .2s;
+}
+
+.skill:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+}
+
+/* =========================================================
+   CONTACT
+========================================================= */
+
+.contact {
+    background: var(--light);
+    text-align: center;
+}
+
+.contact-box {
+    background: white;
+    padding: 50px 30px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.contact-box h2 {
+    color: var(--primary);
+    font-size: 35px;
+    margin-bottom: 10px;
+}
+
+.contact-box p {
+    color: var(--gray);
+    margin-bottom: 25px;
+}
+
+.contact-info {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    color: var(--secondary);
+    font-weight: bold;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer {
+    background: #0d1d2b;
+    color: #9fb0bc;
+    text-align: center;
+    padding: 25px;
+    font-size: 13px;
+}
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.92);
+    z-index: 5000;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    max-width: 1000px;
+    max-height: 90vh;
+    position: relative;
+}
+
+.modal-content img,
+.modal-content video,
+.modal-content iframe {
+    max-width: 90vw;
+    max-height: 85vh;
+    border: none;
+}
+
+.modal-close {
+    position: absolute;
+    right: -45px;
+    top: -45px;
+    color: white;
+    font-size: 35px;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width: 800px) {
+
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 65px;
+        left: 0;
+        width: 100%;
+        background: white;
+        flex-direction: column;
+        padding: 20px;
+        box-shadow: var(--shadow);
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .menu-button {
+        display: block;
+        color: var(--primary);
+    }
+
+    .profile-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .job-header {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .date {
+        white-space: normal;
+    }
+
+    .education-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .skills-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .media-slider,
+    .slider-track,
+    .slide img,
+    .slide video,
+    .slide iframe {
+        height: 280px;
+    }
+}
+
+@media(max-width: 500px) {
+
+    section {
+        padding: 65px 0;
+    }
+
+    .header-content h1 {
+        font-size: 42px;
+    }
+
+    .experience-content {
+        padding: 25px;
+    }
+
+    .skills-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .modal-close {
+        right: 0;
+        top: -45px;
+    }
+
+    .media-slider,
+    .slider-track,
+    .slide img,
+    .slide video,
+    .slide iframe {
+        height: 230px;
+    }
+}
+
+</style>
+</head>
+<body>
+<!-- ======================================================
+     HERO
+======================================================= -->
+<header id="inicio">
+<div class="header-content">
+<div class="eyebrow">
+            CV &amp; Portafolio Profesional
+        </div>
+<h1>
+            Daniel Alejandro<br/>
+<span>Gómez Peña</span>
+</h1>
+<p class="header-subtitle">
+            Docente de Tecnología · STEAM · Robótica · Innovación Educativa
+        </p>
+<div class="header-buttons">
+<a class="btn btn-primary" href="#experiencia">
+                Ver experiencia
+            </a>
+<a class="btn btn-outline" href="#contacto">
+                Contacto
+            </a>
+</div>
+</div>
+</header>
+<!-- ======================================================
+     NAV
+======================================================= -->
+<nav>
+<div class="nav-container">
+<div class="logo">
+            DANIEL GÓMEZ
+        </div>
+<button class="menu-button" onclick="toggleMenu()">
+            ☰
+        </button>
+<ul class="nav-links" id="navLinks">
+<li>
+<a href="#inicio">Inicio</a>
+</li>
+<li>
+<a href="#perfil">Perfil</a>
+</li>
+<li>
+<a href="#experiencia">Experiencia</a>
+</li>
+<li>
+<a href="#formacion">Formación</a>
+</li>
+<li>
+<a href="#competencias">Competencias</a>
+</li>
+<li>
+<a href="#contacto">Contacto</a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- ======================================================
+     PERFIL
+======================================================= -->
+<section class="profile" id="perfil">
+<div class="container">
+<div class="section-title">
+<span>Sobre mí</span>
+<h2>Perfil profesional</h2>
+</div>
+<div class="profile-grid">
+<div class="profile-text">
+<p>
+                    Docente y emprendedor especializado en
+                    <strong>educación tecnológica, STEAM, robótica e innovación educativa</strong>,
+                    con más de 5 años de experiencia trabajando con estudiantes
+                    de preescolar, primaria, secundaria y preparatoria.
+                </p>
+<br/>
+<p>
+                    Fundador y coordinador del
+                    <strong>Centro de Innovación Tecnológica de Zapopan (CITZ)</strong>,
+                    desde donde he diseñado y coordinado programas educativos,
+                    talleres y proyectos tecnológicos para niños y jóvenes.
+                </p>
+<br/>
+<p>
+                    Experiencia en diseño e implementación de proyectos educativos,
+                    coordinación de equipos docentes, desarrollo de programas de
+                    robótica, gestión de grupos y vinculación institucional.
+                </p>
+</div>
+<div class="profile-highlight">
+<h3>Especialidad</h3>
+<ul>
+<li>🤖 Robótica educativa</li>
+<li>💻 Tecnología e informática</li>
+<li>🧠 Educación STEAM</li>
+<li>🚀 Innovación educativa</li>
+<li>🎓 Formación tecnológica</li>
+<li>👥 Coordinación de proyectos</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<!-- ======================================================
+     EXPERIENCIA
+======================================================= -->
+<section class="experience" id="experiencia">
+<div class="container">
+<div class="section-title">
+<span>Trayectoria</span>
+<h2>Experiencia profesional</h2>
+</div>
+<!-- =================================================
+             CITZ
+        ================================================== -->
+<article class="experience-item">
+<div class="experience-content">
+<div class="job-header">
+<div>
+<h3 class="job-title">
+                            Fundador y Coordinador
+                        </h3>
+<div class="company">
+                            Centro de Innovación Tecnológica de Zapopan (CITZ)
+                        </div>
+</div>
+<div class="date">
+                        2022 – Actualidad
+                    </div>
+</div>
+<div class="job-description">
+<ul>
+<li>
+                            Diseño, desarrollo e implementación de programas educativos
+                            de Robótica, Tecnología, Diseño, Guitarra, Ajedrez y Francés.
+                        </li>
+<li>
+                            Coordinación de un equipo docente multidisciplinario.
+                        </li>
+<li>
+                            Desarrollo de alianzas con el Gobierno Municipal de Zapopan.
+                        </li>
+<li>
+                            Coordinación de centros de capacitación en robótica
+                            en colaboración con DIF Zapopan.
+                        </li>
+<li>
+                            Diseño de materiales y experiencias educativas basadas
+                            en proyectos.
+                        </li>
+</ul>
+</div>
+</div>
+<!-- SLIDER CITZ -->
+<div class="media-slider" data-slider="">
+        <div class="slides">
+            <img src="foto1.jpg" alt="Fotografía 1" class="slide active">
+            <img src="foto2.jpg" alt="Fotografía 2" class="slide">
+            <img src="foto3.jpg" alt="Fotografía 3" class="slide">
+            <img src="foto4.jpg" alt="Fotografía 4" class="slide">
+            <img src="foto5.jpg" alt="Fotografía 5" class="slide">
+            <img src="foto6.jpg" alt="Fotografía 6" class="slide">
+            <img src="foto7.jpg" alt="Fotografía 7" class="slide">
+            <img src="foto8.jpg" alt="Fotografía 8" class="slide">
+            <img src="foto9.jpg" alt="Fotografía 9" class="slide">
+            <img src="foto10.jpg" alt="Fotografía 10" class="slide">
+        </div>
+        <button class="slider-prev" type="button" aria-label="Fotografía anterior">❮</button>
+        <button class="slider-next" type="button" aria-label="Fotografía siguiente">❯</button>
+        
+    </div>
+                    -->
+<div class="slide active">
+<img alt="CITZ" onclick="openMedia(this)" src="media/citz/foto1.jpg"/>
+<div class="slide-caption">
+                            Centro de Innovación Tecnológica de Zapopan
+                        </div>
+</div>
+<div class="slide">
+<img alt="CITZ" onclick="openMedia(this)" src="media/citz/foto2.jpg"/>
+</div>
+<!-- VIDEO MP4 -->
+
+</div>
+<button class="slider-button slider-prev">
+                    ‹
+                </button>
+<button class="slider-button slider-next">
+                    ›
+                </button>
+
+</div>
+</article>
+<!-- =================================================
+             NEW JEAN PIAGET
+        ================================================== -->
+<article class="experience-item">
+<div class="experience-content">
+<div class="job-header">
+<div>
+<h3 class="job-title">
+                            Docente de Tecnología
+                        </h3>
+<div class="company">
+                            Secundaria New Jean Piaget
+                        </div>
+</div>
+<div class="date">
+                        Agosto 2024 – Actualidad
+                    </div>
+</div>
+<div class="job-description">
+<ul>
+<li>
+                            Impartición de Tecnología e Informática a nivel secundaria.
+                        </li>
+<li>
+                            Administración y supervisión del laboratorio de cómputo.
+                        </li>
+<li>
+                            Diseño y desarrollo de proyectos tecnológicos.
+                        </li>
+<li>
+                            Desarrollo de material educativo.
+                        </li>
+</ul>
+</div>
+</div>
+
+</article>
+<!-- =================================================
+             OAKLAND
+        ================================================== -->
+<article class="experience-item">
+<div class="experience-content">
+<div class="job-header">
+<div>
+<h3 class="job-title">
+                            Docente de Tecnología
+                        </h3>
+<div class="company">
+                            Oakland School
+                        </div>
+</div>
+<div class="date">
+                        Agosto 2022 – Julio 2024
+                    </div>
+</div>
+<div class="job-description">
+<ul>
+<li>
+                            Impartición de asignaturas y proyectos tecnológicos
+                            desde preescolar hasta secundaria.
+                        </li>
+<li>
+                            Diseño de actividades orientadas al aprendizaje práctico.
+                        </li>
+<li>
+                            Desarrollo de proyectos innovadores.
+                        </li>
+<li>
+                            Participación en programas After School y talleres especializados.
+                        </li>
+</ul>
+</div>
+</div>
+
+</article>
+<!-- =================================================
+             COLEGIO UNION
+        ================================================== -->
+<article class="experience-item">
+<div class="experience-content">
+<div class="job-header">
+<div>
+<h3 class="job-title">
+                            Docente de Tecnología
+                        </h3>
+<div class="company">
+                            Colegio Unión México
+                        </div>
+</div>
+<div class="date">
+                        Agosto 2021 – Julio 2022
+                    </div>
+</div>
+<div class="job-description">
+<ul>
+<li>
+                            Formación tecnológica de más de 1,000 estudiantes.
+                        </li>
+<li>
+                            Preparación para competencias estatales y nacionales
+                            de robótica.
+                        </li>
+<li>
+                            Desarrollo y acompañamiento de proyectos tecnológicos.
+                        </li>
+<li>
+                            Invitación a la Red de Docentes SOLACYT.
+                        </li>
+</ul>
+</div>
+</div>
+
+</article>
+<!-- =================================================
+             LICEO DEL COUNTRY
+        ================================================== -->
+<article class="experience-item">
+<div class="experience-content">
+<div class="job-header">
+<div>
+<h3 class="job-title">
+                            Docente de Tecnología
+                        </h3>
+<div class="company">
+                            Liceo del Country
+                        </div>
+</div>
+<div class="date">
+                        Agosto 2020 – Julio 2021
+                    </div>
+</div>
+<div class="job-description">
+<ul>
+<li>
+                            Impartición de tecnología en primaria y secundaria.
+                        </li>
+<li>
+                            Preparación de estudiantes para competencias de robótica.
+                        </li>
+<li>
+                            Participación como finalistas a nivel nacional.
+                        </li>
+<li>
+                            Desarrollo de actividades extracurriculares.
+                        </li>
+</ul>
+</div>
+</div>
+
+</article>
+<!-- =================================================
+             KIDDYBOT
+        ================================================== -->
+<article class="experience-item">
+<div class="experience-content">
+<div class="job-header">
+<div>
+<h3 class="job-title">
+                            Docente de Robótica
+                        </h3>
+<div class="company">
+                            Kiddybot
+                        </div>
+</div>
+<div class="date">
+                        Agosto 2020 – Julio 2021
+                    </div>
+</div>
+<div class="job-description">
+<ul>
+<li>
+                            Impartición de cursos de robótica en primaria,
+                            secundaria y preparatoria.
+                        </li>
+<li>
+                            Participación en proyectos educativos y tecnológicos.
+                        </li>
+<li>
+                            Apoyo en conferencias y desarrollo de proyectos.
+                        </li>
+</ul>
+</div>
+</div>
+
+</article>
+</div>
+</section>
+<!-- ======================================================
+     FORMACIÓN
+======================================================= -->
+<section class="education" id="formacion">
+<div class="container">
+<div class="section-title">
+<span>Preparación</span>
+<h2>Formación académica</h2>
+</div>
+<div class="education-grid">
+<div class="education-card">
+<h3>
+                    Ingeniería en Sistemas Computacionales
+                </h3>
+<p>
+                    Universidad UTEG
+                </p>
+<br/>
+<strong>
+                    En curso
+                </strong>
+</div>
+<div class="education-card">
+<h3>
+                    Licenciatura en Diseño Industrial
+                </h3>
+<p>
+                    Universidad Autónoma de Guadalajara
+                </p>
+<br/>
+<strong>
+                    Estudios en Diseño Industrial
+                </strong>
+</div>
+</div>
+</div>
+</section>
+<!-- ======================================================
+     COMPETENCIAS
+======================================================= -->
+<section class="skills" id="competencias">
+<div class="container">
+<div class="section-title">
+<span>Fortalezas</span>
+<h2>Competencias</h2>
+</div>
+<div class="skills-grid">
+<div class="skill">Educación STEAM</div>
+<div class="skill">Robótica educativa</div>
+<div class="skill">Tecnología e informática</div>
+<div class="skill">Diseño de proyectos educativos</div>
+<div class="skill">Aprendizaje basado en proyectos</div>
+<div class="skill">Coordinación de grupos</div>
+<div class="skill">Coordinación de equipos</div>
+<div class="skill">Diseño de talleres y cursos</div>
+<div class="skill">Innovación educativa</div>
+<div class="skill">Gestión institucional</div>
+<div class="skill">Material educativo</div>
+</div>
+</div>
+</section>
+<!-- ======================================================
+     CONTACTO
+======================================================= -->
+<section class="contact" id="contacto">
+<div class="container">
+<div class="contact-box">
+<h2>
+                ¿Trabajamos juntos?
+            </h2>
+<p>
+                Estoy disponible para proyectos educativos,
+                tecnológicos y oportunidades profesionales.
+            </p>
+<div class="contact-info">
+<a href="tel:3111895129">
+                    📱 311 189 5129
+                </a>
+<a href="mailto:citzapopan@gmail.com">
+                    ✉️ citzapopan@gmail.com
+                </a>
+</div>
+</div>
+</div>
+</section>
+<footer>
+
+    © 2026 Daniel Alejandro Gómez Peña · CV &amp; Portafolio
+
+</footer>
+<!-- ======================================================
+     MODAL
+======================================================= -->
+<div class="modal" id="mediaModal">
+<div class="modal-content" id="modalContent">
+<button class="modal-close" onclick="closeMedia()">
+            ×
+        </button>
+</div>
+</div>
+<!-- ======================================================
+     JAVASCRIPT
+======================================================= -->
+<script>
+
+/* =========================================================
+   MENU MOBILE
+========================================================= */
+
+function toggleMenu() {
+
+    const menu = document.getElementById("navLinks");
+
+    menu.classList.toggle("active");
+
+}
+
+
+/* Cerrar menú después de seleccionar */
+
+document.querySelectorAll(".nav-links a").forEach(link => {
+
+    link.addEventListener("click", () => {
+
+        document
+            .getElementById("navLinks")
+            .classList.remove("active");
+
+    });
+
+});
+
+
+/* =========================================================
+   SLIDERS
+========================================================= */
+
+document.querySelectorAll("[data-slider]").forEach(slider => {
+
+    const slides = slider.querySelectorAll(".slide");
+
+    const previous =
+        slider.querySelector(".slider-prev");
+
+    const next =
+        slider.querySelector(".slider-next");
+
+    const dotsContainer =
+        slider.querySelector(".slider-dots");
+
+    let current = 0;
+
+
+    /* Crear indicadores */
+
+    slides.forEach((slide, index) => {
+
+        const dot = document.createElement("div");
+
+        dot.classList.add("slider-dot");
+
+        if (index === 0) {
+            dot.classList.add("active");
+        }
+
+        dot.addEventListener("click", () => {
+
+            current = index;
+
+            showSlide();
+
+        });
+
+        dotsContainer.appendChild(dot);
+
+    });
+
+
+    const dots =
+        dotsContainer.querySelectorAll(".slider-dot");
+
+
+    function showSlide() {
+
+        slides.forEach((slide, index) => {
+
+            slide.classList.toggle(
+                "active",
+                index === current
+            );
+
+        });
+
+
+        dots.forEach((dot, index) => {
+
+            dot.classList.toggle(
+                "active",
+                index === current
+            );
+
+        });
+
+    }
+
+
+    next.addEventListener("click", () => {
+
+        current++;
+
+        if (current >= slides.length) {
+            current = 0;
+        }
+
+        showSlide();
+
+    });
+
+
+    previous.addEventListener("click", () => {
+
+        current--;
+
+        if (current < 0) {
+            current = slides.length - 1;
+        }
+
+        showSlide();
+
+    });
+
+});
+
+
+/* =========================================================
+   MODAL PARA FOTOS Y VIDEOS
+========================================================= */
+
+function openMedia(element) {
+
+    const modal =
+        document.getElementById("mediaModal");
+
+    const content =
+        document.getElementById("modalContent");
+
+
+    content.innerHTML = `
+        <button
+            class="modal-close"
+            onclick="closeMedia()"
+        >
+            ×
+        </button>
+    `;
+
+
+    if (element.tagName === "IMG") {
+
+        const image =
+            document.createElement("img");
+
+        image.src = element.src;
+
+        image.alt = element.alt;
+
+        content.appendChild(image);
+
+    }
+
+
+    if (element.tagName === "VIDEO") {
+
+        const video =
+            document.createElement("video");
+
+        video.controls = true;
+
+        video.autoplay = true;
+
+        video.src =
+            element.querySelector("source").src;
+
+        content.appendChild(video);
+
+    }
+
+
+    modal.classList.add("active");
+
+}
+
+
+function closeMedia() {
+
+    const modal =
+        document.getElementById("mediaModal");
+
+    const content =
+        document.getElementById("modalContent");
+
+    modal.classList.remove("active");
+
+    content.innerHTML = "";
+
+}
+
+
+/* Cerrar haciendo clic fuera */
+
+document
+    .getElementById("mediaModal")
+    .addEventListener("click", function(event) {
+
+        if (event.target === this) {
+
+            closeMedia();
+
+        }
+
+    });
+
+
+/* Cerrar con ESC */
+
+document.addEventListener("keydown", function(event) {
+|
+    if (event.key === "Escape") {
+
+        closeMedia();
+
+    }
+
+});
+
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const slider = document.querySelector('.slides');
+    if (!slider) return;
+
+    const slides = Array.from(slider.querySelectorAll('.slide'));
+    const prev = document.querySelector('.slider-prev');
+    const next = document.querySelector('.slider-next');
+    const dots = document.querySelector('.slider-dots');
+
+    let current = 0;
+
+    slides.forEach((slide, index) => {
+        slide.style.display = index === 0 ? 'block' : 'none';
+        if (dots) {
+            const dot = document.createElement('button');
+            dot.type = 'button';
+            dot.className = 'slider-dot' + (index === 0 ? ' active' : '');
+            dot.setAttribute('aria-label', `Ir a la fotografía ${index + 1}`);
+            dot.addEventListener('click', () => showSlide(index));
+            dots.appendChild(dot);
+        }
+    });
+
+    function showSlide(index) {
+        current = (index + slides.length) % slides.length;
+        slides.forEach((slide, i) => {
+            slide.style.display = i === current ? 'block' : 'none';
+        });
+        if (dots) {
+            dots.querySelectorAll('.slider-dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === current);
+            });
+        }
+    }
+
+    prev?.addEventListener('click', () => showSlide(current - 1));
+    next?.addEventListener('click', () => showSlide(current + 1));
+
+    setInterval(() => showSlide(current + 1), 5000);
+});
+</script>
+
+</body>
+</html>
