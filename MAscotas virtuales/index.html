@@ -4088,32 +4088,25 @@ async function cargarDashboard() {
 ========================================= */
 
 async function cerrarSesion() {
-
     try {
+        const { error } = await supabaseClient.auth.signOut();
 
-        await supabaseClient
-            .auth
-            .signOut();
+        if (error) {
+            throw error;
+        }
 
+        sessionStorage.clear();
+        localStorage.removeItem("supabase.auth.token");
+
+        window.location.href = "login.html";
+
+    } catch (error) {
+        console.error("Error cerrando sesión:", error);
+        alert("No se pudo cerrar sesión. Intenta nuevamente.");
     }
-
-    catch (error) {
-
-        console.error(
-            "Error cerrando sesión:",
-            error
-        );
-
-    }
-
-
-    sessionStorage.clear();
-
-
-    window.location.href =
-        "login.html";
-
 }
+
+window.cerrarSesion = cerrarSesion;
 
 
 /* =========================================
